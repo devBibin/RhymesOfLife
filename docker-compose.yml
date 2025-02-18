@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"  # Expose Django development server
+    volumes:
+      - ./RhymesOfLife:/app/RhymesOfLife  # Sync host project files to container
+    environment:
+      # Database environment variables
+      DB_NAME: rhymesoflife
+      DB_USER: isenlord
+      DB_PASSWORD: we_will_never_stop
+      DB_HOST: db
+      DB_PORT: 5432
+      # Redis environment variables
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - db
+      - redis
+    command: >
+      sh -c "yes | /venv/bin/python manage.py makemigrations && /venv/bin/python manage.py migrate &&
+             /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000"      
+    networks:
+      - rhymesoflife_network
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"  # Expose PostgreSQL
+    environment:
+      POSTGRES_USER: isenlord
+      POSTGRES_PASSWORD: we_will_never_stop
+      POSTGRES_DB: rhymesoflife
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d 
+      - db_test:/var/lib/postgresql/data  # Persist database data
+    networks:
+      - rhymesoflife_network
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"  # Expose Redis
+    volumes:
+      - redis_data:/data  # Persist Redis data
+    networks:
+      - rhymesoflife_network
+volumes:
+  db_test:  # Named volume for PostgreSQL data persistence
+  redis_data:  # Named volume for Redis data persistence
+networks:
+  rhymesoflife_network:
+    driver: bridge
