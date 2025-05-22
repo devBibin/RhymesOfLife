@@ -1,0 +1,9 @@
+{
+    "DEBUG": true,
+    "SECRET_KEY": "django-insecure-npu3aziag6_93o=!we_q=p@i=!8l@!4&^+2m%747k9w^jvwt$z",
+    "DB_USER": "isenlord",
+    "DB_PASSWORD": "we_will_never_stop",
+    "DB_HOST": "db",
+    "DB_PORT": "5432",
+    "DB_NAME": "rhymesoflife"
+}
