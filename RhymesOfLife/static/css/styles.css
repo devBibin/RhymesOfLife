@@ -23,32 +23,89 @@ body {
 }
 
 /* components */
+
 .text {
     color: #232323;
-    font-family: Montserrat;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
     line-height: 130%;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
 }
 
 .text--bold {
     color: #232323;
-    font-family: Montserrat;
+    font-family: "Cuprum", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
     font-size: 16px;
     font-style: normal;
-    font-weight: 700;
     line-height: 130%; /* 20.8px */
 }
 
 .title {
     color: #232323;
-    text-align: center;
-    font-family: Montserrat;
-    font-size: 26px;
+    text-align: left;
+    font-family: "Cuprum", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-size: 24px;
     font-style: normal;
-    font-weight: 800;
     line-height: 122%; /* 31.72px */
+}
+
+.primeButton--black {
+    display: flex;
+    width: 212px;
+    height: 50px;
+    align-content: baseline;
+    color: #FAFAFA ;
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 13px;
+    background: #232323;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    /* padding: 1rem 2rem; */
+}
+
+.primeButton--white {
+    display: flex;
+    width: 212px;
+    height: 50px;
+    align-content: baseline;
+    color: #FAFAFA ;
+    text-align: center;
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 13px;
+    background: #232323;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    /* padding: 1rem 2rem; */
+}
+
+.input {
+    border: 1px solid #497C74;
+    background: #FAFAFA;
+}
+
+.hidden {
+    display: none !important;
 }
 /* base (header + footer), mobile-first  */
 .header {
@@ -63,7 +120,7 @@ body {
 .base__logo {
     color:  #232323;
     font-family: Ubuntu;
-    font-size: 27px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: 122%; /* 32.94px */
@@ -91,8 +148,7 @@ body {
 .base__navListItemLink,
 .base__navAccountLink {
     display: block;
-    color: var(--, #232323);
-    font-family: Montserrat;
+    color: #232323;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -107,8 +163,7 @@ body {
     display: block;
     width: 2rem;
     height: 2rem;
-    color: var(--, #232323);
-    font-family: Montserrat;
+    color: #232323;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -120,29 +175,22 @@ body {
 .main__block{
     display: flex;
     background: #B7D0CC;
-    padding: 2rem 0rem;
+    padding: 5rem 0rem;
 }
 
 .main__blockTitle{
-    margin: 2.5rem;
-    margin-left: 4rem;
     color:  #232323;
-    font-family: Montserrat;
-    font-size: 24px;
-    /* font-size: 37px; */
-    font-style: normal;
-    font-weight: 800;
-    line-height: 122%; /* 45.14px */
-    text-align: right;
+    font-size: 27px;
+    text-align: left;
+    margin: 0rem 1.6rem;
 }
 
 .main__info{
-    padding: 3rem 2rem;
+    padding: 5rem 1.6rem;
     background: #F9F4F1;
 }
 
 .main__infoText--bold {
-
 }
 
 .main__infoText{
@@ -150,11 +198,11 @@ body {
 }
 
 .main__infoMenu{
-    margin: 2rem 0rem;
+    margin-top: 7rem;
 }
 
 .main__infoTitle {
-
+    margin-bottom: 3rem;
 }
 
 .main__infoMenuList {
@@ -166,27 +214,249 @@ body {
 }
 
 .main__infoMenuListItem {
-    display: flex;
+    /* display: flex; */
+    margin-bottom: 3rem;
+}
+
+.main__infoMenuListItem:last-child{
+    margin-bottom: 0rem;
 }
 
 .main__infoLink {
     text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    margin: 0rem auto;
+    display: block;
+    /* flex-direction: column;
+    margin: 0rem auto; */
+}
+
+.main__infoFigure {
+    padding: 0rem;
+    margin: 0rem;
 }
 
 .main__infoLinkImage {
     display: block;
-    width: 20rem;
-    height: 17rem;
+    width: 100%;
+    height: 20rem;
     background: #E9E2DE;
-    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .main__infoLinkText {
     display: block;
-    max-width: 17rem;
-    font-size: 14px;
-    width: 100%;
+}
+
+.main_infoMenuListBtn {
+    padding: 1rem 2rem;
+    width: auto;
+    margin: 5rem auto 0rem auto;
+}
+
+.main__instruction {
+
+}
+
+.main__instTitle {
+    text-align: left;
+    font-size: 2.4rem;
+    margin-bottom: 3rem;
+}
+
+.main__tabs {
+     background: #B5A29A;
+ padding: 5rem 3rem;
+}
+
+.main__tabsList {
+    padding: 0rem;
+   
+}
+
+.main__tabsListItem{
+    list-style-type: none;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+.main__tabsListItem:last-child {
+    margin-bottom: 0rem;
+}
+
+.main__tabsIcon {
+    width: 45px;
+    height: 45px;
+    margin-right: 2rem;
+    border-radius: 50%;
+    background: #E9E2DE;
+    min-width: 45px;
+}
+
+.main__tabsText {
+    
+}
+
+.main__tabsWrapper {
+    display: none;
+    background: #E9E2DE;
+    margin-right: 0rem;
+    /* padding-bottom: 6rem;
+    padding-top: 6rem; */
+    padding: 6rem 2rem;
+}
+
+.main__tabsPanel {
+
+}
+
+.main__stepOpenTitle {
+    text-align: left;
+    margin-top: 0rem;
+    margin-bottom: 2rem;
+}
+
+.main__stepOpenText {
+
+}
+
+.main__stepOpenTextLink {
+    margin-top: 6rem;
+}
+
+
+
+.main__details {
+    padding: 5rem 2rem;
+    background: #F9F4F1;
+}
+
+.main__detailsTitle {
+    text-align: left;
+    margin-top: 0rem;
+    margin-bottom: 3rem;
+}
+
+.main__detailsText {
+    margin-bottom: 2rem;
+}
+
+.main__detailsList {
+    padding: 0rem;
+    list-style-type: none;
+}
+
+.main__detailsListItem {
+    display: flex;
+    margin-bottom: 3rem;
+    align-items: center;
+}
+
+.main__detailsListItem:last-child{
+    margin-bottom: 0rem;
+}
+
+.main__detailsListText {
+   
+}
+
+.main__detailsIcon {
+    width: 45px;
+    height: 45px;
+    margin-right: 2rem;
+    border-radius: 50%;
+    background: #E9E2DE;
+    min-width: 45px;
+}
+
+.main__tabsText {
+    margin-bottom: 0rem;
+}
+
+
+.main__charity {
+    padding: 5rem 2rem;
+    background: #0B4141;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+}
+
+.main__charityTitle {
+    color: #fafafa;
+    max-width: 70%;
+}
+
+.main__charityText {
+    color: #fafafa;
+    text-align: center;
+    max-width: 70%;
+}
+
+.main__charityLink {
+    margin-top: 3rem;
+    width: 286px;
+    height: 74px;
+    color: #232323;
+    background: #fafafa;
+}   
+
+.main__formInTouch {
+    background: #B7D0CC;
+    display: flex;
+    flex-direction: column;
+}
+
+.main__formTitle {
+    order: 1;
+}
+
+.main__formText{
+    order: 2;
+}
+
+.main__inTouchInfo {
+    order: 4;
+}
+
+.main__inTouchInfoTitle {
+
+}
+
+.main__inTouchAddress {
+
+}
+
+.main__inTouchInfoText {
+
+}
+
+.main__form {
+    order: 3;   
+    display: flex;
+    flex-direction: column;
+}
+
+.main__formLabel {
+
+}
+
+.main__formInput {
+
+}
+
+.main__formBtn {
+
+}
+
+.main__formSubtext {
+
+}
+
+.footer {
+
+}
+
+.footer__text {
+
 }
