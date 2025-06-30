@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
-
-{% block title %}Home - My Django App{% endblock %}
-
-{% block content %}
-    <h2 id="welcome-heading">Click me to change my color!</h2>
-    <p>If the CSS and JS work, this text should be centered, and clicking the heading should turn it red.</p>
-{% endblock %}
+{% if not request.user.additional_info.is_verified and not request.user.additional_info.ready_for_verification %}
+  <form method="post" action="{% url 'request_verification' %}">
+    {% csrf_token %}
+    <button type="submit">Подтвердить учетную запись</button>
+  </form>
+{% elif request.user.additional_info.ready_for_verification %}
+  <p>Письмо с подтвержением учетной записи отправлено на вашу почту.</p>
+{% endif %}

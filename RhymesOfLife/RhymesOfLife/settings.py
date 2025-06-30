@@ -17,7 +17,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open(BASE_DIR / "../environment.json") as f: environment = json.loads(f.read())
+with open(BASE_DIR.parent / "environment.json") as f: 
+    environment = json.loads(f.read())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -131,3 +132,22 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Email config (Yandex SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = environment["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = environment["EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Mailgun config
+MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
+MAILGUN_URL = environment.get("MAILGUN_URL")
+
+# Default domain for verification link
+DOMAIN = environment["DOMAIN"]
