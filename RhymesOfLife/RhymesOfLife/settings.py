@@ -17,8 +17,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open(BASE_DIR.parent / "environment.json") as f: 
-    environment = json.loads(f.read())
+with open(BASE_DIR / "../environment.json") as f: environment = json.loads(f.read())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -148,6 +147,3 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Mailgun config
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
 MAILGUN_URL = environment.get("MAILGUN_URL")
-
-# Default domain for verification link
-DOMAIN = environment["DOMAIN"]

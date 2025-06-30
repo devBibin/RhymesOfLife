@@ -24,11 +24,12 @@ services:
       - db
       - redis
     command: >
-        sh -c "
-        /venv/bin/python /app/RhymesOfLifeShadows/send_verifications_loop.py &
-        yes | /venv/bin/python manage.py makemigrations && 
-        /venv/bin/python manage.py migrate &&
-        /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000"
+      sh -c "
+      /venv/bin/python /app/RhymesOfLifeShadows/send_verifications_loop.py > /app/shadow.log 2>&1 &
+      yes | /venv/bin/python manage.py makemigrations &&
+      /venv/bin/python manage.py migrate &&
+      /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000"
+
     networks:
       - rhymesoflife_network
 

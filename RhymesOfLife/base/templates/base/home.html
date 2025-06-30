@@ -1,8 +1,12 @@
-{% if not request.user.additional_info.is_verified and not request.user.additional_info.ready_for_verification %}
-  <form method="post" action="{% url 'request_verification' %}">
-    {% csrf_token %}
-    <button type="submit">Подтвердить учетную запись</button>
-  </form>
-{% elif request.user.additional_info.ready_for_verification %}
-  <p>Письмо с подтвержением учетной записи отправлено на вашу почту.</p>
-{% endif %}
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if not request.user.additional_info.is_verified and not request.user.additional_info.ready_for_verification %}
+    <form method="post" action="{% url 'request_verification' %}">
+      {% csrf_token %}
+      <button type="submit">Подтвердить учетную запись</button>
+    </form>
+  {% elif request.user.additional_info.ready_for_verification %}
+    <p>Письмо с подтверждением учетной записи отправлено на вашу почту.</p>
+  {% endif %}
+{% endblock %}

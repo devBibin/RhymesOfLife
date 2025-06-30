@@ -4,6 +4,8 @@ from orm_connector import settings
 from base.notifications import ReportNotificator
 from base.utils import generate_verification_link
 from base.models import User
+import traceback
+
 
 def shutdown_handler(signum, frame):
     print("🛑 Received shutdown signal")
@@ -25,7 +27,8 @@ def process_verifications():
             
             print(f"✅ Sent verification to: {user.email}")
         except Exception as e:
-            print(f"❌ Error for {user.email}: {str(e)}")
+            print(f"❌ Ошибка для {user.email}: {str(e)}")
+            traceback.print_exc()
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_handler)

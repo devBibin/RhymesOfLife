@@ -46,8 +46,10 @@ def login_view(request):
 
 
 def logout_view(request):
-    logout(request)
+    if request.method == "POST":
+        logout(request)
     return redirect('login')
+
 
 
 def verify_email_view(request, uidb64, token):

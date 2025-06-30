@@ -7,6 +7,7 @@ from django.dispatch import receiver
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='additional_info')
     syndrome = models.CharField(max_length=255, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     ready_for_verification = models.BooleanField(default=False)
 
