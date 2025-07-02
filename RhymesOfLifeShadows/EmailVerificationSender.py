@@ -10,9 +10,17 @@ from django.conf import settings
 
 class EmailVerificationSender:
 
-    # Utility function to generate a verification link for email confirmation
+
+    # Registry of available email providers mapped to their send methods
+    PROVIDERS = {
+        'mailgun': '_send_via_mailgun',
+        # Add new providers here in format: 'provider_name': '_send_method_name'
+    }
+
+    #Generates a unique email verification link for the user
     @staticmethod
     def generate_verification_link(info, domain=None):
+        
         user = info.user
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -23,10 +31,21 @@ class EmailVerificationSender:
         url = reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
         return f"http://{domain}{url}"
 
-    
-    # sending emails via MailGun
+    #Main email handler that routes sending to the appropriate provider
     @staticmethod
-    def send_email(subject, to_email, text, html=None):
+    def send_email(subject, to_email, text, html=None, provider='mailgun'):
+
+        send_method_name = EmailVerificationSender.PROVIDERS.get(provider)
+        if not send_method_name:
+            raise ValueError(f"Unsupported email provider: {provider}")
+        
+        send_method = getattr(EmailVerificationSender, send_method_name)
+        return send_method(subject, to_email, text, html)
+    
+    #Private method to handle email sending via Mailgun API
+    @staticmethod
+    def _send_via_mailgun(subject, to_email, text, html=None):
+ 
         data = {
             "from": settings.DEFAULT_FROM_EMAIL,
             "to": [to_email],
@@ -42,25 +61,26 @@ class EmailVerificationSender:
         print(f"📤 Subject: {subject}")
         print(f"📤 Token exists: {'✅' if settings.MAILGUN_API_TOKEN else '❌ NO TOKEN'}")
 
-        response = requests.post(
+        # Make API request to Mailgun
+        requests.post(
             settings.MAILGUN_URL,
             auth=("api", settings.MAILGUN_API_TOKEN),
             data=data,
         )
 
-        print(f"📬 Mailgun response: {response.status_code} - {response.text}")
-
-        if response.status_code != 200:
-            raise requests.exceptions.RequestException(f"Mailgun error {response.status_code}: {response.text}")
-        return response
-
-
+    # Sends email verification message to the user
     @staticmethod
-    def send_verification(user, verify_link):
+    def send_verification(user, verify_link, provider='mailgun'):
         subject = "Подтверждение email"
         text = f"Привет, {user.username}! Подтверди свой email по ссылке: {verify_link}"
         html = render_to_string("emails/verify_email.html", {
             "user": user,
             "verify_link": verify_link,
         })
-        return EmailVerificationSender.send_email(subject, user.email, text, html)
+        return EmailVerificationSender.send_email(
+            subject, 
+            user.email, 
+            text, 
+            html,
+            provider=provider
+        )

@@ -20,7 +20,7 @@ def process_verifications():
     for info in verifications:
         try:
             verify_link = EmailVerificationSender.generate_verification_link(info, domain=settings.BASE_URL)
-            EmailVerificationSender.send_verification(info.user, verify_link)
+            EmailVerificationSender.send_verification(info.user, verify_link, provider='mailgun')
 
             info.ready_for_verification = False
             info.save()

@@ -76,12 +76,10 @@ def request_verification_view(request):
 
 @login_required
 def home_view(request):
-    user = User.objects.select_related("additional_info").get(id=request.user.id)
+    user = request.user
     return render(request, 'base/home.html', {
         'user': user,
-        'show_verification_notice': not user.additional_info.is_verified
-    })
-
+        'show_verification_notice': not user.additional_info.is_verified})
 
 @login_required
 def profile_edit_view(request):
