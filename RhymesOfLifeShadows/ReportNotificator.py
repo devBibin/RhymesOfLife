@@ -1,4 +1,4 @@
-from .utils import MailgunClient
+from base.utils import MailgunClient
 from django.template.loader import render_to_string
 
 

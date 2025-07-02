@@ -7,11 +7,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
+from .forms import ProfileForm
 
 from .forms import RegisterForm
-from .utils import generate_verification_link
-from .notifications import ReportNotificator
-
 from django.http import HttpResponse
 
 
@@ -24,11 +22,12 @@ def register_view(request):
             user = form.save()
             user.additional_info.ready_for_verification = True
             user.additional_info.save()
-            messages.success(request, 'Регистрация прошла успешно! Проверьте почту для подтверждения.')
+            messages.success(request, 'Регистрация прошла успешно! Письмо будет отправлено в течение минуты.')
             return redirect('login')
     else:
         form = RegisterForm()
     return render(request, 'base/register.html', {'form': form})
+
 
 
 def login_view(request):
@@ -77,5 +76,37 @@ def request_verification_view(request):
 
 @login_required
 def home_view(request):
-    return render(request, 'base/home.html')
+    user = User.objects.select_related("additional_info").get(id=request.user.id)
+    return render(request, 'base/home.html', {
+        'user': user,
+        'show_verification_notice': not user.additional_info.is_verified
+    })
 
+
+@login_required
+def profile_edit_view(request):
+    info = request.user.additional_info
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=info)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Профиль обновлён!")
+            return redirect('home')
+    else:
+        form = ProfileForm(instance=info)
+
+    return render(request, 'base/profile_edit.html', {'form': form})
+
+@login_required
+def resend_verification_view(request):
+    user = request.user
+    if user.additional_info.is_verified:
+        messages.info(request, "Вы уже подтверждены.")
+    elif user.additional_info.ready_for_verification:
+        messages.info(request, "Письмо уже в очереди на отправку.")
+    else:
+        user.additional_info.ready_for_verification = True
+        user.additional_info.save()
+        messages.success(request, "Письмо будет повторно отправлено в течение минуты.")
+    return redirect('home')

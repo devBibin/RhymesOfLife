@@ -147,3 +147,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Mailgun config
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
 MAILGUN_URL = environment.get("MAILGUN_URL")
+MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
+DEFAULT_FROM_EMAIL = "Rhymes of Life <admin@igstan.com>"
+
+BASE_URL = environment.get("BASE_URL")

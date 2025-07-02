@@ -3,23 +3,32 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import AdditionalUserInfo
 
-
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    syndrome = forms.CharField(label="Синдром", widget=forms.Textarea, required=False)
-    birth_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'syndrome', 'birth_date']
+        fields = ['username', 'email', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
+
         if commit:
             user.save()
-            user.additional_info.syndrome = self.cleaned_data['syndrome']
-            user.additional_info.birth_date = self.cleaned_data['birth_date']
-            user.additional_info.save()
+            AdditionalUserInfo.objects.create(
+                user=user,
+                email=user.email,
+                ready_for_verification=True
+            )
+
         return user
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = AdditionalUserInfo
+        fields = ['syndrome', 'birth_date']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
+            'syndrome': forms.Textarea(attrs={'rows': 3}),
+        }

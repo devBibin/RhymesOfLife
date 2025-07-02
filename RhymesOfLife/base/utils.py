@@ -7,16 +7,13 @@ from django.conf import settings
 
 
 # Utility function to generate a verification link for email confirmation
-def generate_verification_link(user, request=None, domain=None):
+def generate_verification_link(info, domain=None):
+    user = info.user
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-    if request and not domain:
-        from django.contrib.sites.shortcuts import get_current_site
-        domain = get_current_site(request).domain
-
     if not domain:
-        domain = "localhost:8000"  # или example.com
+        domain = getattr(settings, "BASE_URL", "localhost:8000")
 
     url = reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
     return f"http://{domain}{url}"
@@ -28,7 +25,7 @@ class MailgunClient:
     @staticmethod
     def send_email(subject, to_email, text, html=None):
         data = {
-            "from": "Rhymes of Life <admin@igstan.com>",
+            "from": settings.DEFAULT_FROM_EMAIL,
             "to": [to_email],
             "subject": subject,
             "text": text,

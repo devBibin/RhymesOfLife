@@ -42,7 +42,8 @@ settings.configure(
     ],
     ROOT_URLCONF='RhymesOfLife.urls',
     SITE_ID=1,
-    DOMAIN=environment.get("DOMAIN", "app.igstan.com"),
+    BASE_URL=environment.get("BASE_URL", "http://localhost:8000/"),
+    DEFAULT_FROM_EMAIL=environment.get("DEFAULT_FROM_EMAIL", "Rhymes of Life <admin@igstan.com>"),
     MAILGUN_API_TOKEN=environment.get("MAILGUN_API_TOKEN"),
     MAILGUN_URL=environment.get("MAILGUN_URL"),
     TEMPLATES=[{
