@@ -1,21 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 
 
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='additional_info')
 
-    # Основные данные
+    # Basic info
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='additional_info')
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
 
-    # Медицинская информация
+    # Medical information
     syndrome = models.CharField(max_length=255, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
 
-    # Верификация
+    # Verification flags
     is_verified = models.BooleanField(default=False)
     ready_for_verification = models.BooleanField(default=False)
 
