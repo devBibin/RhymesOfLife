@@ -1,3 +1,4 @@
+# RhymesOfLifeShadows/EmailVerificationSender.py
 import requests
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
@@ -8,19 +9,13 @@ from django.conf import settings
 
 
 class EmailVerificationSender:
-    """
-    Handler class for sending email verifications via pluggable providers.
-    Usage:
-        sender = EmailVerificationSender(provider='mailgun')
-        sender.send_verification(info)
-    """
     PROVIDERS = {
         'mailgun': '_send_via_mailgun',
-        # 'smtp': '_send_via_smtp',  # Example for future
     }
 
-    def __init__(self, provider='mailgun'):
+    def __init__(self, provider='mailgun', logger=None):
         self.provider = provider
+        self.logger = logger or print
 
     def generate_verification_link(self, info, domain=None):
         user = info.user
@@ -65,21 +60,21 @@ class EmailVerificationSender:
         if 'html' in payload:
             data['html'] = payload['html']
 
-        print(f"📤 Mailgun request to: {settings.MAILGUN_URL}")
-        print(f"📤 Sending to: {payload['to']}")
-        print(f"📤 Subject: {payload['subject']}")
-        print(f"📤 Token exists: {'✅' if settings.MAILGUN_API_TOKEN else '❌ NO TOKEN'}")
-
-        response = requests.post(
-            settings.MAILGUN_URL,
-            auth=("api", settings.MAILGUN_API_TOKEN),
-            data=data,
-        )
-
-        print(f"📬 Mailgun response: {response.status_code} - {response.text}")
-
-        if response.status_code != 200:
-            raise requests.exceptions.RequestException(
-                f"Mailgun error {response.status_code}: {response.text}"
+        try:
+            response = requests.post(
+                settings.MAILGUN_URL,
+                auth=("api", settings.MAILGUN_API_TOKEN),
+                data=data,
             )
-        return response
+
+            if response.status_code != 200:
+                self.logger.error(f"❌ Mailgun failed for {payload['to']}: {response.status_code} - {response.text}")
+                raise requests.exceptions.RequestException(
+                    f"Mailgun error {response.status_code}: {response.text}"
+                )
+            else:
+                self.logger.info(f"✅ Sent verification to: {payload['to']}")
+
+        except Exception as e:
+            self.logger.exception(f"❌ Exception during sending verification to {payload['to']}")
+            raise

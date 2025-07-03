@@ -1,3 +1,4 @@
+# RhymesOfLifeShadows/send_verifications_loop.py
 import time
 import signal
 import traceback
@@ -5,15 +6,16 @@ import traceback
 from orm_connector import settings
 from RhymesOfLifeShadows.EmailVerificationSender import EmailVerificationSender
 from base.models import AdditionalUserInfo
+from RhymesOfLifeShadows.create_log import create_log
 
+log = create_log("verification.log", "EmailSender")
 
 def shutdown_handler(signum, frame):
-    print("🛑 Received shutdown signal")
+    log.info("🛑 Received shutdown signal")
     exit(0)
 
-
 def process_verifications():
-    sender = EmailVerificationSender(provider='mailgun')
+    sender = EmailVerificationSender(provider='mailgun', logger=log)
 
     verifications = AdditionalUserInfo.objects.filter(
         ready_for_verification=True,
@@ -22,29 +24,23 @@ def process_verifications():
 
     for info in verifications:
         try:
-            verify_link = sender.generate_verification_link(info, domain=settings.BASE_URL)
-
-            sender.send_verification(info.user, verify_link)
-
+            sender.send_verification(info)
             info.ready_for_verification = False
             info.save()
-
-            print(f"✅ Sent verification to: {info.email or info.user.email}")
-
+            log.info(f"✅ Sent verification to: {info.email or info.user.email}")
         except Exception as e:
-            print(f"❌ Error for {info.email or info.user.email}: {str(e)}")
-            traceback.print_exc()
-
+            log.error(f"❌ Error for {info.email or info.user.email}: {str(e)}")
+            log.exception(e)
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_handler)
     signal.signal(signal.SIGTERM, shutdown_handler)
 
-    print("🔁 Starting verification worker")
+    log.info("🔁 Starting verification worker")
     while True:
         try:
             process_verifications()
             time.sleep(10)
         except Exception as e:
-            print(f"⚠️ Critical error: {str(e)}")
+            log.critical(f"⚠️ Critical error: {str(e)}")
             time.sleep(60)
