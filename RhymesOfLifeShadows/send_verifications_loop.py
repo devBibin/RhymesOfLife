@@ -14,6 +14,7 @@ def shutdown_handler(signum, frame):
     log.info("🛑 Received shutdown signal")
     exit(0)
 
+
 def process_verifications():
     sender = EmailVerificationSender(provider='mailgun', logger=log)
 
@@ -44,3 +45,4 @@ if __name__ == "__main__":
         except Exception as e:
             log.critical(f"⚠️ Critical error: {str(e)}")
             time.sleep(60)
+
