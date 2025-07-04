@@ -35,6 +35,8 @@ RUN /venv/bin/pip install -r /app/requirements.txt
 
 # Copy the application code into the container
 COPY RhymesOfLife/ /app/RhymesOfLife
+#COPY IG_Commenter/ /app/IG_Commenter
+COPY RhymesOfLifeShadows/ /app/RhymesOfLifeShadows
 #COPY IG_Commenter_shadows/ /app/IG_Commenter_shadows
 #COPY IG_Dashboard_shadows/ /app/IG_Dashboard_shadows
 COPY environment.json /app

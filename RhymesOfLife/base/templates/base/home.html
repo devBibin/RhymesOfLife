@@ -1,8 +1,33 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}Home - My Django App{% endblock %}
+{% block title %}
+  Главная — {{ block.super }}
+{% endblock %}
 
 {% block content %}
-    <h2 id="welcome-heading">Click me to change my color!</h2>
-    <p>If the CSS and JS work, this text should be centered, and clicking the heading should turn it red.</p>
+  <h2>Добро пожаловать, {{ request.user.username }}!</h2>
+
+  {% if not request.user.additional_info.is_verified %}
+    {% if request.user.additional_info.ready_for_verification %}
+      <p>📩 Письмо для подтверждения уже отправлено.</p>
+      <p>Проверьте почту: <strong>{{ request.user.additional_info.email|default:request.user.email }}</strong></p>
+
+      <form method="post" action="{% url 'resend_verification' %}">
+        {% csrf_token %}
+        <button type="submit">Отправить письмо снова</button>
+      </form>
+
+    {% else %}
+      <p>🔔 Ваш email не подтверждён.</p>
+      <p>Нажмите кнопку ниже, чтобы получить ссылку подтверждения.</p>
+
+      <form method="post" action="{% url 'request_verification' %}">
+        {% csrf_token %}
+        <button type="submit">Подтвердить аккаунт</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <p>✅ Ваш email успешно подтверждён. Добро пожаловать в Rhymes of Life!</p>
+  {% endif %}
 {% endblock %}

@@ -35,6 +35,15 @@
                 </li>
                 <!-- <ul id="sections-menu" hidden role="menu">…</ul> -->
             </ul>
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="primeButton--white">Выйти</button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}" class="primeButton--white">Войти</a>
+            {% endif %}
+
             <!-- icon for mobile -->
             <!-- <a class="base__navAccountLink base__navAccountLink--mobile" href="#">Войти в личный кабинет</a> -->
             <button type="button" class="base__navMenuBtn" aria-label="Открыть мобильное меню">|||</button>
@@ -42,8 +51,9 @@
     </header>
     <!-- Content -->
     <main class="content">
-        <!-- {% block content %}
-    {% endblock %} -->
+        {% block content %}
+        
+        
         <section class="main__block">
             <h1 class="title main__blockTitle">Марфан, Элерс-Данло, Лойс-Дитц и связанные с ними состояния</h1>
         </section>
@@ -282,6 +292,7 @@
                     и соглашаетесь c политикой конфиденциальности</p>
             </form>
         </section>
+     {% endblock %}
     </main>
     <!-- Footer -->
     <footer class="footer">
