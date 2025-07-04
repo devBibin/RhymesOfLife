@@ -22,12 +22,11 @@ def register_view(request):
             user = form.save()
             user.additional_info.ready_for_verification = True
             user.additional_info.save()
-            messages.success(request, 'Регистрация прошла успешно! Письмо будет отправлено в течение минуты.')
+            messages.success(request, 'Registration successful! A verification email will be sent within a minute.')
             return redirect('login')
     else:
         form = RegisterForm()
     return render(request, 'base/register.html', {'form': form})
-
 
 
 def login_view(request):
@@ -38,7 +37,7 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'Неверный логин или пароль.')
+            messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
     return render(request, 'base/login.html', {'form': form})
@@ -48,7 +47,6 @@ def logout_view(request):
     if request.method == "POST":
         logout(request)
     return redirect('login')
-
 
 
 def verify_email_view(request, uidb64, token):
@@ -71,8 +69,9 @@ def request_verification_view(request):
     user = request.user
     user.additional_info.ready_for_verification = True
     user.additional_info.save()
-    messages.success(request, "Письмо с подтверждением выслано вам на почту, пожалуйста подтвердите вашу учетную запись.")
+    messages.success(request, "A verification email has been sent to your email. Please confirm your account.")
     return redirect('home')
+
 
 @login_required
 def home_view(request):
@@ -80,6 +79,7 @@ def home_view(request):
     return render(request, 'base/home.html', {
         'user': user,
         'show_verification_notice': not user.additional_info.is_verified})
+
 
 @login_required
 def profile_edit_view(request):
@@ -89,22 +89,23 @@ def profile_edit_view(request):
         form = ProfileForm(request.POST, instance=info)
         if form.is_valid():
             form.save()
-            messages.success(request, "Профиль обновлён!")
+            messages.success(request, "Profile updated successfully!")
             return redirect('home')
     else:
         form = ProfileForm(instance=info)
 
     return render(request, 'base/profile_edit.html', {'form': form})
 
+
 @login_required
 def resend_verification_view(request):
     user = request.user
     if user.additional_info.is_verified:
-        messages.info(request, "Вы уже подтверждены.")
+        messages.info(request, "You are already verified.")
     elif user.additional_info.ready_for_verification:
-        messages.info(request, "Письмо уже в очереди на отправку.")
+        messages.info(request, "A verification email is already in the queue.")
     else:
         user.additional_info.ready_for_verification = True
         user.additional_info.save()
-        messages.success(request, "Письмо будет повторно отправлено в течение минуты.")
+        messages.success(request, "The verification email will be sent again within a minute.")
     return redirect('home')
