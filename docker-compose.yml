@@ -10,6 +10,7 @@ services:
     volumes:
       - ./RhymesOfLife:/app/RhymesOfLife  # Sync host project files to container
       - ./RhymesOfLifeShadows:/app/RhymesOfLifeShadows  # Sync shadows project files to container
+      - ./media:/app/media   # Sync media files to container
     environment:
       # Database environment variables
       DB_NAME: rhymesoflife

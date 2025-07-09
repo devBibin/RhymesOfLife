@@ -13,7 +13,7 @@ from .forms import RegisterForm
 from django.http import HttpResponse
 
 
-# =================== REGISTRATION / LOGIN / LOGOUT ===================
+# =================== REGISTRATION / LOGIN / LOGOUT REGION ===================
 
 def register_view(request):
     if request.method == 'POST':
@@ -109,3 +109,11 @@ def resend_verification_view(request):
         user.additional_info.save()
         messages.success(request, "The verification email will be sent again within a minute.")
     return redirect('home')
+
+
+# =================== END REGISTRATION / LOGIN / LOGOUT REGION ===================
+
+
+# =================== WIKI REGION ===================
+
+

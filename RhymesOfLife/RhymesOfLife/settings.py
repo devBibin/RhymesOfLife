@@ -39,7 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'base',
+    'django.contrib.humanize.apps.HumanizeConfig',
+    'django_nyt.apps.DjangoNytConfig',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki.apps.WikiConfig',
+    'wiki.plugins.attachments.apps.AttachmentsConfig',
+    'wiki.plugins.notifications.apps.NotificationsConfig',
+    'wiki.plugins.images.apps.ImagesConfig',
+    'wiki.plugins.macros.apps.MacrosConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +76,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                "sekizai.context_processors.sekizai",
             ],
         },
     },
@@ -109,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -151,3 +167,15 @@ MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
 DEFAULT_FROM_EMAIL = "Rhymes of Life <admin@igstan.com>"
 
 BASE_URL = environment.get("BASE_URL")
+
+# Media files for wiki
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Site ID for django.contrib.sites
+SITE_ID = 1
+
+
+# wiki settings
+WIKI_USE_BOOTSTRAP = True 
+

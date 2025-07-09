@@ -1,25 +1,39 @@
-{% load static %}
+{% load static sekizai_tags %}
 <!DOCTYPE html>
-<link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 <html lang="ru">
-
 <head>
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Django App{% endblock %}</title>
-    <!-- google fonts -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cuprum:wght@700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:wght@700&display=swap"
-        rel="stylesheet">
-    <!-- end -->
+    <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+     
+    <!-- Project CSS -->
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- Django Sekizai CSS blocks -->
+    {% render_block "css" %}
+    
+    <!-- Extra CSS block for child templates -->
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- Header Section -->
     <header class="header">
         <a class="base__logo" href="/">Ритмы Жизней</a>
         <nav class="base__nav">
@@ -28,277 +42,57 @@
                     <a class="text--bold base__navListItemLink" href="#">О нас</a>
                 </li>
                 <li class="base__navListItem">
-                    <!-- should be dropdown menu -->
                     <button class="text--bold base__navListItemLink" aria-haspopup="true" aria-expanded="false"
-                        aria-controls="sections-menu">К
-                        разделам</button>
+                            aria-controls="sections-menu">К разделам</button>
                 </li>
-                <!-- <ul id="sections-menu" hidden role="menu">…</ul> -->
             </ul>
+
+            <!-- Wiki Link -->
+            <a href="/wiki/" class="btn btn-outline-light me-2" role="button">
+                <i class="bi bi-book me-1"></i>Статьи
+            </a>
+
+            <!-- Auth Section -->
             {% if request.user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="primeButton--white">Выйти</button>
+                    <button type="submit" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right me-1"></i>Выйти
+                    </button>
                 </form>
-                {% else %}
-                <a href="{% url 'login' %}" class="primeButton--white">Войти</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+                </a>
             {% endif %}
 
-            <!-- icon for mobile -->
-            <!-- <a class="base__navAccountLink base__navAccountLink--mobile" href="#">Войти в личный кабинет</a> -->
-            <button type="button" class="base__navMenuBtn" aria-label="Открыть мобильное меню">|||</button>
+            <!-- Mobile Menu Button -->
+            <button type="button" class="base__navMenuBtn" aria-label="Open mobile menu">|||</button>
         </nav>
     </header>
-    <!-- Content -->
+
+    <!-- Main Content Section -->
     <main class="content">
-        {% block content %}
-        
-        
-        <section class="main__block">
-            <h1 class="title main__blockTitle">Марфан, Элерс-Данло, Лойс-Дитц и связанные с ними состояния</h1>
-        </section>
-        <section class="main__info">
-            <div class="main__infoDesc">
-                <p class="text main__infoText--bold">Синдром Марфана, Лойса-Дитца (СЛД) и сосудистый синдром
-                    Элерса-Данлоса
-                    (СЭД) — это генетические заболевания, которые
-                    поражают соединительную ткань организма и в результате вызывают ослабление артерий. Поскольку
-                    соединительная ткань есть
-                    везде, глаза, кости, суставы и легкие также могут быть затронуты.</p>
-                <p class="text main__infoText">Марфана, синдром LDS, синдром VEDS и некоторые связанные с ними состояния
-                    являются серьезными, а осложнения могут быть
-                    потенциально опасными для жизни. Из-за некоторого сходства между состояниями, затронутые люди
-                    борются с одинаковыми или
-                    похожими физическими проблемами. Важно получить раннюю и точную диагностику, чтобы узнать о
-                    рекомендуемых методах
-                    лечения, быть готовыми к операции и принять особые меры предосторожности при физической активности и
-                    других ситуациях,
-                    таких как беременность. Хотя лекарств от этих состояний не существует, достижения в области
-                    медицинской помощи помогают
-                    людям жить нормальной жизнью. </p>
-            </div>
-            <div class="main__infoMenu">
-                <h2 class="title main__infoTitle">Марфан, Элерс-Данло, Лойс-Дитц
-                    и связанные с ними состояния</h2>
-                <ul class="main__infoMenuList">
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Недифференцированная дисплазия соединительной ткани"
-                                    class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Недифференцированная дисплазия
-                                    соединительной
-                                    ткани</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Элерса-Данло" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Элерса-Данло</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Марфана" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Марфана</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Шпринтцена-Гольдберга Билса" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Шпринтцена-Гольдберга Билса
-                                </figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Лойса-Дитца" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Лойса-Дитца</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Стиклера" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Стиклера</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                    <li class="main__infoMenuListItem">
-                        <a href="#" class="main__infoLink">
-                            <figure class="main__infoFigure">
-                                <img src="#" alt="Синдром Билса" class="main__infoLinkImage">
-                                <figcaption class="text--bold main__infoLinkText">Синдром Билса</figcaption>
-                            </figure>
-                        </a>
-                    </li>
-                </ul>
-                <button class="primeButton--black main_infoMenuListBtn">Показать весь список</button>
-            </div>
-        </section>
-        <section class="main__instruction" aria-labelledby="instruction-title">
-            <div class="main__tabs">
-                <h2 id="instruction-title" class="title main__instTitle">
-                    Что делать, если вы подозреваете, что у вас синдром Марфана или родственное ему заболевание?
-                </h2>
-                <!-- Список табов -->
-                <ul role="tablist" class="main__tabsList">
-                    <li class="main__tabsListItem" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true"
-                        tabindex="0">
-                        <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                            viewBox="…">
-                            <!-- твои <path>… -->
-                        </svg>
-                        <span class="text main__tabsText">Найти врача</span>
-
-                    </li>
-                    <li class="main__tabsListItem" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="true"
-                        tabindex="0">
-                        <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                            viewBox="…">
-                            <!-- твои <path>… -->
-                        </svg>
-                        <span class="text main__tabsText">Обратиться за информацией и поддержкой</span>
-
-                    </li>
-                    <li class="main__tabsListItem" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="true"
-                        tabindex="0">
-                        <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                            viewBox="…">
-                            <!-- твои <path>… -->
-                        </svg>
-                        <span class="text main__tabsText">Обратиться за информацией и поддержкой</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="main__tabsWrapper">
-                <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" class="main__tabsPanel">
-                    <h3 class="title main__stepOpenTitle">Найти врача</h3>
-                    <p class="text main__stepOpenText">
-                        Координированная клиника — лучшее место для лечения…
-                        <!-- здесь твой текст -->
-                    </p>
-                    <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-                </div>
-
-                <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" class="main__tabsPanel" hidden>
-                    <p class="text main__stepOpenText">
-                        Фонд Марфана может помочь…
-                    </p>
-                    <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-                </div>
-
-                <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" class="main__tabsPanel" hidden>
-                    <p class="text main__stepOpenText">
-                        Здесь можно добавить любые другие ресурсы…
-                    </p>
-                    <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-                </div>
-            </div>
-        </section>
-        <section class="main__details">
-            <h2 class="title main__detailsTitle">Готовность к чрезвычайным ситуациям</h2>
-            <p class="text main__detailsText">
-                Соблюдение рекомендаций врача по приему лекарств, мониторингу и физической активности дает вам наилучшие
-                шансы избежать
-                серьезных осложнений синдрома Марфана или любого из связанных с ним состояний. Тем не менее, нет никаких
-                гарантий. Вот
-                почему вам важно узнать о медицинских проблемах, которые могут возникнуть и потребовать немедленного
-                медицинского
-                лечения.
-            </p>
-            <p class="text main__detailsText">
-                Наиболее серьезные из этих проблем связаны с сердцем и кровеносными сосудами, но существуют и другие
-                проблемы с глазами
-                и легкими, которые также требуют неотложного лечения.
-            </p>
-            <p class="text main__detailsText">
-                Чтобы помочь вам подготовиться к таким ситуациям, мы рекомендуем вам заполнить наш набор готовности к
-                чрезвычайным
-                ситуациям, который мы создали специально для людей с синдромом Марфана и связанными с ним состояниями.
-                Он включает в
-                себя нашу карту оповещения о чрезвычайных ситуациях, которую вы можете загрузить и носить в своем
-                кошельке. Вы можете
-                нажать ниже, чтобы загрузить их.
-            </p>
-            <ul class="main__detailsList">
-                <li class="main__detailsListItem">
-                    <svg class="main__detailsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                        viewBox="…">
-                        <!-- твои <path>… -->
-                    </svg>
-                    <span class="text main__detailsListText">Комплект готовности к чрезвычайным ситуациям</span>
-                </li>
-                <li class="main__detailsListItem">
-                    <svg class="main__detailsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                        viewBox="…">
-                        <!-- твои <path>… -->
-                    </svg>
-                    <span class="text main__detailsListText">Карточка оповещания о чрезвычайных ситуациях</span>
-                </li>
-                <li class="main__detailsListItem">
-                    <svg class="main__detailsIcon" aria-hidden="true" focusable="false" width="24" height="24"
-                        viewBox="…">
-                        <!-- твои <path>… -->
-                    </svg>
-                    <span class="text main__detailsListText">Операции</span>
-                </li>
-            </ul>
-        </section>
-        <section class="main__charity">
-            <h2 class="title main__charityTitle">Знай знаки. Борись за победу</h2>
-            <p class="text main__charityText">Присоединяйтесь к нам в борьбе за победу над синдромом Марфана,
-                Лойса-Дитца,
-                VEDS и другими генетическими аортальными и
-                сосудистыми заболеваниями. Помогите нам создать мир, в котором каждый человек с этими заболеваниями
-                сможет прожить свою
-                лучшую жизнь.</p>
-            <a href="#" class="primeButton--white main__charityLink">Пожертвовать сейчас</a>
-        </section>
-        <section class="main__formInTouch">
-            <h2 class="title main__formTitle">Будем на связи!</h2>
-            <p class="text main__formText">Join us in the fight for victory over genetic aortic and vascular conditions.
-                Sign up to get the latest news and
-                updates.</p>
-            <div class="main__inTouchInfo">
-                <h3 class="title main__inTouchInfoTitle">Конфиденциальность</h3>
-                <h3 class="title main__inTouchInfoTitle">Связатья с нами:</h3>
-                <address class="main__inTouchAddress">
-                    <a class="text main__inTouchInfoText" href="mailto:hello@rimt.ru">hello@rimt.ru</a>
-                </address>
-
-            </div>
-            <form action="" class="main__form">
-                <label for="main__formSurname" class="text main__formLabel">Фамилия</label>
-                <input name="surname" type="text" id="main__formSurname" class="input main__formInput" required>
-                <label for="main__formName" class="text main__formLabel">Имя</label>
-                <input name="name" type="text" id="main__formName" class="input main__formInput" required>
-                <label for="main__formEmail" class="text main__formLabel">E-mail:</label>
-                <input name="email" type="email" id="main__formEmail" class="input main__formInput" required>
-                <label for="main__formConnection" class="text main__formLabel">Синдром</label>
-                <input name="condition" type="text" id="main__formConnection" class="input main__formInput" required>
-                <button type="submit" class="primeButton--black main__formBtn">Подписаться</button>
-                <p class="text main__formSubtext">Нажимая на кнопку, вы даёте согласие
-                    на обработку персональных данных
-                    и соглашаетесь c политикой конфиденциальности</p>
-            </form>
-        </section>
-     {% endblock %}
+        {% block content %}{% endblock %}
     </main>
-    <!-- Footer -->
-    <footer class="footer">
-        <p class="text footer__text">&copy; 2025 «Ритмы жизней»</p>
-    </footer>
-    <script src="{% static 'js/scripts.js' %}"></script>
-</body>
 
+    <!-- Footer Section -->
+    <footer class="footer bg-dark text-white py-3 mt-4">
+        <div class="container">
+            <p class="text-center mb-0">&copy; 2025 «Rhymes of Life»</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Project JS -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    
+    <!-- Django Sekizai JS blocks -->
+    {% render_block "js" %}
+    
+    <!-- Extra JS block for child templates -->
+    {% block extra_js %}{% endblock %}
+</body>
 </html>
