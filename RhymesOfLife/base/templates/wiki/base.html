@@ -1,7 +1,6 @@
 {% extends "wiki/base_site.html" %}
 {% load static i18n sekizai_tags %}
 
-
 {% block wiki_body %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
@@ -9,52 +8,37 @@
     {% block wiki_header_branding %}
       <a class="navbar-brand fw-bold" href="/">Ритмы Жизней</a>
     {% endblock %}
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarWiki" aria-controls="navbarWiki" aria-expanded="false" aria-label="Переключить навигацию">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarWiki">
-      {% block wiki_header_navlinks %}
-      <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'wiki:root' %}">{% trans "Главная статья" %}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/django-wiki/django-wiki" target="_blank">{% trans "О проекте" %}</a>
-        </li>
-      </ul>
-      {% endblock %}
+      {% block wiki_header_navlinks %}{% endblock %}
 
-      {% if user.is_authenticated %}
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ user }}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{% url 'logout' %}">{% trans "Выйти" %}</a></li>
-          </ul>
-        </li>
-      </ul>
-      {% else %}
-      <a class="btn btn-outline-light me-2" href="{% url 'login' %}">{% trans "Войти" %}</a>
-      {% endif %}
-
-      {% block wiki_header_search %}
-      <form class="d-flex ms-2" method="GET" action="{% spaceless %}
-        {% if article or urlpath %}
-          {% url 'wiki:search' article_id=article.id path=urlpath.path %}
+      <div class="d-flex ms-auto align-items-center gap-2">
+        {% if user.is_authenticated %}
+          <span class="text-white">{{ user }}</span>
+          <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">{% trans "Выйти" %}</a>
         {% else %}
-          {% url 'wiki:search' %}
+          <a class="btn btn-outline-light me-2" href="{% url 'login' %}">{% trans "Войти" %}</a>
         {% endif %}
-      {% endspaceless %}">
-        <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="{% if article or urlpath %}{% trans 'Поиск по статье...' %}{% else %}{% trans 'Поиск по вики...' %}{% endif %}" aria-label="Поиск">
-        <button class="btn btn-outline-light btn-sm" type="submit">
-          <i class="bi bi-search"></i>
-        </button>
-      </form>
-      {% endblock %}
+
+        {% block wiki_header_search %}
+        <form class="d-flex ms-2" method="GET" action="{% spaceless %}
+          {% if article or urlpath %}
+            {% url 'wiki:search' article_id=article.id path=urlpath.path %}
+          {% else %}
+            {% url 'wiki:search' %}
+          {% endif %}
+        {% endspaceless %}">
+          <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="{% if article or urlpath %}{% trans 'Поиск по статье...' %}{% else %}{% trans 'Поиск по вики...' %}{% endif %}" aria-label="Поиск">
+          <button class="btn btn-outline-light btn-sm" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+        {% endblock %}
+      </div>
     </div>
   </div>
 </nav>

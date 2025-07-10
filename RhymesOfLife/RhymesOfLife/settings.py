@@ -177,5 +177,15 @@ SITE_ID = 1
 
 
 # wiki settings
-WIKI_USE_BOOTSTRAP = True 
+
+WIKI_CAN_WRITE = lambda article, user: hasattr(user, 'is_superuser') and (
+    user.is_superuser or article.current_revision.user == user
+)
+WIKI_CAN_DELETE = lambda article, user: hasattr(user, 'is_superuser') and (
+    user.is_superuser or article.current_revision.user == user
+)
+WIKI_CAN_MODERATE = lambda article, user: hasattr(user, 'is_superuser') and user.is_superuser
+WIKI_USE_BOOTSTRAP = True
+
+
 
