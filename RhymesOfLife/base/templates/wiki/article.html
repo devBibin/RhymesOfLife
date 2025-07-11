@@ -38,17 +38,18 @@
       {% endblock %}
     </div>
 
-    <!-- Блок лайков -->
+    <!-- Блок лайков с формой вместо кнопки -->
     <div class="mt-4 mb-4">
       {% if request.user.is_authenticated %}
-        <button id="like-btn"
-                class="btn {% if user_liked %}btn-danger{% else %}btn-outline-danger{% endif %}"
-                data-article-id="{{ article.id }}"
-                data-like-url="{% url 'wiki_toggle_like' article_id=article.id %}"
-                data-liked="{{ user_liked|yesno:'true,false' }}">
-          {% if user_liked %}💖{% else %}❤️{% endif %}
-          <span id="like-count">{{ article.likes.count }}</span>
-        </button> 
+        <form id="like-form" method="post" action="{% url 'wiki_toggle_like' article_id=article.id %}">
+          {% csrf_token %}
+          <button type="submit" 
+                  id="like-btn"
+                  class="btn {% if user_liked %}btn-danger{% else %}btn-outline-danger{% endif %}">
+            {% if user_liked %}💖{% else %}❤️{% endif %}
+            <span id="like-count">{{ article.likes.count }}</span>
+          </button> 
+        </form>
       {% else %}
         <p class="text-muted">Войдите, чтобы поставить лайк.</p>
       {% endif %}
@@ -90,39 +91,38 @@
 {% addtoblock "js" %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Улучшенная функция получения куки
-    function getCookie(name) {
-        const cookieString = document.cookie || '';
-        const cookies = cookieString.split(';');
-        
-        for (const cookieRaw of cookies) {
-            const cookie = cookieRaw.trim();
-            if (cookie.startsWith(name + '=')) {
-                return decodeURIComponent(cookie.substring(name.length + 1));
-            }
-        }
-        return null;
-    }
-
-    const likeBtn = document.getElementById('like-btn');
+    // Отладочное сообщение для проверки загрузки скрипта
+    console.log('Like script loaded');
     
-    // Если кнопка лайка существует на странице
-    if (likeBtn) {
-        const csrftoken = getCookie('csrftoken');
+    const likeForm = document.getElementById('like-form');
+    
+    if (likeForm) {
+        console.log('Like form found');
         
-        likeBtn.addEventListener('click', function() {
-            const likeUrl = this.getAttribute('data-like-url');
+        likeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Like form submitted');
             
-            fetch(likeUrl, {
+            const form = e.target;
+            const formData = new FormData(form);
+            const likeBtn = document.getElementById('like-btn');
+            const likeCount = document.getElementById('like-count');
+            
+            // Добавляем индикатор загрузки
+            const originalHtml = likeBtn.innerHTML;
+            likeBtn.innerHTML = '⏳';
+            likeBtn.disabled = true;
+            
+            fetch(form.action, {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({})
+                }
             })
             .then(response => {
+                console.log('Response received:', response.status);
+                
                 if (response.status === 403) {
                     throw new Error('Доступ запрещен. Возможно, нужно авторизоваться');
                 }
@@ -132,28 +132,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                // Обновляем иконку и счетчик
-                const icon = data.liked ? '💖' : '❤️';
-                likeBtn.innerHTML = `${icon} <span id="like-count">${data.total_likes}</span>`;
-                likeBtn.setAttribute('data-liked', data.liked.toString());
+                console.log('Like data:', data);
                 
-                // Обновляем стили кнопки
-                if (data.liked) {
-                    likeBtn.classList.remove('btn-outline-danger');
-                    likeBtn.classList.add('btn-danger');
-                } else {
-                    likeBtn.classList.remove('btn-danger');
-                    likeBtn.classList.add('btn-outline-danger');
+                // Обновляем иконку
+                const icon = data.liked ? '💖' : '❤️';
+                
+                // Обновляем счетчик
+                if (likeCount) {
+                    likeCount.textContent = data.total_likes;
                 }
+                
+                // Обновляем кнопку
+                likeBtn.innerHTML = icon + (likeCount ? ` <span id="like-count">${data.total_likes}</span>` : '');
+                
+                // Обновляем стили
+                likeBtn.classList.toggle('btn-danger', data.liked);
+                likeBtn.classList.toggle('btn-outline-danger', !data.liked);
+                
+                // Задержка для визуальной обратной связи
+                setTimeout(() => {
+                    likeBtn.disabled = false;
+                }, 500);
             })
             .catch(error => {
                 console.error('Ошибка при обработке лайка:', error);
+                likeBtn.innerHTML = originalHtml;
+                likeBtn.disabled = false;
                 alert(`Ошибка: ${error.message}`);
             });
         });
     } else {
-        console.log('Кнопка лайка не найдена на странице');
+        console.log('Like form not found');
     }
+    
+
+    document.getElementById('like-btn')?.addEventListener('click', function() {
+        console.log('Like button clicked directly');
+    });
 });
 </script>
 {% endaddtoblock %}
