@@ -23,23 +23,17 @@ class AdditionalUserInfo(models.Model):
     def __str__(self):
         return f"{self.user.username}'s info"
 
+
 class ArticleLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'article')
 
-    def __str__(self):
-        return f"{self.user} ♥ {self.article.title}"
-    
-
 class ArticleComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} on {self.article.title}"
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

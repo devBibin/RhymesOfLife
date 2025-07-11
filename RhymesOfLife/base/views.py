@@ -3,11 +3,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
 from .forms import ProfileForm
+from django.http import JsonResponse
+from wiki.models.article import Article
+from .models import ArticleLike, ArticleComment
 
 from .forms import RegisterForm
 from django.http import HttpResponse
@@ -115,8 +119,44 @@ def resend_verification_view(request):
 
 
 # =================== WIKI REGION ===================
+@require_POST
+@login_required
+def toggle_like(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    like, created = ArticleLike.objects.get_or_create(user=request.user, article=article)
+    if not created:
+        like.delete()
+        liked = False
+    else:
+        liked = True
+    return JsonResponse({'liked': liked, 'total_likes': article.likes.count()})
 
 
+@require_POST
+@login_required
+def post_comment(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    text = request.POST.get('comment')
+    if text:
+        ArticleComment.objects.create(user=request.user, article=article, text=text)
+
+    urlpath = article.urlpath_set.first()
+    return redirect('wiki:get', path=urlpath.path)
+
+
+
+def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    user = self.request.user
+    article = context['article']
+
+    if user.is_authenticated:
+        user_liked = article.likes.filter(user=user).exists()
+    else:
+        user_liked = False
+
+    context['user_liked'] = user_liked
+    return context
 
 # =================== END WIKI REGION ===================
 

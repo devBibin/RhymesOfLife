@@ -186,6 +186,7 @@ WIKI_CAN_DELETE = lambda article, user: hasattr(user, 'is_superuser') and (
 )
 WIKI_CAN_MODERATE = lambda article, user: hasattr(user, 'is_superuser') and user.is_superuser
 WIKI_USE_BOOTSTRAP = True
+WIKI_ARTICLE_HTML_TEMPLATE = "wiki/article.html"
 
 
 
