@@ -124,13 +124,18 @@ def resend_verification_view(request):
 def toggle_like(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     like, created = ArticleLike.objects.get_or_create(user=request.user, article=article)
+
     if not created:
         like.delete()
         liked = False
     else:
         liked = True
-    return JsonResponse({'liked': liked, 'total_likes': article.likes.count()})
 
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'total_likes': article.likes.count()})
+    
+    urlpath = article.urlpath_set.first()
+    return redirect('wiki:get', path=urlpath.path)
 
 @require_POST
 @login_required
