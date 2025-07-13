@@ -14,6 +14,8 @@ from pathlib import Path
 import json
 import os
 
+from RhymesOfLife.wiki_permissions import can_write, can_delete, can_moderate
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -178,13 +180,9 @@ SITE_ID = 1
 
 # wiki settings
 
-WIKI_CAN_WRITE = lambda article, user: hasattr(user, 'is_superuser') and (
-    user.is_superuser or article.current_revision.user == user
-)
-WIKI_CAN_DELETE = lambda article, user: hasattr(user, 'is_superuser') and (
-    user.is_superuser or article.current_revision.user == user
-)
-WIKI_CAN_MODERATE = lambda article, user: hasattr(user, 'is_superuser') and user.is_superuser
+WIKI_CAN_WRITE = can_write
+WIKI_CAN_DELETE = can_delete
+WIKI_CAN_MODERATE = can_moderate
 WIKI_USE_BOOTSTRAP = True
 WIKI_ARTICLE_HTML_TEMPLATE = "wiki/article.html"
 
