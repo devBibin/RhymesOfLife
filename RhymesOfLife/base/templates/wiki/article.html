@@ -1,6 +1,7 @@
 {% extends "wiki/base.html" %}
 {% load wiki_tags i18n sekizai_tags %}
 {% load static %}
+{% load wiki_extras %}
 
 {% block wiki_pagetitle %}{{ article.current_revision.title }}{% endblock %}
 
@@ -40,13 +41,14 @@
 
     <div class="mt-4 mb-4">
       {% if request.user.is_authenticated %}
+        {% get_like_info article as like_info %}
         <form id="like-form" method="post" action="{% url 'wiki_toggle_like' article_id=article.id %}">
           {% csrf_token %}
           <button type="submit" 
                   id="like-btn"
-                  class="btn {% if user_liked %}btn-danger{% else %}btn-outline-danger{% endif %}">
-            {% if user_liked %}💖{% else %}❤️{% endif %}
-            <span id="like-count">{{ article.likes.count }}</span>
+                  class="btn {% if like_info.user_liked %}btn-danger{% else %}btn-outline-danger{% endif %}">
+            {% if like_info.user_liked %}💖{% else %}❤️{% endif %}
+            <span id="like-count">{{ like_info.active_likes_count }}</span>
           </button> 
         </form>
       {% else %}

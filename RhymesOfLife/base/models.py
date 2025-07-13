@@ -25,16 +25,20 @@ class AdditionalUserInfo(models.Model):
 
 
 class ArticleLike(models.Model):
-    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='likes', null=True)
+    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='article_likes', null=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('user_info', 'article')
 
+    def __str__(self):
+        return f'{self.user_info} liked {self.article} (active={self.is_active})'
+
 
 class ArticleComment(models.Model):
-    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='comments', null=True)
+    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='article_comments', null=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

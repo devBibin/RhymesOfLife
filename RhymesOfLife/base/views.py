@@ -126,19 +126,23 @@ def toggle_like(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     user_info = request.user.additional_info
 
-    like, created = ArticleLike.objects.get_or_create(user_info=user_info, article=article)
+    like, created = ArticleLike.objects.get_or_create(
+        user_info=user_info,
+        article=article,
+        defaults={'is_active': True}
+    )
 
     if not created:
-        like.delete()
-        liked = False
-    else:
-        liked = True
+        like.is_active = not like.is_active
+        like.save()
+    
+    liked = like.is_active
+    total_likes = article.likes.filter(is_active=True).count()
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'liked': liked, 'total_likes': article.likes.count()})
+        return JsonResponse({'liked': liked, 'total_likes': total_likes})
 
-    urlpath = article.urlpath_set.first()
-    return redirect('wiki:get', path=urlpath.path)
+    return redirect(article.get_absolute_url())
 
 @require_POST
 @login_required
@@ -156,20 +160,6 @@ def post_comment(request, article_id):
     return redirect('wiki:get', path=urlpath.path)
 
 
-
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    user = self.request.user
-    article = context['article']
-
-    if user.is_authenticated:
-        user_info = user.additional_info
-        user_liked = article.likes.filter(user_info=user_info).exists()
-    else:
-        user_liked = False
-
-    context['user_liked'] = user_liked
-    return context
 # =================== END WIKI REGION ===================
 
 

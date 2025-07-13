@@ -1,0 +1,18 @@
+from django import template
+from ..models import ArticleLike
+
+register = template.Library()
+
+@register.simple_tag(takes_context=True)
+def get_like_info(context, article):
+    request = context['request']
+    if request.user.is_authenticated:
+        user_info = request.user.additional_info
+        return {
+            'user_liked': article.likes.filter(user_info=user_info, is_active=True).exists(),
+            'active_likes_count': article.likes.filter(is_active=True).count()
+        }
+    return {
+        'user_liked': False,
+        'active_likes_count': article.likes.filter(is_active=True).count()
+    }
