@@ -25,15 +25,16 @@ class AdditionalUserInfo(models.Model):
 
 
 class ArticleLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='likes', null=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'article')
+        unique_together = ('user_info', 'article')
+
 
 class ArticleComment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='comments', null=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

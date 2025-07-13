@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from .forms import ProfileForm
 from django.http import JsonResponse
 from wiki.models.article import Article
-from .models import ArticleLike, ArticleComment
+from .models import ArticleLike, ArticleComment, AdditionalUserInfo
 
 from .forms import RegisterForm
 from django.http import HttpResponse
@@ -119,11 +119,14 @@ def resend_verification_view(request):
 
 
 # =================== WIKI REGION ===================
+
 @require_POST
 @login_required
 def toggle_like(request, article_id):
     article = get_object_or_404(Article, id=article_id)
-    like, created = ArticleLike.objects.get_or_create(user=request.user, article=article)
+    user_info = request.user.additional_info
+
+    like, created = ArticleLike.objects.get_or_create(user_info=user_info, article=article)
 
     if not created:
         like.delete()
@@ -133,7 +136,7 @@ def toggle_like(request, article_id):
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'liked': liked, 'total_likes': article.likes.count()})
-    
+
     urlpath = article.urlpath_set.first()
     return redirect('wiki:get', path=urlpath.path)
 
@@ -143,7 +146,11 @@ def post_comment(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     text = request.POST.get('comment')
     if text:
-        ArticleComment.objects.create(user=request.user, article=article, text=text)
+        ArticleComment.objects.create(
+            user_info=request.user.additional_info,
+            article=article,
+            text=text
+        )
 
     urlpath = article.urlpath_set.first()
     return redirect('wiki:get', path=urlpath.path)
@@ -156,13 +163,13 @@ def get_context_data(self, **kwargs):
     article = context['article']
 
     if user.is_authenticated:
-        user_liked = article.likes.filter(user=user).exists()
+        user_info = user.additional_info
+        user_liked = article.likes.filter(user_info=user_info).exists()
     else:
         user_liked = False
 
     context['user_liked'] = user_liked
     return context
-
 # =================== END WIKI REGION ===================
 
 

@@ -59,7 +59,7 @@
       <ul class="list-unstyled">
         {% for comment in article.comments.all %}
           <li class="mb-3 p-2 border rounded">
-            <strong>{{ comment.user }}</strong>: {{ comment.text }}
+            <strong>{{ comment.user_info.user.username }}</strong>: {{ comment.text }}
             <em class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</em>
           </li>
         {% empty %}
