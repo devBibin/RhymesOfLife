@@ -13,11 +13,6 @@
       <p>📩 A verification email has already been sent.</p>
       <p>Check your inbox: <strong>{{ request.user.additional_info.email|default:request.user.email }}</strong></p>
 
-      <form method="post" action="{% url 'resend_verification' %}">
-        {% csrf_token %}
-        <button type="submit">Resend Email</button>
-      </form>
-
     {% else %}
       <p>🔔 Your email is not verified.</p>
       <p>Click the button below to request verification.</p>

@@ -9,10 +9,10 @@ def get_like_info(context, article):
     if request.user.is_authenticated:
         user_info = request.user.additional_info
         return {
-            'user_liked': article.likes.filter(user_info=user_info, is_active=True).exists(),
-            'active_likes_count': article.likes.filter(is_active=True).count()
+            'user_liked': article.custom_fields.likes.filter(user_info=user_info, is_active=True).exists(),
+            'active_likes_count': article.custom_fields.likes_count,
         }
     return {
         'user_liked': False,
-        'active_likes_count': article.likes.filter(is_active=True).count()
+        'active_likes_count': article.custom_fields.likes_count
     }

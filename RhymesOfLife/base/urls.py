@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import profile_edit_view, resend_verification_view
+from .views import profile_edit_view, get_article_comments
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
@@ -11,5 +11,6 @@ urlpatterns = [
     path("profile/edit/", profile_edit_view, name="profile_edit"),
     path('article/<int:article_id>/comment/', views.post_comment, name='wiki_post_comment'),
     path('article/<int:article_id>/like/', views.toggle_like, name='wiki_toggle_like'),
+    path('articles/<int:article_id>/comments/', get_article_comments, name='wiki_get_comments'),
     path('', views.home_view, name='home'),
 ]
