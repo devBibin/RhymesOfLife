@@ -56,4 +56,3 @@ settings.configure(
 django.setup()
 
 from base.models import User, AdditionalUserInfo
-print("✅ ORM connector initialized successfully!")

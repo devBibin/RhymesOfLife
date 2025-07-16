@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block wiki_contents %}
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <div id="article-container">
     <nav id="article-menu" class="navbar navbar-expand-md nav-pills">
@@ -40,6 +40,7 @@
       {% block wiki_contents_tab %}{% endblock %}
     </div>
 
+    {% if request.path|is_view_page %}
     <div class="mt-4 mb-4">
       {% if request.user.is_authenticated %}
         {% get_like_info article as like_info %}
@@ -75,7 +76,8 @@
         </p>
       {% endif %}
     </div>
-  </div>
+  {% endif %}
+
 {% endblock %}
 
 {% block wiki_footer_prepend %}

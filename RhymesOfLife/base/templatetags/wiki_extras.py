@@ -16,3 +16,7 @@ def get_like_info(context, article):
         'user_liked': False,
         'active_likes_count': article.custom_fields.likes_count
     }
+
+@register.filter
+def is_view_page(path):
+    return not any(p in path for p in ['_edit', '_create', '_delete', '_history','_plugin/attachments', '_settings', '_dir'])
