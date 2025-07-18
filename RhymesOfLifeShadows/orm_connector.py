@@ -39,6 +39,8 @@ settings.configure(
         'django.contrib.sessions',
         'django.contrib.sites',
         'base.apps.BaseConfig',
+        'wiki.apps.WikiConfig',
+        'django_nyt', 
     ],
     ROOT_URLCONF='RhymesOfLife.urls',
     SITE_ID=1,

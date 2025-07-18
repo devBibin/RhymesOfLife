@@ -18,3 +18,156 @@
     color: #555;
     margin-top: 0.5rem;
 }
+
+/* profile */
+
+.editable-input[readonly] {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.editable-input:focus {
+  background-color: #ffffff;
+}
+
+.avatar-menu .dropdown-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* Общий стиль для слабовидящих */
+body {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 1.15rem;
+  background-color: #fdfdfd;
+  color: #212529;
+  line-height: 1.6;
+}
+
+/* Ссылки */
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+/* Фокусировка клавишей Tab */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+  outline: 3px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Заголовок логотипа */
+.base__logo {
+  font-size: 1.5rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Стили кнопок и форм */
+.btn, .form-control, .form-select {
+  font-size: 1.1rem;
+}
+
+/* Навигация */
+.base__navList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.base__navListItemLink {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.base__navListItemLink:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer p {
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+.avatar-editable {
+  transition: transform 0.3s ease;
+}
+
+.avatar-editable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.avatar-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 0.5rem;
+  min-width: 160px;
+}
+
+.avatar-menu .dropdown-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.avatar-menu .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: #dc3545;
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: #198754;
+}
+
+
+/* login */
+form .form-label {
+  font-weight: 600;
+}
+
+.card input.form-control {
+  font-size: 1rem;
+}
+
+.text-danger {
+  font-size: 0.875rem;
+}
+
+/* refister */
+
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+

@@ -10,6 +10,7 @@ class AdditionalUserInfo(models.Model):
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     # Medical information
     syndrome = models.CharField(max_length=255, blank=True, null=True)

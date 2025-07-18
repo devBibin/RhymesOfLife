@@ -2,213 +2,124 @@
 {% load static %}
 
 {% block title %}
-  Home — {{ block.super }}
+  Главная — {{ block.super }}
 {% endblock %}
 
 {% block content %}
-  <h2>Welcome, {{ request.user.username }}!</h2>
 
-  {% if not request.user.additional_info.is_verified %}
-    {% if request.user.additional_info.ready_for_verification %}
-      <p>📩 A verification email has already been sent.</p>
-      <p>Check your inbox: <strong>{{ request.user.additional_info.email|default:request.user.email }}</strong></p>
+<div class="container py-4">
+  <div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Добро пожаловать, {{ request.user.username }}!</h1>
 
+    {% if not request.user.additional_info.is_verified %}
+      <div class="alert alert-warning mt-4" role="alert">
+        {% if request.user.additional_info.ready_for_verification %}
+          <p>📩 Письмо для подтверждения уже отправлено.</p>
+          <p>Проверьте ваш email: <strong>{{ request.user.additional_info.email|default:request.user.email }}</strong></p>
+        {% else %}
+          <p>🔔 Ваш email не подтверждён.</p>
+          <p>Нажмите кнопку ниже, чтобы отправить запрос на верификацию.</p>
+          <form method="post" action="{% url 'request_verification' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary mt-2">Подтвердить Email</button>
+          </form>
+        {% endif %}
+      </div>
     {% else %}
-      <p>🔔 Your email is not verified.</p>
-      <p>Click the button below to request verification.</p>
-
-      <form method="post" action="{% url 'request_verification' %}">
-        {% csrf_token %}
-        <button type="submit">Verify Account</button>
-      </form>
+      <div class="alert alert-success mt-4" role="alert">
+        ✅ Ваш email подтверждён. Добро пожаловать в Rhymes of Life!
+      </div>
     {% endif %}
-  {% else %}
-    <p>✅ Your email is verified. Welcome to Rhymes of Life!</p>
-  {% endif %}
+  </div>
 
-  <!-- ✅ Full homepage sections restored below -->
-
-  <section class="main__block">
-    <h1 class="title main__blockTitle">Марфан, Элерс-Данло, Лойс-Дитц и связанные с ними состояния</h1>
-  </section>
-
-  <section class="main__info">
-    <div class="main__infoDesc">
-      <p class="text main__infoText--bold">
-        Синдром Марфана, Лойса-Дитца (СЛД) и сосудистый синдром Элерса-Данлоса
-        (СЭД) — это генетические заболевания, которые
-        поражают соединительную ткань организма и в результате вызывают ослабление артерий.
-      </p>
-      <p class="text main__infoText">
-        Марфана, синдром LDS, синдром VEDS и некоторые связанные с ними состояния
-        являются серьезными, а осложнения могут быть
-        потенциально опасными для жизни. ...
-      </p>
-    </div>
-
-    <div class="main__infoMenu">
-      <h2 class="title main__infoTitle">Марфан, Элерс-Данло, Лойс-Дитц и связанные с ними состояния</h2>
-      <ul class="main__infoMenuList">
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Недифференцированная дисплазия соединительной ткани" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Недифференцированная дисплазия соединительной ткани</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Элерса-Данло" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Элерса-Данло</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Марфана" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Марфана</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Шпринтцена-Гольдберга Билса" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Шпринтцена-Гольдберга Билса</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Лойса-Дитца" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Лойса-Дитца</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Стиклера" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Стиклера</figcaption>
-            </figure>
-          </a>
-        </li>
-        <li class="main__infoMenuListItem">
-          <a href="#" class="main__infoLink">
-            <figure class="main__infoFigure">
-              <img src="#" alt="Синдром Билса" class="main__infoLinkImage">
-              <figcaption class="text--bold main__infoLinkText">Синдром Билса</figcaption>
-            </figure>
-          </a>
-        </li>
-      </ul>
-      <button class="primeButton--black main_infoMenuListBtn">Показать весь список</button>
-    </div>
-  </section>
-
-  <section class="main__instruction" aria-labelledby="instruction-title">
-    <div class="main__tabs">
-      <h2 id="instruction-title" class="title main__instTitle">
-        Что делать, если вы подозреваете, что у вас синдром Марфана или родственное ему заболевание?
-      </h2>
-      <ul role="tablist" class="main__tabsList">
-        <li class="main__tabsListItem" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0">
-          <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24">
-            <!-- icon -->
-          </svg>
-          <span class="text main__tabsText">Найти врача</span>
-        </li>
-        <li class="main__tabsListItem" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="true" tabindex="0">
-          <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24">
-            <!-- icon -->
-          </svg>
-          <span class="text main__tabsText">Обратиться за информацией и поддержкой</span>
-        </li>
-        <li class="main__tabsListItem" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="true" tabindex="0">
-          <svg class="main__tabsIcon" aria-hidden="true" focusable="false" width="24" height="24">
-            <!-- icon -->
-          </svg>
-          <span class="text main__tabsText">Получить ресурсы</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="main__tabsWrapper">
-      <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" class="main__tabsPanel">
-        <h3 class="title main__stepOpenTitle">Найти врача</h3>
-        <p class="text main__stepOpenText">Координированная клиника — лучшее место для лечения…</p>
-        <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-      </div>
-      <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" class="main__tabsPanel" hidden>
-        <p class="text main__stepOpenText">Фонд Марфана может помочь…</p>
-        <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-      </div>
-      <div id="panel-3" role="tabpanel" aria-labelledby="tab-3" class="main__tabsPanel" hidden>
-        <p class="text main__stepOpenText">Здесь можно добавить любые другие ресурсы…</p>
-        <a href="#" class="primeButton--black main__stepOpenTextLink">Продолжить</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="main__details">
-    <h2 class="title main__detailsTitle">Готовность к чрезвычайным ситуациям</h2>
-    <p class="text main__detailsText">Соблюдение рекомендаций врача по приему лекарств...</p>
-    <p class="text main__detailsText">Наиболее серьезные из этих проблем связаны с сердцем и кровеносными сосудами...</p>
-    <p class="text main__detailsText">Чтобы помочь вам подготовиться...</p>
-    <ul class="main__detailsList">
-      <li class="main__detailsListItem">
-        <svg class="main__detailsIcon" aria-hidden="true" width="24" height="24"></svg>
-        <span class="text main__detailsListText">Комплект готовности к ЧС</span>
-      </li>
-      <li class="main__detailsListItem">
-        <svg class="main__detailsIcon" aria-hidden="true" width="24" height="24"></svg>
-        <span class="text main__detailsListText">Карточка оповещения о ЧС</span>
-      </li>
-      <li class="main__detailsListItem">
-        <svg class="main__detailsIcon" aria-hidden="true" width="24" height="24"></svg>
-        <span class="text main__detailsListText">Операции</span>
-      </li>
-    </ul>
-  </section>
-
-  <section class="main__charity">
-    <h2 class="title main__charityTitle">Знай знаки. Борись за победу</h2>
-    <p class="text main__charityText">
-      Присоединяйтесь к нам в борьбе за победу над синдромом Марфана, Лойса-Дитца, VEDS...
+  <!-- main content -->
+  <section class="mb-5">
+    <h2 class="h4 fw-bold mb-3">Генетические синдромы соединительной ткани</h2>
+    <p class="lead">
+      Синдромы Марфана, Лойса-Дитца, Элерса-Данло и другие связаны с нарушением соединительной ткани и могут угрожать жизни без своевременной диагностики.
     </p>
-    <a href="#" class="primeButton--white main__charityLink">Пожертвовать сейчас</a>
   </section>
 
-  <section class="main__formInTouch">
-    <h2 class="title main__formTitle">Будем на связи!</h2>
-    <p class="text main__formText">Join us in the fight...</p>
-
-    <div class="main__inTouchInfo">
-      <h3 class="title main__inTouchInfoTitle">Конфиденциальность</h3>
-      <h3 class="title main__inTouchInfoTitle">Связь с нами:</h3>
-      <address class="main__inTouchAddress">
-        <a class="text main__inTouchInfoText" href="mailto:hello@rimt.ru">hello@rimt.ru</a>
-      </address>
+  <!-- syndron cards -->
+  <section class="row g-4 mb-5">
+    {% for syndrome in syndrome_list %}
+    <div class="col-sm-6 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ syndrome.image_url }}" class="card-img-top" alt="{{ syndrome.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ syndrome.name }}</h5>
+          <p class="card-text">{{ syndrome.short_description|truncatechars:100 }}</p>
+          <a href="{{ syndrome.url }}" class="btn btn-outline-primary w-100">Узнать больше</a>
+        </div>
+      </div>
     </div>
+    {% endfor %}
+  </section>
 
-    <form action="" class="main__form">
-      <label for="main__formSurname" class="text main__formLabel">Фамилия</label>
-      <input name="surname" type="text" id="main__formSurname" class="input main__formInput" required>
-      <label for="main__formName" class="text main__formLabel">Имя</label>
-      <input name="name" type="text" id="main__formName" class="input main__formInput" required>
-      <label for="main__formEmail" class="text main__formLabel">E-mail:</label>
-      <input name="email" type="email" id="main__formEmail" class="input main__formInput" required>
-      <label for="main__formConnection" class="text main__formLabel">Синдром</label>
-      <input name="condition" type="text" id="main__formConnection" class="input main__formInput" required>
-      <button type="submit" class="primeButton--black main__formBtn">Подписаться</button>
-      <p class="text main__formSubtext">
-        Нажимая на кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь c политикой конфиденциальности
-      </p>
+  <!-- instruction -->
+  <section class="bg-light p-4 rounded shadow-sm mb-5" aria-labelledby="instruction-title">
+    <h2 id="instruction-title" class="h4 fw-bold mb-3">Что делать, если вы подозреваете синдром?</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100 border-0">
+          <div class="card-body">
+            <h5 class="card-title">👨‍⚕️ Найти врача</h5>
+            <p class="card-text">Координированная клиника — лучшее место для лечения...</p>
+            <a href="#" class="btn btn-outline-dark">Подробнее</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0">
+          <div class="card-body">
+            <h5 class="card-title">🤝 Поддержка</h5>
+            <p class="card-text">Фонд поможет вам найти ресурсы и общение.</p>
+            <a href="#" class="btn btn-outline-dark">Подробнее</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0">
+          <div class="card-body">
+            <h5 class="card-title">📘 Ресурсы</h5>
+            <p class="card-text">Официальные материалы и инструкции по синдрому.</p>
+            <a href="#" class="btn btn-outline-dark">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- contact -->
+  <section class="mb-5">
+    <h2 class="h4 fw-bold mb-3">Будем на связи</h2>
+    <form method="post" action="#" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-6">
+        <label for="surname" class="form-label">Фамилия</label>
+        <input type="text" class="form-control" id="surname" name="surname" required>
+      </div>
+      <div class="col-md-6">
+        <label for="name" class="form-label">Имя</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="col-md-6">
+        <label for="condition" class="form-label">Синдром</label>
+        <input type="text" class="form-control" id="condition" name="condition" required>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-dark w-100" disabled>Подписаться (временно не работает)</button>
+      </div>
+      <div class="col-12">
+        <p class="form-text">
+          Нажимая на кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь с политикой конфиденциальности.
+        </p>
+      </div>
     </form>
   </section>
+</div>
 
 {% endblock %}

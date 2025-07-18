@@ -1,9 +1,70 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-  <h2>Редактировать профиль</h2>
-  <form method="post">
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+<script defer src="{% static 'js/new_scripts.js' %}"></script>
+
+<div class="container mt-4">
+  <h2 class="mb-4">Редактировать профиль</h2>
+
+  <form id="profile-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
+
+    <div class="text-center mb-4 position-relative">
+      {% if info.avatar %}
+        <img id="avatar-img" src="{{ info.avatar.url }}" alt="Аватар"
+             class="rounded-circle shadow-sm avatar-editable" width="120" style="cursor: pointer;">
+      {% else %}
+        <img id="avatar-img" src="{% static 'images/default-avatar.png' %}" alt="Аватар"
+             class="rounded-circle shadow-sm avatar-editable" width="120" style="cursor: pointer;">
+      {% endif %}
+
+      <input type="file" name="avatar" id="avatar-input" class="d-none">
+      <input type="hidden" name="delete_avatar" id="delete-avatar" value="">
+
+      <div id="avatar-menu" class="avatar-menu d-none">
+        <button type="button" class="dropdown-item" id="change-avatar-btn">📤 Загрузить новую</button>
+        <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 Удалить</button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Имя</label>
+      <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}" required>
+      <div class="invalid-feedback">Введите имя</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Фамилия</label>
+      <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}" required>
+      <div class="invalid-feedback">Введите фамилию</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" value="{{ info.email }}" required>
+      <div class="invalid-feedback">Введите корректный email</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Синдром</label>
+      <select name="syndrome" class="form-select" required>
+        {% for option in syndrome_choices %}
+          <option value="{{ option }}" {% if info.syndrome == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <div class="invalid-feedback">Выберите синдром</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Дата рождения</label>
+      <input type="date" name="birth_date" class="form-control" value="{{ info.birth_date|date:'Y-m-d' }}" required>
+      <div class="invalid-feedback">Укажите дату рождения</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+    <div class="text-success mt-3 d-none" id="form-status">✔️ Профиль обновлён</div>
   </form>
+</div>
 {% endblock %}

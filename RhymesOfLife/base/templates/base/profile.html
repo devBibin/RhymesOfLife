@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Профиль пользователя: {{ user_profile.username }}</h2>
+
+  <!-- Display user avatar if exists -->
+  <div class="text-center mb-4">
+    {% if info.avatar %}
+      <img src="{{ info.avatar.url }}" alt="Аватар пользователя" class="rounded-circle shadow-sm" width="150" height="150">
+    {% else %}
+      <p class="text-muted">Нет аватарки</p>
+    {% endif %}
+  </div>
+
+  <!-- User profile data list -->
+  <ul class="list-group shadow-sm mb-4">
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Имя:</strong>
+      <span>{{ info.first_name|default:"Не указано" }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Фамилия:</strong>
+      <span>{{ info.last_name|default:"Не указано" }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Email:</strong>
+      <span>{{ info.email|default:user_profile.email }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Дата рождения:</strong>
+      <span>{{ info.birth_date|date:"d.m.Y"|default:"Не указана" }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Синдром:</strong>
+      <span>{{ info.syndrome|default:"Не указан" }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <strong>Верифицирован:</strong>
+      <span>
+        {% if info.is_verified %}
+          <span class="text-success">✔️ Верифицирован</span>
+        {% else %}
+          <span class="text-danger">❌ Не верифицирован</span>
+        {% endif %}
+      </span>
+    </li>
+  </ul>
+
+  <!-- Edit profile button for current user -->
+  {% if editable %}
+    <div class="text-end">
+      <a href="{% url 'profile_edit' %}" class="btn btn-primary">
+        <i class="bi bi-pencil-fill me-1"></i> Редактировать профиль
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

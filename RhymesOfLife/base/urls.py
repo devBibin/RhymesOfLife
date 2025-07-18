@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import profile_edit_view, get_article_comments
+from .views import profile_edit_view, get_article_comments, profile_view
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
@@ -12,5 +12,7 @@ urlpatterns = [
     path('article/<int:article_id>/comment/', views.post_comment, name='wiki_post_comment'),
     path('article/<int:article_id>/like/', views.toggle_like, name='wiki_toggle_like'),
     path('articles/<int:article_id>/comments/', get_article_comments, name='wiki_get_comments'),
+    path("profile/", profile_view, name="my_profile"),
+    path("profile/<str:username>/", profile_view, name="user_profile"),
     path('', views.home_view, name='home'),
 ]
