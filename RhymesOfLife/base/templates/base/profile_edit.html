@@ -3,7 +3,6 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
-<script defer src="{% static 'js/new_scripts.js' %}"></script>
 
 <div class="container mt-4">
   <h2 class="mb-4">Редактировать профиль</h2>
@@ -11,7 +10,7 @@
   <form id="profile-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="text-center mb-4 position-relative">
+    <div class="text-center mb-4 position-relative avatar-wrapper">
       {% if info.avatar %}
         <img id="avatar-img" src="{{ info.avatar.url }}" alt="Аватар"
              class="rounded-circle shadow-sm avatar-editable" width="120" style="cursor: pointer;">
@@ -23,7 +22,7 @@
       <input type="file" name="avatar" id="avatar-input" class="d-none">
       <input type="hidden" name="delete_avatar" id="delete-avatar" value="">
 
-      <div id="avatar-menu" class="avatar-menu d-none">
+      <div id="avatar-menu" class="avatar-menu js-avatar-menu">
         <button type="button" class="dropdown-item" id="change-avatar-btn">📤 Загрузить новую</button>
         <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 Удалить</button>
       </div>
@@ -68,3 +67,4 @@
   </form>
 </div>
 {% endblock %}
+<script defer src="{% static 'js/new_scripts.js' %}"></script>
