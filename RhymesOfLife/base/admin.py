@@ -19,3 +19,11 @@ class ArticleCommentAdmin(admin.ModelAdmin):
 @admin.register(CustomArticle)
 class CustomArticle(admin.ModelAdmin):
     pass
+
+@admin.register(MedicalDocument)
+class MedicalDocument(admin.ModelAdmin):
+    pass
+
+@admin.register(MedicalExam)
+class MedicalExam(admin.ModelAdmin):
+    pass

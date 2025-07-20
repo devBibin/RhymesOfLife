@@ -50,3 +50,37 @@ class ArticleComment(models.Model):
     custom_article = models.ForeignKey(CustomArticle, on_delete=models.CASCADE, related_name='comments', null=True,default=None)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class MedicalExam(models.Model):
+    user_info = models.ForeignKey(
+        'AdditionalUserInfo',
+        on_delete=models.CASCADE,
+        related_name='medical_exams'
+    )
+    exam_date = models.DateField()
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-exam_date', '-created_at']
+
+    def __str__(self):
+        return f"Обследование от {self.exam_date.strftime('%Y-%m-%d')}"
+
+class MedicalDocument(models.Model):
+    exam = models.ForeignKey(
+        MedicalExam,
+        on_delete=models.CASCADE,
+        related_name='documents',
+        null=True,
+        blank=True 
+    )
+    file = models.FileField(upload_to='medical_documents/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return f"Документ {self.file.name}"

@@ -206,3 +206,19 @@ form .form-label {
         font-size: 0.9rem;
     }
 }
+
+/* Custom Styles for My Documents Page */
+  #drop-zone {
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  #drop-zone.dragover {
+    background: #e3f2fd;
+  }
+  .file-card {
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+  }

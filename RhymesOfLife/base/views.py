@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import localtime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -5,7 +6,7 @@ from django.contrib import messages
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
@@ -16,8 +17,11 @@ from wiki.models.article import Article
 from .models import *
 from PIL import Image, UnidentifiedImageError
 from io import BytesIO
+import magic
+import os
 import base64
 from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import RegisterForm
 from django.http import HttpResponse
@@ -292,4 +296,123 @@ def get_article_comments(request, article_id):
 
 # =================== END WIKI REGION ===================
 
+# =================== MY DOCUMENTS REGION ===================
+@login_required
+def my_documents_view(request):
+    user_info = request.user.additional_info
 
+    if request.method == 'POST':
+        files = request.FILES.getlist('files')
+        description = request.POST.get('description', '')
+        exam_date_str = request.POST.get('exam_date')
+
+        try:
+            exam_date = datetime.strptime(exam_date_str, "%Y-%m-%d").date()
+        except (ValueError, TypeError):
+            return JsonResponse({'status': 'error', 'message': 'Неверный формат даты'})
+
+        if not files:
+            return JsonResponse({'status': 'error', 'message': 'Файлы не выбраны'})
+
+        MAX_SIZE = 20 * 1024 * 1024  # 20 MB
+        ALLOWED_EXT = ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx']
+        ALLOWED_MIME = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ]
+
+        exam = MedicalExam.objects.create(
+            user_info=user_info,
+            exam_date=exam_date,
+            description=description
+        )
+
+        for f in files:
+            ext = os.path.splitext(f.name)[1].lower()
+            if ext not in ALLOWED_EXT:
+                exam.delete()
+                return JsonResponse({'status': 'error', 'message': f'Файл {f.name} имеет недопустимое расширение'})
+
+            if f.size > MAX_SIZE:
+                exam.delete()
+                return JsonResponse({'status': 'error', 'message': f'Файл {f.name} превышает лимит в 20MB'})
+
+            mime = magic.from_buffer(f.read(1024), mime=True)
+            f.seek(0)
+            if mime not in ALLOWED_MIME:
+                exam.delete()
+                return JsonResponse({'status': 'error', 'message': f'Файл {f.name} имеет недопустимый тип: {mime}'})
+
+            try:
+                if mime.startswith("image/"):
+                    image_data = f.read()
+                    f.seek(0)
+                    img = Image.open(BytesIO(image_data))
+                    img.verify()
+                    img = Image.open(BytesIO(image_data))
+                    MAX_WIDTH, MAX_HEIGHT = 10000, 10000
+                    if img.width > MAX_WIDTH or img.height > MAX_HEIGHT:
+                        exam.delete()
+                        return JsonResponse({'status': 'error', 'message': f'Изображение {f.name} слишком большое'})
+            except UnidentifiedImageError:
+                exam.delete()
+                return JsonResponse({'status': 'error', 'message': f'{f.name} не является изображением'})
+            except Exception:
+                exam.delete()
+                return JsonResponse({'status': 'error', 'message': f'Ошибка при проверке файла {f.name}'})
+
+            MedicalDocument.objects.create(exam=exam, file=f)
+
+        return JsonResponse({'status': 'ok'})
+
+    exams = user_info.medical_exams.all().prefetch_related('documents')
+    return render(request, 'base/my_documents.html', {
+        'exams': exams
+    })
+
+@login_required
+@require_http_methods(["GET", "PUT", "DELETE"])
+def exam_detail_api(request, exam_id):
+    exam = get_object_or_404(MedicalExam, id=exam_id, user_info=request.user.additional_info)
+
+    if request.method == "GET":
+        return JsonResponse({
+            "id": exam.id,
+            "exam_date": exam.exam_date.strftime("%Y-%m-%d"),
+            "description": exam.description,
+            "documents": [
+                {"id": doc.id, "name": os.path.basename(doc.file.name), "url": doc.file.url}
+                for doc in exam.documents.all()
+            ]
+        })
+
+    if request.method == "PUT":
+        try:
+            exam.exam_date = datetime.strptime(request.POST.get("exam_date", ""), "%Y-%m-%d").date()
+            exam.description = request.POST.get("description", "")
+            exam.save()
+
+            for file in request.FILES.getlist("files"):
+                MedicalDocument.objects.create(exam=exam, file=file)
+
+            return JsonResponse({"status": "ok"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
+
+    if request.method == "DELETE":
+        exam.delete()
+        return JsonResponse({"status": "ok"})
+    
+@csrf_exempt
+@require_http_methods(["DELETE"])
+@login_required
+def delete_document_api(request, doc_id):
+    document = get_object_or_404(MedicalDocument, id=doc_id, exam__user_info=request.user.additional_info)
+    document.file.delete(save=False)
+    document.delete()
+    return JsonResponse({"status": "ok"})
+
+# =================== END MY DOCUMENTS REGION ===================

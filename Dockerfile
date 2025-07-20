@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     gcc \
     git \
+    libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a virtual environment

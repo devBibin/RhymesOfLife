@@ -38,6 +38,9 @@
       {% if request.user.is_authenticated %}
         <a href="{% url 'my_profile' %}" class="btn btn-outline-light btn-sm">Мой профиль</a>
 
+        <a href="{% url 'my_documents' %}" class="btn btn-outline-light btn-sm">Мои обследования</a>
+
+
         <form method="post" action="{% url 'logout' %}" class="d-inline">
           {% csrf_token %}
           <button type="submit" class="btn btn-outline-light btn-sm" aria-label="Выйти из аккаунта">

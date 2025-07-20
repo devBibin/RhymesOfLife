@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_tags %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+<div class="container py-4">
+  <h2 class="mb-4 fw-bold">🧾 Мои обследования</h2>
+
+  <!-- Форма создания/редактирования -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-body">
+      <form id="exam-form" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="exam_id" id="exam_id" value="">
+
+        <div class="mb-3">
+          <label for="exam_date" class="form-label">Дата обследования:</label>
+          <input type="date" name="exam_date" id="exam_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Описание:</label>
+          <textarea name="description" id="description" class="form-control" rows="3" placeholder="Описание обследования..."></textarea>
+        </div>
+
+        <!-- DROP ZONE -->
+        <div id="drop-zone" class="border border-secondary-subtle bg-light p-4 rounded text-center mb-3">
+          <p class="mb-0">📂 Перетащите файлы сюда или кликните для выбора</p>
+          <input type="file" id="file-input" name="files" hidden multiple>
+        </div>
+
+        <div id="file-list" class="mb-3"></div>
+
+        <button type="button" id="submit-exam" class="btn btn-primary w-100">
+          📤 Добавить обследование
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Список обследований -->
+  {% for exam in exams %}
+    <div class="card shadow-sm mb-4" data-exam-id="{{ exam.id }}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">📅 Дата обследования: {{ exam.exam_date|date:"d.m.Y" }}</h5>
+          <div>
+            <button class="btn btn-sm btn-outline-primary edit-exam-btn" data-id="{{ exam.id }}">✏️</button>
+            <button class="btn btn-sm btn-outline-danger delete-exam-btn" data-id="{{ exam.id }}">🗑️</button>
+          </div>
+        </div>
+        {% if exam.description %}
+          <p class="card-text"><em>Описание: {{ exam.description }}</em></p>
+        {% endif %}
+        <ul class="list-unstyled">
+          {% for doc in exam.documents.all %}
+            <li class="mb-2">
+              <a href="{{ doc.file.url }}" target="_blank" class="text-decoration-none">
+                📎 {{ doc.file.name|basename }}
+              </a><br>
+              <small class="text-muted">🕒 Дата публикации: {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-info">Обследований пока нет.</div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
