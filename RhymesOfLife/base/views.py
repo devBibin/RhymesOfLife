@@ -22,6 +22,8 @@ import os
 import base64
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 from .forms import RegisterForm
 from django.http import HttpResponse
@@ -343,8 +345,10 @@ def my_documents_view(request):
             mime = magic.from_buffer(f.read(1024), mime=True)
             f.seek(0)
             if mime not in ALLOWED_MIME:
-                exam.delete()
-                return JsonResponse({'status': 'error', 'message': f'Файл {f.name} имеет недопустимый тип: {mime}'})
+                if not (ext == '.docx' and mime == 'application/zip'):
+                    exam.delete()
+                    return JsonResponse({'status': 'error', 'message': f'Файл {f.name} имеет недопустимый тип: {mime}'})
+
 
             try:
                 if mime.startswith("image/"):
@@ -415,4 +419,42 @@ def delete_document_api(request, doc_id):
     document.delete()
     return JsonResponse({"status": "ok"})
 
+# =================== DOCTORS SEGMENT ====================
+
+@login_required
+def patients_list_view(request):
+    if not request.user.is_staff:
+        return redirect("home")
+
+    query = request.GET.get("q", "").strip()
+    all_patients = AdditionalUserInfo.objects.select_related("user")
+
+    if query:
+        all_patients = all_patients.filter(
+            Q(first_name__icontains=query) | Q(last_name__icontains=query)
+        )
+
+    paginator = Paginator(all_patients.order_by("last_name", "first_name"), 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "base/patients_list.html", {
+        "query": query,
+        "page_obj": page_obj,
+        "patients": page_obj.object_list
+    })
+
+@login_required
+def patient_exams_view(request, user_id):
+    if not request.user.is_staff:
+        return redirect("home")
+
+    user = get_object_or_404(User, id=user_id)
+    user_info = getattr(user, "additional_info", None)
+    exams = user_info.medical_exams.prefetch_related("documents") if user_info else []
+
+    return render(request, "base/patient_exams.html", {
+        "patient": user,
+        "exams": exams
+    })
 # =================== END MY DOCUMENTS REGION ===================

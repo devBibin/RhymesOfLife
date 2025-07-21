@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+<div class="container py-4">
+  <h2 class="mb-4">👨‍⚕️ Поиск пациентов</h2>
+
+  <form method="get" class="mb-4 d-flex gap-2">
+    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Введите имя или фамилию...">
+    <button type="submit" class="btn btn-primary">🔍 Искать</button>
+  </form>
+
+  {% if patients %}
+    <ul class="list-group mb-3">
+      {% for info in patients %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})</span>
+          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary">📄 Смотреть обследования</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if page_obj.has_other_pages %}
+      <nav>
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">← Назад</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">← Назад</span></li>
+          {% endif %}
+
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+              <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ query }}&page={{ i }}">{{ i }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Вперёд →</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Вперёд →</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+
+  {% elif query %}
+    <div class="alert alert-warning">Пациенты не найдены.</div>
+  {% else %}
+    <div class="alert alert-info">Введите запрос для поиска пациентов.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load form_tags %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">🧾 Обследования пациента: {{ patient.first_name }} {{ patient.last_name }}</h2>
+
+  {% for exam in exams %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">📅 {{ exam.exam_date|date:"d.m.Y" }}</h5>
+        {% if exam.description %}
+          <p><em>{{ exam.description }}</em></p>
+        {% endif %}
+        <ul class="list-unstyled">
+          {% for doc in exam.documents.all %}
+            <li class="mb-2">
+              <a href="{{ doc.file.url }}" target="_blank" class="text-decoration-none">📎 {{ doc.file.name|basename }}</a><br>
+              <small class="text-muted">🕒 Загружено: {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-info">Нет обследований</div>
+  {% endfor %}
+</div>
+{% endblock %}

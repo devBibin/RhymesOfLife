@@ -1,224 +1,230 @@
-/* Wiki Article Styles */
-.wiki-article figure.thumbnail {
-    margin: 1em auto;
-    max-width: 100%;
-    text-align: center;
+/* ==== Reset & Layout ==== */
+html, body {
+  height: 100%;
 }
 
-.wiki-article figure.thumbnail img {
-    max-width: 100%;
-    height: auto;
-    display: inline-block;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.wiki-article figcaption.caption {
-    font-size: 0.9rem;
-    color: #555;
-    margin-top: 0.5rem;
-}
-
-/* Editable Input Styles */
-.editable-input[readonly] {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    cursor: not-allowed;
-}
-
-.editable-input:focus {
-    background-color: #ffffff;
-}
-
-/* Avatar and Dropdown Menu Styles */
-.avatar-editable {
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: 3px solid transparent;
-}
-
-.avatar-editable:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
-}
-
-.avatar-editable.avatar-menu-active {
-    border-color: #0d6efd;
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
-}
-
-/* Dropdown Menu - Hidden by Default */
-.avatar-menu {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background: white;
-    border: 1px solid #dee2e6;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    font-size: 1rem;
-    padding: 0.25rem 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    pointer-events: none;
-}
-
-/* Show Dropdown Menu */
-.avatar-menu.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-/* Dropdown Item Styles */
-.avatar-menu .dropdown-item {
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
-    color: #212529;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-}
-
-.avatar-menu .dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #0d6efd;
-}
-
-.avatar-menu .dropdown-item.text-danger:hover {
-    color: #dc3545;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 576px) {
-    .avatar-menu {
-        min-width: 160px;
-        font-size: 0.9rem;
-    }
-}
-
-/* Base Accessibility Styles */
 body {
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 1.15rem;
-    background-color: #fdfdfd;
-    color: #212529;
-    line-height: 1.6;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 1.15rem;
+  background-color: #fdfdfd;
+  color: #212529;
+  line-height: 1.6;
 }
 
-/* Link Styles */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+}
+
+/* ==== Links ==== */
 a {
-    color: #0d6efd;
-    text-decoration: none;
+  color: #0d6efd;
+  text-decoration: none;
 }
 
-a:hover,
-a:focus {
-    text-decoration: underline;
+a:hover, a:focus {
+  text-decoration: underline;
 }
 
-/* Focus Styles for Keyboard Navigation */
+/* ==== Focus for Accessibility ==== */
 a:focus,
 button:focus,
 input:focus,
 select:focus,
 textarea:focus {
-    outline: 3px solid #0d6efd;
-    outline-offset: 2px;
+  outline: 3px solid #0d6efd;
+  outline-offset: 2px;
 }
 
-/* Logo Header Styles */
+/* ==== Logo Header ==== */
 .base__logo {
-    font-size: 1.5rem;
-    color: #fff;
-    text-decoration: none;
+  font-size: 1.5rem;
+  color: #fff;
+  text-decoration: none;
 }
 
-/* Buttons and Form Elements */
-.btn,
-.form-control,
-.form-select {
-    font-size: 1.1rem;
+/* ==== Buttons and Forms ==== */
+.btn, .form-control, .form-select {
+  font-size: 1.1rem;
 }
 
-/* Navigation Styles */
-.base__navList {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    display: flex;
-    gap: 1rem;
-}
-
-.base__navListItemLink {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.base__navListItemLink:hover {
-    text-decoration: underline;
-}
-
-/* Footer Styles */
-.footer p {
-    margin-bottom: 0;
-    font-size: 1rem;
-}
-
-/* Login & Register Form Styles */
 form .form-label {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .card input.form-control {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .text-danger {
-    font-size: 0.875rem;
+  font-size: 0.875rem;
 }
 
 .form-text {
-    font-size: 0.875rem;
-    color: #6c757d;
+  font-size: 0.875rem;
+  color: #6c757d;
 }
 
-/* Form Status Animation */
-#form-status {
-    transition: all 0.3s ease;
+/* ==== Footer ==== */
+.footer p {
+  margin-bottom: 0;
+  font-size: 1rem;
 }
 
-/* Responsive Styles */
+/* ==== Avatar & Dropdown ==== */
+.avatar-editable {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 3px solid transparent;
+}
+
+.avatar-editable:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+}
+
+.avatar-editable.avatar-menu-active {
+  border-color: #0d6efd;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+.avatar-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  font-size: 1rem;
+  padding: 0.25rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.avatar-menu.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.avatar-menu .dropdown-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  color: #212529;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.avatar-menu .dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+
+.avatar-menu .dropdown-item.text-danger:hover {
+  color: #dc3545;
+}
+
+/* ==== File Dropzone ==== */
+#drop-zone {
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+#drop-zone.dragover {
+  background: #e3f2fd;
+}
+
+.file-card {
+  background: #f8f9fa;
+  border: 1px dashed #ccc;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* ==== Patient Search Page ==== */
+.patient-search-form input.form-control {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+  border-radius: 0.5rem;
+}
+
+.patient-search-form button.btn {
+  white-space: nowrap;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+
+.patient-list .list-group-item {
+  transition: box-shadow 0.2s ease;
+  border-radius: 0.5rem;
+}
+
+.patient-list .list-group-item:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.patient-list .list-group-item span {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2d3436;
+}
+
+.patient-list .btn-outline-primary {
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.patient-list .btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+/* ==== Pagination ==== */
+.pagination {
+  margin-top: 1rem;
+}
+
+.pagination .page-link {
+  border-radius: 0.4rem;
+}
+
+.pagination .page-item.active .page-link {
+  font-weight: 600;
+}
+
+/* ==== Responsive ==== */
 @media (max-width: 576px) {
-    .avatar-menu {
-        min-width: 160px;
-        font-size: 0.9rem;
-    }
-}
+  .avatar-menu {
+    min-width: 160px;
+    font-size: 0.9rem;
+  }
 
-/* Custom Styles for My Documents Page */
-  #drop-zone {
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
+  .patient-search-form {
+    flex-direction: column;
+    gap: 0.5rem;
   }
-  #drop-zone.dragover {
-    background: #e3f2fd;
+
+  .navbar-nav {
+    gap: 0.25rem;
   }
-  .file-card {
-    background: #f8f9fa;
-    border: 1px dashed #ccc;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
-  }
+}
