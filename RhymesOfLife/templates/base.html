@@ -51,7 +51,12 @@
               <li class="nav-item">
                 <a href="{% url 'my_documents' %}" class="btn btn-outline-light btn-sm">Мои обследования</a>
               </li>
-
+              <li class="nav-item">
+                <a href="{% url 'notifications' %}" class="btn btn-outline-light btn-sm">🔔 Уведомления</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'friends_page' %}" class="btn btn-outline-light btn-sm">👥 Друзья</a>
+              </li>
               {% if request.user.is_staff %}
                 <li class="nav-item">
                   <a href="{% url 'patients_list' %}" class="btn btn-warning btn-sm fw-bold text-dark">

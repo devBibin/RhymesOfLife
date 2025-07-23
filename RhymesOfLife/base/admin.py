@@ -27,3 +27,11 @@ class MedicalDocument(admin.ModelAdmin):
 @admin.register(MedicalExam)
 class MedicalExam(admin.ModelAdmin):
     pass
+
+@admin.register(FriendRequest)
+class FriendRequest(admin.ModelAdmin):
+    pass
+
+@admin.register(Notification)
+class Notification(admin.ModelAdmin):
+    pass

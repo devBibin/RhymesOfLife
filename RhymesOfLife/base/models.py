@@ -20,8 +20,14 @@ class AdditionalUserInfo(models.Model):
     is_verified = models.BooleanField(default=False)
     ready_for_verification = models.BooleanField(default=False)
 
+    # Friends management
+    friends = models.ManyToManyField('self', symmetrical=True, blank=True, null=True)
+
     def __str__(self):
         return f"{self.user.username}'s info"
+    
+    def is_friends_with(self, other_user):
+        return self.friends.filter(user=other_user).exists()
 
 
 class CustomArticle(models.Model):
@@ -41,8 +47,8 @@ class ArticleLike(models.Model):
     # class Meta:
     #     unique_together = ('user_info', 'article')
 
-    def __str__(self):
-        return f'{self.user_info} liked {self.article} (active={self.is_active})'
+    # def __str__(self):
+    #     return f'{self.user_info} liked {self.article} (active={self.is_active})'
 
 
 class ArticleComment(models.Model):
@@ -84,3 +90,32 @@ class MedicalDocument(models.Model):
 
     def __str__(self):
         return f"Документ {self.file.name}"
+    
+
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(User, related_name='sent_friend_requests', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='received_friend_requests', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+
+    def __str__(self):
+        return f"{self.from_user.username} ➡️ {self.to_user.username}"
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = (
+        ('FRIEND_REQUEST', 'Friend Request'),
+    )
+
+    recipient = models.ForeignKey(AdditionalUserInfo, related_name='notifications', on_delete=models.CASCADE)
+    sender = models.ForeignKey(AdditionalUserInfo, related_name='sent_notifications', on_delete=models.CASCADE)
+    
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    message = models.TextField(blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.type} от {self.sender.user.username} -> {self.recipient.user.username}"

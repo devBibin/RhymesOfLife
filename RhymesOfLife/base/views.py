@@ -123,17 +123,29 @@ def home_view(request):
 
 
 @login_required
-def resend_verification_view(request):
-    user = request.user
-    if user.additional_info.is_verified:
-        messages.info(request, "You are already verified.")
-    elif user.additional_info.ready_for_verification:
-        messages.info(request, "A verification email is already in the queue.")
+def profile_view(request, username=None):
+    if username:
+        user = get_object_or_404(User, username=username)
+        editable = (user == request.user)
     else:
-        user.additional_info.ready_for_verification = True
-        user.additional_info.save()
-        messages.success(request, "The verification email will be sent again within a minute.")
-    return redirect('home')
+        user = request.user
+        editable = True
+
+    info = user.additional_info
+
+    is_friend = False
+    if not editable and request.user.is_authenticated:
+        try:
+            is_friend = info.is_friends_with(request.user)
+        except AdditionalUserInfo.DoesNotExist:
+            is_friend = False
+
+    return render(request, 'base/profile.html', {
+        'user_profile': user,
+        'info': info,
+        'editable': editable,
+        'is_friend': is_friend
+    })
 
 
 # =================== END REGISTRATION / LOGIN / LOGOUT REGION ===================
@@ -202,8 +214,104 @@ def profile_view(request, username=None):
         'info': info,
         'editable': editable
     })
-
 # =================== END PROFILE REGION ===================
+ 
+# =================== FRIENDS REGION ===================
+
+@login_required
+def send_friend_request(request, user_id):
+    if request.method != "POST":
+        return JsonResponse({'success': False, 'error': 'Метод должен быть POST'})
+
+    to_user = get_object_or_404(User, id=user_id)
+    from_user = request.user
+
+    if from_user == to_user:
+        return JsonResponse({'success': False, 'error': 'Нельзя добавить самого себя'})
+
+    if FriendRequest.objects.filter(from_user=from_user, to_user=to_user).exists():
+        return JsonResponse({'success': False, 'error': 'Заявка уже отправлена'})
+
+    if to_user.additional_info in from_user.additional_info.friends.all():
+        return JsonResponse({'success': False, 'error': 'Вы уже друзья'})
+
+    FriendRequest.objects.create(from_user=from_user, to_user=to_user)
+
+    Notification.objects.create(
+        recipient=to_user.additional_info,
+        sender=from_user.additional_info,
+        notification_type='FRIEND_REQUEST',
+        message=f"{from_user.username} хочет добавить вас в друзья",
+    )
+
+    return JsonResponse({'success': True, 'message': 'Заявка отправлена'})
+
+@login_required
+def friend_request_response(request, notification_id, action):
+    recipient_info = request.user.additional_info
+    notification = get_object_or_404(Notification, id=notification_id, recipient=recipient_info)
+
+    if notification.notification_type != 'FRIEND_REQUEST':
+        return JsonResponse({'success': False, 'error': 'Некорректный тип уведомления'})
+
+    sender_user = notification.sender.user
+
+    try:
+        friend_request = FriendRequest.objects.get(from_user=sender_user, to_user=request.user)
+    except FriendRequest.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Заявка не найдена'})
+
+    if action == 'accept':
+        recipient_info.friends.add(notification.sender)
+        notification.sender.friends.add(recipient_info)
+        friend_request.delete()
+        notification.is_read = True
+        notification.save()
+        return JsonResponse({'success': True, 'message': 'Теперь вы друзья'})
+    
+    elif action == 'reject':
+        friend_request.delete()
+        notification.is_read = True
+        notification.save()
+        return JsonResponse({'success': True, 'message': 'Заявка отклонена'})
+
+    return JsonResponse({'success': False, 'error': 'Неверное действие'})
+
+@login_required
+def friends_page(request):
+    info = request.user.additional_info
+    friends = info.friends.all()
+
+    incoming_requests = FriendRequest.objects.filter(to_user=request.user).select_related('from_user__additional_info')
+
+    query = request.GET.get("q", "").strip()
+    results = []
+
+    if query:
+        results = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(additional_info__first_name__icontains=query) |
+            Q(additional_info__last_name__icontains=query)
+        ).exclude(id=request.user.id)
+
+    return render(request, "base/friends_page.html", {
+        "friends": friends,
+        "query": query,
+        "results": results,
+        "incoming_requests": incoming_requests
+    })
+
+# =================== END FRIENDS REGION ===================
+
+# =================== NOTIFICATIONS REGION ===================
+
+@login_required
+def notifications_view(request):
+    info = request.user.additional_info
+    notifications = info.notifications.filter(is_read=False).order_by('-created_at')
+    return render(request, 'base/notifications.html', {'notifications': notifications})
+
+# =================== END NOTIFICATIONS REGION ===================
 
 # =================== WIKI REGION ===================
 

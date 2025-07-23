@@ -283,5 +283,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ----------- FRIEND REQUEST FORM (UNIVERSAL) ----------------
+  document.querySelectorAll(".friend-request-form").forEach(form => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      fetch(form.action, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            form.innerHTML = `<span class="text-success">✅ Заявка отправлена</span>`;
+          } else {
+            alert(data.error || "Ошибка при отправке заявки");
+          }
+        })
+        .catch(() => alert("Ошибка отправки запроса на сервер"));
+    });
+  });
+
   console.log("✅ new_scripts.js загружен полностью");
 });
