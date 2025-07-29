@@ -1,0 +1,11 @@
+<div class="editor-block" data-type="image_with_caption">
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-sm btn-danger remove-block">×</button>
+  </div>
+  {% if value.image %}
+    <img src="{% image_url value.image 'width-300' %}" class="img-thumbnail mb-2">
+    <input type="hidden" name="image_id" value="{{ value.image.id }}">
+  {% endif %}
+  <input type="file" class="form-control mb-2" accept="image/*">
+  <input type="text" class="form-control" value="{{ value.caption }}" placeholder="Подпись...">
+</div>

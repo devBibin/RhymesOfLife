@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from wiki.models import Article
 
 
 class AdditionalUserInfo(models.Model):
@@ -20,42 +19,14 @@ class AdditionalUserInfo(models.Model):
     is_verified = models.BooleanField(default=False)
     ready_for_verification = models.BooleanField(default=False)
 
-    # Friends management
-    friends = models.ManyToManyField('self', symmetrical=True, blank=True, null=True)
+    # Friends management - ИСПРАВЛЕНО: убран null=True
+    friends = models.ManyToManyField('self', symmetrical=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s info"
     
     def is_friends_with(self, other_user):
         return self.friends.filter(user=other_user).exists()
-
-
-class CustomArticle(models.Model):
-    article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name="custom_fields")
-    likes_count = models.IntegerField(default=0)
-    comments_count = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.article}'s info"
-
-class ArticleLike(models.Model):
-    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='article_likes', null=True)
-    custom_article = models.ForeignKey(CustomArticle, on_delete=models.CASCADE, related_name='likes', null=True,default=None)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-    
-    # class Meta:
-    #     unique_together = ('user_info', 'article')
-
-    # def __str__(self):
-    #     return f'{self.user_info} liked {self.article} (active={self.is_active})'
-
-
-class ArticleComment(models.Model):
-    user_info = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name='article_comments', null=True)
-    custom_article = models.ForeignKey(CustomArticle, on_delete=models.CASCADE, related_name='comments', null=True,default=None)
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class MedicalExam(models.Model):
@@ -74,6 +45,7 @@ class MedicalExam(models.Model):
     def __str__(self):
         return f"Обследование от {self.exam_date.strftime('%Y-%m-%d')}"
 
+
 class MedicalDocument(models.Model):
     exam = models.ForeignKey(
         MedicalExam,
@@ -90,7 +62,7 @@ class MedicalDocument(models.Model):
 
     def __str__(self):
         return f"Документ {self.file.name}"
-    
+
 
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(User, related_name='sent_friend_requests', on_delete=models.CASCADE)
@@ -112,10 +84,10 @@ class Notification(models.Model):
     recipient = models.ForeignKey(AdditionalUserInfo, related_name='notifications', on_delete=models.CASCADE)
     sender = models.ForeignKey(AdditionalUserInfo, related_name='sent_notifications', on_delete=models.CASCADE)
     
-    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)  # ИСПРАВЛЕНО: правильное имя поля
     message = models.TextField(blank=True)
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.type} от {self.sender.user.username} -> {self.recipient.user.username}"
+        return f"{self.notification_type} от {self.sender.user.username} -> {self.recipient.user.username}"

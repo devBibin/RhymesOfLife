@@ -1,4 +1,4 @@
-{% load static sekizai_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
-  {% render_block "css" %}
+  <!-- Удалены render_block теги -->
   {% block extra_css %}{% endblock %}
 </head>
 
@@ -38,12 +38,6 @@
             <li class="nav-item">
               <a class="nav-link text-white fw-semibold" href="#">О нас</a>
             </li>
-            <li class="nav-item">
-              <a href="/wiki/_dir/" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-book me-1"></i>Статьи
-              </a>
-            </li>
-
             {% if request.user.is_authenticated %}
               <li class="nav-item">
                 <a href="{% url 'my_profile' %}" class="btn btn-outline-light btn-sm">Мой профиль</a>
@@ -53,6 +47,9 @@
               </li>
               <li class="nav-item">
                 <a href="{% url 'notifications' %}" class="btn btn-outline-light btn-sm">🔔 Уведомления</a>
+              </li>
+              <li class="nav-item">
+                <a href="/articles/" class="btn btn-outline-light btn-sm">Статьи</a>
               </li>
               <li class="nav-item">
                 <a href="{% url 'friends_page' %}" class="btn btn-outline-light btn-sm">👥 Друзья</a>
@@ -102,7 +99,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/new_scripts.js' %}"></script>
 
-  {% render_block "js" %}
+  <!-- Удалены render_block теги -->
   {% block extra_js %}{% endblock %}
 </body>
 </html>

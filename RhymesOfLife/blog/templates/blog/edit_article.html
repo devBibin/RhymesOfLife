@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static wagtailimages_tags %}
+
+{% block extra_js %}
+  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      CKEDITOR.replace('body');
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Редактировать статью</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="title">Заголовок</label>
+      <input type="text" name="title" class="form-control" required value="{{ page.title }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="intro">Краткое описание</label>
+      <textarea name="intro" class="form-control" required>{{ page.intro }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="main_image">Главное изображение</label>
+      <input type="file" name="main_image" class="form-control">
+      {% if page.main_image %}
+      <div class="mt-2">
+        {% image page.main_image width-300 as preview %}
+        <img src="{{ preview.url }}" class="img-thumbnail" width="150">
+        <div class="form-check mt-2">
+          <input class="form-check-input" type="checkbox" name="main_image-clear" id="main_image-clear">
+          <label class="form-check-label" for="main_image-clear">Удалить изображение</label>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="body">Контент статьи</label>
+      <textarea name="body" id="body" class="form-control" rows="12" required>{{ page.body }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="tags">Теги (через запятую)</label>
+      <input type="text" name="tags" class="form-control" value="{{ page.tags.all|join:', ' }}">
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary">Обновить</button>
+      <a href="{% url 'delete_article' page.id %}" class="btn btn-outline-danger"
+         onclick="return confirm('Удалить статью?')">Удалить</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

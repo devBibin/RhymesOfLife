@@ -14,8 +14,6 @@ from pathlib import Path
 import json
 import os
 
-from RhymesOfLife.wiki_permissions import can_write, can_delete, can_moderate
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,17 +41,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'base',
+    'blog',
     'django.contrib.humanize.apps.HumanizeConfig',
-    'django_nyt.apps.DjangoNytConfig',
-    'mptt',
-    'sekizai',
-    'sorl.thumbnail',
-    'wiki.apps.WikiConfig',
-    'wiki.plugins.attachments.apps.AttachmentsConfig',
-    'wiki.plugins.notifications.apps.NotificationsConfig',
-    'wiki.plugins.images.apps.ImagesConfig',
-    'wiki.plugins.macros.apps.MacrosConfig',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+    "ckeditor",
+    "ckeditor_uploader",
+
+    'modelcluster',
+    'taggit',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,7 +89,6 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                "sekizai.context_processors.sekizai",
             ],
         },
     },
@@ -178,13 +184,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SITE_ID = 1
 
 
-# wiki settings
+# Wagtail settings
+WAGTAIL_SITE_NAME = 'Rhymes of Life'
+WAGTAIL_I18N_ENABLED = True
+WAGTAIL_CONTENT_LANGUAGES = [
+    ('ru', 'Russian'),
+    ('en', 'English'),
+]
+WAGTAILIMAGES_IMAGE_MODEL = 'wagtailimages.Image'
+WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
+WAGTAILIMAGES_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp']
 
-WIKI_CAN_WRITE = can_write
-WIKI_CAN_DELETE = can_delete
-WIKI_CAN_MODERATE = can_moderate
-WIKI_USE_BOOTSTRAP = True
-WIKI_ARTICLE_HTML_TEMPLATE = "wiki/article.html"
+# CKEditor config
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 400,
+        'width': 'auto',
+        'extraPlugins': 'image2',
+    },
+}
 
-
-
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+WAGTAILADMIN_BASE_URL = BASE_URL

@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags static %}
+{% load form_tags static %}
+
+{% block title %}{{ page.title }}{% endblock %}
+{% block meta_description %}{{ page.intro }}{% endblock %}
+
+{% block content %}
+<div class="container article-container">
+  <h1 class="article-title">{{ page.title }}</h1>
+  
+  <div class="article-meta d-flex align-items-center mb-4">
+    {% if page.author and page.author.avatar %}
+      <img src="{{ page.author.avatar.url }}" 
+           class="author-avatar rounded-circle me-3" 
+           width="48" 
+           alt="Автор статьи">
+    {% endif %}
+    <div>
+      <div class="author-name">
+        {% if page.author %}
+          {{ page.author.first_name }} {{ page.author.last_name }}
+        {% else %}
+          Анонимный автор
+        {% endif %}
+      </div>
+      <div class="article-date text-muted">
+        {{ page.date|date:"j E Y" }}
+      </div>
+    </div>
+  </div>
+
+  <div class="article-intro lead mb-4">
+    {{ page.intro }}
+  </div>
+
+  <div class="article-body">
+    {{ page.body|richtext }}
+  </div>
+
+
+
+  {% if request.user == page.author.user or request.user.is_superuser %}
+    <div class="article-actions mt-4">
+      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary me-2">
+        Редактировать
+      </a>
+      <a href="{% url 'delete_article' page.id %}" class="btn btn-outline-danger"
+         onclick="return confirm('Вы уверены, что хотите удалить эту статью?')">
+        Удалить
+      </a>
+    </div>
+  {% endif %}
+
+  <div class="article-interactions mt-4">
+    <div class="d-flex align-items-center mb-3">
+      <span class="me-3">
+        <span id="like-count">{{ page.likes_count }}</span> ❤️
+      </span>
+      <span>
+        <span id="comment-count">{{ page.comments_count }}</span> 💬
+      </span>
+    </div>
+
+    {% if request.user.is_authenticated %}
+      <button id="like-btn" class="btn {% if page.is_liked_by|call_method:request.user %}btn-danger{% else %}btn-outline-danger{% endif %}">
+        {% if page.is_liked_by|call_method:request.user %}Убрать лайк{% else %}Поставить лайк{% endif %}
+      </button>
+    {% else %}
+      <a href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary">
+        Войдите, чтобы поставить лайк
+      </a>
+    {% endif %}
+  </div>
+
+  <hr class="my-4">
+
+  <div class="article-comments">
+    <h5 class="mb-3">Комментарии</h5>
+    
+    <div id="comments">
+      {% for comment in page.comments.all %}
+        <div class="comment mb-3">
+          <div class="d-flex align-items-center mb-1">
+            {% if comment.author.avatar %}
+              <img src="{{ comment.author.avatar.url }}" 
+                   class="comment-avatar rounded-circle me-2" 
+                   width="32" 
+                   alt="Аватар">
+            {% endif %}
+            <strong>{{ comment.author.first_name }}</strong>
+            <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+          </div>
+          <p class="comment-text">{{ comment.text|linebreaks }}</p>
+        </div>
+      {% empty %}
+        <p class="text-muted">Пока нет комментариев</p>
+      {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+      <form id="comment-form" class="mt-3">
+        {% csrf_token %}
+        <div class="mb-2">
+          <textarea name="text" class="form-control" 
+                   placeholder="Оставьте комментарий..." 
+                   required rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+    {% else %}
+      <div class="alert alert-info mt-3">
+        <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">
+          Войдите
+        </a>, чтобы оставить комментарий
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .article-container {
+    max-width: 800px;
+    padding: 2rem 1rem;
+  }
+  .article-title {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .article-intro {
+    font-size: 1.2rem;
+    color: #444;
+  }
+  .article-body img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 4px;
+  }
+  .comment {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+  .author-avatar {
+    object-fit: cover;
+  }
+  .comment-avatar {
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const pageId = {{ page.id }};
+    
+    const likeBtn = document.getElementById('like-btn');
+    if (likeBtn) {
+      likeBtn.addEventListener('click', () => {
+        fetch(`/articles/${pageId}/like/`, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': csrftoken },
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('like-count').textContent = data.like_count;
+          
+          if (data.liked) {
+            likeBtn.textContent = 'Убрать лайк';
+            likeBtn.classList.remove('btn-outline-danger');
+            likeBtn.classList.add('btn-danger');
+          } else {
+            likeBtn.textContent = 'Поставить лайк';
+            likeBtn.classList.remove('btn-danger');
+            likeBtn.classList.add('btn-outline-danger');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    }
+
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+      commentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(commentForm);
+        fetch(`/articles/${pageId}/comment/`, {
+          method: 'POST',
+          body: formData,
+          headers: { 'X-CSRFToken': csrftoken },
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+          
+          const commentsDiv = document.getElementById('comments');
+          const newComment = `
+            <div class="comment mb-3">
+              <div class="d-flex align-items-center mb-1">
+                ${data.avatar ? `<img src="${data.avatar}" class="comment-avatar rounded-circle me-2" width="32" alt="Аватар">` : ''}
+                <strong>${data.username}</strong>
+                <small class="text-muted ms-2">Только что</small>
+              </div>
+              <p class="comment-text">${data.text.replace(/\n/g, '<br>')}</p>
+            </div>
+          `;
+          
+          if (commentsDiv.querySelector('.text-muted')) {
+            commentsDiv.innerHTML = newComment;
+          } else {
+            commentsDiv.insertAdjacentHTML('afterbegin', newComment);
+          }
+          
+          document.getElementById('comment-count').textContent = data.comment_count;
+          commentForm.reset();
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    }
+  });
+</script>
+{% endblock %}

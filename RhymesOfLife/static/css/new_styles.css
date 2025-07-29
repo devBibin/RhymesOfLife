@@ -228,3 +228,73 @@ form .form-label {
     gap: 0.25rem;
   }
 }
+
+
+/*Blog*/
+.blog-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  border-radius: 0.5rem;
+  transition: transform 0.2s ease-in-out;
+  overflow: hidden;
+  min-height: 160px;
+}
+
+.blog-card:hover {
+  transform: translateY(-2px);
+}
+
+.blog-card .blog-card-img {
+  flex-shrink: 0;
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.blog-card .card-body {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.blog-card .card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-card .card-text {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.blog-card .badge {
+  font-size: 0.75rem;
+  margin-right: 6px;
+}
+
+.blog-card .stretched-link {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 576px) {
+  .blog-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .blog-card .blog-card-img {
+    width: 100%;
+    height: 180px;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .blog-card .card-body {
+    padding: 1rem;
+  }
+}
+

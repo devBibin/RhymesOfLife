@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags static %}
+
+{% block extra_css %}
+  <link href="{% static 'css/blog_cards.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 class="mb-0">{{ page.title }}</h1>
+      {% if page.intro %}
+        <p class="text-muted mb-0">{{ page.intro }}</p>
+      {% endif %}
+    </div>
+    <a href="{% url 'create_article' %}" class="btn btn-primary">
+      ✍️ Новая статья
+    </a>
+  </div>
+
+  <hr class="mb-4">
+
+  {% if posts %}
+    <div class="d-flex flex-column gap-4">
+      {% for post in posts %}
+        <div class="blog-card card shadow-sm">
+          {% if post.main_image %}
+            {% image post.main_image fill-320x240 as img %}
+            <img src="{{ img.url }}" class="blog-card-img" alt="{{ post.title }}">
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title mb-1">
+              <a href="{{ post.url }}" class="stretched-link text-decoration-none text-dark">
+                {{ post.title }}
+              </a>
+            </h5>
+            <p class="card-text mb-2">{{ post.intro|truncatechars:160 }}</p>
+
+            {% if post.tags.all %}
+              <div class="mb-2">
+                {% for tag in post.tags.all %}
+                  <span class="badge bg-secondary">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <div class="text-muted small">
+              {% if post.author %}
+                👤 {{ post.author.first_name }} {{ post.author.last_name }} |
+              {% endif %}
+              🗓 {{ post.date|date:"j E Y" }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">Пока нет опубликованных статей</div>
+  {% endif %}
+</div>
+{% endblock %}

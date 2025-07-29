@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_js %}
+  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      CKEDITOR.replace('body');
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Новая статья</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="title">Заголовок</label>
+      <input type="text" name="title" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="intro">Краткое описание</label>
+      <textarea name="intro" class="form-control" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="main_image">Главное изображение</label>
+      <input type="file" name="main_image" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label for="body">Контент статьи</label>
+      <textarea name="body" id="body" class="form-control" rows="12" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="tags">Теги (через запятую)</label>
+      <input type="text" name="tags" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Опубликовать</button>
+  </form>
+</div>
+{% endblock %}

@@ -8,29 +8,22 @@ class AdditionalUserInfoAdmin(admin.ModelAdmin):
     raw_id_fields = ["user",]
     list_display = ('user',)
 
-@admin.register(ArticleLike)
-class ArticleLikeAdmin(admin.ModelAdmin):
-    pass
 
-@admin.register(ArticleComment)
-class ArticleCommentAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(CustomArticle)
-class CustomArticle(admin.ModelAdmin):
-    pass
 
 @admin.register(MedicalDocument)
 class MedicalDocument(admin.ModelAdmin):
     pass
 
+
 @admin.register(MedicalExam)
 class MedicalExam(admin.ModelAdmin):
     pass
 
+
 @admin.register(FriendRequest)
 class FriendRequest(admin.ModelAdmin):
     pass
+
 
 @admin.register(Notification)
 class Notification(admin.ModelAdmin):
