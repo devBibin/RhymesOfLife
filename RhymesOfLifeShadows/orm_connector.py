@@ -30,13 +30,32 @@ settings.configure(
         }
     },
     INSTALLED_APPS=[
-        'django.contrib.auth',
         'django.contrib.admin',
+        'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
         'django.contrib.sites',
-        'base.apps.BaseConfig',
-        'django_nyt',
+
+        'base',
+        'blog',
+
+        'wagtail.contrib.forms',
+        'wagtail.contrib.redirects',
+        'wagtail.embeds',
+        'wagtail.sites',
+        'wagtail.users',
+        'wagtail.snippets',
+        'wagtail.documents',
+        'wagtail.images',
+        'wagtail.search',
+        'wagtail.admin',
+        'wagtail',
+
+        'modelcluster',
+        'taggit',
+
     ],
     ROOT_URLCONF='RhymesOfLife.urls',
     SITE_ID=1,

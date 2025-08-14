@@ -1,190 +1,368 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponseForbidden
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from wagtail.models import Page
-from wagtail.images.models import Image
-from django.utils import timezone
-from django.views.decorators.http import require_http_methods, require_POST
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_http_methods, require_POST
+from django.db import transaction
+from django.db.models import Q
+
+from wagtail.models import Page
+from wagtail.images import get_image_model
+
 from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment
+from .constants import PREDEFINED_TAGS
+
+import os
+from PIL import Image as PILImage, UnidentifiedImageError, ImageFile
+from PIL.Image import DecompressionBombError
+import bleach
+
+# Pillow safety
+ImageFile.LOAD_TRUNCATED_IMAGES = False
+PILImage.MAX_IMAGE_PIXELS = 10000 * 10000
+
+ALLOWED_EXTS = set(getattr(settings, "WAGTAILIMAGES_EXTENSIONS", ["gif", "jpg", "jpeg", "png", "webp"]))
+MAX_UPLOAD = int(getattr(settings, "WAGTAILIMAGES_MAX_UPLOAD_SIZE", 10 * 1024 * 1024))
+
+ALLOWED_TAGS = [
+    "p", "br", "strong", "em", "u", "s", "a", "ul", "ol", "li", "blockquote", "code", "pre", "hr",
+    "h2", "h3", "h4", "h5", "h6", "figure", "figcaption", "img",
+    "table", "thead", "tbody", "tr", "th", "td",
+]
+ALLOWED_ATTRS = {
+    "*": ["class", "style"],
+    "a": ["href", "title", "rel", "target"],
+    "img": ["src", "alt", "width", "height", "loading", "class", "style"],
+    "table": ["border", "style"],
+    "th": ["colspan", "rowspan", "style"],
+    "td": ["colspan", "rowspan", "style"],
+}
+ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
+
+
+def _sanitize_html(html: str) -> str:
+    return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, protocols=ALLOWED_PROTOCOLS, strip=True)
+
+
+def _validate_image_file(f):
+    ext = os.path.splitext(f.name)[1].lower().lstrip(".")
+    if ext not in ALLOWED_EXTS:
+        raise ValidationError(_("Unsupported image format."))
+    if getattr(f, "size", None) and f.size > MAX_UPLOAD:
+        mb = MAX_UPLOAD // (1024 * 1024)
+        raise ValidationError(_("File is too large (max %(mb)s MB).") % {"mb": mb})
+    try:
+        if hasattr(f, "tell"):
+            pos = f.tell()
+        else:
+            pos = None
+        img = PILImage.open(f)
+        img.verify()
+        if hasattr(f, "seek"):
+            f.seek(0)
+        img = PILImage.open(f)
+        w, h = img.size
+        if w > 10000 or h > 10000:
+            raise ValidationError(_("Image is too large (max 10000×10000px)."))
+        if hasattr(f, "seek") and pos is not None:
+            f.seek(pos)
+    except DecompressionBombError:
+        raise ValidationError(_("Image is too large or suspicious (decompression bomb)."))
+    except UnidentifiedImageError:
+        raise ValidationError(_("The uploaded file is not a valid image."))
+    except Exception:
+        raise ValidationError(_("Image processing error."))
+    return f
+
+
+def _get_or_create_blog_index():
+    root = Page.get_first_root_node()
+    parent = BlogIndexPage.objects.first()
+    if not parent:
+        parent = BlogIndexPage(title="Blog", slug="blog")
+        root.add_child(instance=parent)
+        parent.save_revision().publish()
+    return parent
+
+
+def _latest_revision_specific(page):
+    try:
+        if hasattr(page, "get_latest_revision_as_page"):
+            obj = page.get_latest_revision_as_page()
+            if obj:
+                return getattr(obj, "specific", obj)
+    except Exception:
+        pass
+    try:
+        rev = page.get_latest_revision()
+        if not rev:
+            return page
+        if hasattr(rev, "as_object"):
+            obj = rev.as_object()
+        elif hasattr(rev, "as_page_object"):
+            obj = rev.as_page_object()
+        else:
+            return page
+        return getattr(obj, "specific", obj)
+    except Exception:
+        return page
+
+
+def _unique_slug(base: str) -> str:
+    if not base:
+        base = str(int(timezone.now().timestamp()))
+    slug = base
+    i = 1
+    while BlogPage.objects.filter(slug=slug).exists():
+        slug = f"{base}-{i}"
+        i += 1
+    return slug
+
+
+def _filter_tags_to_predefined(tags):
+    allowed = set(PREDEFINED_TAGS)
+    return [t for t in tags if t in allowed]
 
 
 @login_required
 @require_http_methods(["GET", "POST"])
 def create_article_view(request):
-    if request.method == 'POST':
-        title = request.POST.get('title', '').strip()
-        intro = request.POST.get('intro', '').strip()
-        body = request.POST.get('body', '').strip()
-        tags = [t.strip() for t in request.POST.get('tags', '').split(',') if t.strip()]
-        main_image_file = request.FILES.get('main_image')
+    ctx = {"all_tags": PREDEFINED_TAGS}
+    if request.method == "POST":
+        action = request.POST.get("action") or "draft"
+        title = request.POST.get("title", "").strip()
+        intro = request.POST.get("intro", "").strip()
+        body = _sanitize_html(request.POST.get("body", "").strip())
+        tags = _filter_tags_to_predefined(request.POST.getlist("tags"))
+        main_img_f = request.FILES.get("main_image")
+
+        ctx.update({"title": title, "intro": intro, "body": body, "selected_tags": tags})
 
         try:
-            if not hasattr(request.user, 'additional_info'):
-                raise ValidationError("Профиль пользователя не найден")
-
             if not title or not body:
-                raise ValidationError("Заголовок и контент статьи обязательны")
+                raise ValidationError(_("Title and content are required."))
 
-            main_image = None
-            if main_image_file:
-                main_image = Image.objects.create(
-                    title=f"{title} — главное изображение",
-                    file=main_image_file,
-                    uploaded_by_user=request.user
+            with transaction.atomic():
+                main_image = None
+                if main_img_f:
+                    _validate_image_file(main_img_f)
+                    Image = get_image_model()
+                    main_image = Image.objects.create(
+                        title=f"{title[:50]} — main image",
+                        file=main_img_f,
+                        uploaded_by_user=request.user,
+                    )
+
+                parent = _get_or_create_blog_index()
+                unique_slug = _unique_slug(slugify(title, allow_unicode=True))
+
+                page = BlogPage(
+                    title=title,
+                    slug=unique_slug,
+                    date=timezone.now(),
+                    intro=intro,
+                    author=request.user.additional_info,
+                    main_image=main_image,
+                    body=body,
                 )
+                parent.add_child(instance=page)
+                if tags:
+                    page.tags.add(*tags)
+                rev = page.save_revision()
+                if action == "publish":
+                    rev.publish()
+                    return redirect(page.url)
+                else:
+                    if page.live:
+                        page.unpublish()
+                    return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
-            root = Page.get_first_root_node()
-            if not root:
-                raise Exception("Wagtail root page не найден. Убедитесь, что база инициализирована.")
-
-            parent = BlogIndexPage.objects.first()
-            if not parent:
-                parent = BlogIndexPage(title="Блог", slug="blog")
-                root.add_child(instance=parent)
-                parent.save_revision().publish()
-
-            page = BlogPage(
-                title=title,
-                slug=slugify(title),
-                date=timezone.now(),
-                intro=intro,
-                author=request.user.additional_info,
-                main_image=main_image,
-                body=body,
-            )
-
-            parent.add_child(instance=page)
-            page.tags.add(*tags)
-            page.save_revision().publish()
-
-            return redirect(page.url)
-
-        except ValidationError as ve:
-            return render(request, 'blog/create_article.html', {
-                'error': str(ve),
-                'title': title,
-                'intro': intro,
-                'body': body,
-                'tags': ', '.join(tags)
-            })
-
+        except ValidationError as e:
+            ctx["error"] = str(e)
         except Exception as e:
-            return render(request, 'blog/create_article.html', {
-                'error': f"Ошибка сервера: {str(e)}",
-                'title': title,
-                'intro': intro,
-                'body': body,
-                'tags': ', '.join(tags)
-            })
+            ctx["error"] = _("System error: %(msg)s") % {"msg": e}
 
-    return render(request, 'blog/create_article.html')
+    return render(request, "blog/create_article.html", ctx)
 
 
-# EDITING ARTICLE
 @login_required
 @require_http_methods(["GET", "POST"])
 def edit_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
-
     if not page.is_editable_by(request.user):
-        return HttpResponseForbidden("Недостаточно прав.")
+        return HttpResponseForbidden()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            page.title = request.POST.get('title', page.title).strip()
-            page.intro = request.POST.get('intro', page.intro).strip()
-            page.body = request.POST.get('body', page.body).strip()
-            tags = [t.strip() for t in request.POST.get('tags', '').split(',') if t.strip()]
-            page.tags.set(*tags)
+            action = request.POST.get("action", "publish")
+            page.title = request.POST.get("title", page.title).strip()
+            page.intro = request.POST.get("intro", page.intro).strip()
+            page.body = _sanitize_html(request.POST.get("body", page.body).strip())
+            page.tags.set(_filter_tags_to_predefined(request.POST.getlist("tags")))
 
-            if 'main_image' in request.FILES:
+            if "main_image" in request.FILES:
+                f = request.FILES["main_image"]
+                _validate_image_file(f)
+                Image = get_image_model()
                 if page.main_image:
                     page.main_image.delete()
                 page.main_image = Image.objects.create(
-                    title=f"{page.title} — главное изображение",
-                    file=request.FILES['main_image'],
-                    uploaded_by_user=request.user
+                    title=f"{page.title[:50]} — main image",
+                    file=f,
+                    uploaded_by_user=request.user,
                 )
-            elif request.POST.get('main_image-clear') == 'on':
-                if page.main_image:
-                    page.main_image.delete()
-                    page.main_image = None
+            elif request.POST.get("main_image-clear") == "on" and page.main_image:
+                page.main_image.delete()
+                page.main_image = None
 
-            page.save_revision().publish()
-            return redirect(page.url)
+            rev = page.save_revision()
+            if action == "publish":
+                rev.publish()
+                return redirect(page.url)
+            else:
+                return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
+        except ValidationError as e:
+            error = str(e)
         except Exception as e:
-            return render(request, 'blog/edit_article.html', {
-                'page': page,
-                'page_tags': ', '.join(page.tags.names()),
-                'error': str(e)
-            })
+            error = _("System error: %(msg)s") % {"msg": e}
 
-    return render(request, 'blog/edit_article.html', {'page': page})
+        page_for_form = _latest_revision_specific(page)
+        ctx = {
+            "page": page_for_form,
+            "all_tags": PREDEFINED_TAGS,
+            "selected_tags": list(page_for_form.tags.names()),
+            "error": error,
+        }
+        return render(request, "blog/edit_article.html", ctx)
+
+    page_for_form = _latest_revision_specific(page) if (page.has_unpublished_changes or not page.live) else page
+    ctx = {"page": page_for_form, "all_tags": PREDEFINED_TAGS, "selected_tags": list(page_for_form.tags.names())}
+    return render(request, "blog/edit_article.html", ctx)
 
 
-# DELETE
 @login_required
 @require_POST
 def delete_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
     if not page.is_editable_by(request.user):
-        return HttpResponseForbidden("Недостаточно прав.")
+        return HttpResponseForbidden(_("Insufficient permissions."))
+    if page.live:
+        page.is_deleted = True
+        page.save_revision().publish()
+    else:
+        page.delete()
+    return redirect("/articles/")
 
-    page.is_deleted = True
-    page.save_revision().publish()
-    return redirect('blog_index')
 
-
-# LIKE
 @login_required
 @require_POST
 def like_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
     user_info = request.user.additional_info
-
     like, created = ArticleLike.objects.get_or_create(
-        author=user_info,
-        article=page,
-        defaults={'is_active': True}
+        author=user_info, article=page, defaults={"is_active": True}
     )
-
     if not created:
         like.is_active = not like.is_active
-        like.save()
-
+        like.save(update_fields=["is_active"])
     page.likes_count = ArticleLike.objects.filter(article=page, is_active=True).count()
     page.save(update_fields=["likes_count"])
-
-    return JsonResponse({
-        'liked': like.is_active,
-        'like_count': page.likes_count
-    })
+    return JsonResponse({"liked": like.is_active, "like_count": page.likes_count})
 
 
-# COMMENT
 @login_required
 @require_POST
 def comment_article_view(request, page_id):
-    text = request.POST.get('text', '').strip()
+    text = request.POST.get("text", "").strip()
     if not text:
-        return JsonResponse({'error': 'Комментарий не может быть пустым'}, status=400)
-
+        return JsonResponse({"error": _("Comment cannot be empty.")}, status=400)
     page = get_object_or_404(BlogPage, id=page_id).specific
     user_info = request.user.additional_info
-
     comment = ArticleComment.objects.create(article=page, author=user_info, text=text)
-
-    page.comments_count = ArticleComment.objects.filter(article=page).count()
+    page.comments_count = ArticleComment.objects.filter(article=page, is_deleted=False).count()
     page.save(update_fields=["comments_count"])
-
     return JsonResponse({
-        'username': user_info.first_name or request.user.username,
-        'avatar': user_info.avatar.url if user_info.avatar else '',
-        'text': comment.text,
-        'created_at': comment.created_at.strftime('%Y-%m-%d %H:%M'),
-        'comment_count': page.comments_count
+        "id": comment.id,
+        "username": user_info.first_name or request.user.username,
+        "avatar": user_info.avatar.url if user_info.avatar else "",
+        "text": comment.text,
+        "created_at": comment.created_at.strftime("%Y-%m-%d %H:%M"),
+        "comment_count": page.comments_count,
     })
+
+
+def ajax_article_search(request):
+    query = request.GET.get("q", "").strip()
+    blog_index = BlogIndexPage.objects.first()
+    results = BlogPage.objects.live().descendant_of(blog_index).filter(is_deleted=False) if blog_index else BlogPage.objects.none()
+    if query:
+        results = results.filter(
+            Q(title__icontains=query) |
+            Q(tags__name__icontains=query) |
+            Q(author__first_name__icontains=query) |
+            Q(author__last_name__icontains=query)
+        ).distinct()
+    html = render_to_string(
+        "blog/includes/article_list_fragment.html",
+        {"posts": results, "current_filter": request.GET.get("filter", "popular"), "query": query},
+        request=request,
+    )
+    return JsonResponse({"html": html})
+
+
+@login_required
+@require_POST
+def delete_comment_view(request, comment_id):
+    comment = get_object_or_404(ArticleComment, id=comment_id)
+    if comment.author.user != request.user and not request.user.is_superuser:
+        return HttpResponseForbidden(_("You cannot delete someone else's comment."))
+    comment.is_deleted = True
+    comment.save(update_fields=["is_deleted"])
+    article = comment.article
+    article.comments_count = ArticleComment.objects.filter(article=article, is_deleted=False).count()
+    article.save(update_fields=["comments_count"])
+    return JsonResponse({"deleted": True, "comment_count": article.comments_count})
+
+
+@login_required
+@require_http_methods(["POST"])
+def edit_comment_view(request, comment_id):
+    comment = get_object_or_404(ArticleComment, id=comment_id)
+    if comment.author.user != request.user and not request.user.is_superuser:
+        return HttpResponseForbidden(_("You cannot edit someone else's comment."))
+    new_text = request.POST.get("text", "").strip()
+    if not new_text:
+        return JsonResponse({"error": _("Comment cannot be empty.")}, status=400)
+    comment.text = new_text
+    comment.edited_at = timezone.now()
+    comment.save(update_fields=["text", "edited_at"])
+    return JsonResponse({"text": comment.text, "edited_at": comment.edited_at.strftime("%Y-%m-%d %H:%M")})
+
+
+@login_required
+@require_POST
+def ckeditor5_upload(request):
+    f = request.FILES.get("upload")
+    if not f:
+        return JsonResponse({"error": {"message": _("No file uploaded.")}}, status=400)
+    try:
+        _validate_image_file(f)
+        ImageModel = get_image_model()
+        image = ImageModel(file=f, title=f.name, uploaded_by_user=request.user)
+        image.save()
+        try:
+            rendition = image.get_rendition("max-1600x1600|format-webp")
+        except Exception:
+            rendition = image.get_rendition("max-1600x1600")
+        return JsonResponse({"url": rendition.url})
+    except ValidationError as e:
+        return JsonResponse({"error": {"message": str(e)}}, status=400)
+    except Exception:
+        return JsonResponse({"error": {"message": _("Upload error.")}}, status=500)

@@ -17,7 +17,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open(BASE_DIR / "../environment.json") as f: environment = json.loads(f.read())
+with open(BASE_DIR / "../environment.json") as f:
+    environment = json.loads(f.read())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -30,7 +31,6 @@ DEBUG = environment["DEBUG"]
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,9 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
+    # project apps
     'base',
     'blog',
+
+    # extras
     'django.contrib.humanize.apps.HumanizeConfig',
+
+    # wagtail
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -54,17 +60,15 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail',
-    "ckeditor",
-    "ckeditor_uploader",
 
     'modelcluster',
     'taggit',
 ]
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -89,13 +93,13 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
+                'base.context_processors.notifications',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'RhymesOfLife.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -110,10 +114,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -129,18 +131,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+LANGUAGE_CODE = 'en'
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGES = [
+    ("en", "English"),
+    ("ru", "Русский"),
+]
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -150,12 +153,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')  # Global static directory
 ]
 
+LOCALE_PATHS = [BASE_DIR / 'locale']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # Email config (Yandex SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -166,7 +168,6 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = environment["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = environment["EMAIL_HOST_PASSWORD"]
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 
 # Mailgun config
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
@@ -183,27 +184,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Site ID for django.contrib.sites
 SITE_ID = 1
 
-
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Rhymes of Life'
 WAGTAIL_I18N_ENABLED = True
 WAGTAIL_CONTENT_LANGUAGES = [
-    ('ru', 'Russian'),
     ('en', 'English'),
+    ('ru', 'Russian'),
 ]
 WAGTAILIMAGES_IMAGE_MODEL = 'wagtailimages.Image'
 WAGTAILIMAGES_MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 WAGTAILIMAGES_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp']
 
-# CKEditor config
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 400,
-        'width': 'auto',
-        'extraPlugins': 'image2',
-    },
-}
-
-CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+# No CKEditor Django apps/config — we use CDN + custom upload endpoint
 WAGTAILADMIN_BASE_URL = BASE_URL

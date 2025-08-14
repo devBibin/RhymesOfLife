@@ -12,3 +12,5 @@ python-magic==0.4.27
 pillow==11.3.0
 wagtail==7.0.2
 django-ckeditor==6.7.3
+django-ckeditor-5==0.2.18
+bleach==6.2.0

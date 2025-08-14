@@ -1,82 +1,165 @@
-{% load static %}
+{% load static i18n %}
+{% load form_tags %}
+
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Rhymes of Life{% endblock %}</title>
 
-  <!-- Favicon -->
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 
-  <!-- Fonts & Bootstrap -->
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-  <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
-
-  <!-- Удалены render_block теги -->
   {% block extra_css %}{% endblock %}
 </head>
-
 <body>
   <div class="wrapper d-flex flex-column min-vh-100">
+
     <!-- HEADER -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3" role="banner">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="/">Ритмы Жизней</a>
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">{% trans "Rhymes of Life" %}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                aria-controls="navbarNav" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav align-items-center gap-2">
             <li class="nav-item">
-              <a class="nav-link text-white fw-semibold" href="#">О нас</a>
+              <a class="nav-link text-white fw-semibold" href="#">{% trans "About" %}</a>
             </li>
+
             {% if request.user.is_authenticated %}
+
               <li class="nav-item">
-                <a href="{% url 'my_profile' %}" class="btn btn-outline-light btn-sm">Мой профиль</a>
+                <a class="nav-link" href="{% url 'my_profile' %}">
+                  <i class="bi bi-person-circle"></i> {% trans "My profile" %}
+                </a>
               </li>
+
               <li class="nav-item">
-                <a href="{% url 'my_documents' %}" class="btn btn-outline-light btn-sm">Мои обследования</a>
+                <a class="nav-link" href="{% url 'my_documents' %}">
+                  <i class="bi bi-file-earmark-medical"></i> {% trans "My examinations" %}
+                </a>
               </li>
+
               <li class="nav-item">
-                <a href="{% url 'notifications' %}" class="btn btn-outline-light btn-sm">🔔 Уведомления</a>
+                {% blog_index_url as blog_url %}
+                <a class="nav-link" href="{{ blog_url }}">
+                  <i class="bi bi-journal-text"></i> {% trans "Articles" %}
+                </a>
               </li>
-              <li class="nav-item">
-                <a href="/articles/" class="btn btn-outline-light btn-sm">Статьи</a>
+
+              <!-- Notifications dropdown -->
+              <li class="nav-item dropdown">
+                <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-bell fs-5"></i>
+                  {% if unread_notifications_count %}
+                    <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1">
+                      {{ unread_notifications_count }}
+                    </span>
+                  {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notifDropdown" style="min-width: 300px;">
+                  <li class="dropdown-header">
+                    {% trans "Notifications" %}
+                    {% if unread_notifications_count %}
+                      <span class="badge bg-danger ms-1">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+
+                  {% if latest_notifications %}
+                    {% for n in latest_notifications %}
+                      <li>
+                        <a class="dropdown-item d-flex align-items-start {% if not n.is_read %}bg-light{% endif %}" href="{% url 'notifications' %}#n-{{ n.id }}">
+                          <div class="me-2">
+                            <i class="bi bi-{{ n.notification_type|lower }} fs-5 text-primary"></i>
+                          </div>
+                          <div class="flex-grow-1">
+                            <div class="small text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</div>
+                            {% if n.notification_type == 'FOLLOW' %}
+                              {% blocktrans with username=n.sender.user.username %}
+                                <strong>{{ username }}</strong> followed you.
+                              {% endblocktrans %}
+                            {% else %}
+                              {{ n.message }}
+                            {% endif %}
+                          </div>
+                        </a>
+                      </li>
+                    {% endfor %}
+                    <li><hr class="dropdown-divider"></li>
+                  {% else %}
+                    <li>
+                      <span class="dropdown-item text-muted">{% trans "No new notifications" %}</span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                  {% endif %}
+
+                  <li>
+                    <a class="dropdown-item text-center small text-primary" href="{% url 'notifications' %}">
+                      {% trans "Show all notifications" %}
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li class="nav-item">
-                <a href="{% url 'friends_page' %}" class="btn btn-outline-light btn-sm">👥 Друзья</a>
-              </li>
+
               {% if request.user.is_staff %}
                 <li class="nav-item">
-                  <a href="{% url 'patients_list' %}" class="btn btn-warning btn-sm fw-bold text-dark">
-                    <i class="bi bi-search me-1"></i>Пациенты
+                  <a class="nav-link text-warning" href="{% url 'patients_list' %}">
+                    <i class="bi bi-people-fill"></i> {% trans "Patients" %}
                   </a>
                 </li>
               {% endif %}
 
               <li class="nav-item">
-                <form method="post" action="{% url 'logout' %}" class="d-inline">
-                  {% csrf_token %}
+                <form method="post" action="{% url 'logout' %}"> {% csrf_token %}
                   <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right me-1"></i>Выйти
+                    <i class="bi bi-box-arrow-right me-1"></i> {% trans "Log out" %}
                   </button>
                 </form>
               </li>
+
             {% else %}
+
               <li class="nav-item">
-                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">
-                  <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+                <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> {% trans "Log in" %}
                 </a>
               </li>
+
             {% endif %}
+
+            {% with code=LANGUAGE_CODE|slice:":2" %}
+              <li class="nav-item ms-2">
+                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                  {% csrf_token %}
+                  {% if code == "en" %}
+                    <input type="hidden" name="language" value="ru">
+                    <input type="hidden" name="next" value="{% lang_path 'ru' %}">
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">
+                      <span aria-hidden="true">EN</span><span class="visually-hidden">RU</span>
+                    </button>
+                  {% else %}
+                    <input type="hidden" name="language" value="en">
+                    <input type="hidden" name="next" value="{% lang_path 'en' %}">
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">
+                      <span aria-hidden="true">RU</span><span class="visually-hidden">EN</span>
+                    </button>
+                  {% endif %}
+                </form>
+              </li>
+            {% endwith %}
           </ul>
         </div>
       </div>
@@ -88,18 +171,22 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer bg-dark text-white py-3 mt-4" role="contentinfo">
+    <footer class="footer bg-dark text-white py-3 mt-4">
       <div class="container text-center">
-        <p class="mb-0">&copy; 2025 «Rhymes of Life». Все права защищены.</p>
+        <p class="mb-0">&copy; {% now "Y" %} “Rhymes of Life”. {% trans "All rights reserved." %}</p>
       </div>
     </footer>
   </div>
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{% static 'js/new_scripts.js' %}"></script>
 
-  <!-- Удалены render_block теги -->
+  <script src="{% url 'javascript-catalog' %}"></script>
+  <script src="{% static 'js/article_detail.js' %}"></script>
+  <script src="{% static 'js/articles_index.js' %}"></script>
+  <script src="{% static 'js/avatar.js' %}"></script>
+  <script src="{% static 'js/exam.js' %}"></script>
+  <script src="{% static 'js/friends.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import AdditionalUserInfo
 
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -23,6 +24,7 @@ class RegisterForm(UserCreationForm):
             )
 
         return user
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:

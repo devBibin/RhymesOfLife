@@ -1,10 +1,13 @@
 # Use the official Python image
 FROM python:3.10-slim
 
+# Prevent Python from buffering stdout/stderr
+ENV PYTHONUNBUFFERED=1
+
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies required for cffi, Pillow, and other Python packages
+# System deps for Pillow, psycopg2, etc. + gettext for compilemessages
 RUN apt-get update && apt-get install -y \
     build-essential \
     libffi-dev \
@@ -21,31 +24,25 @@ RUN apt-get update && apt-get install -y \
     gcc \
     git \
     libmagic1 \
+    gettext \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a virtual environment
 RUN python3 -m venv /venv
 
-# Copy requirements.txt into the container
+# Copy requirements and install
 COPY requirements.txt /app/requirements.txt
-
-# Upgrade pip, setuptools, and wheel
 RUN /venv/bin/pip install --upgrade pip setuptools wheel
-
-# Install Python dependencies from requirements.txt
 RUN /venv/bin/pip install -r /app/requirements.txt
 
-# Copy the application code into the container
+# Copy project
 COPY RhymesOfLife/ /app/RhymesOfLife
-#COPY IG_Commenter/ /app/IG_Commenter
 COPY RhymesOfLifeShadows/ /app/RhymesOfLifeShadows
-#COPY IG_Commenter_shadows/ /app/IG_Commenter_shadows
-#COPY IG_Dashboard_shadows/ /app/IG_Dashboard_shadows
 COPY environment.json /app
 
-
-# Set the working directory to the Django project folder
+# Compile translations (.po -> .mo)
 WORKDIR /app/RhymesOfLife
+RUN /venv/bin/python manage.py compilemessages -l ru -l en
 
-# Expose the port Django runs on
+# Expose the port
 EXPOSE 8000

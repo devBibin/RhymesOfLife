@@ -1,75 +1,131 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 {% load form_tags %}
+
+{% block extra_css %}
+<style>
+  @media (max-width: 576px) {
+    #drop-zone {
+      padding: 1.5rem 1rem;
+    }
+    .file-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .file-card span {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 <div class="container py-4">
-  <h2 class="mb-4 fw-bold">🧾 Мои обследования</h2>
 
-  <!-- Форма создания/редактирования -->
-  <div class="card shadow-sm mb-5">
-    <div class="card-body">
-      <form id="exam-form" enctype="multipart/form-data" class="needs-validation" novalidate>
-        {% csrf_token %}
-        <input type="hidden" name="exam_id" id="exam_id" value="">
+  <ul class="nav nav-pills mb-4" id="examTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="my-exams-tab" data-bs-toggle="pill" data-bs-target="#my-exams" type="button" role="tab" aria-controls="my-exams" aria-selected="true">
+        🧾 {% trans "My examinations" %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="recommendations-tab" data-bs-toggle="pill" data-bs-target="#recommendations" type="button" role="tab" aria-controls="recommendations" aria-selected="false">
+        💡 {% trans "Doctor's recommendations" %}
+      </button>
+    </li>
+  </ul>
 
-        <div class="mb-3">
-          <label for="exam_date" class="form-label">Дата обследования:</label>
-          <input type="date" name="exam_date" id="exam_date" class="form-control" required>
+  <div class="tab-content" id="examTabsContent">
+    <div class="tab-pane fade show active" id="my-exams" role="tabpanel" aria-labelledby="my-exams-tab">
+
+      <div class="card shadow-sm mb-5">
+        <div class="card-body">
+          <h4 class="mb-3">➕ {% trans "Add examination" %}</h4>
+          <form id="exam-form" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <input type="hidden" id="exam_id" name="exam_id" value="">
+            <div class="row g-3">
+              <div class="col-12 col-md-3">
+                <label for="exam_date" class="form-label">{% trans "Examination date" %}</label>
+                <input type="date" name="exam_date" id="exam_date" class="form-control" required>
+              </div>
+              <div class="col-12 col-md-9">
+                <label for="description" class="form-label">{% trans "Description" %}</label>
+                <textarea name="description" id="description" class="form-control" rows="1" placeholder="{% trans 'Short description (optional)' %}"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">{% trans "Files" %}</label>
+                <div id="drop-zone" class="border border-secondary-subtle bg-light p-4 rounded text-center">
+                  <p class="mb-0">📂 {% trans "Drag files here or click" %}</p>
+                  <input type="file" id="file-input" name="files" hidden multiple accept=".pdf,image/jpeg,image/png">
+                </div>
+                <div id="file-list" class="mt-2"></div>
+              </div>
+              <div class="col-12 text-end">
+                <button type="button" id="submit-exam" class="btn btn-primary">📤 {% trans "Save" %}</button>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label">Описание:</label>
-          <textarea name="description" id="description" class="form-control" rows="3" placeholder="Описание обследования..."></textarea>
-        </div>
-
-        <!-- DROP ZONE -->
-        <div id="drop-zone" class="border border-secondary-subtle bg-light p-4 rounded text-center mb-3">
-          <p class="mb-0">📂 Перетащите файлы сюда или кликните для выбора</p>
-          <input type="file" id="file-input" name="files" hidden multiple>
-        </div>
-
-        <div id="file-list" class="mb-3"></div>
-
-        <button type="button" id="submit-exam" class="btn btn-primary w-100">
-          📤 Добавить обследование
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Список обследований -->
-  {% for exam in exams %}
-    <div class="card shadow-sm mb-4" data-exam-id="{{ exam.id }}">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <h5 class="card-title">📅 Дата обследования: {{ exam.exam_date|date:"d.m.Y" }}</h5>
-          <div>
-            <button class="btn btn-sm btn-outline-primary edit-exam-btn" data-id="{{ exam.id }}">✏️</button>
-            <button class="btn btn-sm btn-outline-danger delete-exam-btn" data-id="{{ exam.id }}">🗑️</button>
-          </div>
-        </div>
-        {% if exam.description %}
-          <p class="card-text"><em>Описание: {{ exam.description }}</em></p>
-        {% endif %}
-        <ul class="list-unstyled">
-          {% for doc in exam.documents.all %}
-            <li class="mb-2">
-              <a href="{{ doc.file.url }}" target="_blank" class="text-decoration-none">
-                📎 {{ doc.file.name|basename }}
-              </a><br>
-              <small class="text-muted">🕒 Дата публикации: {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
-            </li>
-          {% endfor %}
-        </ul>
       </div>
-    </div>
-  {% empty %}
-    <div class="alert alert-info">Обследований пока нет.</div>
-  {% endfor %}
-</div>
-{% endblock %}
 
-{% block extra_js %}
+      {% for exam in exams %}
+        <div class="card shadow-sm mb-3">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <strong>📅 {{ exam.exam_date|date:"d.m.Y" }}</strong>
+              {% if exam.description %}
+                <span class="text-muted ms-2">{{ exam.description }}</span>
+              {% endif %}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-outline-primary edit-exam-btn" data-id="{{ exam.id }}">✏️</button>
+              <button class="btn btn-sm btn-outline-danger delete-exam-btn" data-id="{{ exam.id }}">🗑️</button>
+            </div>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for doc in exam.documents.all %}
+              <li class="list-group-item d-flex justify-content-between">
+                <a href="{{ doc.file.url }}" target="_blank">{{ doc.file.name|basename }}</a>
+                <small class="text-muted">{{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">{% trans "No documents" %}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% empty %}
+        <div class="alert alert-info">{% trans "No examinations yet." %}</div>
+      {% endfor %}
+
+    </div>
+
+    <div class="tab-pane fade" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab">
+      {% for exam in exams %}
+        {% if exam.comments.exists %}
+          <div class="mb-4">
+            <h5 class="fw-bold">
+              {% trans "Examination from" %} {{ exam.exam_date|date:"d.m.Y" }}
+            </h5>
+            {% for comment in exam.comments.all %}
+              <div class="card mb-2 border-info">
+                <div class="card-header bg-info text-white d-flex justify-content-between">
+                  <div>{{ comment.author.user.get_full_name|default:comment.author.user.username }}</div>
+                  <div>{{ comment.created_at|date:"d.m.Y H:i" }}</div>
+                </div>
+                <div class="card-body">
+                  <p class="mb-0">{{ comment.content }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% empty %}
+        <p class="text-muted">{% trans "No recommendations yet." %}</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
 {% endblock %}

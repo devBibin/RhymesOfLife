@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 <div class="container py-4">
-  <h2 class="mb-4">👨‍⚕️ Поиск пациентов</h2>
+  <h2 class="mb-4">👨‍⚕️ {% trans "Search patients" %}</h2>
 
   <form method="get" class="mb-4 d-flex gap-2">
-    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Введите имя или фамилию...">
-    <button type="submit" class="btn btn-primary">🔍 Искать</button>
+    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="{% trans 'Enter first or last name...' %}">
+    <button type="submit" class="btn btn-primary">🔍 {% trans "Search" %}</button>
   </form>
 
   {% if patients %}
@@ -16,7 +16,7 @@
       {% for info in patients %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <span>{{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})</span>
-          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary">📄 Смотреть обследования</a>
+          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary">📄 {% trans "View examinations" %}</a>
         </li>
       {% endfor %}
     </ul>
@@ -26,10 +26,10 @@
         <ul class="pagination justify-content-center">
           {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">← Назад</a>
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">← {% trans "Back" %}</a>
             </li>
           {% else %}
-            <li class="page-item disabled"><span class="page-link">← Назад</span></li>
+            <li class="page-item disabled"><span class="page-link">← {% trans "Back" %}</span></li>
           {% endif %}
 
           {% for i in page_obj.paginator.page_range %}
@@ -44,19 +44,19 @@
 
           {% if page_obj.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Вперёд →</a>
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">{% trans "Next" %} →</a>
             </li>
           {% else %}
-            <li class="page-item disabled"><span class="page-link">Вперёд →</span></li>
+            <li class="page-item disabled"><span class="page-link">{% trans "Next" %} →</span></li>
           {% endif %}
         </ul>
       </nav>
     {% endif %}
 
   {% elif query %}
-    <div class="alert alert-warning">Пациенты не найдены.</div>
+    <div class="alert alert-warning">{% trans "No patients found." %}</div>
   {% else %}
-    <div class="alert alert-info">Введите запрос для поиска пациентов.</div>
+    <div class="alert alert-info">{% trans "Enter a query to search for patients." %}</div>
   {% endif %}
 </div>
 {% endblock %}

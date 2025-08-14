@@ -1,11 +1,13 @@
+{% load i18n wagtailimages_tags %}
+
 <div class="editor-block" data-type="image_with_caption">
   <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-sm btn-danger remove-block">×</button>
+    <button type="button" class="btn btn-sm btn-danger remove-block" aria-label="{% trans 'Remove block' %}" title="{% trans 'Remove block' %}">×</button>
   </div>
   {% if value.image %}
-    <img src="{% image_url value.image 'width-300' %}" class="img-thumbnail mb-2">
+    <img src="{% image_url value.image 'width-300' %}" class="img-thumbnail mb-2" alt="">
     <input type="hidden" name="image_id" value="{{ value.image.id }}">
   {% endif %}
   <input type="file" class="form-control mb-2" accept="image/*">
-  <input type="text" class="form-control" value="{{ value.caption }}" placeholder="Подпись...">
+  <input type="text" class="form-control" value="{{ value.caption }}" placeholder="{% trans 'Caption...' %}">
 </div>

@@ -9,7 +9,6 @@ class AdditionalUserInfoAdmin(admin.ModelAdmin):
     list_display = ('user',)
 
 
-
 @admin.register(MedicalDocument)
 class MedicalDocument(admin.ModelAdmin):
     pass
@@ -20,11 +19,11 @@ class MedicalExam(admin.ModelAdmin):
     pass
 
 
-@admin.register(FriendRequest)
-class FriendRequest(admin.ModelAdmin):
+@admin.register(Notification)
+class Notification(admin.ModelAdmin):
     pass
 
 
-@admin.register(Notification)
-class Notification(admin.ModelAdmin):
+@admin.register(Follower)
+class Follower(admin.ModelAdmin):
     pass

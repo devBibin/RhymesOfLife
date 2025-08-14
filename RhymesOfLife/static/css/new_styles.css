@@ -2,7 +2,6 @@
 html, body {
   height: 100%;
 }
-
 body {
   font-family: 'Ubuntu', sans-serif;
   font-size: 1.15rem;
@@ -10,13 +9,11 @@ body {
   color: #212529;
   line-height: 1.6;
 }
-
 .wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-
 main {
   flex-grow: 1;
 }
@@ -26,7 +23,6 @@ a {
   color: #0d6efd;
   text-decoration: none;
 }
-
 a:hover, a:focus {
   text-decoration: underline;
 }
@@ -41,7 +37,7 @@ textarea:focus {
   outline-offset: 2px;
 }
 
-/* ==== Logo Header ==== */
+/* ==== Navbar & Logo ==== */
 .base__logo {
   font-size: 1.5rem;
   color: #fff;
@@ -52,19 +48,15 @@ textarea:focus {
 .btn, .form-control, .form-select {
   font-size: 1.1rem;
 }
-
 form .form-label {
   font-weight: 600;
 }
-
 .card input.form-control {
   font-size: 1rem;
 }
-
 .text-danger {
   font-size: 0.875rem;
 }
-
 .form-text {
   font-size: 0.875rem;
   color: #6c757d;
@@ -75,6 +67,35 @@ form .form-label {
   margin-bottom: 0;
   font-size: 1rem;
 }
+.card-profile { max-width: 660px; margin: auto; }
+  @media (max-width:576px) {
+    .card-profile { padding: 1rem; }
+    .avatar-editable { width: 80px!important; height: 80px!important; }
+  }
+  .avatar-menu {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: none;
+    z-index: 1000;
+  }
+  .avatar-menu.show {
+    display: block;
+  }
+
+/* ==== Profile Card ==== */
+.card-profile {
+  max-width: 660px;
+  margin: auto;
+}
+@media (max-width: 576px) {
+  .card-profile {
+    padding: 1rem;
+  }
+}
 
 /* ==== Avatar & Dropdown ==== */
 .avatar-editable {
@@ -82,25 +103,16 @@ form .form-label {
   cursor: pointer;
   border: 3px solid transparent;
 }
-
 .avatar-editable:hover {
   transform: scale(1.03);
   box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
 }
-
-.avatar-editable.avatar-menu-active {
-  border-color: #0d6efd;
-  box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
-}
-
 .avatar-menu {
   position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  background: white;
-  border: 1px solid #dee2e6;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  background: #fff;
+  border: 1px solid #ccc;
   border-radius: 0.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   min-width: 200px;
@@ -108,16 +120,15 @@ form .form-label {
   padding: 0.25rem 0;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   pointer-events: none;
+  z-index: 1000;
 }
-
 .avatar-menu.show {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
-
 .avatar-menu .dropdown-item {
   width: 100%;
   text-align: left;
@@ -125,21 +136,28 @@ form .form-label {
   border: none;
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
-  color: #212529;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.2s ease;
 }
-
 .avatar-menu .dropdown-item:hover {
   background-color: #f8f9fa;
-  color: #0d6efd;
 }
-
 .avatar-menu .dropdown-item.text-danger:hover {
   color: #dc3545;
+}
+
+/* ==== Profile Form Responsive ==== */
+@media (max-width: 768px) {
+  /* колонки формы занимают всю ширину */
+  .card-profile .row.g-3 .col-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  /* отступ под меню аватара чтоб не резало */
+  .card-profile .position-relative {
+    padding-top: 2rem;
+  }
 }
 
 /* ==== File Dropzone ==== */
@@ -147,11 +165,9 @@ form .form-label {
   cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
-
 #drop-zone.dragover {
   background: #e3f2fd;
 }
-
 .file-card {
   background: #f8f9fa;
   border: 1px dashed #ccc;
@@ -167,33 +183,27 @@ form .form-label {
   max-width: 400px;
   border-radius: 0.5rem;
 }
-
 .patient-search-form button.btn {
   white-space: nowrap;
   font-weight: 600;
   padding: 0.5rem 1rem;
 }
-
 .patient-list .list-group-item {
   transition: box-shadow 0.2s ease;
   border-radius: 0.5rem;
 }
-
 .patient-list .list-group-item:hover {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
-
 .patient-list .list-group-item span {
   font-size: 1.1rem;
   font-weight: 500;
   color: #2d3436;
 }
-
 .patient-list .btn-outline-primary {
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
-
 .patient-list .btn-outline-primary:hover {
   background-color: #0d6efd;
   color: white;
@@ -203,48 +213,25 @@ form .form-label {
 .pagination {
   margin-top: 1rem;
 }
-
 .pagination .page-link {
   border-radius: 0.4rem;
 }
-
 .pagination .page-item.active .page-link {
   font-weight: 600;
 }
 
-/* ==== Responsive ==== */
-@media (max-width: 576px) {
-  .avatar-menu {
-    min-width: 160px;
-    font-size: 0.9rem;
-  }
-
-  .patient-search-form {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .navbar-nav {
-    gap: 0.25rem;
-  }
-}
-
-
-/*Blog*/
+/* ==== Blog Cards ==== */
 .blog-card {
   display: flex;
-  flex-direction: row;
   gap: 1rem;
   border-radius: 0.5rem;
   transition: transform 0.2s ease-in-out;
   overflow: hidden;
   min-height: 160px;
 }
-
 .blog-card:hover {
   transform: translateY(-2px);
 }
-
 .blog-card .blog-card-img {
   flex-shrink: 0;
   width: 160px;
@@ -252,7 +239,6 @@ form .form-label {
   object-fit: cover;
   border-radius: 0.5rem 0 0 0.5rem;
 }
-
 .blog-card .card-body {
   padding: 1rem 1.25rem;
   display: flex;
@@ -260,41 +246,75 @@ form .form-label {
   justify-content: space-between;
   flex: 1;
 }
-
 .blog-card .card-title {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
 }
-
 .blog-card .card-text {
   font-size: 0.9rem;
   color: #555;
 }
-
 .blog-card .badge {
   font-size: 0.75rem;
   margin-right: 6px;
 }
-
 .blog-card .stretched-link {
   position: relative;
   z-index: 1;
 }
-
 @media (max-width: 576px) {
   .blog-card {
     flex-direction: column;
     align-items: center;
   }
-
   .blog-card .blog-card-img {
     width: 100%;
     height: 180px;
     border-radius: 0.5rem 0.5rem 0 0;
   }
-
   .blog-card .card-body {
     padding: 1rem;
   }
 }
 
+/* ==== Articles ==== */
+.article-container {
+  max-width: 800px;
+  padding: 2rem 1rem;
+}
+.article-title {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+}
+.article-intro {
+  font-size: 1.2rem;
+  color: #444;
+}
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+.comment {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+.author-avatar,
+.comment-avatar {
+  object-fit: cover;
+}
+
+/* ==== Notifications Badge ==== */
+.nav-link .badge {
+  font-size: 0.65rem;
+  line-height: 1;
+  transform: translate(50%, -50%);
+}
+.dropdown-item.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.card-profile { max-width:600px; margin:auto; }
+  @media(max-width:576px){ .profile-avatar{width:100px!important;height:100px!important;} }

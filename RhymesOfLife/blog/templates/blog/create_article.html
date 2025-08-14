@@ -1,18 +1,11 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block extra_js %}
-  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      CKEDITOR.replace('body');
-    });
-  </script>
-{% endblock %}
+{% block title %}{% trans "New article" %} — {{ block.super }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-  <h1>Новая статья</h1>
+  <h1>{% trans "New article" %}</h1>
 
   {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
@@ -22,31 +15,69 @@
     {% csrf_token %}
 
     <div class="mb-3">
-      <label for="title">Заголовок</label>
-      <input type="text" name="title" class="form-control" required>
+      <label class="form-label">{% trans "Title" %}</label>
+      <input name="title" class="form-control" required value="{{ title }}">
     </div>
 
     <div class="mb-3">
-      <label for="intro">Краткое описание</label>
-      <textarea name="intro" class="form-control" required></textarea>
+      <label class="form-label">{% trans "Short description" %}</label>
+      <textarea name="intro" class="form-control" required>{{ intro }}</textarea>
     </div>
 
     <div class="mb-3">
-      <label for="main_image">Главное изображение</label>
-      <input type="file" name="main_image" class="form-control">
+      <label class="form-label">{% trans "Main image" %}</label>
+      <input type="file" name="main_image" class="form-control" accept="image/*">
     </div>
 
     <div class="mb-3">
-      <label for="body">Контент статьи</label>
-      <textarea name="body" id="body" class="form-control" rows="12" required></textarea>
+      <label class="form-label">{% trans "Article content" %}</label>
+      <textarea id="body"
+                name="body"
+                class="form-control js-ckeditor"
+                rows="12"
+                data-language="{{ LANGUAGE_CODE|slice:':2' }}"
+                data-upload-url="{% url 'ck5_upload' %}"
+                data-placeholder="{% trans 'Start writing…' %}">{{ body }}</textarea>
     </div>
 
     <div class="mb-3">
-      <label for="tags">Теги (через запятую)</label>
-      <input type="text" name="tags" class="form-control">
+      <label class="form-label">{% trans "Tags" %}</label>
+      <div class="row row-cols-2 row-cols-md-3 g-2">
+        {% for tag in all_tags %}
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="tags"
+                   id="tag-{{ forloop.counter }}"
+                   value="{{ tag }}"
+                   {% if tag in selected_tags %}checked{% endif %}>
+            <label class="form-check-label" for="tag-{{ forloop.counter }}">
+              {{ tag }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Опубликовать</button>
+    <div class="d-flex gap-2">
+      <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
+        {% trans "Save draft" %}
+      </button>
+      <button type="submit" name="action" value="publish" class="btn btn-primary">
+        {% trans "Publish" %}
+      </button>
+    </div>
   </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+  {% if LANGUAGE_CODE|slice:":2" == 'ru' %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/translations/ru.js"></script>
+  {% endif %}
+
+  <script src="{% static 'js/ckeditor-init.js' %}"></script>
+
+  <style>.ck-editor__editable_inline{min-height:360px}</style>
 {% endblock %}

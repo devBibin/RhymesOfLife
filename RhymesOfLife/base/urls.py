@@ -17,15 +17,9 @@ urlpatterns = [
     path('api/documents/<int:doc_id>/', delete_document_api, name='delete_document_api'),
     path("patients/", patients_list_view, name="patients_list"),
     path("patients/<int:user_id>/", patient_exams_view, name="patient_exams"),
-    path('send_friend_request/<int:user_id>/', send_friend_request, name='send_friend_request'),
     path('notifications/', notifications_view, name='notifications'),
-    path('friend_request/respond/<int:notification_id>/<str:action>/', friend_request_response, name='friend_request_response'),
-    path('send_friend_request/<int:user_id>/', send_friend_request, name='send_friend_request'),
-    path("friends/", friends_page, name="friends_page"),
-    path('friend_request/respond/<int:request_id>/<str:action>/', friend_request_response, name='friend_request_response'),
-
-
-
+    path('follow/<int:user_id>/', follow_view, name='follow_user'),
+    path('unfollow/<int:user_id>/', unfollow_view, name='unfollow_user'),
 
 
     path('', views.home_view, name='home'),

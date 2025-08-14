@@ -1,71 +1,47 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends 'base.html' %}
+{% load static i18n %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
-
-<div class="container mt-5">
-  <h2 class="mb-4">Профиль пользователя: {{ user_profile.username }}</h2>
-
-  <div class="text-center mb-4">
-    {% if info.avatar %}
-      <img src="{{ info.avatar.url }}" alt="Аватар пользователя" class="rounded-circle shadow-sm" width="150" height="150">
-    {% else %}
-      <p class="text-muted">Нет аватарки</p>
-    {% endif %}
-  </div>
-
-  <ul class="list-group shadow-sm mb-4">
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Имя:</strong>
-      <span>{{ info.first_name|default:"Не указано" }}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Фамилия:</strong>
-      <span>{{ info.last_name|default:"Не указано" }}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Email:</strong>
-      <span>{{ info.email|default:user_profile.email }}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Дата рождения:</strong>
-      <span>{{ info.birth_date|date:"d.m.Y"|default:"Не указана" }}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Синдром:</strong>
-      <span>{{ info.syndrome|default:"Не указан" }}</span>
-    </li>
-    <li class="list-group-item d-flex justify-content-between">
-      <strong>Верифицирован:</strong>
-      <span>
-        {% if info.is_verified %}
-          <span class="text-success">✔️ Верифицирован</span>
-        {% else %}
-          <span class="text-danger">❌ Не верифицирован</span>
-        {% endif %}
-      </span>
-    </li>
-  </ul>
-
-  {% if editable %}
-    <div class="text-end">
-      <a href="{% url 'profile_edit' %}" class="btn btn-primary">
-        <i class="bi bi-pencil-fill me-1"></i> Редактировать профиль
-      </a>
-    </div>
-  {% else %}
-    <div class="text-end" id="friend-request-container">
-      {% if not is_friend %}
-        <form id="friend-request-form" method="post" action="{% url 'send_friend_request' user_profile.id %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-success">Добавить в друзья</button>
-        </form>
-      {% else %}
-        <span class="text-muted">✅ Вы уже друзья</span>
-      {% endif %}
-    </div>
-  {% endif %}
-</div>
+{% block extra_css %}
 {% endblock %}
 
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm card-profile">
+    <div class="card-body text-center">
+      {% if info.avatar %}
+        <img src="{{ info.avatar.url }}" class="rounded-circle profile-avatar mb-3" style="width:120px;height:120px;" alt="{% trans 'User avatar' %}">
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle profile-avatar mb-3" style="width:120px;height:120px;" alt="{% trans 'Default avatar' %}">
+      {% endif %}
+      <h4>{{ user_profile.get_full_name }}</h4>
+
+      <div class="row text-start gx-3 gy-2 mt-4">
+        <div class="col-6"><strong>{% trans "First name" %}:</strong> {{ info.first_name|default:"—" }}</div>
+        <div class="col-6"><strong>{% trans "Last name" %}:</strong> {{ info.last_name|default:"—" }}</div>
+        <div class="col-6"><strong>{% trans "Email" %}:</strong> {{ info.email|default:user_profile.email }}</div>
+        <div class="col-6"><strong>{% trans "Date of birth" %}:</strong> {{ info.birth_date|date:"d.m.Y"|default:"—" }}</div>
+        <div class="col-12">
+          <strong>{% trans "Syndromes" %}:</strong>
+          {% if info.syndromes %}
+            {% for code,label in syndrome_choices %}
+              {% if code in info.syndromes %}
+                <span class="badge bg-secondary text-dark me-1">{{ label }}</span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+      </div>
+
+      {% if editable %}
+        <div class="mt-4">
+          <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-fill me-1"></i> {% trans "Edit" %}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

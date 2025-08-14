@@ -1,0 +1,683 @@
+# Russian translations for RhymesOfLife
+# Copyright (C)
+# This file is distributed under the same license as the project.
+# Translator: —
+msgid ""
+msgstr ""
+"Project-Id-Version: RhymesOfLife\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-13 18:34+0000\n"
+"PO-Revision-Date: 2025-08-13 19:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: base/templates/base/home.html:5
+msgid "Home"
+msgstr "Главная"
+
+#: base/templates/base/home.html:15
+#, python-format
+msgid "Welcome, %(username)s!"
+msgstr "Добро пожаловать, %(username)s!"
+
+#: base/templates/base/home.html:18
+msgid "Welcome!"
+msgstr "Добро пожаловать!"
+
+#: base/templates/base/home.html:23
+msgid "Email not verified."
+msgstr "Email не подтверждён."
+
+#: base/templates/base/home.html:24
+msgid "Please verify your email for full access."
+msgstr "Пожалуйста, подтвердите email для полного доступа."
+
+#: base/templates/base/home.html:27
+msgid "Send email"
+msgstr "Отправить письмо"
+
+#: base/templates/base/home.html:29
+msgid "Close"
+msgstr "Закрыть"
+
+#: base/templates/base/home.html:36
+msgid "Genetic connective tissue syndromes"
+msgstr "Генетические синдромы соединительной ткани"
+
+#: base/templates/base/home.html:38
+msgid ""
+"Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective "
+"tissue disorders and can be life-threatening without timely diagnosis."
+msgstr "Синдромы Марфана, Лойса–Дитца, Элерса–Данлоса и другие связаны с нарушениями соединительной ткани и могут быть опасны для жизни без своевременной диагностики."
+
+#: base/templates/base/home.html:51 base/templates/base/home.html:67
+#: base/templates/base/home.html:76 base/templates/base/home.html:85
+msgid "Learn more"
+msgstr "Узнать больше"
+
+#: base/templates/base/home.html:60
+msgid "What to do if you suspect a syndrome?"
+msgstr "Что делать, если вы подозреваете синдром?"
+
+#: base/templates/base/home.html:65
+msgid "Find a doctor"
+msgstr "Найти врача"
+
+#: base/templates/base/home.html:66
+msgid "A coordinated clinic is the best place for treatment..."
+msgstr "Координированная клиника — лучшее место для лечения..."
+
+#: base/templates/base/home.html:74
+msgid "Support"
+msgstr "Поддержка"
+
+#: base/templates/base/home.html:75
+msgid "A foundation can help you find resources and community."
+msgstr "Фонд поможет найти ресурсы и сообщество."
+
+#: base/templates/base/home.html:83
+msgid "Resources"
+msgstr "Ресурсы"
+
+#: base/templates/base/home.html:84
+msgid "Official materials and guidelines for the syndrome."
+msgstr "Официальные материалы и рекомендации по синдрому."
+
+#: base/templates/base/home.html:100
+msgid "Welcome to Rhymes of Life!"
+msgstr "Добро пожаловать в Rhymes of Life!"
+
+#: base/templates/base/home.html:106 base/templates/base/home.html:157
+#: base/templates/base/home.html:188 base/templates/base/login.html:40
+#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/register.html:44
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: base/templates/base/home.html:113 base/templates/base/home.html:186
+#: base/templates/base/login.html:4 base/templates/base/login.html:10
+#: base/templates/base/login.html:36 base/templates/base/register.html:48
+#: blog/templates/blog/blog_page.html:115 templates/base.html:134
+msgid "Log in"
+msgstr "Войти"
+
+#: base/templates/base/home.html:131 base/templates/base/home.html:171
+#: base/templates/base/login.html:21 base/templates/base/register.html:25
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: base/templates/base/home.html:137 base/templates/base/profile.html:21
+#: base/templates/base/profile_edit.html:49
+#: base/templates/base/register.html:30
+msgid "Email"
+msgstr "Email"
+
+#: base/templates/base/home.html:143 base/templates/base/home.html:177
+#: base/templates/base/login.html:29 base/templates/base/register.html:35
+msgid "Password"
+msgstr "Пароль"
+
+#: base/templates/base/home.html:148 base/templates/base/register.html:40
+msgid "Confirm password"
+msgstr "Повторите пароль"
+
+#: base/templates/base/home.html:154 base/templates/base/home.html:183
+msgid "Show password"
+msgstr "Показать пароль"
+
+#: base/templates/base/home.html:188 base/templates/base/login.html:40
+msgid "Don't have an account?"
+msgstr "Нет аккаунта?"
+
+#: base/templates/base/my_documents.html:29 templates/base.html:48
+msgid "My examinations"
+msgstr "Мои обследования"
+
+#: base/templates/base/my_documents.html:34
+msgid "Doctor's recommendations"
+msgstr "Рекомендации врача"
+
+#: base/templates/base/my_documents.html:44
+msgid "Add examination"
+msgstr "Добавить обследование"
+
+#: base/templates/base/my_documents.html:50
+msgid "Examination date"
+msgstr "Дата обследования"
+
+#: base/templates/base/my_documents.html:54
+msgid "Description"
+msgstr "Описание"
+
+#: base/templates/base/my_documents.html:55
+msgid "Short description (optional)"
+msgstr "Краткое описание (необязательно)"
+
+#: base/templates/base/my_documents.html:58
+msgid "Files"
+msgstr "Файлы"
+
+#: base/templates/base/my_documents.html:60
+msgid "Drag files here or click"
+msgstr "Перетащите файлы сюда или кликните"
+
+#: base/templates/base/my_documents.html:66
+#: base/templates/base/profile_edit.html:113
+msgid "Save"
+msgstr "Сохранить"
+
+#: base/templates/base/my_documents.html:94
+msgid "No documents"
+msgstr "Нет документов"
+
+#: base/templates/base/my_documents.html:99
+msgid "No examinations yet."
+msgstr "Обследований пока нет."
+
+#: base/templates/base/my_documents.html:109
+msgid "Examination from"
+msgstr "Обследование от"
+
+#: base/templates/base/my_documents.html:125
+#: base/templates/base/patient_exams.html:35
+msgid "No recommendations yet."
+msgstr "Пока нет рекомендаций."
+
+#: base/templates/base/notifications.html:4
+#: base/templates/base/notifications.html:9 templates/base.html:71
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: base/templates/base/notifications.html:5
+msgid "Your notifications list"
+msgstr "Список ваших уведомлений"
+
+#: base/templates/base/notifications.html:15
+#, python-format
+msgid ""
+"\n"
+"            <strong>%(username)s</strong> followed you.\n"
+"          "
+msgstr ""
+"\n"
+"            <strong>%(username)s</strong> подписался(ась) на вас.\n"
+"          "
+
+#: base/templates/base/notifications.html:19
+#, python-format
+msgid ""
+"\n"
+"            <strong>%(username)s</strong> sent you a friend request.\n"
+"          "
+msgstr ""
+"\n"
+"            <strong>%(username)s</strong> отправил(а) запрос в друзья.\n"
+"          "
+
+#: base/templates/base/notifications.html:28
+msgid "No notifications"
+msgstr "Уведомлений нет"
+
+#: base/templates/base/patient_exams.html:26
+msgid "Recommendations"
+msgstr "Рекомендации"
+
+#: base/templates/base/patient_exams.html:44
+msgid "Enter recommendation..."
+msgstr "Введите рекомендацию..."
+
+#: base/templates/base/patient_exams.html:46
+msgid "Add recommendation"
+msgstr "Добавить рекомендацию"
+
+#: base/templates/base/patient_exams.html:51
+msgid "No exams available."
+msgstr "Нет доступных обследований."
+
+#: base/templates/base/patients_list.html:7
+msgid "Search patients"
+msgstr "Поиск пациентов"
+
+#: base/templates/base/patients_list.html:10
+msgid "Enter first or last name..."
+msgstr "Введите имя или фамилию..."
+
+#: base/templates/base/patients_list.html:11
+#: blog/templates/blog/blog_index_page.html:49
+msgid "Search"
+msgstr "Поиск"
+
+#: base/templates/base/patients_list.html:19
+msgid "View examinations"
+msgstr "Смотреть обследования"
+
+#: base/templates/base/patients_list.html:29
+#: base/templates/base/patients_list.html:32
+msgid "Back"
+msgstr "Назад"
+
+#: base/templates/base/patients_list.html:47
+#: base/templates/base/patients_list.html:50
+msgid "Next"
+msgstr "Вперёд"
+
+#: base/templates/base/patients_list.html:57
+msgid "No patients found."
+msgstr "Пациенты не найдены."
+
+#: base/templates/base/patients_list.html:59
+msgid "Enter a query to search for patients."
+msgstr "Введите запрос для поиска пациентов."
+
+#: base/templates/base/profile.html:12 base/templates/base/profile_edit.html:18
+msgid "User avatar"
+msgstr "Аватар пользователя"
+
+#: base/templates/base/profile.html:14
+msgid "Default avatar"
+msgstr "Аватар по умолчанию"
+
+#: base/templates/base/profile.html:19 base/templates/base/profile_edit.html:41
+msgid "First name"
+msgstr "Имя"
+
+#: base/templates/base/profile.html:20 base/templates/base/profile_edit.html:45
+msgid "Last name"
+msgstr "Фамилия"
+
+#: base/templates/base/profile.html:22 base/templates/base/profile_edit.html:54
+msgid "Date of birth"
+msgstr "Дата рождения"
+
+#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:90
+msgid "Syndromes"
+msgstr "Синдромы"
+
+#: base/templates/base/profile.html:40 blog/templates/blog/blog_page.html:67
+msgid "Edit"
+msgstr "Редактировать"
+
+#: base/templates/base/profile_edit.html:23
+msgid "Upload new"
+msgstr "Загрузить новую"
+
+#: base/templates/base/profile_edit.html:26
+#: blog/templates/blog/blog_page.html:73
+#: blog/templates/blog/edit_article.html:89
+msgid "Delete"
+msgstr "Удалить"
+
+#: base/templates/base/profile_edit.html:58
+msgid "Day"
+msgstr "День"
+
+#: base/templates/base/profile_edit.html:68
+msgid "Month"
+msgstr "Месяц"
+
+#: base/templates/base/profile_edit.html:78
+msgid "Year"
+msgstr "Год"
+
+#: base/templates/base/profile_edit.html:116
+msgid "Profile updated"
+msgstr "Профиль обновлён"
+
+#: base/templates/base/register.html:18
+msgid "Registration successful!"
+msgstr "Регистрация прошла успешно!"
+
+#: base/templates/base/register.html:18
+msgid "You can"
+msgstr "Вы можете"
+
+#: base/templates/base/register.html:18
+msgid "log in"
+msgstr "войти"
+
+#: base/templates/base/register.html:48
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+#: base/views/auth_views.py:42 base/views/auth_views.py:151
+msgid "Please fill in all fields."
+msgstr "Пожалуйста, заполните все поля."
+
+#: base/views/auth_views.py:44 base/views/auth_views.py:154
+msgid "Passwords don't match."
+msgstr "Пароли не совпадают."
+
+#: base/views/auth_views.py:46 base/views/auth_views.py:157
+msgid "A user with that name already exists."
+msgstr "Пользователь с таким именем уже существует."
+
+#: base/views/auth_views.py:48 base/views/auth_views.py:160
+msgid "The email has already been registered."
+msgstr "Этот email уже зарегистрирован."
+
+#: base/views/auth_views.py:61 base/views/auth_views.py:174
+msgid ""
+"Registration was successful! An email confirmation will be sent within a "
+"minute."
+msgstr "Регистрация прошла успешно! Письмо для подтверждения будет отправлено в течение минуты."
+
+#: base/views/auth_views.py:76 base/views/auth_views.py:184
+msgid "Invalid username or password."
+msgstr "Неверное имя пользователя или пароль."
+
+#: base/views/auth_views.py:111
+msgid ""
+"A verification email has been sent to your email. Please confirm your "
+"account."
+msgstr "Письмо для подтверждения отправлено на ваш email. Пожалуйста, подтвердите аккаунт."
+
+#: base/views/auth_views.py:136
+msgid "Вы уже авторизованы."
+msgstr "Вы уже авторизованы."
+
+#: base/views/doctors_views.py:51
+#, python-format
+msgid "Врач %(docname)s оставил рекомендацию к обследованию от %(date)s"
+msgstr "Врач %(docname)s оставил рекомендацию к обследованию от %(date)s"
+
+#: base/views/doctors_views.py:56
+msgid "Recommendation added and patient notified."
+msgstr "Рекомендация добавлена, пациент уведомлён."
+
+#: base/views/doctors_views.py:58
+msgid "Recommendation cannot be empty."
+msgstr "Рекомендация не может быть пустой."
+
+#: base/views/documents_views.py:27
+msgid "Invalid date format"
+msgstr "Неверный формат даты"
+
+#: base/views/documents_views.py:30
+msgid "No files selected"
+msgstr "Файлы не выбраны"
+
+#: base/views/profile_views.py:16
+msgid "Синдром 1"
+msgstr "Синдром 1"
+
+#: base/views/profile_views.py:17
+msgid "Синдром 2"
+msgstr "Синдром 2"
+
+#: base/views/profile_views.py:18
+msgid "Синдром 3"
+msgstr "Синдром 3"
+
+#: base/views/profile_views.py:19
+msgid "Синдром 4"
+msgstr "Синдром 4"
+
+#: base/views/profile_views.py:20
+msgid "Синдром 5"
+msgstr "Синдром 5"
+
+#: base/views/profile_views.py:21
+msgid "Синдром 6"
+msgstr "Синдром 6"
+
+#: base/views/profile_views.py:77
+msgid "Файл слишком большой (макс. 10MB)"
+msgstr "Файл слишком большой (макс. 10MB)"
+
+#: base/views/profile_views.py:85
+msgid "Неподдерживаемый формат изображения"
+msgstr "Неподдерживаемый формат изображения"
+
+#: base/views/profile_views.py:87
+msgid "Ошибка при обработке изображения"
+msgstr "Ошибка при обработке изображения"
+
+#: base/views/profile_views.py:90
+msgid "Изображение слишком большое (макс. 10 000×10 000px)"
+msgstr "Изображение слишком большое (макс. 10 000×10 000px)"
+
+#: base/views/social_views.py:15
+msgid "Cannot follow yourself"
+msgstr "Нельзя подписаться на самого себя"
+
+#: base/views/social_views.py:21
+#, python-format
+msgid "%(username)s has followed you"
+msgstr "%(username)s подписался(ась) на вас"
+
+#: blog/templates/blog/blocks/image_with_caption.html:5
+msgid "Remove block"
+msgstr "Удалить блок"
+
+#: blog/templates/blog/blocks/image_with_caption.html:12
+msgid "Caption..."
+msgstr "Подпись..."
+
+#: blog/templates/blog/blog_index_page.html:8
+#: blog/templates/blog/create_article.html:4
+#: blog/templates/blog/create_article.html:13
+msgid "New article"
+msgstr "Новая статья"
+
+#: blog/templates/blog/blog_index_page.html:16
+msgid "Popular"
+msgstr "Популярные"
+
+#: blog/templates/blog/blog_index_page.html:22
+msgid "My articles"
+msgstr "Мои статьи"
+
+#: blog/templates/blog/blog_index_page.html:28
+msgid "Subscriptions"
+msgstr "Подписки"
+
+#: blog/templates/blog/blog_index_page.html:34
+msgid "Doctors"
+msgstr "Врачи"
+
+#: blog/templates/blog/blog_index_page.html:47
+msgid "Search by title, author or tags"
+msgstr "Поиск по названию, автору или тегам"
+
+#: blog/templates/blog/blog_page.html:17
+msgid "Author avatar"
+msgstr "Аватар автора"
+
+#: blog/templates/blog/blog_page.html:24
+#, python-format
+msgid ""
+"\n"
+"          %(n)s follower\n"
+"        "
+msgid_plural ""
+"\n"
+"          %(n)s followers\n"
+"        "
+msgstr[0] ""
+"\n"
+"          %(n)s подписчик\n"
+"        "
+msgstr[1] ""
+"\n"
+"          %(n)s подписчика\n"
+"        "
+msgstr[2] ""
+"\n"
+"          %(n)s подписчиков\n"
+"        "
+msgstr[3] ""
+"\n"
+"          %(n)s подписчика\n"
+"        "
+
+#: blog/templates/blog/blog_page.html:31
+msgid "Anonymous author"
+msgstr "Анонимный автор"
+
+#: blog/templates/blog/blog_page.html:44
+msgid "Unfollow"
+msgstr "Отписаться"
+
+#: blog/templates/blog/blog_page.html:44
+msgid "Follow"
+msgstr "Подписаться"
+
+#: blog/templates/blog/blog_page.html:71
+msgid "Delete the article?"
+msgstr "Удалить статью?"
+
+#: blog/templates/blog/blog_page.html:87
+msgid "Remove like"
+msgstr "Убрать лайк"
+
+#: blog/templates/blog/blog_page.html:87
+msgid "Like"
+msgstr "Поставить лайк"
+
+#: blog/templates/blog/blog_page.html:92
+msgid "Log in to like"
+msgstr "Войдите, чтобы лайкнуть"
+
+#: blog/templates/blog/blog_page.html:100
+msgid "Comments"
+msgstr "Комментарии"
+
+#: blog/templates/blog/blog_page.html:107
+msgid "Leave a comment..."
+msgstr "Оставьте комментарий..."
+
+#: blog/templates/blog/blog_page.html:110
+msgid "Send"
+msgstr "Отправить"
+
+#: blog/templates/blog/blog_page.html:117
+msgid "to leave a comment"
+msgstr "чтобы оставить комментарий"
+
+#: blog/templates/blog/blog_page.html:129
+msgid "Avatar"
+msgstr "Аватар"
+
+#: blog/templates/blog/blog_page.html:134
+msgid "edited"
+msgstr "изменено"
+
+#: blog/templates/blog/create_article.html:22
+#: blog/templates/blog/edit_article.html:28
+msgid "Title"
+msgstr "Заголовок"
+
+#: blog/templates/blog/create_article.html:26
+#: blog/templates/blog/edit_article.html:33
+msgid "Short description"
+msgstr "Краткое описание"
+
+#: blog/templates/blog/create_article.html:30
+#: blog/templates/blog/edit_article.html:38
+msgid "Main image"
+msgstr "Главное изображение"
+
+#: blog/templates/blog/create_article.html:34
+#: blog/templates/blog/edit_article.html:53
+msgid "Article content"
+msgstr "Контент статьи"
+
+#: blog/templates/blog/create_article.html:38
+#: blog/templates/blog/edit_article.html:58
+msgid "Tags"
+msgstr "Теги"
+
+#: blog/templates/blog/create_article.html:58
+#: blog/templates/blog/edit_article.html:81
+msgid "Save draft"
+msgstr "Сохранить черновик"
+
+#: blog/templates/blog/create_article.html:61
+#: blog/templates/blog/edit_article.html:76
+msgid "Publish"
+msgstr "Опубликовать"
+
+#: blog/templates/blog/edit_article.html:14
+msgid "Edit article"
+msgstr "Редактировать статью"
+
+#: blog/templates/blog/edit_article.html:16
+#: blog/templates/blog/includes/article_cards.html:77
+msgid "Draft"
+msgstr "Черновик"
+
+#: blog/templates/blog/edit_article.html:43
+msgid "Current image"
+msgstr "Текущее изображение"
+
+#: blog/templates/blog/edit_article.html:46
+msgid "Remove image"
+msgstr "Удалить изображение"
+
+#: blog/templates/blog/includes/article_cards.html:79
+msgid "Unpublished changes"
+msgstr "Неопубликованные изменения"
+
+#: blog/templates/blog/includes/article_list_fragment.html:10
+msgid "Nothing found."
+msgstr "Ничего не найдено."
+
+#: blog/templates/blog/includes/article_list_fragment.html:16
+msgid "Page navigation"
+msgstr "Навигация по страницам"
+
+#: templates/base.html:26
+msgid "Rhymes of Life"
+msgstr "Rhymes of Life"
+
+#: templates/base.html:28
+msgid "Toggle navigation"
+msgstr "Переключить навигацию"
+
+#: templates/base.html:35
+msgid "About"
+msgstr "О нас"
+
+#: templates/base.html:42
+msgid "My profile"
+msgstr "Мой профиль"
+
+#: templates/base.html:54
+msgid "Articles"
+msgstr "Статьи"
+
+#: templates/base.html:88
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(username)s</strong> followed you.\n"
+"                              "
+msgstr ""
+"\n"
+"                                <strong>%(username)s</strong> подписался(ась) на вас.\n"
+"                              "
+
+#: templates/base.html:101
+msgid "No new notifications"
+msgstr "Новых уведомлений нет"
+
+#: templates/base.html:108
+msgid "Show all notifications"
+msgstr "Показать все уведомления"
+
+#: templates/base.html:117
+msgid "Patients"
+msgstr "Пациенты"
+
+#: templates/base.html:125
+msgid "Log out"
+msgstr "Выйти"
+
+#: templates/base.html:152
+msgid "All rights reserved."
+msgstr "Все права защищены."
