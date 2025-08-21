@@ -84,3 +84,23 @@ def blog_index_url(context):
         return urlunsplit((parts.scheme, parts.netloc, path, parts.query, parts.fragment))
     except Exception:
         return page.get_url(request) if request else page.url
+
+
+@register.filter
+def is_following(current_info, target_info):
+    try:
+        if not current_info or not target_info:
+            return False
+        return current_info.is_following(target_info)
+    except Exception:
+        return False
+
+
+@register.filter
+def call_method(bound_method, arg):
+    try:
+        if callable(bound_method):
+            return bound_method(arg)
+        return False
+    except Exception:
+        return False

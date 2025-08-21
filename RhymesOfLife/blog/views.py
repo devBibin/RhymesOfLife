@@ -18,17 +18,21 @@ from wagtail.images import get_image_model
 from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment
 from .constants import PREDEFINED_TAGS
 
-import os
-from PIL import Image as PILImage, UnidentifiedImageError, ImageFile
-from PIL.Image import DecompressionBombError
 import bleach
 
-# Pillow safety
+from base.utils.files import validate_image_upload
+from base.utils.logging import get_app_logger
+
+from PIL import Image as PILImage, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = False
 PILImage.MAX_IMAGE_PIXELS = 10000 * 10000
 
+log = get_app_logger(__name__)
+
 ALLOWED_EXTS = set(getattr(settings, "WAGTAILIMAGES_EXTENSIONS", ["gif", "jpg", "jpeg", "png", "webp"]))
 MAX_UPLOAD = int(getattr(settings, "WAGTAILIMAGES_MAX_UPLOAD_SIZE", 10 * 1024 * 1024))
+ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP", "GIF"}
 
 ALLOWED_TAGS = [
     "p", "br", "strong", "em", "u", "s", "a", "ul", "ol", "li", "blockquote", "code", "pre", "hr",
@@ -50,37 +54,6 @@ def _sanitize_html(html: str) -> str:
     return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, protocols=ALLOWED_PROTOCOLS, strip=True)
 
 
-def _validate_image_file(f):
-    ext = os.path.splitext(f.name)[1].lower().lstrip(".")
-    if ext not in ALLOWED_EXTS:
-        raise ValidationError(_("Unsupported image format."))
-    if getattr(f, "size", None) and f.size > MAX_UPLOAD:
-        mb = MAX_UPLOAD // (1024 * 1024)
-        raise ValidationError(_("File is too large (max %(mb)s MB).") % {"mb": mb})
-    try:
-        if hasattr(f, "tell"):
-            pos = f.tell()
-        else:
-            pos = None
-        img = PILImage.open(f)
-        img.verify()
-        if hasattr(f, "seek"):
-            f.seek(0)
-        img = PILImage.open(f)
-        w, h = img.size
-        if w > 10000 or h > 10000:
-            raise ValidationError(_("Image is too large (max 10000×10000px)."))
-        if hasattr(f, "seek") and pos is not None:
-            f.seek(pos)
-    except DecompressionBombError:
-        raise ValidationError(_("Image is too large or suspicious (decompression bomb)."))
-    except UnidentifiedImageError:
-        raise ValidationError(_("The uploaded file is not a valid image."))
-    except Exception:
-        raise ValidationError(_("Image processing error."))
-    return f
-
-
 def _get_or_create_blog_index():
     root = Page.get_first_root_node()
     parent = BlogIndexPage.objects.first()
@@ -88,6 +61,7 @@ def _get_or_create_blog_index():
         parent = BlogIndexPage(title="Blog", slug="blog")
         root.add_child(instance=parent)
         parent.save_revision().publish()
+        log.info("BlogIndexPage created: id=%s", parent.id)
     return parent
 
 
@@ -151,7 +125,17 @@ def create_article_view(request):
             with transaction.atomic():
                 main_image = None
                 if main_img_f:
-                    _validate_image_file(main_img_f)
+                    ok, err = validate_image_upload(
+                        main_img_f,
+                        max_size_bytes=MAX_UPLOAD,
+                        max_side_px=10000,
+                        allowed_mimes=ALLOWED_IMAGE_MIMES,
+                        allowed_formats=ALLOWED_IMAGE_FORMATS,
+                        max_total_pixels=10000 * 10000,
+                    )
+                    if not ok:
+                        raise ValidationError(_(err))
+
                     Image = get_image_model()
                     main_image = Image.objects.create(
                         title=f"{title[:50]} — main image",
@@ -177,16 +161,20 @@ def create_article_view(request):
                 rev = page.save_revision()
                 if action == "publish":
                     rev.publish()
+                    log.info("Article published: page_id=%s author_id=%s", page.id, request.user.id)
                     return redirect(page.url)
                 else:
                     if page.live:
                         page.unpublish()
+                    log.info("Article saved as draft: page_id=%s author_id=%s", page.id, request.user.id)
                     return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
         except ValidationError as e:
             ctx["error"] = str(e)
+            log.warning("Create article validation error: user_id=%s reason=%s", request.user.id, e)
         except Exception as e:
             ctx["error"] = _("System error: %(msg)s") % {"msg": e}
+            log.exception("Create article system error: user_id=%s", request.user.id)
 
     return render(request, "blog/create_article.html", ctx)
 
@@ -208,7 +196,17 @@ def edit_article_view(request, page_id):
 
             if "main_image" in request.FILES:
                 f = request.FILES["main_image"]
-                _validate_image_file(f)
+                ok, err = validate_image_upload(
+                    f,
+                    max_size_bytes=MAX_UPLOAD,
+                    max_side_px=10000,
+                    allowed_mimes=ALLOWED_IMAGE_MIMES,
+                    allowed_formats=ALLOWED_IMAGE_FORMATS,
+                    max_total_pixels=10000 * 10000,
+                )
+                if not ok:
+                    raise ValidationError(_(err))
+
                 Image = get_image_model()
                 if page.main_image:
                     page.main_image.delete()
@@ -224,14 +222,18 @@ def edit_article_view(request, page_id):
             rev = page.save_revision()
             if action == "publish":
                 rev.publish()
+                log.info("Article republished: page_id=%s editor_id=%s", page.id, request.user.id)
                 return redirect(page.url)
             else:
+                log.info("Article saved draft: page_id=%s editor_id=%s", page.id, request.user.id)
                 return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
         except ValidationError as e:
             error = str(e)
+            log.warning("Edit article validation error: page_id=%s user_id=%s reason=%s", page.id, request.user.id, e)
         except Exception as e:
             error = _("System error: %(msg)s") % {"msg": e}
+            log.exception("Edit article system error: page_id=%s user_id=%s", page.id, request.user.id)
 
         page_for_form = _latest_revision_specific(page)
         ctx = {
@@ -256,8 +258,11 @@ def delete_article_view(request, page_id):
     if page.live:
         page.is_deleted = True
         page.save_revision().publish()
+        log.info("Article soft-deleted: page_id=%s user_id=%s", page.id, request.user.id)
     else:
+        pid = page.id
         page.delete()
+        log.info("Article hard-deleted: page_id=%s user_id=%s", pid, request.user.id)
     return redirect("/articles/")
 
 
@@ -266,14 +271,18 @@ def delete_article_view(request, page_id):
 def like_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
     user_info = request.user.additional_info
+
     like, created = ArticleLike.objects.get_or_create(
         author=user_info, article=page, defaults={"is_active": True}
     )
     if not created:
         like.is_active = not like.is_active
         like.save(update_fields=["is_active"])
+
     page.likes_count = ArticleLike.objects.filter(article=page, is_active=True).count()
     page.save(update_fields=["likes_count"])
+
+    log.info("Article like toggled: page_id=%s user_id=%s liked=%s", page.id, request.user.id, like.is_active)
     return JsonResponse({"liked": like.is_active, "like_count": page.likes_count})
 
 
@@ -283,11 +292,16 @@ def comment_article_view(request, page_id):
     text = request.POST.get("text", "").strip()
     if not text:
         return JsonResponse({"error": _("Comment cannot be empty.")}, status=400)
+
     page = get_object_or_404(BlogPage, id=page_id).specific
     user_info = request.user.additional_info
+
     comment = ArticleComment.objects.create(article=page, author=user_info, text=text)
+
     page.comments_count = ArticleComment.objects.filter(article=page, is_deleted=False).count()
     page.save(update_fields=["comments_count"])
+
+    log.info("Article comment added: page_id=%s user_id=%s comment_id=%s", page.id, request.user.id, comment.id)
     return JsonResponse({
         "id": comment.id,
         "username": user_info.first_name or request.user.username,
@@ -309,6 +323,7 @@ def ajax_article_search(request):
             Q(author__first_name__icontains=query) |
             Q(author__last_name__icontains=query)
         ).distinct()
+
     html = render_to_string(
         "blog/includes/article_list_fragment.html",
         {"posts": results, "current_filter": request.GET.get("filter", "popular"), "query": query},
@@ -323,11 +338,15 @@ def delete_comment_view(request, comment_id):
     comment = get_object_or_404(ArticleComment, id=comment_id)
     if comment.author.user != request.user and not request.user.is_superuser:
         return HttpResponseForbidden(_("You cannot delete someone else's comment."))
+
     comment.is_deleted = True
     comment.save(update_fields=["is_deleted"])
+
     article = comment.article
     article.comments_count = ArticleComment.objects.filter(article=article, is_deleted=False).count()
     article.save(update_fields=["comments_count"])
+
+    log.info("Article comment deleted: comment_id=%s user_id=%s", comment.id, request.user.id)
     return JsonResponse({"deleted": True, "comment_count": article.comments_count})
 
 
@@ -337,12 +356,16 @@ def edit_comment_view(request, comment_id):
     comment = get_object_or_404(ArticleComment, id=comment_id)
     if comment.author.user != request.user and not request.user.is_superuser:
         return HttpResponseForbidden(_("You cannot edit someone else's comment."))
+
     new_text = request.POST.get("text", "").strip()
     if not new_text:
         return JsonResponse({"error": _("Comment cannot be empty.")}, status=400)
+
     comment.text = new_text
     comment.edited_at = timezone.now()
     comment.save(update_fields=["text", "edited_at"])
+
+    log.info("Article comment edited: comment_id=%s user_id=%s", comment.id, request.user.id)
     return JsonResponse({"text": comment.text, "edited_at": comment.edited_at.strftime("%Y-%m-%d %H:%M")})
 
 
@@ -353,7 +376,17 @@ def ckeditor5_upload(request):
     if not f:
         return JsonResponse({"error": {"message": _("No file uploaded.")}}, status=400)
     try:
-        _validate_image_file(f)
+        ok, err = validate_image_upload(
+            f,
+            max_size_bytes=MAX_UPLOAD,
+            max_side_px=10000,
+            allowed_mimes=ALLOWED_IMAGE_MIMES,
+            allowed_formats=ALLOWED_IMAGE_FORMATS,
+            max_total_pixels=10000 * 10000,
+        )
+        if not ok:
+            return JsonResponse({"error": {"message": _(err)}}, status=400)
+
         ImageModel = get_image_model()
         image = ImageModel(file=f, title=f.name, uploaded_by_user=request.user)
         image.save()
@@ -361,8 +394,8 @@ def ckeditor5_upload(request):
             rendition = image.get_rendition("max-1600x1600|format-webp")
         except Exception:
             rendition = image.get_rendition("max-1600x1600")
+        log.info("CKEditor image uploaded: image_id=%s user_id=%s", image.id, request.user.id)
         return JsonResponse({"url": rendition.url})
-    except ValidationError as e:
-        return JsonResponse({"error": {"message": str(e)}}, status=400)
     except Exception:
+        log.exception("CKEditor upload error: user_id=%s", request.user.id)
         return JsonResponse({"error": {"message": _("Upload error.")}}, status=500)

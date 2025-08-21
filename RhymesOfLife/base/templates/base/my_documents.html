@@ -102,28 +102,27 @@
     </div>
 
     <div class="tab-pane fade" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab">
-      {% for exam in exams %}
-        {% if exam.comments.exists %}
-          <div class="mb-4">
-            <h5 class="fw-bold">
-              {% trans "Examination from" %} {{ exam.exam_date|date:"d.m.Y" }}
-            </h5>
-            {% for comment in exam.comments.all %}
-              <div class="card mb-2 border-info">
-                <div class="card-header bg-info text-white d-flex justify-content-between">
-                  <div>{{ comment.author.user.get_full_name|default:comment.author.user.username }}</div>
-                  <div>{{ comment.created_at|date:"d.m.Y H:i" }}</div>
-                </div>
-                <div class="card-body">
-                  <p class="mb-0">{{ comment.content }}</p>
-                </div>
+      {% if recommendations %}
+        {% for note in recommendations %}
+          <div class="card mb-3 border-info">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+              <div>
+                {% if note.sender and note.sender.user %}
+                  {{ note.sender.user.get_full_name|default:note.sender.user.username }}
+                {% else %}
+                  {% trans "Doctor" %}
+                {% endif %}
               </div>
-            {% endfor %}
+              <div>{{ note.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <div class="card-body">
+              <p class="mb-0">{{ note.message }}</p>
+            </div>
           </div>
-        {% endif %}
-      {% empty %}
+        {% endfor %}
+      {% else %}
         <p class="text-muted">{% trans "No recommendations yet." %}</p>
-      {% endfor %}
+      {% endif %}
     </div>
 
   </div>

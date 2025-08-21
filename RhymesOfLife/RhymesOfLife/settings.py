@@ -72,6 +72,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    # Enforce verified email for authenticated non-superusers
+    'base.middleware.EnforceVerifiedMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -177,7 +181,7 @@ DEFAULT_FROM_EMAIL = "Rhymes of Life <admin@igstan.com>"
 
 BASE_URL = environment.get("BASE_URL")
 
-# Media files for wiki
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -197,3 +201,23 @@ WAGTAILIMAGES_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp']
 
 # No CKEditor Django apps/config — we use CDN + custom upload endpoint
 WAGTAILADMIN_BASE_URL = BASE_URL
+
+# Email verification middleware configuration
+EMAIL_VERIFICATION_EXEMPT_URLNAMES = {
+    # Public/auth routes:
+    'login',
+    'logout',
+    'register',
+    'home',
+    'verify_email',
+    'request_verification',
+    'verify_prompt',
+    'profile_onboarding',
+    'set_language',
+    'admin:index',
+}
+
+EMAIL_VERIFICATION_EXEMPT_PATHS = {
+    # Static/media & misc file endpoints are handled inside middleware defaults,
+    # add extra path prefixes here if needed, e.g. '/healthz'
+}

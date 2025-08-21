@@ -1,20 +1,70 @@
-# models.py
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
-SYNDROME_CHOICES = [
-    ("s1", "Syndrome 1"),
-    ("s2", "Syndrome 2"),
-    ("s3", "Syndrome 3"),
-    ("s4", "Syndrome 4"),
-    ("s5", "Syndrome 5"),
-    ("s6", "Syndrome 6"),
+
+# =========================
+# Config model (dynamic lists)
+# =========================
+
+class Config(models.Model):
+    key = models.CharField(max_length=64, unique=True, db_index=True)
+    value = models.JSONField(default=dict, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Config"
+        verbose_name_plural = "Config"
+
+    def __str__(self):
+        return f"{self.key}"
+
+    # Convenience accessors
+    @classmethod
+    def get_list(cls, key: str, default=None):
+        default = default if default is not None else []
+        rec = cls.objects.filter(key=key).values_list("value", flat=True).first()
+        if isinstance(rec, list):
+            return rec
+        return default
+
+
+# Default values used if Config not populated yet
+_DEFAULT_SYNDROME_CHOICES = [
+    ["s1", "Syndrome 1"],
+    ["s2", "Syndrome 2"],
+    ["s3", "Syndrome 3"],
+    ["s4", "Syndrome 4"],
+    ["s5", "Syndrome 5"],
+    ["s6", "Syndrome 6"],
 ]
 
+
+def get_syndrome_choices():
+    raw = Config.get_list("SYNDROME_CHOICES", default=_DEFAULT_SYNDROME_CHOICES)
+    choices = [(c[0], c[1]) for c in raw if isinstance(c, (list, tuple)) and len(c) == 2]
+    return choices or [(c[0], c[1]) for c in _DEFAULT_SYNDROME_CHOICES]
+
+
+def _validate_syndromes(value_list):
+
+    allowed = {c for c, _ in get_syndrome_choices()}
+    invalid = [v for v in (value_list or []) if v not in allowed]
+    if invalid:
+        raise ValidationError(
+            _("Invalid syndrome codes: %(codes)s"),
+            params={"codes": ", ".join(invalid)},
+        )
+
+
+# =========================
+# Soft delete infrastructure
+# =========================
 
 class SoftDeleteQuerySet(models.QuerySet):
     def delete(self):
@@ -59,22 +109,36 @@ class SoftDeleteModel(models.Model):
         return super().delete()
 
 
+# =========================
+# Domain models
+# =========================
+
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_info")
+
+    # Basic info
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+
     syndromes = ArrayField(
-        base_field=models.CharField(max_length=32, choices=SYNDROME_CHOICES),
+        base_field=models.CharField(max_length=32),
         size=6,
         blank=True,
         default=list,
         help_text="Select one or more syndromes",
     )
     birth_date = models.DateField(blank=True, null=True)
+
+    # Verification flags
     is_verified = models.BooleanField(default=False)
     ready_for_verification = models.BooleanField(default=False)
+
+    def clean(self):
+        # Validate syndromes dynamically against Config
+        super().clean()
+        _validate_syndromes(self.syndromes)
 
     def __str__(self):
         return f"{self.user.username}'s info"

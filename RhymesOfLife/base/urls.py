@@ -20,6 +20,8 @@ urlpatterns = [
     path('notifications/', notifications_view, name='notifications'),
     path('follow/<int:user_id>/', follow_view, name='follow_user'),
     path('unfollow/<int:user_id>/', unfollow_view, name='unfollow_user'),
+    path("verify/", verify_prompt_view, name="verify_prompt"),
+    path("onboarding/profile/", profile_onboarding_view, name="profile_onboarding"),
 
 
     path('', views.home_view, name='home'),

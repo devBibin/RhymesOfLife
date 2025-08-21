@@ -4,7 +4,41 @@
 {% load form_tags %}
 {% block content %}
 <div class="container py-4">
-  <h2 class="mb-4">🧾 Обследования пациента: {{ patient.first_name }} {{ patient.last_name }}</h2>
+  <h2 class="mb-4">🧾 {% trans "Patient examinations" %}: {{ patient.first_name }} {{ patient.last_name }}</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">💡 {% trans "Send doctor's recommendation" %}</h5>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-2">
+          <textarea name="content" class="form-control" rows="3" placeholder="{% trans "Enter recommendation..." %}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+      </form>
+    </div>
+  </div>
+
+  {% if recommendations %}
+    <div class="mb-4">
+      <h5 class="mb-3">{% trans "Sent recommendations" %}</h5>
+      {% for note in recommendations %}
+        <div class="alert alert-secondary">
+          <div class="d-flex justify-content-between">
+            <strong>
+              {% if note.sender and note.sender.user %}
+                {{ note.sender.user.get_full_name|default:note.sender.user.username }}
+              {% else %}
+                {% trans "Doctor" %}
+              {% endif %}
+            </strong>
+            <small class="text-muted">{{ note.created_at|date:"d.m.Y H:i" }}</small>
+          </div>
+          <p class="mb-0">{{ note.message }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   {% for exam in exams %}
     <div class="card shadow-sm mb-4">
@@ -19,32 +53,10 @@
               <a href="{{ doc.file.url }}" target="_blank">📎 {{ doc.file.name|basename }}</a>
               <small class="text-muted d-block">🕒 {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
             </li>
+          {% empty %}
+            <li class="text-muted">{% trans "No documents" %}</li>
           {% endfor %}
         </ul>
-
-        {# Список рекомендаций #}
-        <h6 class="mt-3">{% trans "Recommendations" %}:</h6>
-        <div class="mb-3">
-          {% for comment in exam.comments.all %}
-            <div class="alert alert-secondary">
-              <strong>{{ comment.author.user.username }}</strong>
-              <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
-              <p class="mb-0">{{ comment.content }}</p>
-            </div>
-          {% empty %}
-            <p class="text-muted">{% trans "No recommendations yet." %}</p>
-          {% endfor %}
-        </div>
-
-        {# Форма добавления новой рекомендации #}
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="exam_id" value="{{ exam.id }}">
-          <div class="mb-2">
-            <textarea name="content" class="form-control" rows="2" placeholder="{% trans "Enter recommendation..." %}"></textarea>
-          </div>
-          <button type="submit" class="btn btn-sm btn-primary">{% trans "Add recommendation" %}</button>
-        </form>
       </div>
     </div>
   {% empty %}

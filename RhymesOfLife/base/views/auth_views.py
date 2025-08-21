@@ -13,14 +13,13 @@ from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 
 from ..models import AdditionalUserInfo
+from ..utils.logging import get_app_logger, get_security_logger
 
+log = get_app_logger(__name__)
+seclog = get_security_logger()
 
-# ---------- Shared helpers ----------
 
 def _validate_signup_input(username: str, email: str, password1: str, password2: str):
-    """
-    Returns (error_message | None). Keeps messages i18n-ready.
-    """
     if not username or not email or not password1:
         return _("Please fill in all fields.")
     if password1 != password2:
@@ -34,27 +33,21 @@ def _validate_signup_input(username: str, email: str, password1: str, password2:
 
 @transaction.atomic
 def _create_user_with_profile(username: str, email: str, raw_password: str) -> User:
-    """
-    Creates a User and its AdditionalUserInfo in one atomic step.
-    """
     user = User.objects.create(
         username=username,
         email=email,
         password=make_password(raw_password),
     )
-    info, _ = AdditionalUserInfo.objects.get_or_create(user=user)
-    info.email = email
-    info.ready_for_verification = True
+    info = AdditionalUserInfo.objects.create(user=user, email=email, ready_for_verification=True)
     info.save()
+    log.info("User created: username=%s email=%s id=%s", username, email, user.id)
+    seclog.info("Signup: user_id=%s email=%s", user.id, email)
     return user
 
-
-# ---------- Views ----------
 
 @require_http_methods(["GET", "POST"])
 def register_view(request):
     context = {"values": {}}
-
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         email = request.POST.get("email", "").strip().lower()
@@ -65,7 +58,9 @@ def register_view(request):
 
         error = _validate_signup_input(username, email, password1, password2)
         if error:
+            messages.error(request, error)
             context["error"] = error
+            log.warning("Signup validation failed: username=%s email=%s reason=%s", username, email, error)
             return render(request, "base/register.html", context)
 
         _create_user_with_profile(username, email, password1)
@@ -73,8 +68,7 @@ def register_view(request):
             request,
             _("Registration was successful! A confirmation email will arrive shortly.")
         )
-        return redirect("login")
-
+        return redirect("verify_prompt")
     return render(request, "base/register.html", context)
 
 
@@ -83,19 +77,28 @@ def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            login(request, form.get_user())
+            user = form.get_user()
+            login(request, user)
+            seclog.info("Login success: user_id=%s username=%s", user.id, user.username)
             return redirect("home")
         messages.error(request, _("Invalid username or password."))
+        seclog.warning("Login failed: username=%s ip=%s", request.POST.get("username"), request.META.get("REMOTE_ADDR"))
     else:
         form = AuthenticationForm()
-
     return render(request, "base/login.html", {"form": form})
 
 
 @require_http_methods(["POST"])
 def logout_view(request):
+    uid = getattr(request.user, "id", None)
     logout(request)
+    seclog.info("Logout: user_id=%s", uid)
     return redirect("login")
+
+
+@require_http_methods(["GET"])
+def verify_prompt_view(request):
+    return render(request, "base/verify_prompt.html")
 
 
 @require_http_methods(["GET"])
@@ -107,32 +110,39 @@ def verify_email_view(request, uidb64, token):
         user = None
 
     if user and default_token_generator.check_token(user, token):
-        info, _ = AdditionalUserInfo.objects.get_or_create(user=user)
+        info = getattr(user, "additional_info", None)
+        if info is None:
+            info = AdditionalUserInfo.objects.create(user=user)
         info.is_verified = True
         info.save()
         login(request, user)
-        return redirect("my_profile")
+        seclog.info("Email verified: user_id=%s", user.id)
+        return redirect("profile_onboarding")
 
+    messages.error(request, _("Email verification failed or token is invalid."))
+    seclog.warning("Email verification failed: uid=%s", uidb64)
     return render(request, "base/verification_failed.html")
 
 
 @login_required
 @require_http_methods(["POST"])
 def request_verification_view(request):
-    info, _ = AdditionalUserInfo.objects.get_or_create(user=request.user)
+    info = getattr(request.user, "additional_info", None)
+    if info is None:
+        info = AdditionalUserInfo.objects.create(user=request.user)
     info.ready_for_verification = True
     info.save()
     messages.success(
         request,
         _("A verification email has been sent. Please confirm your account.")
     )
+    log.info("Verification requested: user_id=%s", request.user.id)
     return redirect("home")
 
 
-# --- Home: available to all + tabbed Sign Up / Log In for guests
 @require_http_methods(["GET", "POST"])
 def home_view(request):
-    is_authed = getattr(request.user, "is_authenticated", False)
+    is_authed = request.user.is_authenticated
     user = request.user if is_authed else None
 
     show_verification_notice = (
@@ -154,36 +164,37 @@ def home_view(request):
             return redirect("home")
 
         form_type = request.POST.get("form_type")
+
         if form_type == "signup":
             username = request.POST.get("username", "").strip()
             email = request.POST.get("email", "").strip().lower()
             password1 = request.POST.get("password1", "")
             password2 = request.POST.get("password2", "")
-
             context["active_tab"] = "signup"
             context["reg_values"] = {"username": username, "email": email}
-
             error = _validate_signup_input(username, email, password1, password2)
             if error:
+                messages.error(request, error)
                 context["reg_error"] = error
+                log.warning("Home signup validation failed: username=%s email=%s reason=%s", username, email, error)
                 return render(request, "base/home.html", context)
-
             _create_user_with_profile(username, email, password1)
-            messages.success(
-                request,
-                _("Registration was successful! A confirmation email will arrive shortly.")
-            )
-            return redirect("login")
+            messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
+            return redirect("verify_prompt")
 
         if form_type == "login":
             context["active_tab"] = "login"
             context["login_values"] = {"username": request.POST.get("username", "").strip()}
             form = AuthenticationForm(data=request.POST)
             if form.is_valid():
-                login(request, form.get_user())
+                user = form.get_user()
+                login(request, user)
+                seclog.info("Login success via home: user_id=%s", user.id)
                 return redirect("home")
-
-            context["login_error"] = _("Invalid username or password.")
+            error = _("Invalid username or password.")
+            messages.error(request, error)
+            context["login_error"] = error
+            seclog.warning("Login failed via home: username=%s", request.POST.get("username"))
             return render(request, "base/home.html", context)
 
     return render(request, "base/home.html", context)
