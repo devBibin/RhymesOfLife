@@ -1,14 +1,14 @@
 from functools import wraps
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django.db.models import Q
-from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import get_user_model
+from django.views.decorators.http import require_http_methods
 
 from ..models import AdditionalUserInfo, MedicalExam, Notification, ExamComment
 from ..utils.logging import get_app_logger
@@ -45,7 +45,11 @@ def patients_list_view(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, "base/patients_list.html", {"query": query, "page_obj": page_obj, "patients": page_obj.object_list})
+    return render(
+        request,
+        "base/patients_list.html",
+        {"query": query, "page_obj": page_obj, "patients": page_obj.object_list},
+    )
 
 
 @login_required
@@ -63,7 +67,7 @@ def patient_exams_view(request, user_id: int):
             messages.error(request, _("Recommendation cannot be empty."))
             return redirect("patient_exams", user_id=user_id)
         if not exam_id:
-            messages.error(request, _("Recommendation cannot be empty."))
+            messages.error(request, _("Exam is required."))
             return redirect("patient_exams", user_id=user_id)
 
         author_info = request.user.additional_info
@@ -80,7 +84,15 @@ def patient_exams_view(request, user_id: int):
                 },
             )
         messages.success(request, _("Recommendation added and the patient has been notified."))
-        log.info("Doctor recommendation sent: doctor_id=%s patient_id=%s exam_id=%s", request.user.id, patient_user.id, exam.id)
         return redirect("patient_exams", user_id=user_id)
 
-    return render(request, "base/patient_exams.html", {"patient": patient_user, "exams": exams_qs})
+    recommendations = (
+        Notification.objects.filter(recipient=patient_info, notification_type="EXAM_COMMENT")
+        .select_related("sender__user")
+        .order_by("-created_at")
+    )
+    return render(
+        request,
+        "base/patient_exams.html",
+        {"patient": patient_user, "exams": exams_qs, "recommendations": recommendations},
+    )

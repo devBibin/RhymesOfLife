@@ -8,10 +8,6 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 
-# =========================
-# Config model (dynamic lists)
-# =========================
-
 class Config(models.Model):
     key = models.CharField(max_length=64, unique=True, db_index=True)
     value = models.JSONField(default=dict, blank=True)
@@ -24,7 +20,6 @@ class Config(models.Model):
     def __str__(self):
         return f"{self.key}"
 
-    # Convenience accessors
     @classmethod
     def get_list(cls, key: str, default=None):
         default = default if default is not None else []
@@ -34,7 +29,6 @@ class Config(models.Model):
         return default
 
 
-# Default values used if Config not populated yet
 _DEFAULT_SYNDROME_CHOICES = [
     ["s1", "Syndrome 1"],
     ["s2", "Syndrome 2"],
@@ -52,19 +46,11 @@ def get_syndrome_choices():
 
 
 def _validate_syndromes(value_list):
-
     allowed = {c for c, _ in get_syndrome_choices()}
     invalid = [v for v in (value_list or []) if v not in allowed]
     if invalid:
-        raise ValidationError(
-            _("Invalid syndrome codes: %(codes)s"),
-            params={"codes": ", ".join(invalid)},
-        )
+        raise ValidationError(_("Invalid syndrome codes: %(codes)s"), params={"codes": ", ".join(invalid)})
 
-
-# =========================
-# Soft delete infrastructure
-# =========================
 
 class SoftDeleteQuerySet(models.QuerySet):
     def delete(self):
@@ -109,14 +95,9 @@ class SoftDeleteModel(models.Model):
         return super().delete()
 
 
-# =========================
-# Domain models
-# =========================
-
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_info")
 
-    # Basic info
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
@@ -131,12 +112,17 @@ class AdditionalUserInfo(models.Model):
     )
     birth_date = models.DateField(blank=True, null=True)
 
-    # Verification flags
-    is_verified = models.BooleanField(default=False)
-    ready_for_verification = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False, db_index=True)
+    ready_for_verification = models.BooleanField(default=False, db_index=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["is_verified"]),
+            models.Index(fields=["ready_for_verification"]),
+        ]
 
     def clean(self):
-        # Validate syndromes dynamically against Config
         super().clean()
         _validate_syndromes(self.syndromes)
 
@@ -171,12 +157,15 @@ class AdditionalUserInfo(models.Model):
 
 class MedicalExam(SoftDeleteModel):
     user_info = models.ForeignKey("AdditionalUserInfo", on_delete=models.CASCADE, related_name="medical_exams")
-    exam_date = models.DateField()
+    exam_date = models.DateField(db_index=True)
     description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-exam_date", "-created_at"]
+        indexes = [
+            models.Index(fields=["user_info", "exam_date"]),
+        ]
 
     def __str__(self):
         return f"Exam on {self.exam_date:%Y-%m-%d}"
@@ -184,14 +173,24 @@ class MedicalExam(SoftDeleteModel):
 
 class MedicalDocument(SoftDeleteModel):
     exam = models.ForeignKey(MedicalExam, on_delete=models.CASCADE, related_name="documents", null=True, blank=True)
-    file = models.FileField(upload_to="medical_documents/")
+    file = models.FileField(upload_to="medical_documents/", blank=True, null=True)
+    external_url = models.URLField(max_length=1000, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-uploaded_at"]
 
+    def clean(self):
+        super().clean()
+        if not self.file and not self.external_url:
+            raise ValidationError({"external_url": _("Either a file or an external link is required.")})
+
     def __str__(self):
-        return f"Document {self.file.name}"
+        if self.file:
+            return f"Document {self.file.name}"
+        if self.external_url:
+            return f"ExternalLink {self.external_url}"
+        return "EmptyDocument"
 
 
 class Notification(SoftDeleteModel):
@@ -201,10 +200,16 @@ class Notification(SoftDeleteModel):
     )
     recipient = models.ForeignKey(AdditionalUserInfo, related_name="notifications", on_delete=models.CASCADE)
     sender = models.ForeignKey(AdditionalUserInfo, related_name="sent_notifications", on_delete=models.CASCADE)
-    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES, db_index=True)
     message = models.TextField(blank=True)
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["recipient", "is_read", "-created_at"]),
+            models.Index(fields=["sender", "-created_at"]),
+        ]
 
     def __str__(self):
         return f"{self.notification_type} from {self.sender.user.username} -> {self.recipient.user.username}"
@@ -213,11 +218,14 @@ class Notification(SoftDeleteModel):
 class Follower(models.Model):
     follower = models.ForeignKey("AdditionalUserInfo", related_name="following", on_delete=models.CASCADE)
     following = models.ForeignKey("AdditionalUserInfo", related_name="followers", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     class Meta:
         unique_together = ("follower", "following")
+        indexes = [
+            models.Index(fields=["follower", "following", "is_active"]),
+        ]
 
     def __str__(self):
         status = "active" if self.is_active else "inactive"
@@ -228,10 +236,13 @@ class ExamComment(SoftDeleteModel):
     exam = models.ForeignKey(MedicalExam, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name="exam_comments")
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["exam", "created_at"]),
+        ]
 
     def __str__(self):
         return f"Comment by {self.author.user.username} on {self.exam.exam_date:%Y-%m-%d}"

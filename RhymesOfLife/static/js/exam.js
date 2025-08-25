@@ -1,6 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
   const _ = (window.gettext) ? window.gettext : (s) => s;
 
+  function normalizeUrlMaybe(u) {
+    if (!u) return "";
+    let s = String(u).trim();
+    if (!s) return "";
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    return s;
+  }
+
   const examForm    = document.getElementById("exam-form");
   const dateInput   = document.getElementById("exam_date");
   const descInput   = document.getElementById("description");
@@ -14,6 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitBtn   = document.getElementById("submit-exam");
   const examIdInput = document.getElementById("exam_id");
   let filesToUpload = [];
+
+  const linkList   = document.getElementById("link-list");
+  const addLinkBtn = document.getElementById("add-link-btn");
+  const singleLink = document.getElementById("external_url");
+
+  function addLinkInput(prefill = "") {
+    const wrap = document.createElement("div");
+    wrap.className = "link-item";
+    wrap.innerHTML = `
+      <input type="url" class="form-control ext-link" placeholder="${_('Paste link')}" value="${prefill}">
+      <button type="button" class="btn btn-sm btn-outline-danger remove-link-btn" aria-label="${_('Remove link')}">✖</button>
+    `;
+    linkList.appendChild(wrap);
+    wrap.querySelector(".remove-link-btn").onclick = () => wrap.remove();
+  }
+
+  if (addLinkBtn && linkList) {
+    addLinkBtn.addEventListener("click", () => addLinkInput(""));
+  }
 
   if (dropZone && fileInput && fileList) {
     dropZone.addEventListener("click", e => { if (!e.target.closest(".dropdown")) fileInput.click(); });
@@ -64,10 +91,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!dateInput.value) { alert(_("Please specify the exam date.")); return; }
       const fd = new FormData();
       fd.append("exam_date", dateInput.value);
-      fd.append("description", descInput.value.trim());
+      fd.append("description", (descInput.value || "").trim());
+
+      if (singleLink && singleLink.value.trim()) {
+        const norm = normalizeUrlMaybe(singleLink.value);
+        fd.append("external_url", norm);
+      }
+
+      const multiLinks = Array.from(document.querySelectorAll(".ext-link"))
+        .map(inp => normalizeUrlMaybe(inp.value))
+        .filter(v => v.length > 0);
+      multiLinks.forEach(u => fd.append("external_urls[]", u));
+
       filesToUpload.forEach(f => fd.append("files", f));
+
       const id = examIdInput?.value || "";
       const url = id ? `/api/exams/${id}/` : window.location.href;
+
       fetch(url, {
         method: "POST",
         headers: { "X-CSRFToken": csrfToken, "X-Requested-With": "XMLHttpRequest" },

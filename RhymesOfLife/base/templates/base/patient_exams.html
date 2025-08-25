@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% load static %}
-{% load i18n %}
-{% load form_tags %}
+{% load static i18n %}
+
 {% block content %}
 <div class="container py-4">
   <h2 class="mb-4">🧾 {% trans "Patient examinations" %}: {{ patient.first_name }} {{ patient.last_name }}</h2>
@@ -12,7 +11,18 @@
       <form method="post">
         {% csrf_token %}
         <div class="mb-2">
-          <textarea name="content" class="form-control" rows="3" placeholder="{% trans "Enter recommendation..." %}" required></textarea>
+          <label class="form-label">{% trans "Examination" %}</label>
+          <select name="exam_id" class="form-select" required>
+            <option value="">{% trans "Select examination" %}</option>
+            {% for exam in exams %}
+              <option value="{{ exam.id }}">
+                {{ exam.exam_date|date:"d.m.Y" }}{% if exam.description %} — {{ exam.description }}{% endif %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-2">
+          <textarea name="content" class="form-control" rows="3" placeholder="{% trans 'Enter recommendation...' %}" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
       </form>
@@ -50,7 +60,7 @@
         <ul class="list-unstyled">
           {% for doc in exam.documents.all %}
             <li class="mb-2">
-              <a href="{{ doc.file.url }}" target="_blank">📎 {{ doc.file.name|basename }}</a>
+              <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">📎 {{ doc.file.name|basename }}</a>
               <small class="text-muted d-block">🕒 {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
             </li>
           {% empty %}

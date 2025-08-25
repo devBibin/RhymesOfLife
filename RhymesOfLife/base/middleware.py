@@ -1,7 +1,9 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.urls import resolve
+from django.urls import resolve, Resolver404
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+
 from .utils.logging import get_security_logger
 
 seclog = get_security_logger()
@@ -14,25 +16,11 @@ class EnforceVerifiedMiddleware:
         self.exempt_paths = set(getattr(settings, "EMAIL_VERIFICATION_EXEMPT_PATHS", set()))
 
     def __call__(self, request):
-        if request.user.is_authenticated and not request.user.is_superuser:
-            info = getattr(request.user, "additional_info", None)
-            if info and not info.is_verified:
-                try:
-                    match = resolve(request.path_info)
-                    name = match.url_name
-                except Exception:
-                    name = None
-                if request.path in self.exempt_paths or name in self.exempt_names:
-                    return self.get_response(request)
-                seclog.info("Blocked unverified access: user_id=%s path=%s", request.user.id, request.path)
-                return redirect("verify_prompt")
         return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         user = getattr(request, "user", None)
-        if not user or not user.is_authenticated:
-            return None
-        if user.is_superuser:
+        if not user or not user.is_authenticated or user.is_superuser:
             return None
 
         info = getattr(user, "additional_info", None)
@@ -40,34 +28,43 @@ class EnforceVerifiedMiddleware:
             return None
 
         path = request.path
-        if any(path.startswith(p) for p in self._default_exempt_paths()):
-            return None
-        if any(path.startswith(p) for p in self.exempt_paths):
+
+        if self._is_path_exempt(path):
             return None
 
         try:
             match = resolve(path)
             name = match.url_name or ""
-        except Exception:
+        except Resolver404:
             name = ""
 
-        if name in self._default_exempt_names() or name in self.exempt_names:
+        if self._is_name_exempt(name):
             return None
 
-        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        if request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest":
+            seclog.info("Blocked unverified AJAX: user_id=%s path=%s", user.id, path)
             return JsonResponse({"detail": _("Email not verified.")}, status=403)
 
+        seclog.info("Blocked unverified access: user_id=%s path=%s", user.id, path)
         return redirect("verify_prompt")
+
+    def _is_path_exempt(self, path: str) -> bool:
+        defaults = self._default_exempt_paths()
+        if any(path.startswith(p) for p in defaults):
+            return True
+        if any(path.startswith(p) for p in self.exempt_paths):
+            return True
+        return False
+
+    def _is_name_exempt(self, name: str) -> bool:
+        defaults = self._default_exempt_names()
+        return name in defaults or name in self.exempt_names
 
     @staticmethod
     def _default_exempt_paths():
-        from django.conf import settings as dj_settings
-        return [
-            getattr(dj_settings, "STATIC_URL", "/static/"),
-            getattr(dj_settings, "MEDIA_URL", "/media/"),
-            "/favicon.ico",
-            "/robots.txt",
-        ]
+        static_url = getattr(settings, "STATIC_URL", "/static/")
+        media_url = getattr(settings, "MEDIA_URL", "/media/")
+        return [static_url, media_url, "/favicon.ico", "/robots.txt"]
 
     @staticmethod
     def _default_exempt_names():

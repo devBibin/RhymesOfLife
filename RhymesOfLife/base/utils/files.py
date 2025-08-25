@@ -2,7 +2,11 @@ import math
 import os
 from typing import Optional, Tuple, Set
 
-import magic
+try:
+    import magic  # type: ignore
+except Exception:
+    magic = None
+
 from PIL import Image, UnidentifiedImageError
 from PIL.Image import DecompressionBombError
 
@@ -16,10 +20,22 @@ def _reset(f) -> None:
 
 
 def _safe_mime_from_buffer(buf: bytes) -> Optional[str]:
-    try:
-        return magic.from_buffer(buf, mime=True)
-    except Exception:
-        return None
+    if magic:
+        try:
+            return magic.from_buffer(buf, mime=True)
+        except Exception:
+            return None
+    return None
+
+
+def _guess_mime(uploaded_file) -> Optional[str]:
+    head = uploaded_file.read(1024)
+    _reset(uploaded_file)
+    mime = _safe_mime_from_buffer(head)
+    if mime:
+        return mime
+    ct = getattr(uploaded_file, "content_type", None)
+    return ct or None
 
 
 def _mb(n: int) -> int:
@@ -42,9 +58,7 @@ def validate_image_upload(
         return False, f"File exceeds {_mb(max_size_bytes)}MB: {name}"
 
     if allowed_mimes is not None:
-        head = uploaded_file.read(1024)
-        _reset(uploaded_file)
-        mime = _safe_mime_from_buffer(head)
+        mime = _guess_mime(uploaded_file)
         if not mime or mime not in allowed_mimes:
             return False, f"Invalid MIME type: {mime or 'unknown'}"
 
@@ -96,9 +110,7 @@ def validate_mixed_upload(
     if size and size > max_size_bytes:
         return False, f"File exceeds {_mb(max_size_bytes)}MB: {name}"
 
-    head = uploaded_file.read(1024)
-    _reset(uploaded_file)
-    mime = _safe_mime_from_buffer(head)
+    mime = _guess_mime(uploaded_file)
     if not mime or mime not in allowed_mimes:
         return False, f"Invalid MIME type: {mime or 'unknown'}"
 

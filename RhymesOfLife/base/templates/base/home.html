@@ -7,8 +7,6 @@
 
 {% block content %}
 <div class="container py-4">
-
-  <!-- Greeting -->
   <div class="text-center mb-5">
     {% if request.user.is_authenticated %}
       <h1 class="display-5 fw-bold">
@@ -31,7 +29,6 @@
     {% endif %}
   </div>
 
-  <!-- Main content -->
   <section class="mb-5">
     <h2 class="h4 fw-bold mb-3">{% trans "Genetic connective tissue syndromes" %}</h2>
     <p class="lead">
@@ -39,7 +36,7 @@
     </p>
   </section>
 
-  <!-- Syndrome cards -->
+  {% if syndrome_list %}
   <section class="row g-4 mb-5">
     {% for syndrome in syndrome_list %}
       <div class="col-sm-6 col-md-4">
@@ -48,54 +45,21 @@
           <div class="card-body">
             <h5 class="card-title">{{ syndrome.name }}</h5>
             <p class="card-text">{{ syndrome.short_description|truncatechars:100 }}</p>
-            <a href="{{ syndrome.url }}" class="btn btn-outline-primary w-100">{% trans "Learn more" %}</a>
+            <a href="{{ syndrome.url }}" class="btn btn-outline-primary w-100" target="_blank" rel="noopener noreferrer">
+              {% trans "Learn more" %}
+            </a>
           </div>
         </div>
       </div>
     {% endfor %}
   </section>
+  {% endif %}
 
-  <!-- Instruction -->
-  <section class="bg-light p-4 rounded shadow-sm mb-5" aria-labelledby="instruction-title">
-    <h2 id="instruction-title" class="h4 fw-bold mb-3">{% trans "What to do if you suspect a syndrome?" %}</h2>
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card h-100 border-0">
-          <div class="card-body">
-            <h5 class="card-title">👨‍⚕️ {% trans "Find a doctor" %}</h5>
-            <p class="card-text">{% trans "A coordinated clinic is the best place for treatment..." %}</p>
-            <a href="#" class="btn btn-outline-dark">{% trans "Learn more" %}</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card h-100 border-0">
-          <div class="card-body">
-            <h5 class="card-title">🤝 {% trans "Support" %}</h5>
-            <p class="card-text">{% trans "A foundation can help you find resources and community." %}</p>
-            <a href="#" class="btn btn-outline-dark">{% trans "Learn more" %}</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card h-100 border-0">
-          <div class="card-body">
-            <h5 class="card-title">📘 {% trans "Resources" %}</h5>
-            <p class="card-text">{% trans "Official materials and guidelines for the syndrome." %}</p>
-            <a href="#" class="btn btn-outline-dark">{% trans "Learn more" %}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Auth switcher (only for guests) -->
   {% if not request.user.is_authenticated %}
   <section class="mb-5">
     <div class="row justify-content-center">
       <div class="col-sm-10 col-md-8 col-lg-6">
         <div class="card shadow-sm p-4">
-
           <div class="text-center mb-3">
             <h2 class="h5 mb-3">{% trans "Welcome to Rhymes of Life!" %}</h2>
             <ul class="nav nav-pills nav-justified" id="authTabs" role="tablist">
@@ -117,8 +81,6 @@
           </div>
 
           <div class="tab-content">
-
-            <!-- Tab: Sign up -->
             <div class="tab-pane fade {% if active_tab != 'login' %}show active{% endif %}" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab">
               {% if reg_error %}
                 <div class="alert alert-danger">{{ reg_error }}</div>
@@ -126,39 +88,30 @@
               <form method="post" action="{% url 'home' %}" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="form_type" value="signup">
-
                 <div class="mb-3">
                   <label for="su-username" class="form-label">{% trans "Username" %}</label>
-                  <input type="text" id="su-username" name="username" class="form-control"
-                         required value="{{ reg_values.username|default:'' }}">
+                  <input type="text" id="su-username" name="username" class="form-control" required value="{{ reg_values.username|default:'' }}">
                 </div>
-
                 <div class="mb-3">
                   <label for="su-email" class="form-label">{% trans "Email" %}</label>
-                  <input type="email" id="su-email" name="email" class="form-control"
-                         required value="{{ reg_values.email|default:'' }}">
+                  <input type="email" id="su-email" name="email" class="form-control" required value="{{ reg_values.email|default:'' }}">
                 </div>
-
                 <div class="mb-3">
                   <label for="su-password1" class="form-label">{% trans "Password" %}</label>
                   <input type="password" id="su-password1" name="password1" class="form-control" required>
                 </div>
-
                 <div class="mb-3">
                   <label for="su-password2" class="form-label">{% trans "Confirm password" %}</label>
                   <input type="password" id="su-password2" name="password2" class="form-control" required>
                 </div>
-
                 <div class="form-check mb-3">
                   <input class="form-check-input" type="checkbox" value="" id="su-showpass">
                   <label class="form-check-label" for="su-showpass">{% trans "Show password" %}</label>
                 </div>
-
                 <button type="submit" class="btn btn-dark w-100">{% trans "Sign up" %}</button>
               </form>
             </div>
 
-            <!-- Tab: Log in -->
             <div class="tab-pane fade {% if active_tab == 'login' %}show active{% endif %}" id="login-pane" role="tabpanel" aria-labelledby="login-tab">
               {% if login_error %}
                 <div class="alert alert-danger">{{ login_error }}</div>
@@ -166,31 +119,26 @@
               <form method="post" action="{% url 'home' %}" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="form_type" value="login">
-
                 <div class="mb-3">
                   <label for="li-username" class="form-label">{% trans "Username" %}</label>
-                  <input type="text" id="li-username" name="username" class="form-control"
-                         required value="{{ login_values.username|default:'' }}">
+                  <input type="text" id="li-username" name="username" class="form-control" required value="{{ login_values.username|default:'' }}">
                 </div>
-
                 <div class="mb-3">
                   <label for="li-password" class="form-label">{% trans "Password" %}</label>
                   <input type="password" id="li-password" name="password" class="form-control" required>
                 </div>
-
                 <div class="form-check mb-3">
                   <input class="form-check-input" type="checkbox" value="" id="li-showpass">
                   <label class="form-check-label" for="li-showpass">{% trans "Show password" %}</label>
                 </div>
-
                 <button type="submit" class="btn btn-primary w-100">{% trans "Log in" %}</button>
                 <p class="text-center text-muted mt-3 mb-0">
                   {% trans "Don't have an account?" %} <a class="link-primary" href="#" onclick="document.getElementById('signup-tab').click(); return false;">{% trans "Sign up" %}</a>
                 </p>
               </form>
             </div>
-
           </div>
+
         </div>
       </div>
     </div>
@@ -206,7 +154,6 @@
             suP1.type = t; suP2.type = t;
           });
         }
-
         const liToggle = document.getElementById('li-showpass');
         const liP = document.getElementById('li-password');
         if (liToggle && liP) {

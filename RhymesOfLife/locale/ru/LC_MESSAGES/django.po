@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-21 00:56+0000\n"
+"POT-Creation-Date: 2025-08-24 14:33+0000\n"
 "PO-Revision-Date: 2025-08-21 00:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -18,45 +18,98 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: base/models.py:60
+#: base/middleware.py:46 base/templates/base/home.html:21
+msgid "Email not verified."
+msgstr "Email не подтверждён."
+
+#: base/models.py:52
 #, python-format
 msgid "Invalid syndrome codes: %(codes)s"
 msgstr "Недопустимые коды синдромов: %(codes)s"
+
+#: base/models.py:186
+msgid "Either a file or an external link is required."
+msgstr "Необходимо загрузить файл или указать внешнюю ссылку."
+
+#: base/signals.py:25
+msgid "New user registered"
+msgstr "Зарегистрирован новый пользователь"
+
+#: base/signals.py:26 base/templates/base/home.html:92
+#: base/templates/base/home.html:123 base/templates/base/login.html:21
+#: base/templates/base/register.html:25
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: base/signals.py:27
+msgid "User ID"
+msgstr "ID пользователя"
+
+#: base/signals.py:28 base/templates/base/home.html:96
+#: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:49
+#: base/templates/base/profile_onboarding.html:27
+#: base/templates/base/register.html:30
+msgid "Email"
+msgstr "Email"
+
+#: base/signals.py:31 base/signals.py:51
+msgid "Admin"
+msgstr "Администратор"
+
+#: base/signals.py:43
+msgid "New medical document uploaded"
+msgstr "Загружен новый медицинский документ"
+
+#: base/signals.py:44
+msgid "Document ID"
+msgstr "ID документа"
+
+#: base/signals.py:45
+msgid "File"
+msgstr "Файл"
+
+#: base/signals.py:46
+msgid "Exam ID"
+msgstr "ID обследования"
+
+#: base/signals.py:47
+msgid "Exam date"
+msgstr "Дата обследования"
+
+#: base/signals.py:48
+msgid "User"
+msgstr "Пользователь"
 
 #: base/templates/base/home.html:5
 msgid "Home"
 msgstr "Главная"
 
-#: base/templates/base/home.html:15
+#: base/templates/base/home.html:13
 #, python-format
 msgid "Welcome, %(username)s!"
 msgstr "Добро пожаловать, %(username)s!"
 
-#: base/templates/base/home.html:18
+#: base/templates/base/home.html:16
 msgid "Welcome!"
 msgstr "Добро пожаловать!"
 
-#: base/templates/base/home.html:23
-msgid "Email not verified."
-msgstr "Email не подтверждён."
-
-#: base/templates/base/home.html:24
+#: base/templates/base/home.html:22
 msgid "Please verify your email for full access."
 msgstr "Пожалуйста, подтвердите email для полного доступа."
 
-#: base/templates/base/home.html:27
+#: base/templates/base/home.html:25
 msgid "Send email"
 msgstr "Отправить письмо"
 
-#: base/templates/base/home.html:29
+#: base/templates/base/home.html:27
 msgid "Close"
 msgstr "Закрыть"
 
-#: base/templates/base/home.html:36
+#: base/templates/base/home.html:33
 msgid "Genetic connective tissue syndromes"
 msgstr "Генетические синдромы соединительной ткани"
 
-#: base/templates/base/home.html:38
+#: base/templates/base/home.html:35
 msgid ""
 "Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective "
 "tissue disorders and can be life-threatening without timely diagnosis."
@@ -65,142 +118,118 @@ msgstr ""
 "соединительной ткани и могут быть опасны для жизни без своевременной "
 "диагностики."
 
-#: base/templates/base/home.html:51 base/templates/base/home.html:67 \
-base/templates/base/home.html:76 base/templates/base/home.html:85
+#: base/templates/base/home.html:49
 msgid "Learn more"
 msgstr "Узнать больше"
 
-#: base/templates/base/home.html:60
-msgid "What to do if you suspect a syndrome?"
-msgstr "Что делать, если вы подозреваете синдром?"
-
-#: base/templates/base/home.html:65
-msgid "Find a doctor"
-msgstr "Найти врача"
-
-#: base/templates/base/home.html:66
-msgid "A coordinated clinic is the best place for treatment..."
-msgstr "Координированная клиника — лучшее место для лечения..."
-
-#: base/templates/base/home.html:74
-msgid "Support"
-msgstr "Поддержка"
-
-#: base/templates/base/home.html:75
-msgid "A foundation can help you find resources and community."
-msgstr "Фонд поможет найти ресурсы и сообщество."
-
-#: base/templates/base/home.html:83
-msgid "Resources"
-msgstr "Ресурсы"
-
-#: base/templates/base/home.html:84
-msgid "Official materials and guidelines for the syndrome."
-msgstr "Официальные материалы и рекомендации по синдрому."
-
-#: base/templates/base/home.html:100
+#: base/templates/base/home.html:64
 msgid "Welcome to Rhymes of Life!"
 msgstr "Добро пожаловать в Rhymes of Life!"
 
-#: base/templates/base/home.html:106 base/templates/base/home.html:157 \
-base/templates/base/home.html:188 base/templates/base/login.html:40 \
-base/templates/base/register.html:4 base/templates/base/register.html:11 \
-base/templates/base/register.html:44
+#: base/templates/base/home.html:70 base/templates/base/home.html:111
+#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/register.html:44
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: base/templates/base/home.html:113 base/templates/base/home.html:186 \
-base/templates/base/login.html:4 base/templates/base/login.html:10 \
-base/templates/base/login.html:36 base/templates/base/register.html:48 \
-blog/templates/blog/blog_page.html:115 templates/base.html:137
+#: base/templates/base/home.html:77 base/templates/base/home.html:134
+#: base/templates/base/login.html:4 base/templates/base/login.html:10
+#: base/templates/base/login.html:36 base/templates/base/register.html:48
+#: blog/templates/blog/blog_page.html:115 templates/base.html:137
 msgid "Log in"
 msgstr "Войти"
 
-#: base/templates/base/home.html:131 base/templates/base/home.html:171 \
-base/templates/base/login.html:21 base/templates/base/register.html:25
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: base/templates/base/home.html:137 base/templates/base/profile.html:21 \
-base/templates/base/profile_edit.html:49 \
-base/templates/base/profile_onboarding.html:27 \
-base/templates/base/register.html:30
-msgid "Email"
-msgstr "Email"
-
-#: base/templates/base/home.html:143 base/templates/base/home.html:177 \
-base/templates/base/login.html:29 base/templates/base/register.html:35
+#: base/templates/base/home.html:100 base/templates/base/home.html:127
+#: base/templates/base/login.html:29 base/templates/base/register.html:35
 msgid "Password"
 msgstr "Пароль"
 
-#: base/templates/base/home.html:148 base/templates/base/register.html:40
+#: base/templates/base/home.html:104 base/templates/base/register.html:40
 msgid "Confirm password"
 msgstr "Повторите пароль"
 
-#: base/templates/base/home.html:154 base/templates/base/home.html:183
+#: base/templates/base/home.html:109 base/templates/base/home.html:132
 msgid "Show password"
 msgstr "Показать пароль"
 
-#: base/templates/base/home.html:188 base/templates/base/login.html:40
+#: base/templates/base/home.html:136 base/templates/base/login.html:40
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
-#: base/templates/base/my_documents.html:29 templates/base.html:50
+#: base/templates/base/my_documents.html:21 templates/base.html:50
 msgid "My examinations"
 msgstr "Мои обследования"
 
-#: base/templates/base/my_documents.html:34
+#: base/templates/base/my_documents.html:26
 msgid "Doctor's recommendations"
 msgstr "Рекомендации врача"
 
-#: base/templates/base/my_documents.html:44
+#: base/templates/base/my_documents.html:36
 msgid "Add examination"
 msgstr "Добавить обследование"
 
-#: base/templates/base/my_documents.html:50
+#: base/templates/base/my_documents.html:42
 msgid "Examination date"
 msgstr "Дата обследования"
 
-#: base/templates/base/my_documents.html:54
+#: base/templates/base/my_documents.html:46
 msgid "Description"
 msgstr "Описание"
 
-#: base/templates/base/my_documents.html:55
+#: base/templates/base/my_documents.html:47
 msgid "Short description (optional)"
 msgstr "Краткое описание (необязательно)"
 
-#: base/templates/base/my_documents.html:58
+#: base/templates/base/my_documents.html:50
 msgid "Files"
 msgstr "Файлы"
 
-#: base/templates/base/my_documents.html:60
+#: base/templates/base/my_documents.html:52
 msgid "Drag files here or click"
 msgstr "Перетащите файлы сюда или кликните"
 
-#: base/templates/base/my_documents.html:66 \
-base/templates/base/profile_edit.html:113
+#: base/templates/base/my_documents.html:58
+msgid "Or external link"
+msgstr "Или внешняя ссылка"
+
+#: base/templates/base/my_documents.html:60
+msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
+msgstr "Вставьте общую ссылку (Google/Dropbox/Yandex и др.)"
+
+#: base/templates/base/my_documents.html:62
+msgid "Use this if your file type is not supported."
+msgstr "Используйте это, если ваш тип файла не поддерживается."
+
+#: base/templates/base/my_documents.html:67
+#: base/templates/base/profile_edit.html:113
 msgid "Save"
 msgstr "Сохранить"
 
-#: base/templates/base/my_documents.html:94 \
-base/templates/base/patient_exams.html:57
+#: base/templates/base/my_documents.html:103
+#: base/templates/base/patient_exams.html:67
 msgid "No documents"
 msgstr "Нет документов"
 
-#: base/templates/base/my_documents.html:99
+#: base/templates/base/my_documents.html:108
 msgid "No examinations yet."
 msgstr "Обследований пока нет."
 
-#: base/templates/base/my_documents.html:113
+#: base/templates/base/my_documents.html:122
+#: base/templates/base/patient_exams.html:42
 msgid "Doctor"
 msgstr "Врач"
 
-#: base/templates/base/my_documents.html:124
+#: base/templates/base/my_documents.html:130
+msgid "For examination"
+msgstr "Для обследования"
+
+#: base/templates/base/my_documents.html:136
 msgid "No recommendations yet."
 msgstr "Пока нет рекомендаций."
 
-#: base/templates/base/notifications.html:4 \
-base/templates/base/notifications.html:9 templates/base.html:74
+#: base/templates/base/notifications.html:4
+#: base/templates/base/notifications.html:9 templates/base.html:74
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -234,28 +263,36 @@ msgstr ""
 msgid "No notifications"
 msgstr "Уведомлений нет"
 
-#: base/templates/base/patient_exams.html:7
+#: base/templates/base/patient_exams.html:6
 msgid "Patient examinations"
 msgstr "Обследования пациента"
 
-#: base/templates/base/patient_exams.html:11
+#: base/templates/base/patient_exams.html:10
 msgid "Send doctor's recommendation"
 msgstr "Отправить рекомендацию врача"
 
-#: base/templates/base/patient_exams.html:15
+#: base/templates/base/patient_exams.html:14
+msgid "Examination"
+msgstr "Обследование"
+
+#: base/templates/base/patient_exams.html:16
+msgid "Select examination"
+msgstr "Выберите обследование"
+
+#: base/templates/base/patient_exams.html:25
 msgid "Enter recommendation..."
 msgstr "Введите рекомендацию..."
 
-#: base/templates/base/patient_exams.html:17 \
-blog/templates/blog/blog_page.html:110
+#: base/templates/base/patient_exams.html:27
+#: blog/templates/blog/blog_page.html:110
 msgid "Send"
 msgstr "Отправить"
 
-#: base/templates/base/patient_exams.html:24
+#: base/templates/base/patient_exams.html:34
 msgid "Sent recommendations"
 msgstr "Отправленные рекомендации"
 
-#: base/templates/base/patient_exams.html:63
+#: base/templates/base/patient_exams.html:73
 msgid "No exams available."
 msgstr "Нет доступных обследований."
 
@@ -267,8 +304,8 @@ msgstr "Поиск пациентов"
 msgid "Enter first or last name..."
 msgstr "Введите имя или фамилию..."
 
-#: base/templates/base/patients_list.html:11 \
-blog/templates/blog/blog_index_page.html:49
+#: base/templates/base/patients_list.html:11
+#: blog/templates/blog/blog_index_page.html:49
 msgid "Search"
 msgstr "Поиск"
 
@@ -276,13 +313,13 @@ msgstr "Поиск"
 msgid "View examinations"
 msgstr "Смотреть обследования"
 
-#: base/templates/base/patients_list.html:29 \
-base/templates/base/patients_list.html:32
+#: base/templates/base/patients_list.html:29
+#: base/templates/base/patients_list.html:32
 msgid "Back"
 msgstr "Назад"
 
-#: base/templates/base/patients_list.html:47 \
-base/templates/base/patients_list.html:50
+#: base/templates/base/patients_list.html:47
+#: base/templates/base/patients_list.html:50
 msgid "Next"
 msgstr "Вперёд"
 
@@ -302,13 +339,13 @@ msgstr "Аватар пользователя"
 msgid "Default avatar"
 msgstr "Аватар по умолчанию"
 
-#: base/templates/base/profile.html:19 base/templates/base/profile_edit.html:41 \
-base/templates/base/profile_onboarding.html:19
+#: base/templates/base/profile.html:19 base/templates/base/profile_edit.html:41
+#: base/templates/base/profile_onboarding.html:19
 msgid "First name"
 msgstr "Имя"
 
-#: base/templates/base/profile.html:20 base/templates/base/profile_edit.html:45 \
-base/templates/base/profile_onboarding.html:23
+#: base/templates/base/profile.html:20 base/templates/base/profile_edit.html:45
+#: base/templates/base/profile_onboarding.html:23
 msgid "Last name"
 msgstr "Фамилия"
 
@@ -316,8 +353,8 @@ msgstr "Фамилия"
 msgid "Date of birth"
 msgstr "Дата рождения"
 
-#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:90 \
-base/templates/base/profile_onboarding.html:58
+#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:90
+#: base/templates/base/profile_onboarding.html:58
 msgid "Syndromes"
 msgstr "Синдромы"
 
@@ -329,24 +366,24 @@ msgstr "Редактировать"
 msgid "Upload new"
 msgstr "Загрузить новую"
 
-#: base/templates/base/profile_edit.html:26 \
-blog/templates/blog/blog_page.html:73 \
-blog/templates/blog/edit_article.html:88
+#: base/templates/base/profile_edit.html:26
+#: blog/templates/blog/blog_page.html:73
+#: blog/templates/blog/edit_article.html:88
 msgid "Delete"
 msgstr "Удалить"
 
-#: base/templates/base/profile_edit.html:58 \
-base/templates/base/profile_onboarding.html:31
+#: base/templates/base/profile_edit.html:58
+#: base/templates/base/profile_onboarding.html:31
 msgid "Day"
 msgstr "День"
 
-#: base/templates/base/profile_edit.html:68 \
-base/templates/base/profile_onboarding.html:40
+#: base/templates/base/profile_edit.html:68
+#: base/templates/base/profile_onboarding.html:40
 msgid "Month"
 msgstr "Месяц"
 
-#: base/templates/base/profile_edit.html:78 \
-base/templates/base/profile_onboarding.html:49
+#: base/templates/base/profile_edit.html:78
+#: base/templates/base/profile_onboarding.html:49
 msgid "Year"
 msgstr "Год"
 
@@ -354,13 +391,13 @@ msgstr "Год"
 msgid "Profile updated"
 msgstr "Профиль обновлён"
 
-#: base/templates/base/profile_onboarding.html:4 \
-base/templates/base/profile_onboarding.html:9
+#: base/templates/base/profile_onboarding.html:4
+#: base/templates/base/profile_onboarding.html:9
 msgid "Complete your profile"
 msgstr "Заполните профиль"
 
-#: base/templates/base/profile_onboarding.html:70 \
-blog/templates/blog/blog_page.html:129
+#: base/templates/base/profile_onboarding.html:70
+#: blog/templates/blog/blog_page.html:129
 msgid "Avatar"
 msgstr "Аватар"
 
@@ -384,8 +421,8 @@ msgstr "войти"
 msgid "Already have an account?"
 msgstr "Уже есть аккаунт?"
 
-#: base/templates/base/verify_prompt.html:4 \
-base/templates/base/verify_prompt.html:9
+#: base/templates/base/verify_prompt.html:4
+#: base/templates/base/verify_prompt.html:9
 msgid "Verify your email"
 msgstr "Подтвердите вашу почту"
 
@@ -401,121 +438,112 @@ msgstr ""
 msgid "Resend email"
 msgstr "Отправить письмо ещё раз"
 
-#: base/views/auth_views.py:26
+#: base/views/auth_views.py:24
 msgid "Please fill in all fields."
 msgstr "Пожалуйста, заполните все поля."
 
-#: base/views/auth_views.py:28
+#: base/views/auth_views.py:26
 msgid "Passwords don't match."
 msgstr "Пароли не совпадают."
 
-#: base/views/auth_views.py:30
+#: base/views/auth_views.py:28
 msgid "A user with that username already exists."
 msgstr "Пользователь с таким именем уже существует."
 
-#: base/views/auth_views.py:32
+#: base/views/auth_views.py:30
 msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
-#: base/views/auth_views.py:80 base/views/auth_views.py:184
+#: base/views/auth_views.py:69 base/views/auth_views.py:182
+msgid "Registration was successful! A confirmation email will arrive shortly."
+msgstr "Регистрация прошла успешно! Письмо с подтверждением скоро придёт."
+
+#: base/views/auth_views.py:84 base/views/auth_views.py:194
 msgid "Invalid username or password."
 msgstr "Неверное имя пользователя или пароль."
 
-#: base/views/auth_views.py:107
+#: base/views/auth_views.py:122
 msgid "Email verification failed or token is invalid."
 msgstr "Не удалось подтвердить email или токен недействителен."
 
-#: base/views/auth_views.py:119
+#: base/views/auth_views.py:137
 msgid "A verification email has been sent. Please confirm your account."
 msgstr "Письмо для подтверждения отправлено. Пожалуйста, подтвердите аккаунт."
 
-#: base/views/auth_views.py:153
+#: base/views/auth_views.py:163
 msgid "You are already signed in."
 msgstr "Вы уже вошли в систему."
 
-#: base/views/doctors_views.py:23
+#: base/views/doctors_views.py:25
 msgid "You don't have permission to view this page."
 msgstr "У вас нет прав для просмотра этой страницы."
 
-#: base/views/doctors_views.py:69
+#: base/views/doctors_views.py:67
 msgid "Recommendation cannot be empty."
 msgstr "Рекомендация не может быть пустой."
 
-#: base/views/doctors_views.py:77
+#: base/views/doctors_views.py:70
+msgid "Exam is required."
+msgstr "Необходимо выбрать обследование."
+
+#: base/views/doctors_views.py:81
 #, python-format
 msgid "Doctor %(docname)s wrote: %(text)s"
 msgstr "Врач %(docname)s написал(а): %(text)s"
 
-#: base/views/doctors_views.py:82
+#: base/views/doctors_views.py:86
 msgid "Recommendation added and the patient has been notified."
 msgstr "Рекомендация добавлена, пациент уведомлён."
 
-#: base/views/documents_views.py:63 base/views/documents_views.py:127
+#: base/views/documents_views.py:91 base/views/documents_views.py:150
 msgid "Invalid date format"
 msgstr "Неверный формат даты"
 
-#: base/views/documents_views.py:65
-msgid "No files selected"
-msgstr "Файлы не выбраны"
+#: base/views/documents_views.py:94
+msgid "No files selected. You can also add an external link."
+msgstr "Файлы не выбраны. Вы также можете добавить внешнюю ссылку."
 
-#: base/views/documents_views.py:77
+#: base/views/documents_views.py:112
 msgid "Failed to upload documents. Please try again."
 msgstr "Не удалось загрузить документы. Попробуйте ещё раз."
 
-#: base/views/documents_views.py:140
+#: base/views/documents_views.py:170
 msgid "Failed to update the exam."
 msgstr "Не удалось обновить обследование."
 
-#: base/views/profile_views.py:20
+#: base/views/profile_views.py:18
 msgid "Syndrome 1"
 msgstr "Синдром 1"
 
-#: base/views/profile_views.py:21
+#: base/views/profile_views.py:19
 msgid "Syndrome 2"
 msgstr "Синдром 2"
 
-#: base/views/profile_views.py:22
+#: base/views/profile_views.py:20
 msgid "Syndrome 3"
 msgstr "Синдром 3"
 
-#: base/views/profile_views.py:23
+#: base/views/profile_views.py:21
 msgid "Syndrome 4"
 msgstr "Синдром 4"
 
-#: base/views/profile_views.py:24
+#: base/views/profile_views.py:22
 msgid "Syndrome 5"
 msgstr "Синдром 5"
 
-#: base/views/profile_views.py:25
+#: base/views/profile_views.py:23
 msgid "Syndrome 6"
 msgstr "Синдром 6"
 
-#: base/views/profile_views.py:81 base/views/profile_views.py:143
-msgid "File is too large (max 10MB)."
-msgstr "Файл слишком большой (макс. 10 МБ)."
-
-#: base/views/profile_views.py:88 base/views/profile_views.py:94 \
-base/views/profile_views.py:157
-msgid "Unsupported image format."
-msgstr "Неподдерживаемый формат изображения."
-
-#: base/views/profile_views.py:90 base/views/profile_views.py:166
-msgid "Error while processing the image."
-msgstr "Ошибка при обработке изображения."
-
-#: base/views/profile_views.py:92 base/views/profile_views.py:175
-msgid "Image is too large."
-msgstr "Изображение слишком большое."
-
-#: base/views/profile_views.py:187
+#: base/views/profile_views.py:179
 msgid "Please fill in the required fields."
 msgstr "Пожалуйста, заполните обязательные поля."
 
-#: base/views/social_views.py:19
+#: base/views/social_views.py:21
 msgid "Cannot follow yourself."
 msgstr "Нельзя подписаться на самого себя."
 
-#: base/views/social_views.py:25
+#: base/views/social_views.py:27
 #, python-format
 msgid "%(username)s has followed you."
 msgstr "%(username)s подписался(ась) на вас."
@@ -532,18 +560,18 @@ msgstr "Дата публикации"
 msgid "Author"
 msgstr "Автор"
 
-#: blog/models.py:124 blog/templates/blog/create_article.html:23 \
-blog/templates/blog/edit_article.html:26
+#: blog/models.py:124 blog/templates/blog/create_article.html:23
+#: blog/templates/blog/edit_article.html:26
 msgid "Short description"
 msgstr "Краткое описание"
 
-#: blog/models.py:131 blog/templates/blog/create_article.html:28 \
-blog/templates/blog/edit_article.html:31
+#: blog/models.py:131 blog/templates/blog/create_article.html:28
+#: blog/templates/blog/edit_article.html:31
 msgid "Main image"
 msgstr "Главное изображение"
 
-#: blog/models.py:133 blog/templates/blog/create_article.html:33 \
-blog/templates/blog/edit_article.html:46
+#: blog/models.py:133 blog/templates/blog/create_article.html:33
+#: blog/templates/blog/edit_article.html:46
 msgid "Article content"
 msgstr "Контент статьи"
 
@@ -603,9 +631,9 @@ msgstr "Подпись..."
 msgid "Articles"
 msgstr "Статьи"
 
-#: blog/templates/blog/blog_index_page.html:8 \
-blog/templates/blog/create_article.html:4 \
-blog/templates/blog/create_article.html:8
+#: blog/templates/blog/blog_index_page.html:8
+#: blog/templates/blog/create_article.html:4
+#: blog/templates/blog/create_article.html:8
 msgid "New article"
 msgstr "Новая статья"
 
@@ -672,8 +700,8 @@ msgstr "Отписаться"
 msgid "Follow"
 msgstr "Подписаться"
 
-#: blog/templates/blog/blog_page.html:71 \
-blog/templates/blog/edit_article.html:86
+#: blog/templates/blog/blog_page.html:71
+#: blog/templates/blog/edit_article.html:86
 msgid "Delete the article?"
 msgstr "Удалить статью?"
 
@@ -705,34 +733,39 @@ msgstr "чтобы оставить комментарий"
 msgid "edited"
 msgstr "изменено"
 
-#: blog/templates/blog/create_article.html:18 \
-blog/templates/blog/edit_article.html:21
+#: blog/templates/blog/create_article.html:18
+#: blog/templates/blog/edit_article.html:21
 msgid "Title"
 msgstr "Заголовок"
 
-#: blog/templates/blog/create_article.html:40 \
-blog/templates/blog/edit_article.html:53
+#: blog/templates/blog/create_article.html:40
+#: blog/templates/blog/edit_article.html:53
 msgid "Start writing…"
 msgstr "Начните писать…"
 
-#: blog/templates/blog/create_article.html:44 \
-blog/templates/blog/edit_article.html:57
+#: blog/templates/blog/create_article.html:44
+#: blog/templates/blog/edit_article.html:57
 msgid "Tags"
 msgstr "Теги"
 
-#: blog/templates/blog/create_article.html:64 \
-blog/templates/blog/edit_article.html:79
+#: blog/templates/blog/create_article.html:64
+#: blog/templates/blog/edit_article.html:79
 msgid "Save draft"
 msgstr "Сохранить черновик"
 
-#: blog/templates/blog/create_article.html:67 \
-blog/templates/blog/edit_article.html:75
+#: blog/templates/blog/create_article.html:67
+#: blog/templates/blog/edit_article.html:75
 msgid "Publish"
 msgstr "Опубликовать"
 
 #: blog/templates/blog/edit_article.html:7
 msgid "Edit article"
 msgstr "Редактировать статью"
+
+#: blog/templates/blog/edit_article.html:9
+#: blog/templates/blog/includes/article_cards.html:77
+msgid "Draft"
+msgstr "Черновик"
 
 #: blog/templates/blog/edit_article.html:36
 msgid "Current image"
@@ -754,36 +787,36 @@ msgstr "Ничего не найдено."
 msgid "Page navigation"
 msgstr "Навигация по страницам"
 
-#: blog/views.py:120
+#: blog/views.py:123
 msgid "Title and content are required."
 msgstr "Требуются заголовок и содержимое."
 
-#: blog/views.py:169 blog/views.py:223
+#: blog/views.py:176 blog/views.py:235
 #, python-format
 msgid "System error: %(msg)s"
 msgstr "Системная ошибка: %(msg)s"
 
-#: blog/views.py:244
+#: blog/views.py:257
 msgid "Insufficient permissions."
 msgstr "Недостаточно прав."
 
-#: blog/views.py:278 blog/views.py:344
+#: blog/views.py:294 blog/views.py:362
 msgid "Comment cannot be empty."
 msgstr "Комментарий не может быть пустым."
 
-#: blog/views.py:323
+#: blog/views.py:340
 msgid "You cannot delete someone else's comment."
 msgstr "Нельзя удалять чужой комментарий."
 
-#: blog/views.py:340
+#: blog/views.py:358
 msgid "You cannot edit someone else's comment."
 msgstr "Нельзя редактировать чужой комментарий."
 
-#: blog/views.py:358
+#: blog/views.py:377
 msgid "No file uploaded."
 msgstr "Файл не загружен."
 
-#: blog/views.py:379
+#: blog/views.py:401
 msgid "Upload error."
 msgstr "Ошибка загрузки."
 
