@@ -9,6 +9,22 @@
 <div class="container article-container py-4">
   <h1 class="article-title text-break">{{ page.title }}</h1>
 
+  {% if not page.is_approved %}
+    {% if request.user.is_staff %}
+      <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <div>⏳ {% trans "This article is awaiting approval." %}</div>
+        <form method="post" action="{% url 'approve_article' page.id %}">
+          {% csrf_token %}
+          <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
+        </form>
+      </div>
+    {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+      <div class="alert alert-info">
+        ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
+      </div>
+    {% endif %}
+  {% endif %}
+
   <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
     {% if page.author and page.author.avatar %}
       <img src="{{ page.author.avatar.url }}"

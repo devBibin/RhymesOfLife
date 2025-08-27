@@ -34,6 +34,14 @@
           {% trans "Doctors" %}
         </a>
       </li>
+      {% if request.user.is_staff %}
+      <li class="nav-item">
+        <a href="#" data-filter="pending"
+           class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
+          ⏳ {% trans "Pending approval" %}
+        </a>
+      </li>
+      {% endif %}
     </ul>
   </nav>
 

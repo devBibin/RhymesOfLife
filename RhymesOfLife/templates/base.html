@@ -50,7 +50,11 @@
                   <i class="bi bi-file-earmark-medical"></i> {% trans "My examinations" %}
                 </a>
               </li>
-
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'recommendations' %}">
+                  <i class="bi bi-lightbulb"></i> {% trans "Recommendations" %}
+                </a>
+              </li>
               <li class="nav-item">
                 {% blog_index_url as blog_url %}
                 <a class="nav-link" href="{{ blog_url }}">
@@ -187,6 +191,7 @@
   <script src="{% static 'js/avatar.js' %}"></script>
   <script src="{% static 'js/exam.js' %}"></script>
   <script src="{% static 'js/friends.js' %}"></script>
+  <script src="{% static 'js/phone_wait.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

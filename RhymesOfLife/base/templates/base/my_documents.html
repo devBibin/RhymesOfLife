@@ -17,123 +17,84 @@
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 <div class="container py-4">
 
-  <ul class="nav nav-pills mb-4" id="examTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="my-exams-tab" data-bs-toggle="pill" data-bs-target="#my-exams" type="button" role="tab" aria-controls="my-exams" aria-selected="true">
-        🧾 {% trans "My examinations" %}
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="recommendations-tab" data-bs-toggle="pill" data-bs-target="#recommendations" type="button" role="tab" aria-controls="recommendations" aria-selected="false">
-        💡 {% trans "Doctor's recommendations" %}
-      </button>
-    </li>
-  </ul>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">🧾 {% trans "My examinations" %}</h2>
+    <a class="btn btn-outline-info btn-sm" href="{% url 'recommendations' %}">💡 {% trans "Doctor's recommendations" %}</a>
+  </div>
 
-  <div class="tab-content" id="examTabsContent">
-    <div class="tab-pane fade show active" id="my-exams" role="tabpanel" aria-labelledby="my-exams-tab">
+  <div class="card shadow-sm mb-5">
+    <div class="card-body">
+      <h4 class="mb-3">➕ {% trans "Add examination" %}</h4>
+      <form id="exam-form" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <input type="hidden" id="exam_id" name="exam_id" value="">
+        <div class="row g-3">
+          <div class="col-12 col-md-3">
+            <label for="exam_date" class="form-label">{% trans "Examination date" %}</label>
+            <input type="date" name="exam_date" id="exam_date" class="form-control" required>
+          </div>
+          <div class="col-12 col-md-9">
+            <label for="description" class="form-label">{% trans "Description" %}</label>
+            <textarea name="description" id="description" class="form-control" rows="1" placeholder="{% trans 'Short description (optional)' %}"></textarea>
+          </div>
 
-      <div class="card shadow-sm mb-5">
-        <div class="card-body">
-          <h4 class="mb-3">➕ {% trans "Add examination" %}</h4>
-          <form id="exam-form" enctype="multipart/form-data" novalidate>
-            {% csrf_token %}
-            <input type="hidden" id="exam_id" name="exam_id" value="">
-            <div class="row g-3">
-              <div class="col-12 col-md-3">
-                <label for="exam_date" class="form-label">{% trans "Examination date" %}</label>
-                <input type="date" name="exam_date" id="exam_date" class="form-control" required>
-              </div>
-              <div class="col-12 col-md-9">
-                <label for="description" class="form-label">{% trans "Description" %}</label>
-                <textarea name="description" id="description" class="form-control" rows="1" placeholder="{% trans 'Short description (optional)' %}"></textarea>
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">{% trans "Files" %}</label>
-                <div id="drop-zone" class="border border-secondary-subtle bg-light p-4 rounded text-center">
-                  <p class="mb-0">📂 {% trans "Drag files here or click" %}</p>
-                  <input type="file" id="file-input" name="files" hidden multiple accept=".pdf,image/jpeg,image/png">
-                </div>
-                <div id="file-list" class="mt-2"></div>
-
-                <div class="mt-3">
-                  <label class="form-label">{% trans "Links (optional)" %}</label>
-                  <input type="url" id="external_url" name="external_url" class="form-control mb-2" placeholder="{% trans 'Paste a shared link (Google/Dropbox/Yandex/etc.)' %}">
-                  <div id="link-list"></div>
-                  <button type="button" id="add-link-btn" class="btn btn-sm btn-outline-secondary mt-2">➕ {% trans "Add another link" %}</button>
-                  <small class="text-muted d-block mt-2">{% trans "You can attach links instead of files or together with them. HTTP/HTTPS only." %}</small>
-                </div>
-              </div>
-
-              <div class="col-12 text-end">
-                <button type="button" id="submit-exam" class="btn btn-primary">📤 {% trans "Save" %}</button>
-              </div>
+          <div class="col-12">
+            <label class="form-label">{% trans "Files" %}</label>
+            <div id="drop-zone" class="border border-secondary-subtle bg-light p-4 rounded text-center">
+              <p class="mb-0">📂 {% trans "Drag files here or click" %}</p>
+              <input type="file" id="file-input" name="files" hidden multiple accept=".pdf,image/jpeg,image/png">
             </div>
-          </form>
+            <div id="file-list" class="mt-2"></div>
+
+            <div class="mt-3">
+              <label class="form-label">{% trans "Links (optional)" %}</label>
+              <input type="url" id="external_url" name="external_url" class="form-control mb-2" placeholder="{% trans 'Paste a shared link (Google/Dropbox/Yandex/etc.)' %}">
+              <div id="link-list"></div>
+              <button type="button" id="add-link-btn" class="btn btn-sm btn-outline-secondary mt-2">➕ {% trans "Add another link" %}</button>
+              <small class="text-muted d-block mt-2">{% trans "You can attach links instead of files or together with them. HTTP/HTTPS only." %}</small>
+            </div>
+          </div>
+
+          <div class="col-12 text-end">
+            <button type="button" id="submit-exam" class="btn btn-primary">📤 {% trans "Save" %}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% for exam in exams %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+          <strong>📅 {{ exam.exam_date|date:"d.m.Y" }}</strong>
+          {% if exam.description %}
+            <span class="text-muted ms-2">{{ exam.description }}</span>
+          {% endif %}
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary edit-exam-btn" data-id="{{ exam.id }}">✏️</button>
+          <button class="btn btn-sm btn-outline-danger delete-exam-btn" data-id="{{ exam.id }}">🗑️</button>
         </div>
       </div>
-
-      {% for exam in exams %}
-        <div class="card shadow-sm mb-3">
-          <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-              <strong>📅 {{ exam.exam_date|date:"d.m.Y" }}</strong>
-              {% if exam.description %}
-                <span class="text-muted ms-2">{{ exam.description }}</span>
-              {% endif %}
-            </div>
-            <div>
-              <button class="btn btn-sm btn-outline-primary edit-exam-btn" data-id="{{ exam.id }}">✏️</button>
-              <button class="btn btn-sm btn-outline-danger delete-exam-btn" data-id="{{ exam.id }}">🗑️</button>
-            </div>
-          </div>
-          <ul class="list-group list-group-flush">
-            {% for doc in exam.documents.all %}
-              <li class="list-group-item d-flex justify-content-between">
-                {% if doc.external_url %}
-                  <a href="{{ doc.external_url }}" target="_blank" rel="noopener noreferrer">🔗 {{ doc.external_url }}</a>
-                {% else %}
-                  <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">{{ doc.file.name|basename }}</a>
-                {% endif %}
-                <small class="text-muted">{{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
-              </li>
-            {% empty %}
-              <li class="list-group-item text-muted">{% trans "No documents" %}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% empty %}
-        <div class="alert alert-info">{% trans "No examinations yet." %}</div>
-      {% endfor %}
-
-    </div>
-
-    <div class="tab-pane fade" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab">
-      {% if comments %}
-        {% for c in comments %}
-          <div class="card mb-3 border-info">
-            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-              <div>
-                {% if c.author and c.author.user %}
-                  {{ c.author.user.get_full_name|default:c.author.user.username }}
-                {% else %}
-                  {% trans "Doctor" %}
-                {% endif %}
-              </div>
-              <div>{{ c.created_at|date:"d.m.Y H:i" }}</div>
-            </div>
-            <div class="card-body">
-              <p class="mb-1">{{ c.content }}</p>
-              <small class="text-muted">{% trans "For examination" %}: {{ c.exam.exam_date|date:"d.m.Y" }}{% if c.exam.description %} — {{ c.exam.description }}{% endif %}</small>
-            </div>
-          </div>
+      <ul class="list-group list-group-flush">
+        {% for doc in exam.documents.all %}
+          <li class="list-group-item d-flex justify-content-between">
+            {% if doc.external_url %}
+              <a href="{{ doc.external_url }}" target="_blank" rel="noopener noreferrer">🔗 {{ doc.external_url }}</a>
+            {% else %}
+              <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">{{ doc.file.name|basename }}</a>
+            {% endif %}
+            <small class="text-muted">{{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">{% trans "No documents" %}</li>
         {% endfor %}
-      {% else %}
-        <p class="text-muted">{% trans "No recommendations yet." %}</p>
-      {% endif %}
+      </ul>
     </div>
+  {% empty %}
+    <div class="alert alert-info">{% trans "No examinations yet." %}</div>
+  {% endfor %}
 
-  </div>
 </div>
 {% endblock %}

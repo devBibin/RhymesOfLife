@@ -27,3 +27,13 @@ class Notification(admin.ModelAdmin):
 @admin.register(Follower)
 class Follower(admin.ModelAdmin):
     pass
+
+
+@admin.register(ExamComment)
+class ExamComment(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PhoneVerification)
+class PhoneVerification(admin.ModelAdmin):
+    pass

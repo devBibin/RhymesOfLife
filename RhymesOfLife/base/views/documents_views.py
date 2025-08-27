@@ -9,8 +9,9 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
+from django.core.paginator import Paginator
 
-from ..models import MedicalExam, MedicalDocument, ExamComment
+from ..models import MedicalExam, MedicalDocument, Recommendation
 from ..utils.logging import get_app_logger, get_uploads_logger
 from ..utils.files import validate_mixed_upload
 
@@ -135,13 +136,8 @@ def my_documents_view(request):
             return _json_error(_("Failed to upload documents. Please try again."), status=500)
         log.info("Exam created: exam_id=%s user_id=%s date=%s", exam.id, request.user.id, exam_date)
         return JsonResponse({"status": "ok"})
-    exams = user_info.medical_exams.prefetch_related("documents", "comments__author__user")
-    comments = (
-        ExamComment.objects.filter(exam__in=exams)
-        .select_related("exam", "author__user")
-        .order_by("created_at")
-    )
-    return render(request, "base/my_documents.html", {"exams": exams, "comments": comments})
+    exams = user_info.medical_exams.prefetch_related("documents")
+    return render(request, "base/my_documents.html", {"exams": exams})
 
 
 @login_required
@@ -217,3 +213,21 @@ def delete_document_api(request, doc_id):
         document.delete()
         uplog.info("Document soft-deleted: doc_id=%s user_id=%s", document.id, request.user.id)
     return JsonResponse({"status": "ok"})
+
+
+@login_required
+@require_http_methods(["GET"])
+def recommendations_view(request):
+    qs = (
+        Recommendation.objects
+        .filter(patient=request.user.additional_info)
+        .select_related("author__user")
+        .order_by("-created_at")
+    )
+    paginator = Paginator(qs, 10)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    return render(
+        request,
+        "base/recommendations.html",
+        {"page_obj": page_obj, "recommendations": page_obj.object_list},
+    )

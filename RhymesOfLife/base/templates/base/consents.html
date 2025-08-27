@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <div class="card shadow-sm p-4" style="max-width:720px;width:100%;">
+    <h2 class="mb-3 text-center">{% trans "Agreements" %}</h2>
+    {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+    <div class="mb-3 text-muted">
+      <p>{% trans "Please read the following documents and confirm:" %}</p>
+      <ul>
+        <li>{% trans "Terms of Service" %}</li>
+        <li>{% trans "Privacy Policy" %}</li>
+        <li>{% trans "Consent to personal data processing" %}</li>
+      </ul>
+    </div>
+    <form method="post" class="mt-2">
+      {% csrf_token %}
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="c1" name="tos">
+        <label class="form-check-label" for="c1">{% trans "I agree with Terms of Service" %}</label>
+      </div>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="c2" name="privacy">
+        <label class="form-check-label" for="c2">{% trans "I agree with Privacy Policy" %}</label>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="c3" name="data">
+        <label class="form-check-label" for="c3">{% trans "I consent to personal data processing" %}</label>
+      </div>
+      <button class="btn btn-success w-100">{% trans "Continue" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

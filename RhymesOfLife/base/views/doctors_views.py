@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from ..models import AdditionalUserInfo, MedicalExam, Notification, ExamComment
+from ..models import AdditionalUserInfo, MedicalExam, Notification, Recommendation, get_syndrome_choices
 from ..utils.logging import get_app_logger
 
 User = get_user_model()
@@ -45,11 +45,12 @@ def patients_list_view(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
-    return render(
-        request,
-        "base/patients_list.html",
-        {"query": query, "page_obj": page_obj, "patients": page_obj.object_list},
-    )
+    return render(request, "base/patients_list.html", {
+        "patients": page_obj.object_list,
+        "page_obj": page_obj,
+        "query": "",
+        "syndrome_choices": get_syndrome_choices(),
+    })
 
 
 @login_required
@@ -58,26 +59,25 @@ def patients_list_view(request):
 def patient_exams_view(request, user_id: int):
     patient_user = get_object_or_404(User, id=user_id)
     patient_info = patient_user.additional_info
-    exams_qs = patient_info.medical_exams.prefetch_related("documents", "comments__author__user")
+    exams_qs = patient_info.medical_exams.prefetch_related("documents")
 
     if request.method == "POST":
         content = (request.POST.get("content") or "").strip()
-        exam_id = request.POST.get("exam_id")
         if not content:
             messages.error(request, _("Recommendation cannot be empty."))
             return redirect("patient_exams", user_id=user_id)
-        if not exam_id:
-            messages.error(request, _("Exam is required."))
-            return redirect("patient_exams", user_id=user_id)
 
         author_info = request.user.additional_info
-        exam = get_object_or_404(MedicalExam, id=exam_id, user_info=patient_info)
         with transaction.atomic():
-            ExamComment.objects.create(exam=exam, author=author_info, content=content)
+            Recommendation.objects.create(
+                patient=patient_info,
+                author=author_info,
+                content=content,
+            )
             Notification.objects.create(
                 recipient=patient_info,
                 sender=author_info,
-                notification_type="EXAM_COMMENT",
+                notification_type="RECOMMENDATION",
                 message=_("Doctor %(docname)s wrote: %(text)s") % {
                     "docname": request.user.get_full_name() or request.user.username,
                     "text": content,
@@ -87,8 +87,8 @@ def patient_exams_view(request, user_id: int):
         return redirect("patient_exams", user_id=user_id)
 
     recommendations = (
-        Notification.objects.filter(recipient=patient_info, notification_type="EXAM_COMMENT")
-        .select_related("sender__user")
+        Recommendation.objects.filter(patient=patient_info)
+        .select_related("author__user")
         .order_by("-created_at")
     )
     return render(

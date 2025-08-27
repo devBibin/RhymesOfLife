@@ -1,73 +1,23 @@
-import sys
 import os
-import json
+import sys
 from pathlib import Path
-from django.conf import settings
-import django
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE_DIR))
+# Project root (folder with manage.py)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DJANGO_PACKAGE = PROJECT_ROOT / "RhymesOfLife"
 
-PROJECT_DIR = BASE_DIR / "RhymesOfLife"
-sys.path.insert(0, str(PROJECT_DIR))
+# Ensure import paths
+for p in (str(PROJECT_ROOT), str(DJANGO_PACKAGE)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
-ENV_PATH = BASE_DIR / "environment.json"
-with open(ENV_PATH) as f:
-    environment = json.load(f)
+# Point Django to the real settings module
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "RhymesOfLife.settings")
 
-
-settings.configure(
-    SECRET_KEY=environment["SECRET_KEY"],
-    DEBUG=environment["DEBUG"],
-    DATABASES={
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': environment["DB_NAME"],
-            'USER': environment["DB_USER"],
-            'PASSWORD': environment["DB_PASSWORD"],
-            'HOST': environment["DB_HOST"],
-            'PORT': environment["DB_PORT"],
-        }
-    },
-    INSTALLED_APPS=[
-        'django.contrib.admin',
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-        'django.contrib.sites',
-
-        'base',
-        'blog',
-
-        'wagtail.contrib.forms',
-        'wagtail.contrib.redirects',
-        'wagtail.embeds',
-        'wagtail.sites',
-        'wagtail.users',
-        'wagtail.snippets',
-        'wagtail.documents',
-        'wagtail.images',
-        'wagtail.search',
-        'wagtail.admin',
-        'wagtail',
-
-        'modelcluster',
-        'taggit',
-
-    ],
-    ROOT_URLCONF='RhymesOfLife.urls',
-    SITE_ID=1,
-    BASE_URL=environment.get("BASE_URL", "http://localhost:8000/"),
-    DEFAULT_FROM_EMAIL=environment.get("DEFAULT_FROM_EMAIL", "Rhymes of Life <admin@igstan.com>"),
-    MAILGUN_API_TOKEN=environment.get("MAILGUN_API_TOKEN"),
-    MAILGUN_URL=environment.get("MAILGUN_URL"),
-    TEMPLATES=[{
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_DIR, 'base', 'templates')],
-        'APP_DIRS': True,
-    }],
-)
-
+# Bootstrap Django
+import django  # noqa: E402
 django.setup()
+
+# Re-export configured settings so legacy imports keep working
+from django.conf import settings as dj_settings  # noqa: E402
+settings = dj_settings

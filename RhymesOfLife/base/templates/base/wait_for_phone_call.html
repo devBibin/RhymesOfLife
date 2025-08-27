@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <div class="card shadow-sm p-4 text-center" style="max-width:520px;width:100%;">
+    <h2 class="mb-3">{% trans "Confirm your phone" %}</h2>
+
+    <p class="mb-2">
+      {% trans "To confirm number" %} <strong>{{ phone }}</strong>,
+      {% trans "please place a call to" %}:
+    </p>
+
+    <div class="p-3 mb-2 border rounded fs-3 fw-bold">
+    {{ call_number|default:"—" }}
+    </div>
+
+    {% if call_number %}
+    <small class="text-muted d-block mb-3">
+        Call will be dropped automatically. Call from the same number you entered.
+    </small>
+    {% else %}
+    <small class="text-muted d-block mb-3">
+        We will call your number automatically. Just answer the call.
+    </small>
+    {% endif %}
+
+    <div id="status" class="alert alert-info mb-3">{% trans "Waiting for call" %}</div>
+    <div class="d-flex justify-content-between align-items-center">
+      <a href="{% url 'phone_change' %}" class="btn btn-link p-0">{% trans "Enter another number" %}</a>
+      <span class="text-muted" id="dial-status"></span>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/phone_wait.js' %}"></script>
+{% endblock %}

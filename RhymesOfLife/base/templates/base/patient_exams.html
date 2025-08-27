@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n form_tags%}
 
 {% block content %}
 <div class="container py-4">
@@ -10,17 +10,6 @@
       <h5 class="card-title">💡 {% trans "Send doctor's recommendation" %}</h5>
       <form method="post">
         {% csrf_token %}
-        <div class="mb-2">
-          <label class="form-label">{% trans "Examination" %}</label>
-          <select name="exam_id" class="form-select" required>
-            <option value="">{% trans "Select examination" %}</option>
-            {% for exam in exams %}
-              <option value="{{ exam.id }}">
-                {{ exam.exam_date|date:"d.m.Y" }}{% if exam.description %} — {{ exam.description }}{% endif %}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
         <div class="mb-2">
           <textarea name="content" class="form-control" rows="3" placeholder="{% trans 'Enter recommendation...' %}" required></textarea>
         </div>
@@ -36,15 +25,15 @@
         <div class="alert alert-secondary">
           <div class="d-flex justify-content-between">
             <strong>
-              {% if note.sender and note.sender.user %}
-                {{ note.sender.user.get_full_name|default:note.sender.user.username }}
+              {% if note.author and note.author.user %}
+                {{ note.author.user.get_full_name|default:note.author.user.username }}
               {% else %}
                 {% trans "Doctor" %}
               {% endif %}
             </strong>
             <small class="text-muted">{{ note.created_at|date:"d.m.Y H:i" }}</small>
           </div>
-          <p class="mb-0">{{ note.message }}</p>
+          <p class="mb-0">{{ note.content }}</p>
         </div>
       {% endfor %}
     </div>
@@ -60,7 +49,17 @@
         <ul class="list-unstyled">
           {% for doc in exam.documents.all %}
             <li class="mb-2">
-              <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">📎 {{ doc.file.name|basename }}</a>
+              {% if doc.file %}
+                <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">
+                  📎 {{ doc.file.name|basename }}
+                </a>
+              {% elif doc.external_url %}
+                <a href="{{ doc.external_url }}" target="_blank" rel="noopener noreferrer">
+                  🔗 {{ doc.external_url|truncatechars:60 }}
+                </a>
+              {% else %}
+                <span class="text-muted">{% trans "No file attached" %}</span>
+              {% endif %}
               <small class="text-muted d-block">🕒 {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
             </li>
           {% empty %}

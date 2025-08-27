@@ -97,62 +97,65 @@ class SoftDeleteModel(models.Model):
 
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_info")
-
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
-
-    syndromes = ArrayField(
-        base_field=models.CharField(max_length=32),
-        size=6,
-        blank=True,
-        default=list,
-        help_text="Select one or more syndromes",
-    )
+    syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
+    confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
     birth_date = models.DateField(blank=True, null=True)
-
     is_verified = models.BooleanField(default=False, db_index=True)
     ready_for_verification = models.BooleanField(default=False, db_index=True)
+    email_verified = models.BooleanField(default=False, db_index=True)
+    phone = models.CharField(max_length=32, blank=True, null=True)
+    phone_verified = models.BooleanField(default=False, db_index=True)
+    tos_accepted = models.BooleanField(default=False)
+    privacy_accepted = models.BooleanField(default=False)
+    data_processing_accepted = models.BooleanField(default=False)
+    consents_accepted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         indexes = [
             models.Index(fields=["user"]),
             models.Index(fields=["is_verified"]),
             models.Index(fields=["ready_for_verification"]),
+            models.Index(fields=["email_verified"]),
+            models.Index(fields=["phone_verified"]),
         ]
 
     def clean(self):
         super().clean()
         _validate_syndromes(self.syndromes)
+        _validate_syndromes(self.confirmed_syndromes)
+        if any(v not in (self.syndromes or []) for v in (self.confirmed_syndromes or [])):
+            raise ValidationError({"confirmed_syndromes": _("Confirmed codes must be a subset of syndromes.")})
 
     def __str__(self):
         return f"{self.user.username}'s info"
 
-    def is_following(self, other_user_info):
-        return Follower.objects.filter(follower=self, following=other_user_info, is_active=True).exists()
-
-    def follow(self, other_user_info):
-        if self != other_user_info:
-            obj, created = Follower.objects.get_or_create(
-                follower=self, following=other_user_info, defaults={"is_active": True}
-            )
-            if not created and not obj.is_active:
-                obj.is_active = True
-                obj.save(update_fields=["is_active"])
-
-    def unfollow(self, other_user_info):
-        try:
-            sub = Follower.objects.get(follower=self, following=other_user_info)
-            if sub.is_active:
-                sub.is_active = False
-                sub.save(update_fields=["is_active"])
-        except Follower.DoesNotExist:
-            pass
-
     @property
     def followers_count(self):
         return self.followers.filter(is_active=True).count()
+
+
+class PhoneVerification(models.Model):
+    class Status(models.TextChoices):
+        NEW = "new", "new"
+        CALLING = "calling", "calling"
+        VERIFIED = "verified", "verified"
+        FAILED = "failed", "failed"
+
+    user_info = models.OneToOneField(AdditionalUserInfo, on_delete=models.CASCADE, related_name="phone_verification")
+    phone = models.CharField(max_length=32)
+    pin_code = models.CharField(max_length=8)
+    provider_session_id = models.CharField(max_length=64, blank=True, null=True)
+    provider_number = models.CharField(max_length=32, blank=True, null=True)
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.NEW, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, db_index=True)
+
+    def __str__(self):
+        return f"{self.user_info_id}:{self.phone}:{self.status}"
 
 
 class MedicalExam(SoftDeleteModel):
@@ -197,6 +200,7 @@ class Notification(SoftDeleteModel):
     NOTIFICATION_TYPES = (
         ("FOLLOW", "Follow"),
         ("EXAM_COMMENT", "ExamComment"),
+        ("RECOMMENDATION", "Recommendation"),
     )
     recipient = models.ForeignKey(AdditionalUserInfo, related_name="notifications", on_delete=models.CASCADE)
     sender = models.ForeignKey(AdditionalUserInfo, related_name="sent_notifications", on_delete=models.CASCADE)
@@ -246,3 +250,20 @@ class ExamComment(SoftDeleteModel):
 
     def __str__(self):
         return f"Comment by {self.author.user.username} on {self.exam.exam_date:%Y-%m-%d}"
+
+
+class Recommendation(SoftDeleteModel):
+    patient = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name="recommendations", db_index=True)
+    author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name="sent_recommendations", db_index=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["patient", "-created_at"]),
+            models.Index(fields=["author", "-created_at"]),
+        ]
+
+    def __str__(self):
+        return f"Recommendation to {self.patient.user.username} by {self.author.user.username}"

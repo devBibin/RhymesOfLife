@@ -9,19 +9,12 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
 
-from ..models import AdditionalUserInfo
+from ..models import AdditionalUserInfo, get_syndrome_choices
 from ..utils.files import validate_image_upload
 
 User = get_user_model()
 
-SYNDROME_CHOICES = [
-    ("s1", _("Syndrome 1")),
-    ("s2", _("Syndrome 2")),
-    ("s3", _("Syndrome 3")),
-    ("s4", _("Syndrome 4")),
-    ("s5", _("Syndrome 5")),
-    ("s6", _("Syndrome 6")),
-]
+SYNDROME_CHOICES = [(c, n) for c, n in get_syndrome_choices()]
 
 MAX_AVATAR_SIZE_BYTES = 10 * 1024 * 1024
 MAX_AVATAR_DIMENSION = 4096
@@ -76,7 +69,11 @@ def profile_edit_view(request):
         else:
             info.birth_date = None
 
-        info.syndromes = request.POST.getlist("syndromes")
+        selected = request.POST.getlist("syndromes")
+        confirmed = request.POST.getlist("confirmed_syndromes")
+        confirmed = [c for c in confirmed if c in selected]
+        info.syndromes = selected
+        info.confirmed_syndromes = confirmed
 
         image = request.FILES.get("avatar")
         if image:
@@ -134,7 +131,11 @@ def profile_onboarding_view(request):
         else:
             info.birth_date = None
 
-        info.syndromes = request.POST.getlist("syndromes")
+        selected = request.POST.getlist("syndromes")
+        confirmed = request.POST.getlist("confirmed_syndromes")
+        confirmed = [c for c in confirmed if c in selected]
+        info.syndromes = selected
+        info.confirmed_syndromes = confirmed
 
         image = request.FILES.get("avatar")
         if image:
@@ -164,7 +165,7 @@ def profile_onboarding_view(request):
 
         info.save()
 
-        if info.first_name and info.last_name and info.email:
+        if info.first_name and info.last_name and info.email and info.birth_date:
             return redirect("home")
 
         return render(

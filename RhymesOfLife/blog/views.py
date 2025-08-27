@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
@@ -315,7 +315,10 @@ def comment_article_view(request, page_id):
 def ajax_article_search(request):
     query = request.GET.get("q", "").strip()
     blog_index = BlogIndexPage.objects.first()
-    results = BlogPage.objects.live().descendant_of(blog_index).filter(is_deleted=False) if blog_index else BlogPage.objects.none()
+    results = BlogPage.objects.none()
+    if blog_index:
+        base = BlogPage.objects.live().descendant_of(blog_index).filter(is_deleted=False)
+        results = base.filter(is_approved=True)
     if query:
         results = results.filter(
             Q(title__icontains=query) |
@@ -399,3 +402,15 @@ def ckeditor5_upload(request):
     except Exception:
         log.exception("CKEditor upload error: user_id=%s", request.user.id)
         return JsonResponse({"error": {"message": _("Upload error.")}}, status=500)
+
+
+@login_required
+@require_POST
+@user_passes_test(lambda u: u.is_staff)
+def approve_article_view(request, page_id):
+    page = get_object_or_404(BlogPage, id=page_id).specific
+    page.is_approved = True
+    page.approved_at = timezone.now()
+    page.approved_by = request.user
+    page.save(update_fields=["is_approved", "approved_at", "approved_by"])
+    return redirect(page.url)

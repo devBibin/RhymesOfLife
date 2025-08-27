@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 00:04+0000\n"
+"POT-Creation-Date: 2025-08-27 22:09+0000\n"
 "PO-Revision-Date: 2025-08-14 12:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
@@ -79,39 +79,49 @@ msgstr "Введите текст…"
 msgid "Image caption…"
 msgstr "Подпись к изображению…"
 
-#: static/js/exam.js:29
+#: static/js/exam.js:34
+msgid "Paste link"
+msgstr ""
+
+#: static/js/exam.js:35
+#, fuzzy
+#| msgid "Remove like"
+msgid "Remove link"
+msgstr "Убрать лайк"
+
+#: static/js/exam.js:56
 msgid "Unsupported file type: %(name)s"
 msgstr "Неподдерживаемый формат: %(name)s"
 
-#: static/js/exam.js:46 static/js/exam.js:105
+#: static/js/exam.js:73 static/js/exam.js:145
 msgid "Remove file"
 msgstr "Удалить файл"
 
-#: static/js/exam.js:64
+#: static/js/exam.js:91
 msgid "Please specify the exam date."
 msgstr "Укажите дату обследования."
 
-#: static/js/exam.js:81
+#: static/js/exam.js:121
 msgid "Failed to save."
 msgstr "Не удалось сохранить."
 
-#: static/js/exam.js:84 static/js/exam.js:127 static/js/exam.js:143
+#: static/js/exam.js:124 static/js/exam.js:167 static/js/exam.js:183
 msgid "Network error."
 msgstr "Ошибка сети."
 
-#: static/js/exam.js:112
+#: static/js/exam.js:152
 msgid "Unable to load data."
 msgstr "Не удалось загрузить данные."
 
-#: static/js/exam.js:120
+#: static/js/exam.js:160
 msgid "Delete this exam?"
 msgstr "Удалить обследование?"
 
-#: static/js/exam.js:126 static/js/exam.js:142
+#: static/js/exam.js:166 static/js/exam.js:182
 msgid "Deletion failed."
 msgstr "Ошибка удаления."
 
-#: static/js/exam.js:136
+#: static/js/exam.js:176
 msgid "Delete this file?"
 msgstr "Удалить файл?"
 

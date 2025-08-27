@@ -15,7 +15,22 @@
     <ul class="list-group mb-3">
       {% for info in patients %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span>{{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})</span>
+          <div>
+            <div>{{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})</div>
+            <div class="mt-1">
+              {% if info.confirmed_syndromes %}
+                {% for code in info.confirmed_syndromes %}
+                  {% for c,l in syndrome_choices %}
+                    {% if c == code %}
+                      <span class="badge rounded-pill text-bg-success me-1">{{ l }}</span>
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+              {% else %}
+                <span class="text-muted small">{% trans "No genetically confirmed syndromes" %}</span>
+              {% endif %}
+            </div>
+          </div>
           <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary">📄 {% trans "View examinations" %}</a>
         </li>
       {% endfor %}

@@ -54,25 +54,60 @@
             {% endfor %}
           </select>
         </div>
+
         <div class="col-12">
           <label class="form-label">{% trans "Syndromes" %}</label>
-          <div class="d-flex flex-wrap gap-2">
+          <div class="d-flex flex-column gap-2">
             {% for code,label in syndrome_choices %}
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
-                       {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
-                <label class="form-check-label" for="s-{{ code }}">{{ label }}</label>
+              <div class="row align-items-center">
+                <div class="col-7">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
+                           {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
+                    <label class="form-check-label" for="s-{{ code }}">{{ label }}</label>
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="confirmed_syndromes"
+                           value="{{ code }}"
+                           id="sc-{{ code }}"
+                           data-main="#s-{{ code }}"
+                           {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
+                           {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
+                    <label class="form-check-label" for="sc-{{ code }}">{% trans "Genetically confirmed" %}</label>
+                  </div>
+                </div>
               </div>
             {% endfor %}
           </div>
         </div>
+
         <div class="col-12">
           <label class="form-label">{% trans "Avatar" %}</label>
           <input type="file" name="avatar" class="form-control" accept="image/*">
         </div>
       </div>
+
       <button type="submit" class="btn btn-success w-100 mt-4">{% trans "Save and continue" %}</button>
     </form>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
+    var mainSel=c.getAttribute("data-main");
+    var m=document.querySelector(mainSel);
+    var sync=function(){
+      var enabled=!!(m&&m.checked);
+      c.disabled=!enabled;
+      if(!enabled){c.checked=false;}
+    };
+    if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
+  });
+});
+</script>
 {% endblock %}

@@ -1,4 +1,3 @@
-# blog/models.py
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
@@ -34,11 +33,12 @@ class BlogIndexPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        published = (
+        base_live = (
             BlogPage.objects.live()
             .descendant_of(self)
             .filter(is_deleted=False)
         )
+        published = base_live.filter(is_approved=True)
 
         if request.user.is_authenticated:
             mine = (
@@ -63,9 +63,9 @@ class BlogIndexPage(Page):
             )
             qs = published.filter(author__in=f_ids).order_by("-first_published_at")
         elif f == "doctors":
-            qs = published.filter(author__user__is_staff=True).order_by(
-                "-first_published_at"
-            )
+            qs = published.filter(author__user__is_staff=True).order_by("-first_published_at")
+        elif f == "pending" and request.user.is_staff:
+            qs = base_live.filter(is_approved=False).order_by("-first_published_at")
         else:
             f = "popular"
             qs = published.order_by("-likes_count")
@@ -137,6 +137,12 @@ class BlogPage(Page):
     likes_count = models.PositiveIntegerField(_("Likes count"), default=0)
     comments_count = models.PositiveIntegerField(_("Comments count"), default=0)
 
+    is_approved = models.BooleanField(_("Approved by admin"), default=False, db_index=True)
+    approved_at = models.DateTimeField(_("Approved at"), null=True, blank=True)
+    approved_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="approved_articles", verbose_name=_("Approved by")
+    )
+
     content_panels = Page.content_panels + [
         FieldPanel("date"),
         FieldPanel("author"),
@@ -144,6 +150,7 @@ class BlogPage(Page):
         FieldPanel("main_image"),
         FieldPanel("body"),
         FieldPanel("tags"),
+        FieldPanel("is_approved"),
     ]
 
     @property
@@ -155,23 +162,20 @@ class BlogPage(Page):
         request.LANGUAGE_CODE = translation.get_language()
 
         if self.is_draft:
-            if (
-                request.user.is_authenticated
-                and self.author
-                and self.author.user == request.user
-            ):
-                return TemplateResponse(
-                    request,
-                    self.get_template(request),
-                    {"page": self},
-                )
+            if request.user.is_authenticated and self.author and self.author.user == request.user:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
+            if request.user.is_staff:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
             raise Http404
 
-        return TemplateResponse(
-            request,
-            self.get_template(request),
-            {"page": self},
-        )
+        if not self.is_approved:
+            if request.user.is_authenticated and self.author and self.author.user == request.user:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
+            if request.user.is_staff:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
+            raise Http404
+
+        return TemplateResponse(request, self.get_template(request), {"page": self})
 
     def is_editable_by(self, user):
         try:
@@ -181,9 +185,7 @@ class BlogPage(Page):
 
     def is_liked_by(self, user):
         try:
-            return self.likes.filter(
-                author=user.additional_info, is_active=True
-            ).exists()
+            return self.likes.filter(author=user.additional_info, is_active=True).exists()
         except AdditionalUserInfo.DoesNotExist:
             return False
 
@@ -207,9 +209,7 @@ class BlogPage(Page):
 
 
 class ArticleLike(models.Model):
-    article = models.ForeignKey(
-        BlogPage, on_delete=models.CASCADE, related_name="likes"
-    )
+    article = models.ForeignKey(BlogPage, on_delete=models.CASCADE, related_name="likes")
     author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
 
@@ -223,9 +223,7 @@ class ArticleLike(models.Model):
 
 
 class ArticleComment(models.Model):
-    article = models.ForeignKey(
-        BlogPage, on_delete=models.CASCADE, related_name="comments"
-    )
+    article = models.ForeignKey(BlogPage, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE)
     text = models.TextField(_("Text"))
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)

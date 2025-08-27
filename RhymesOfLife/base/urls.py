@@ -5,9 +5,14 @@ from .views.auth_views import (
     login_view,
     logout_view,
     verify_email_view,
-    request_verification_view,
     verify_prompt_view,
+    request_verification_view,
     home_view,
+    phone_enter_view,
+    phone_wait_view,
+    phone_status_api,
+    phone_change_view,
+    consents_view,
 )
 from .views.profile_views import (
     profile_view,
@@ -18,6 +23,7 @@ from .views.documents_views import (
     my_documents_view,
     exam_detail_api,
     delete_document_api,
+    recommendations_view,
 )
 from .views.doctors_views import (
     patients_list_view,
@@ -36,9 +42,16 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
 
-    path("verify/<uidb64>/<token>/", verify_email_view, name="verify_email"),
-    path("request-verification/", request_verification_view, name="request_verification"),
     path("verify/", verify_prompt_view, name="verify_prompt"),
+    path("verify/request/", request_verification_view, name="request_verification"),
+    path("verify/<uidb64>/<token>/", verify_email_view, name="verify_email"),
+
+    path("auth/phone/", phone_enter_view, name="phone_enter"),
+    path("auth/phone/wait/", phone_wait_view, name="phone_wait"),
+    path("auth/phone/status/", phone_status_api, name="phone_status_api"),
+    path("auth/phone/change/", phone_change_view, name="phone_change"),
+
+    path("consents/", consents_view, name="consents"),
 
     path("profile/", profile_view, name="my_profile"),
     path("profile/edit/", profile_edit_view, name="profile_edit"),
@@ -48,6 +61,8 @@ urlpatterns = [
     path("my-documents/", my_documents_view, name="my_documents"),
     path("api/exams/<int:exam_id>/", exam_detail_api, name="exam_detail_api"),
     path("api/documents/<int:doc_id>/", delete_document_api, name="delete_document_api"),
+
+    path("recommendations/", recommendations_view, name="recommendations"),
 
     path("patients/", patients_list_view, name="patients_list"),
     path("patients/<int:user_id>/", patient_exams_view, name="patient_exams"),
