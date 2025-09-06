@@ -1,5 +1,10 @@
 from django.urls import path
 
+from .views.telegram_views import (
+    connect_telegram_view,
+    telegram_webhook,
+)
+
 from .views.auth_views import (
     register_view,
     login_view,
@@ -70,4 +75,7 @@ urlpatterns = [
     path("notifications/", notifications_view, name="notifications"),
     path("follow/<int:user_id>/", follow_view, name="follow_user"),
     path("unfollow/<int:user_id>/", unfollow_view, name="unfollow_user"),
+
+    path("connect-telegram/", connect_telegram_view, name="connect_telegram"),
+    path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
 ]

@@ -6,7 +6,13 @@ from django.utils.translation import gettext as _
 from .models import MedicalDocument
 from .utils.telegram import send_message
 
+from .models import Notification
+from .utils.telegram_user import send_message_to_userinfo
+from .utils.logging import get_app_logger
+
 User = get_user_model()
+
+log = get_app_logger(__name__)
 
 
 def _admin_url(app_label: str, model: str, pk: int) -> str:
@@ -50,3 +56,14 @@ def notify_admin_on_document_created(sender, instance: MedicalDocument, created:
     if admin_link:
         lines.append(f"{_('Admin')}: {admin_link}")
     send_message("\n".join(lines))
+
+
+@receiver(post_save, sender=Notification)
+def notify_user_in_telegram(sender, instance: Notification, created, **kwargs):
+    if not created:
+        return
+    try:
+        if instance.recipient:
+            send_message_to_userinfo(instance.message or "", instance.recipient)
+    except Exception:
+        log.exception("Failed to push Telegram notification: id=%s", instance.id)

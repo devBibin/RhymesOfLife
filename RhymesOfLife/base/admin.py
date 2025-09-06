@@ -37,3 +37,8 @@ class ExamComment(admin.ModelAdmin):
 @admin.register(PhoneVerification)
 class PhoneVerification(admin.ModelAdmin):
     pass
+
+
+@admin.register(TelegramAccount)
+class TelegramAccount(admin.ModelAdmin):
+    pass

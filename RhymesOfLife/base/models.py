@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+import uuid
+
 
 User = get_user_model()
 
@@ -136,6 +138,29 @@ class AdditionalUserInfo(models.Model):
     @property
     def followers_count(self):
         return self.followers.filter(is_active=True).count()
+
+
+class TelegramAccount(models.Model):
+    user_info = models.OneToOneField("AdditionalUserInfo", on_delete=models.CASCADE, related_name="telegram_account")
+    telegram_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    username = models.CharField(max_length=100, null=True, blank=True)
+    first_name = models.CharField(max_length=100, null=True, blank=True)
+    last_name = models.CharField(max_length=100, null=True, blank=True)
+    language_code = models.CharField(max_length=10, null=True, blank=True)
+    activation_token = models.UUIDField(default=uuid.uuid4, unique=True, null=True, blank=True)
+    telegram_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["telegram_id"]),
+            models.Index(fields=["activation_token"]),
+            models.Index(fields=["telegram_verified"]),
+        ]
+
+    def __str__(self):
+        return f"tg:{self.telegram_id or '-'} for {self.user_info.user.username}"
 
 
 class PhoneVerification(models.Model):

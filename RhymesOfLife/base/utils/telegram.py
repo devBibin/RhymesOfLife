@@ -7,13 +7,13 @@ _API = "https://api.telegram.org/bot{token}/{method}"
 
 
 def _enabled():
-    return bool(settings.TELEGRAM_BOT_TOKEN) and bool(settings.TELEGRAM_STAFF_CHAT_IDS)
+    return bool(settings.TELEGRAM_BOT_TOKEN_ADMIN) and bool(settings.TELEGRAM_STAFF_CHAT_IDS)
 
 
 def send_message(text: str, *, parse_mode: str | None = None) -> None:
     if not _enabled():
         return
-    url = _API.format(token=settings.TELEGRAM_BOT_TOKEN, method="sendMessage")
+    url = _API.format(token=settings.TELEGRAM_BOT_TOKEN_ADMIN, method="sendMessage")
     for cid in settings.TELEGRAM_STAFF_CHAT_IDS:
         payload = {"chat_id": cid, "text": text, "disable_web_page_preview": True}
         if parse_mode:

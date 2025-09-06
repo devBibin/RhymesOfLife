@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_css %}
+<style>
+  .howto { background:#eef6ff; border:1px solid #cfe2ff; border-radius:.5rem; padding:1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-3">{% trans "Connect Telegram" %}</h1>
+
+  {% if email_verified %}
+    <div class="alert alert-success mb-3">{% trans "Email verified." %}</div>
+  {% endif %}
+
+  {% if not bot_username %}
+    <div class="alert alert-danger">{% trans "Telegram bot is not configured." %}</div>
+  {% else %}
+    {% if is_verified %}
+      <div class="alert alert-success">{% trans "Telegram is connected and phone is verified." %}</div>
+    {% else %}
+      <p class="text-muted">{% trans "To continue, please link your Telegram account." %}</p>
+
+      <div class="howto mb-3">
+        <p class="fw-semibold mb-2">{% trans "Instructions:" %}</p>
+        <ol class="mb-3">
+          <li class="mb-2">{% trans "Open Telegram and follow this link:" %}</li>
+          <li class="mb-2">{% trans 'Press "Start" in the chat with the bot.' %}</li>
+          <li class="mb-2">{% trans "The bot will ask you to share your phone number." %}</li>
+          <li class="mb-0">{% trans 'Return to this page and click "Continue".' %}</li>
+        </ol>
+
+        <a href="{{ link }}" class="btn btn-outline-primary mb-2" target="_blank" rel="noopener">
+          {% blocktrans %}Open @{{ bot_username }}{% endblocktrans %}
+        </a>
+      </div>
+
+      <form method="post" class="mb-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary w-100">
+          {% trans "Continue (I've interacted with the bot)" %}
+        </button>
+      </form>
+
+      <p class="text-muted mb-2">{% trans "No Telegram or don't want to use it?" %}</p>
+      <a class="btn btn-outline-secondary w-100" href="{{ skip_url }}">
+        {% trans "Skip Telegram and verify by phone call" %}
+      </a>
+
+      {% if error %}
+        <div class="alert alert-warning mt-3">{{ error }}</div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

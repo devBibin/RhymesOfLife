@@ -14,3 +14,5 @@ wagtail==7.0.2
 django-ckeditor==6.7.3
 django-ckeditor-5==0.2.18
 bleach==6.2.0
+pyTelegramBotAPI==4.29.1
+

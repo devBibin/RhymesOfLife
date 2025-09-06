@@ -1,19 +1,20 @@
+# base/views/auth_views.py
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_str
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
-from django.utils.translation import gettext_lazy as _
-from django.db import transaction
 from django.utils import timezone
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 import random
 
 from ..models import AdditionalUserInfo
@@ -127,7 +128,7 @@ def verify_email_view(request, uidb64, token):
         info.save(update_fields=["is_verified"])
         login(request, user)
         seclog.info("Email verified: user_id=%s", user.id)
-        return redirect("phone_enter")
+        return redirect("connect_telegram")  # go to Telegram link step first
     messages.error(request, _("Email verification failed or token is invalid."))
     seclog.warning("Email verification failed: uid=%s", uidb64)
     return render(request, "base/verification_failed.html")
@@ -175,19 +176,15 @@ def phone_status_api(request):
     info = request.user.additional_info
     if not info.phone:
         return JsonResponse({"status": "error", "message": "no phone"})
-
     if info.phone_verified:
         return JsonResponse({"status": "done"})
-
     api = poll_zvonok_status(info.phone)
     if not api.get("ok"):
         return JsonResponse({"status": "error", "message": api.get("message", "provider error")})
-
     if api.get("verified"):
         info.phone_verified = True
         info.save(update_fields=["phone_verified"])
         return JsonResponse({"status": "success", "next": "/consents/"})
-
     return JsonResponse({"status": "pending", "dial_status": api.get("dial_status_display")})
 
 
@@ -237,9 +234,9 @@ def home_view(request):
         current_name = getattr(getattr(request, "resolver_match", None), "url_name", "")
 
         if info.is_verified and not info.phone_verified and current_name not in {
-            "phone_enter", "phone_wait", "phone_status_api", "phone_change"
+            "connect_telegram", "phone_enter", "phone_wait", "phone_status_api", "phone_change"
         }:
-            return redirect("phone_enter")
+            return redirect("connect_telegram")
 
         if info.is_verified and info.phone_verified and not has_consents(info) and current_name != "consents":
             return redirect("consents")

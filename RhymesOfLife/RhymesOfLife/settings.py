@@ -158,15 +158,20 @@ EMAIL_VERIFICATION_EXEMPT_URLNAMES = {
     "profile_onboarding",
     "set_language",
     "admin:index",
+    "connect_telegram",
 }
 EMAIL_VERIFICATION_EXEMPT_PATHS = set()
 
-TELEGRAM_BOT_TOKEN = environment.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_BOT_TOKEN_ADMIN = environment.get("TELEGRAM_BOT_TOKEN_ADMIN")
 _raw_chat_ids = environment.get("TELEGRAM_STAFF_CHAT_IDS", [])
 if isinstance(_raw_chat_ids, str):
     TELEGRAM_STAFF_CHAT_IDS = [int(x) for x in _raw_chat_ids.split(",") if x.strip().lstrip("-").isdigit()]
 else:
     TELEGRAM_STAFF_CHAT_IDS = [int(x) for x in _raw_chat_ids if str(x).lstrip("-").isdigit()]
+
+TELEGRAM_BOT_TOKEN_USERS = environment.get("TELEGRAM_BOT_TOKEN_USERS", "")
+TELEGRAM_BOT_USERNAME = environment.get("TELEGRAM_BOT_USERNAME", "")
+
 
 SECURE_PROXY_SSL_HEADER = tuple(environment.get("SECURE_PROXY_SSL_HEADER", ())) or None
 SESSION_COOKIE_SECURE = environment.get("SESSION_COOKIE_SECURE", not DEBUG)

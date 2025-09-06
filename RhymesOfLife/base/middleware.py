@@ -79,4 +79,5 @@ class EnforceVerifiedMiddleware:
             "profile_onboarding",
             "set_language",
             "admin:index",
+            "connect_telegram",
         }
