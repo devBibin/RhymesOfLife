@@ -1,202 +1,197 @@
-# Russian translations for RhymesOfLife
-# Copyright (C)
-# This file is distributed under the same license as the project.
-# Translator: —
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: RhymesOfLife\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-11 11:17+0000\n"
-"PO-Revision-Date: 2025-08-21 00:56+0000\n"
-"Last-Translator: \n"
-"Language-Team: Russian\n"
-"Language: ru\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: base/middleware.py:46 base/templates/base/home.html:21
 msgid "Email not verified."
-msgstr "Email не подтверждён."
+msgstr ""
 
 #: base/models.py:54
 #, python-format
 msgid "Invalid syndrome codes: %(codes)s"
-msgstr "Недопустимые коды синдромов: %(codes)s"
+msgstr ""
 
 #: base/models.py:133
 msgid "Confirmed codes must be a subset of syndromes."
-msgstr "Подтверждённые коды должны быть подмножеством синдромов."
+msgstr ""
 
 #: base/models.py:214
 msgid "Either a file or an external link is required."
-msgstr "Необходимо загрузить файл или указать внешнюю ссылку."
+msgstr ""
 
 #: base/signals.py:31
 msgid "New user registered"
-msgstr "Зарегистрирован новый пользователь"
+msgstr ""
 
 #: base/signals.py:32 base/templates/base/home.html:92
 #: base/templates/base/home.html:123 base/templates/base/login.html:21
 #: base/templates/base/register.html:25
 msgid "Username"
-msgstr "Имя пользователя"
+msgstr ""
 
 #: base/signals.py:33
 msgid "User ID"
-msgstr "ID пользователя"
+msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
 #: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:44
 #: base/templates/base/profile_onboarding.html:27
 #: base/templates/base/register.html:30
 msgid "Email"
-msgstr "Email"
+msgstr ""
 
 #: base/signals.py:37 base/signals.py:57
 msgid "Admin"
-msgstr "Администратор"
+msgstr ""
 
 #: base/signals.py:49
 msgid "New medical document uploaded"
-msgstr "Загружен новый медицинский документ"
+msgstr ""
 
 #: base/signals.py:50
 msgid "Document ID"
-msgstr "ID документа"
+msgstr ""
 
 #: base/signals.py:51
 msgid "File"
-msgstr "Файл"
+msgstr ""
 
 #: base/signals.py:52
 msgid "Exam ID"
-msgstr "ID обследования"
+msgstr ""
 
 #: base/signals.py:53
 msgid "Exam date"
-msgstr "Дата обследования"
+msgstr ""
 
 #: base/signals.py:54
 msgid "User"
-msgstr "Пользователь"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:12
 msgid "Connect Telegram"
-msgstr "Подключить Telegram"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:15
-#| msgid "Email not verified."
 msgid "Email verified."
-msgstr "Email подтверждён."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:19
 msgid "Telegram bot is not configured."
-msgstr "Телеграм-бот не настроен."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:22
 msgid "Telegram is connected and phone is verified."
-msgstr "Telegram подключён, телефон подтверждён."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:24
 msgid "To continue, please link your Telegram account."
-msgstr "Чтобы продолжить, привяжите свой аккаунт Telegram."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:27
 msgid "Instructions:"
-msgstr "Инструкции:"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:29
 msgid "Open Telegram and follow this link:"
-msgstr "Откройте Telegram и перейдите по этой ссылке:"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:30
 msgid "Press \"Start\" in the chat with the bot."
-msgstr "Нажмите «Старт» в чате с ботом."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:31
 msgid "The bot will ask you to share your phone number."
-msgstr "Бот попросит поделиться вашим номером телефона."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:32
 msgid "Return to this page and click \"Continue\"."
-msgstr "Вернитесь на эту страницу и нажмите «Продолжить»."
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:36
 #, python-format
-#| msgid "Welcome, %(username)s!"
 msgid "Open @%(bot_username)s"
-msgstr "Открыть @%(bot_username)s"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:43
 msgid "Continue (I've interacted with the bot)"
-msgstr "Продолжить (я уже взаимодействовал(а) с ботом)"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:47
 msgid "No Telegram or don't want to use it?"
-msgstr "Нет Telegram или не хотите его использовать?"
+msgstr ""
 
 #: base/templates/base/connect_telegram.html:49
 msgid "Skip Telegram and verify by phone call"
-msgstr "Пропустить Telegram и подтвердить по звонку"
+msgstr ""
 
 #: base/templates/base/consents.html:7
 msgid "Agreements"
-msgstr "Согласия"
+msgstr ""
 
 #: base/templates/base/consents.html:11
 msgid "Please read the following documents and confirm:"
-msgstr "Пожалуйста, прочитайте следующие документы и подтвердите:"
+msgstr ""
 
 #: base/templates/base/consents.html:14 base/templates/base/consents.html:68
 msgid "Terms of Service"
-msgstr "Пользовательское соглашение"
+msgstr ""
 
 #: base/templates/base/consents.html:17 base/templates/base/consents.html:96
 msgid "Privacy Policy"
-msgstr "Политика конфиденциальности"
+msgstr ""
 
 #: base/templates/base/consents.html:21
-#| msgid "Consent to personal data processing"
 msgid "Consent to personal data processing (Patient)"
-msgstr "Согласие на обработку персональных данных (Пациент)"
+msgstr ""
 
 #: base/templates/base/consents.html:26
-#| msgid "Consent to personal data processing"
 msgid "Consent to personal data processing (Expert/Doctor)"
-msgstr "Согласие на обработку персональных данных (Эксперт/Врач)"
+msgstr ""
 
 #: base/templates/base/consents.html:37
 msgid "I agree with Terms of Service"
-msgstr "Я принимаю Пользовательское соглашение"
+msgstr ""
 
 #: base/templates/base/consents.html:38 base/templates/base/consents.html:45
 msgid "read"
-msgstr "прочитать"
+msgstr ""
 
 #: base/templates/base/consents.html:44
 msgid "I agree with Privacy Policy"
-msgstr "Я принимаю Политику конфиденциальности"
+msgstr ""
 
 #: base/templates/base/consents.html:51
 msgid "I consent to personal data processing"
-msgstr "Я даю согласие на обработку персональных данных"
+msgstr ""
 
 #: base/templates/base/consents.html:52
-#| msgid "Patient examinations"
 msgid "patient version"
-msgstr "версия для пациентов"
+msgstr ""
 
 #: base/templates/base/consents.html:54
 msgid "expert version"
-msgstr "версия для экспертов"
+msgstr ""
 
 #: base/templates/base/consents.html:58
 msgid "Continue"
-msgstr "Продолжить"
+msgstr ""
 
 #: base/templates/base/consents.html:69 base/templates/base/consents.html:85
 #: base/templates/base/consents.html:97 base/templates/base/consents.html:108
@@ -204,37 +199,29 @@ msgstr "Продолжить"
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
 msgid "Close"
-msgstr "Закрыть"
+msgstr ""
 
 #: base/templates/base/consents.html:73
 msgid ""
 "These Terms of Service govern your use of the site and services. Please "
 "review them carefully before continuing."
 msgstr ""
-"Настоящие Условия использования регулируют ваше использование сайта и "
-"сервисов. Пожалуйста, внимательно ознакомьтесь с ними перед продолжением."
 
 #: base/templates/base/consents.html:78
 msgid ""
 "By accessing or using the site, you agree to be bound by these Terms. The "
 "Operator may update these Terms from time to time."
 msgstr ""
-"Получая доступ к сайту или используя его, вы соглашаетесь соблюдать "
-"настоящие Условия. Оператор может периодически обновлять данные Условия."
 
 #: base/templates/base/consents.html:101
 msgid ""
 "This Privacy Policy describes how we collect, use, and protect your personal "
 "data. Please read it carefully."
 msgstr ""
-"В данной Политике конфиденциальности описано, как мы собираем, используем и "
-"защищаем ваши персональные данные. Пожалуйста, внимательно ознакомьтесь с "
-"ней."
 
 #: base/templates/base/consents.html:120
-#| msgid "Consent to personal data processing"
 msgid "Consent to Personal Data Processing (Patient)"
-msgstr "Согласие на обработку персональных данных (Пациент)"
+msgstr ""
 
 #: base/templates/base/consents.html:126
 msgid ""
@@ -244,14 +231,10 @@ msgid ""
 "Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the "
 "following conditions:"
 msgstr ""
-"Действуя свободно, своей волей и в своём интересе, подтверждая свою "
-"дееспособность, настоящим даю и подтверждаю согласие на обработку моих "
-"персональных данных Благотворительным фондом помощи людям с синдромом "
-"хронической боли «Астра» (далее — «Оператор») на следующих условиях:"
 
 #: base/templates/base/consents.html:133
 msgid "PROVIDING INFORMATION BY THE USER"
-msgstr "ПРЕДОСТАВЛЕНИЕ ИНФОРМАЦИИ ПОЛЬЗОВАТЕЛЕМ"
+msgstr ""
 
 #: base/templates/base/consents.html:135
 msgid ""
@@ -259,43 +242,34 @@ msgid ""
 "Data”, consent is given to the processing of the following personal data of "
 "the User:"
 msgstr ""
-"В соответствии с Федеральным законом от 27 июля 2007 г. № 152-ФЗ «О "
-"персональных данных» даётся согласие на обработку следующих персональных "
-"данных Пользователя:"
 
 #: base/templates/base/consents.html:141 base/templates/base/consents.html:339
 msgid "last name, first name, middle name (if any);"
-msgstr "фамилия, имя, отчество (при наличии);"
+msgstr ""
 
 #: base/templates/base/consents.html:142
-#| msgid "Date of birth"
 msgid "date of birth;"
-msgstr "дата рождения;"
+msgstr ""
 
 #: base/templates/base/consents.html:143
 msgid "telephone number(s) (landline, mobile);"
-msgstr "номер(а) телефона (стационарный, мобильный);"
+msgstr ""
 
 #: base/templates/base/consents.html:144 base/templates/base/consents.html:348
 msgid "email address;"
-msgstr "адрес электронной почты;"
+msgstr ""
 
 #: base/templates/base/consents.html:145
 msgid ""
 "health-related information necessary for the Operator to perform actions in "
 "the User’s interests;"
 msgstr ""
-"сведения о состоянии здоровья, необходимые Оператору для совершения действий "
-"в интересах Пользователя;"
 
 #: base/templates/base/consents.html:146
 msgid ""
 "additional information provided by the User at their own discretion, "
 "including biometric personal data (photos and/or videos, audio recordings)."
 msgstr ""
-"дополнительная информация, предоставляемая Пользователем по собственному "
-"усмотрению, включая биометрические персональные данные (фото- и/или "
-"видеоматериалы, аудиозаписи)."
 
 #: base/templates/base/consents.html:150
 msgid ""
@@ -303,17 +277,12 @@ msgid ""
 "constituting medical confidentiality, to the extent necessary for the "
 "Operator to act in the User’s interests."
 msgstr ""
-"Пользователь соглашается на передачу своих персональных данных, включая "
-"сведения, составляющие врачебную тайну, в объёме, необходимом Оператору для "
-"совершения действий в интересах Пользователя."
 
 #: base/templates/base/consents.html:156
 msgid ""
 "The Operator uses the personal data provided by the User for the following "
 "purposes:"
 msgstr ""
-"Оператор использует предоставленные Пользователем персональные данные в "
-"следующих целях:"
 
 #: base/templates/base/consents.html:158
 msgid ""
@@ -321,38 +290,28 @@ msgid ""
 "to participate in studies, new publications, or other information consistent "
 "with the Operator’s statutory purposes;"
 msgstr ""
-"информирование Пользователя по электронной почте, телефонным звонкам и в "
-"мессенджерах о возможностях участия в исследованиях, новых публикациях и "
-"другой информации, соответствующей уставным целям Оператора;"
 
 #: base/templates/base/consents.html:159
 msgid ""
 "including the User’s information in the Register of patients with hereditary "
 "connective tissue dysplasia (CTD);"
 msgstr ""
-"включение сведений о Пользователе в Реестр пациентов с наследственной "
-"дисплазией соединительной ткани (НДСТ);"
 
 #: base/templates/base/consents.html:160
 msgid ""
 "enabling the User to take tests on the Site, and storing and analyzing test "
 "results;"
 msgstr ""
-"предоставление возможности прохождения тестов на Сайте, а также хранение и "
-"анализ результатов тестов;"
 
 #: base/templates/base/consents.html:161
 msgid ""
 "providing the User with informational consultations related to the "
 "Operator’s statutory activities;"
 msgstr ""
-"оказание Пользователю информационных консультаций, связанных с уставной "
-"деятельностью Оператора;"
 
 #: base/templates/base/consents.html:162
 msgid "enabling registration on the “Rhythms of Life” project website."
 msgstr ""
-"предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
 
 #: base/templates/base/consents.html:166
 msgid ""
@@ -361,10 +320,6 @@ msgid ""
 "“Site”). The scope of information may differ depending on the user category "
 "and information provided by the User."
 msgstr ""
-"Пользователь даёт согласие Оператору на обработку персональных данных при "
-"заполнении формы «Регистрация» на сайте проекта «Ритмы жизни» (далее — "
-"«Сайт»). Объём запрашиваемой информации может отличаться в зависимости от "
-"категории пользователя и предоставляемых им сведений."
 
 #: base/templates/base/consents.html:174
 msgid ""
@@ -372,9 +327,6 @@ msgid ""
 "allowing the User to enter information about themselves while taking tests "
 "on the Operator’s Site."
 msgstr ""
-"Пользователь соглашается на обработку персональных данных с целью "
-"предоставления возможности внесения сведений о себе при прохождении тестов "
-"на Сайте Оператора."
 
 #: base/templates/base/consents.html:181
 msgid ""
@@ -382,33 +334,24 @@ msgid ""
 "information to the Register of patients with hereditary CTD. The Register "
 "includes all personal data of the User, including:"
 msgstr ""
-"Пользователь даёт согласие на обработку персональных данных при внесении его "
-"сведений в Реестр пациентов с наследственной НДСТ. Реестр включает все "
-"персональные данные Пользователя, в том числе:"
 
 #: base/templates/base/consents.html:187
 msgid ""
 "health-related information provided when filling in the “Registration” form "
 "on the project website;"
 msgstr ""
-"сведения о состоянии здоровья, предоставленные при заполнении формы "
-"«Регистрация» на сайте проекта;"
 
 #: base/templates/base/consents.html:188
 msgid ""
 "information provided while taking tests on the project website, test results "
 "and their analysis;"
 msgstr ""
-"информацию, предоставленную при прохождении тестов на сайте проекта, "
-"результаты тестов и их анализ;"
 
 #: base/templates/base/consents.html:189
 msgid ""
 "information necessary for the provision of informational services by the "
 "Operator, including data constituting medical confidentiality."
 msgstr ""
-"сведения, необходимые для оказания Оператором информационных услуг, включая "
-"данные, составляющие врачебную тайну."
 
 #: base/templates/base/consents.html:193
 msgid ""
@@ -416,9 +359,6 @@ msgid ""
 "parties responsible for processing and storing data during the formation of "
 "the Register."
 msgstr ""
-"Пользователь соглашается на передачу всех указанных персональных данных "
-"третьим лицам, ответственным за обработку и хранение данных при формировании "
-"Реестра."
 
 #: base/templates/base/consents.html:200
 msgid ""
@@ -427,27 +367,18 @@ msgid ""
 "modification), retrieval, use, anonymization, blocking, deletion, "
 "destruction."
 msgstr ""
-"В процессе обработки Оператор может осуществлять: сбор, запись, "
-"систематизацию, накопление, хранение, обновление (уточнение, изменение), "
-"извлечение, использование, обезличивание, блокирование, удаление, "
-"уничтожение персональных данных."
 
 #: base/templates/base/consents.html:207
 msgid ""
 "Personal data are processed until the purposes of processing are achieved or "
 "until the withdrawal of this Consent."
 msgstr ""
-"Персональные данные обрабатываются до достижения целей обработки либо до "
-"отзыва настоящего Согласия."
 
 #: base/templates/base/consents.html:214
 msgid ""
 "When processing the User’s personal data, the Operator is guided by Federal "
 "Law “On Personal Data” and the Operator’s internal regulations."
 msgstr ""
-"При обработке персональных данных Пользователя Оператор руководствуется "
-"Федеральным законом «О персональных данных» и внутренними документами "
-"Оператора."
 
 #: base/templates/base/consents.html:221
 msgid ""
@@ -455,10 +386,6 @@ msgid ""
 "as an official request to the Operator, as stipulated by the Operator’s "
 "Personal Data Policy for Site users."
 msgstr ""
-"Все обращения Пользователя по вопросам обработки персональных данных "
-"осуществляются в форме официального запроса Оператору в порядке, "
-"предусмотренном Политикой обработки персональных данных Оператора для "
-"пользователей Сайта."
 
 #: base/templates/base/consents.html:228
 msgid ""
@@ -467,35 +394,24 @@ msgid ""
 "or unnecessary for the stated purpose, and may take legal measures to "
 "protect their rights."
 msgstr ""
-"Пользователь вправе требовать разъяснения, блокирования или уничтожения "
-"персональных данных в случае их неполноты, устарелости, неточности, "
-"незаконного получения или излишности для заявленной цели, а также принимать "
-"предусмотренные законом меры по защите своих прав."
 
 #: base/templates/base/consents.html:236
 msgid ""
 "If inaccuracies are identified, the User may notify the Operator at: "
 "info@bfastra.ru to update the data."
 msgstr ""
-"При выявлении неточностей Пользователь может направить уведомление для "
-"актуализации данных на адрес: info@bfastra.ru."
 
 #: base/templates/base/consents.html:242
 msgid ""
 "The User may withdraw their consent at any time by emailing: info@bfastra.ru "
 "with the note “Withdrawal of consent to personal data processing”."
 msgstr ""
-"Пользователь может отозвать своё согласие в любое время, направив письмо на "
-"адрес: info@bfastra.ru с пометкой «Отзыв согласия на обработку персональных "
-"данных»."
 
 #: base/templates/base/consents.html:249
 msgid ""
 "Upon receipt of a written withdrawal, the Operator ceases processing within "
 "5 (five) days from the date of receipt."
 msgstr ""
-"После получения письменного отзыва Оператор прекращает обработку в течение 5 "
-"(пяти) дней с даты получения."
 
 #: base/templates/base/consents.html:256
 msgid ""
@@ -503,30 +419,22 @@ msgid ""
 "purposes for which the data were collected, unless another period is "
 "provided by contract or applicable law."
 msgstr ""
-"Срок обработки персональных данных определяется достижением целей, для "
-"которых данные были собраны, если иной срок не установлен договором или "
-"применимым законодательством."
 
 #: base/templates/base/consents.html:262 base/templates/base/consents.html:430
 msgid "ORGANIZATION OF PROVISION, PROCESSING AND TRANSFER OF PERSONAL DATA"
-msgstr "ОРГАНИЗАЦИЯ ПРЕДОСТАВЛЕНИЯ, ОБРАБОТКИ И ПЕРЕДАЧИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
 
 #: base/templates/base/consents.html:265
 msgid ""
 "Personal data obtained from the User are transferred for inclusion in the "
 "CTD Register and for analysis."
 msgstr ""
-"Персональные данные, полученные от Пользователя, передаются для включения в "
-"Реестр НДСТ и для проведения анализа."
 
 #: base/templates/base/consents.html:271
 msgid ""
 "The Operator ensures protection against unauthorized (including accidental) "
 "access to personal data, including detecting and recording such access."
 msgstr ""
-"Оператор обеспечивает защиту от несанкционированного (в том числе "
-"случайного) доступа к персональным данным, включая выявление и фиксацию "
-"фактов такого доступа."
 
 #: base/templates/base/consents.html:278
 msgid ""
@@ -534,9 +442,6 @@ msgid ""
 "measures to protect personal data and performs internal control for "
 "compliance with applicable laws and requirements."
 msgstr ""
-"Оператор принимает необходимые и достаточные организационные и технические "
-"меры по защите персональных данных и осуществляет внутренний контроль за "
-"соответствием обработки требованиям законодательства."
 
 #: base/templates/base/consents.html:285
 msgid ""
@@ -544,17 +449,12 @@ msgid ""
 "and other state authorities) is not deemed a breach if required by "
 "applicable law."
 msgstr ""
-"Разглашение персональных данных Пользователей третьим лицам (налоговым, "
-"правоохранительным и иным государственным органам) не считается нарушением, "
-"если требуется по закону."
 
 #: base/templates/base/consents.html:292
 msgid ""
 "The Operator is not responsible for information posted by the User on the "
 "Site in a publicly accessible form."
 msgstr ""
-"Оператор не несёт ответственности за информацию, размещённую Пользователем "
-"на Сайте в общедоступной форме."
 
 #: base/templates/base/consents.html:298
 msgid ""
@@ -562,15 +462,10 @@ msgid ""
 "the Personal Data Policy (https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). "
 "This consent is given both with and without the use of automation tools."
 msgstr ""
-"Все сведения об обработке персональных данных Пользователей на Сайте "
-"содержатся в Политике в отношении персональных данных "
-"(https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). Настоящее согласие даётся "
-"как с использованием средств автоматизации, так и без их использования."
 
 #: base/templates/base/consents.html:318
-#| msgid "Consent to personal data processing"
 msgid "Consent to Personal Data Processing (Expert/Doctor)"
-msgstr "Согласие на обработку персональных данных (Эксперт/Врач)"
+msgstr ""
 
 #: base/templates/base/consents.html:324
 msgid ""
@@ -580,14 +475,10 @@ msgid ""
 "Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the "
 "following conditions."
 msgstr ""
-"Действуя свободно, своей волей и в своём интересе, подтверждая свою "
-"дееспособность, настоящим даю и подтверждаю согласие на обработку моих "
-"персональных данных Благотворительным фондом помощи людям с синдромом "
-"хронической боли «Астра» (далее — «Оператор») на следующих условиях."
 
 #: base/templates/base/consents.html:331
 msgid "PROVIDING INFORMATION BY THE EXPERT"
-msgstr "ПРЕДОСТАВЛЕНИЕ ИНФОРМАЦИИ ЭКСПЕРТОМ"
+msgstr ""
 
 #: base/templates/base/consents.html:333
 msgid ""
@@ -595,66 +486,56 @@ msgid ""
 "Data”, consent is given to the processing of the following personal data of "
 "the Expert:"
 msgstr ""
-"В соответствии с Федеральным законом от 27 июля 2007 г. № 152-ФЗ «О "
-"персональных данных» даётся согласие на обработку следующих персональных "
-"данных Эксперта:"
 
 #: base/templates/base/consents.html:340
-#| msgid "Date of birth"
 msgid "date and place of birth;"
-msgstr "дата и место рождения;"
+msgstr ""
 
 #: base/templates/base/consents.html:341
 msgid "citizenship;"
-msgstr "гражданство;"
+msgstr ""
 
 #: base/templates/base/consents.html:342
 msgid "information on knowledge of foreign languages;"
-msgstr "сведения о знании иностранных языков;"
+msgstr ""
 
 #: base/templates/base/consents.html:343
 msgid ""
 "education (name of educational institution, year of graduation, education "
 "document, qualification, specialty);"
 msgstr ""
-"образование (наименование учебного заведения, год окончания, документ об "
-"образовании, квалификация, специальность);"
 
 #: base/templates/base/consents.html:344
 msgid "profession; length of service;"
-msgstr "профессия; стаж работы;"
+msgstr ""
 
 #: base/templates/base/consents.html:345
 msgid "passport details (number, date of issue, issuing authority);"
-msgstr "паспортные данные (номер, дата выдачи, орган, выдавший документ);"
+msgstr ""
 
 #: base/templates/base/consents.html:346
 msgid ""
 "residential address (as per passport, actual address), date of registration "
 "at the place of residence;"
 msgstr ""
-"адрес проживания (по паспорту, фактический адрес), дата регистрации по месту "
-"жительства;"
 
 #: base/templates/base/consents.html:347
 msgid "telephone number(s) (home, mobile);"
-msgstr "номер(а) телефона (домашний, мобильный);"
+msgstr ""
 
 #: base/templates/base/consents.html:349
 msgid ""
 "information on attestation/certification, advanced training, professional "
 "retraining;"
 msgstr ""
-"сведения об аттестации/сертификации, повышении квалификации, профессиональной "
-"переподготовке;"
 
 #: base/templates/base/consents.html:350
 msgid "information on awards (commendations), honorary titles;"
-msgstr "сведения о наградах (поощрениях), почётных званиях;"
+msgstr ""
 
 #: base/templates/base/consents.html:351
 msgid "information on taxpayer identification number;"
-msgstr "сведения об идентификационном номере налогоплательщика;"
+msgstr ""
 
 #: base/templates/base/consents.html:352
 msgid ""
@@ -663,25 +544,18 @@ msgid ""
 "bodies, etc.), and biometric personal data (personal photos/videos, audio "
 "recordings);"
 msgstr ""
-"дополнительная информация, добровольно предоставленная Экспертом (например, "
-"национальность, пребывание за рубежом, членство в общественных организациях "
-"или выборных органах и т. п.), а также биометрические персональные данные "
-"(личные фото/видеоматериалы, аудиозаписи);"
 
 #: base/templates/base/consents.html:355
 msgid ""
 "The Operator uses the personal data provided by the Expert for the following "
 "purposes:"
 msgstr ""
-"Оператор использует предоставленные Экспертом персональные данные в "
-"следующих целях:"
 
 #: base/templates/base/consents.html:357
 msgid ""
 "concluding an agreement on the Expert’s participation in the “Rhythms of "
 "Life” project;"
 msgstr ""
-"заключение соглашения об участии Эксперта в проекте «Ритмы жизни»;"
 
 #: base/templates/base/consents.html:358
 msgid ""
@@ -689,31 +563,24 @@ msgid ""
 "to participate in studies, new publications, or other information consistent "
 "with the Operator’s statutory purposes;"
 msgstr ""
-"информирование Эксперта по электронной почте, телефонным звонкам и в "
-"мессенджерах о возможностях участия в исследованиях, новых публикациях и "
-"другой информации, соответствующей уставным целям Оператора;"
 
 #: base/templates/base/consents.html:359
 msgid ""
 "publishing information about the Expert on the “Rhythms of Life” project "
 "website;"
 msgstr ""
-"размещение информации об Эксперте на сайте проекта «Ритмы жизни»;"
 
 #: base/templates/base/consents.html:360
 msgid ""
 "providing the possibility to render informational services to Users of the "
 "“Rhythms of Life” project website;"
 msgstr ""
-"предоставление возможности оказывать информационные услуги Пользователям "
-"сайта проекта «Ритмы жизни»;"
 
 #: base/templates/base/consents.html:361
 msgid ""
 "providing the possibility to register on the “Rhythms of Life” project "
 "website."
 msgstr ""
-"предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
 
 #: base/templates/base/consents.html:365
 msgid ""
@@ -723,27 +590,18 @@ msgid ""
 "modification), retrieval, use, anonymization, blocking, deletion, and "
 "destruction."
 msgstr ""
-"Эксперт уполномочивает Оператора при обработке персональных данных "
-"осуществлять следующие действия (операции): сбор, запись, систематизацию, "
-"накопление, хранение, обновление (уточнение, изменение), извлечение, "
-"использование, обезличивание, блокирование, удаление и уничтожение."
 
 #: base/templates/base/consents.html:373
 msgid ""
 "Personal data are processed until the purposes of processing are achieved or "
 "until the withdrawal of this Consent to personal data processing."
 msgstr ""
-"Персональные данные обрабатываются до достижения целей обработки либо до "
-"отзыва настоящего Согласия на обработку персональных данных."
 
 #: base/templates/base/consents.html:380
 msgid ""
 "When processing the Expert’s personal data, the Operator is guided by the "
 "Federal Law “On Personal Data” and the Operator’s internal regulations."
 msgstr ""
-"При обработке персональных данных Эксперта Оператор руководствуется "
-"Федеральным законом «О персональных данных» и внутренними документами "
-"Оператора."
 
 #: base/templates/base/consents.html:387
 msgid ""
@@ -752,10 +610,6 @@ msgid ""
 "for by the Operator’s Personal Data Policy in relation to processing of "
 "personal data of the Site’s users."
 msgstr ""
-"Все обращения к Оператору по вопросам обработки персональных данных "
-"осуществляются в форме официального запроса в порядке, предусмотренном "
-"Политикой Оператора в отношении обработки персональных данных пользователей "
-"Сайта."
 
 #: base/templates/base/consents.html:395
 msgid ""
@@ -764,18 +618,12 @@ msgid ""
 "obtained or unnecessary for the stated purpose of processing, and may take "
 "the measures provided by law to protect their rights."
 msgstr ""
-"Эксперт вправе требовать разъяснения, блокирования или уничтожения своих "
-"персональных данных, если данные являются неполными, устаревшими, "
-"неточными, получены незаконно или излишни для заявленной цели обработки, а "
-"также принимать предусмотренные законом меры по защите своих прав."
 
 #: base/templates/base/consents.html:403
 msgid ""
 "If inaccuracies are identified in personal data, the Expert may send a "
 "notification to the Operator to update the data at: info@bfastra.ru."
 msgstr ""
-"При выявлении неточностей в персональных данных Эксперт может направить "
-"уведомление Оператору для актуализации данных на адрес: info@bfastra.ru."
 
 #: base/templates/base/consents.html:410
 msgid ""
@@ -783,9 +631,6 @@ msgid ""
 "time by sending a notification to the Operator by email at: info@bfastra.ru "
 "with the note “Withdrawal of consent to personal data processing”."
 msgstr ""
-"Эксперт может отозвать согласие на обработку персональных данных в любое "
-"время, направив уведомление Оператору на адрес: info@bfastra.ru с пометкой "
-"«Отзыв согласия на обработку персональных данных»."
 
 #: base/templates/base/consents.html:417
 msgid ""
@@ -793,9 +638,6 @@ msgid ""
 "ceases processing of personal data within 5 (five) days from the date of "
 "receipt of such withdrawal."
 msgstr ""
-"После получения письменного заявления об отзыве согласия Оператор прекращает "
-"обработку персональных данных в течение 5 (пяти) дней с даты получения "
-"указанного отзыва."
 
 #: base/templates/base/consents.html:424
 msgid ""
@@ -803,9 +645,6 @@ msgid ""
 "purposes for which the personal data were collected, unless another period "
 "is provided by contract or by applicable law."
 msgstr ""
-"Срок обработки персональных данных определяется достижением целей, для "
-"которых персональные данные были собраны, если иной срок не предусмотрен "
-"договором или применимым законодательством."
 
 #: base/templates/base/consents.html:433
 msgid ""
@@ -813,8 +652,6 @@ msgid ""
 "(including accidental) access, including the detection and recording of such "
 "access."
 msgstr ""
-"Оператор обеспечивает безопасность персональных данных от несанкционированного "
-"(включая случайного) доступа, включая выявление и фиксацию таких случаев."
 
 #: base/templates/base/consents.html:440
 msgid ""
@@ -824,11 +661,6 @@ msgid ""
 "regulations, with requirements for personal data protection, with its "
 "personal data processing policy and local acts."
 msgstr ""
-"Оператор принимает необходимые и достаточные организационные и технические "
-"меры для защиты персональных данных. Оператор осуществляет внутренний "
-"контроль за соответствием обработки персональных данных федеральному закону "
-"и подзаконным актам, требованиям по защите персональных данных, своей "
-"политике и локальным актам."
 
 #: base/templates/base/consents.html:449
 msgid ""
@@ -836,17 +668,12 @@ msgid ""
 "and other state authorities) shall not be deemed a breach if required by "
 "applicable law."
 msgstr ""
-"Разглашение персональных данных Пользователей третьим лицам (налоговым, "
-"правоохранительным и иным государственным органам) не считается нарушением, "
-"если это требуется применимым законодательством."
 
 #: base/templates/base/consents.html:456
 msgid ""
 "The Operator is not liable for information provided by a User on the Site in "
 "a publicly accessible form."
 msgstr ""
-"Оператор не несёт ответственности за информацию, предоставленную "
-"Пользователем на Сайте в общедоступной форме."
 
 #: base/templates/base/consents.html:462
 msgid ""
@@ -855,182 +682,172 @@ msgid ""
 "polozhenie_o_pdn.pdf). This consent to personal data processing is given "
 "both with and without the use of automation tools."
 msgstr ""
-"Вся информация об обработке персональных данных Пользователей на Сайте "
-"приведена в Политике в отношении персональных данных "
-"(https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). Настоящее согласие на "
-"обработку персональных данных даётся как с использованием средств "
-"автоматизации, так и без них."
 
 #: base/templates/base/enter_phone_number.html:7
 #: base/templates/base/wait_for_phone_call.html:7
 msgid "Confirm your phone"
-msgstr "Подтвердите номер телефона"
+msgstr ""
 
 #: base/templates/base/enter_phone_number.html:8
 msgid "Enter your phone number. We will verify it by a short call."
-msgstr "Введите номер телефона. Мы подтвердим его коротким звонком."
+msgstr ""
 
 #: base/templates/base/enter_phone_number.html:14
 msgid "Your phone number"
-msgstr "Ваш номер телефона"
+msgstr ""
 
 #: base/templates/base/enter_phone_number.html:23
 msgid "Use international format like +7 999 123-45-67."
-msgstr "Используйте международный формат, например +7 999 123-45-67."
+msgstr ""
 
 #: base/templates/base/enter_phone_number.html:25
 msgid "Get code by call"
-msgstr "Получить код звонком"
+msgstr ""
 
 #: base/templates/base/home.html:5
 msgid "Home"
-msgstr "Главная"
+msgstr ""
 
 #: base/templates/base/home.html:13
 #, python-format
 msgid "Welcome, %(username)s!"
-msgstr "Добро пожаловать, %(username)s!"
+msgstr ""
 
 #: base/templates/base/home.html:16
 msgid "Welcome!"
-msgstr "Добро пожаловать!"
+msgstr ""
 
 #: base/templates/base/home.html:22
 msgid "Please verify your email for full access."
-msgstr "Пожалуйста, подтвердите email для полного доступа."
+msgstr ""
 
 #: base/templates/base/home.html:25
 msgid "Send email"
-msgstr "Отправить письмо"
+msgstr ""
 
 #: base/templates/base/home.html:33
 msgid "Genetic connective tissue syndromes"
-msgstr "Генетические синдромы соединительной ткани"
+msgstr ""
 
 #: base/templates/base/home.html:35
 msgid ""
 "Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective "
 "tissue disorders and can be life-threatening without timely diagnosis."
 msgstr ""
-"Синдромы Марфана, Лойса–Дитца, Элерса–Данлоса и другие связаны с нарушениями "
-"соединительной ткани и могут быть опасны для жизни без своевременной "
-"диагностики."
 
 #: base/templates/base/home.html:49
 msgid "Learn more"
-msgstr "Узнать больше"
+msgstr ""
 
 #: base/templates/base/home.html:64
 msgid "Welcome to Rhymes of Life!"
-msgstr "Добро пожаловать в Rhymes of Life!"
+msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
 #: base/templates/base/home.html:136 base/templates/base/login.html:40
 #: base/templates/base/register.html:4 base/templates/base/register.html:11
 #: base/templates/base/register.html:44
 msgid "Sign up"
-msgstr "Зарегистрироваться"
+msgstr ""
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
 #: base/templates/base/login.html:4 base/templates/base/login.html:10
 #: base/templates/base/login.html:36 base/templates/base/register.html:48
 #: blog/templates/blog/blog_page.html:131 templates/base.html:141
 msgid "Log in"
-msgstr "Войти"
+msgstr ""
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
 #: base/templates/base/login.html:29 base/templates/base/register.html:35
 msgid "Password"
-msgstr "Пароль"
+msgstr ""
 
 #: base/templates/base/home.html:104 base/templates/base/register.html:40
 msgid "Confirm password"
-msgstr "Повторите пароль"
+msgstr ""
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
 msgid "Show password"
-msgstr "Показать пароль"
+msgstr ""
 
 #: base/templates/base/home.html:136 base/templates/base/login.html:40
 msgid "Don't have an account?"
-msgstr "Нет аккаунта?"
+msgstr ""
 
 #: base/templates/base/my_documents.html:21
 #: base/templates/base/recommendations.html:19 templates/base.html:50
 msgid "My examinations"
-msgstr "Мои обследования"
+msgstr ""
 
 #: base/templates/base/my_documents.html:22
 #: base/templates/base/recommendations.html:4
 #: base/templates/base/recommendations.html:18
 msgid "Doctor's recommendations"
-msgstr "Рекомендации врача"
+msgstr ""
 
 #: base/templates/base/my_documents.html:27
 msgid "Add examination"
-msgstr "Добавить обследование"
+msgstr ""
 
 #: base/templates/base/my_documents.html:33
 msgid "Examination date"
-msgstr "Дата обследования"
+msgstr ""
 
 #: base/templates/base/my_documents.html:37
 msgid "Description"
-msgstr "Описание"
+msgstr ""
 
 #: base/templates/base/my_documents.html:38
 msgid "Short description (optional)"
-msgstr "Краткое описание (необязательно)"
+msgstr ""
 
 #: base/templates/base/my_documents.html:42
 msgid "Files"
-msgstr "Файлы"
+msgstr ""
 
 #: base/templates/base/my_documents.html:44
 msgid "Drag files here or click"
-msgstr "Перетащите файлы сюда или кликните"
+msgstr ""
 
 #: base/templates/base/my_documents.html:50
 msgid "Links (optional)"
-msgstr "Ссылки (необязательно)"
+msgstr ""
 
 #: base/templates/base/my_documents.html:51
 msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
-msgstr "Вставьте общую ссылку (Google/Dropbox/Yandex и др.)"
+msgstr ""
 
 #: base/templates/base/my_documents.html:53
 msgid "Add another link"
-msgstr "Добавить ещё ссылку"
+msgstr ""
 
 #: base/templates/base/my_documents.html:54
 msgid ""
 "You can attach links instead of files or together with them. HTTP/HTTPS only."
 msgstr ""
-"Вы можете прикрепить ссылки вместо файлов или вместе с ними. Только HTTP/"
-"HTTPS."
 
 #: base/templates/base/my_documents.html:59
 #: base/templates/base/profile_edit.html:107
 msgid "Save"
-msgstr "Сохранить"
+msgstr ""
 
 #: base/templates/base/my_documents.html:91
 #: base/templates/base/patient_exams.html:66
 msgid "No documents"
-msgstr "Нет документов"
+msgstr ""
 
 #: base/templates/base/my_documents.html:96
 msgid "No examinations yet."
-msgstr "Обследований пока нет."
+msgstr ""
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9 templates/base.html:78
 msgid "Notifications"
-msgstr "Уведомления"
+msgstr ""
 
 #: base/templates/base/notifications.html:5
 msgid "Your notifications list"
-msgstr "Список ваших уведомлений"
+msgstr ""
 
 #: base/templates/base/notifications.html:15
 #, python-format
@@ -1039,9 +856,6 @@ msgid ""
 "            <strong>%(username)s</strong> followed you.\n"
 "          "
 msgstr ""
-"\n"
-"            <strong>%(username)s</strong> подписался(ась) на вас.\n"
-"          "
 
 #: base/templates/base/notifications.html:19
 #, python-format
@@ -1050,465 +864,458 @@ msgid ""
 "            <strong>%(username)s</strong> sent you a friend request.\n"
 "          "
 msgstr ""
-"\n"
-"            <strong>%(username)s</strong> отправил(а) запрос в друзья.\n"
-"          "
 
 #: base/templates/base/notifications.html:28
 msgid "No notifications"
-msgstr "Уведомлений нет"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:6
 msgid "Patient examinations"
-msgstr "Обследования пациента"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:10
 msgid "Send doctor's recommendation"
-msgstr "Отправить рекомендацию врача"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:14
 msgid "Enter recommendation..."
-msgstr "Введите рекомендацию..."
+msgstr ""
 
 #: base/templates/base/patient_exams.html:16
 #: blog/templates/blog/blog_page.html:126
 msgid "Send"
-msgstr "Отправить"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:23
 msgid "Sent recommendations"
-msgstr "Отправленные рекомендации"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:31
 #: base/templates/base/recommendations.html:32
 msgid "Doctor"
-msgstr "Врач"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:61
 msgid "No file attached"
-msgstr "Файл не прикреплён"
+msgstr ""
 
 #: base/templates/base/patient_exams.html:72
 msgid "No exams available."
-msgstr "Нет доступных обследований."
+msgstr ""
 
 #: base/templates/base/patients_list.html:7
 msgid "Search patients"
-msgstr "Поиск пациентов"
+msgstr ""
 
 #: base/templates/base/patients_list.html:10
 msgid "Enter first or last name..."
-msgstr "Введите имя или фамилию..."
+msgstr ""
 
 #: base/templates/base/patients_list.html:11
 #: blog/templates/blog/blog_index_page.html:57
 msgid "Search"
-msgstr "Поиск"
+msgstr ""
 
 #: base/templates/base/patients_list.html:30
 msgid "No genetically confirmed syndromes"
-msgstr "Нет генетически подтверждённых синдромов"
+msgstr ""
 
 #: base/templates/base/patients_list.html:34
 msgid "View examinations"
-msgstr "Смотреть обследования"
+msgstr ""
 
 #: base/templates/base/patients_list.html:44
 #: base/templates/base/patients_list.html:47
 #: base/templates/base/recommendations.html:50
 #: base/templates/base/recommendations.html:53
 msgid "Back"
-msgstr "Назад"
+msgstr ""
 
 #: base/templates/base/patients_list.html:62
 #: base/templates/base/patients_list.html:65
 #: base/templates/base/recommendations.html:66
 #: base/templates/base/recommendations.html:69
 msgid "Next"
-msgstr "Вперёд"
+msgstr ""
 
 #: base/templates/base/patients_list.html:72
 msgid "No patients found."
-msgstr "Пациенты не найдены."
+msgstr ""
 
 #: base/templates/base/patients_list.html:74
 msgid "Enter a query to search for patients."
-msgstr "Введите запрос для поиска пациентов."
+msgstr ""
 
 #: base/templates/base/profile.html:12 base/templates/base/profile_edit.html:17
 msgid "User avatar"
-msgstr "Аватар пользователя"
+msgstr ""
 
 #: base/templates/base/profile.html:14
 msgid "Default avatar"
-msgstr "Аватар по умолчанию"
+msgstr ""
 
 #: base/templates/base/profile.html:19 base/templates/base/profile_edit.html:36
 #: base/templates/base/profile_onboarding.html:19
 msgid "First name"
-msgstr "Имя"
+msgstr ""
 
 #: base/templates/base/profile.html:20 base/templates/base/profile_edit.html:40
 #: base/templates/base/profile_onboarding.html:23
 msgid "Last name"
-msgstr "Фамилия"
+msgstr ""
 
 #: base/templates/base/profile.html:22 base/templates/base/profile_edit.html:49
 msgid "Date of birth"
-msgstr "Дата рождения"
+msgstr ""
 
 #: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:79
 #: base/templates/base/profile_onboarding.html:59
 msgid "Syndromes"
-msgstr "Синдромы"
+msgstr ""
 
 #: base/templates/base/profile.html:40 blog/templates/blog/blog_page.html:83
 msgid "Edit"
-msgstr "Редактировать"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:21
 msgid "Upload new"
-msgstr "Загрузить новую"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:22
 #: blog/templates/blog/blog_page.html:89
 #: blog/templates/blog/edit_article.html:88
 msgid "Delete"
-msgstr "Удалить"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:53
 #: base/templates/base/profile_onboarding.html:31
 msgid "Day"
-msgstr "День"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:61
 #: base/templates/base/profile_onboarding.html:40
 msgid "Month"
-msgstr "Месяц"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:69
 #: base/templates/base/profile_onboarding.html:49
 msgid "Year"
-msgstr "Год"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:98
 #: base/templates/base/profile_onboarding.html:80
 msgid "Genetically confirmed"
-msgstr "Генетически подтверждено"
+msgstr ""
 
 #: base/templates/base/profile_edit.html:109
 msgid "Profile updated"
-msgstr "Профиль обновлён"
+msgstr ""
 
 #: base/templates/base/profile_onboarding.html:4
 #: base/templates/base/profile_onboarding.html:9
 msgid "Complete your profile"
-msgstr "Заполните профиль"
+msgstr ""
 
 #: base/templates/base/profile_onboarding.html:89
 #: blog/templates/blog/blog_page.html:145
 msgid "Avatar"
-msgstr "Аватар"
+msgstr ""
 
 #: base/templates/base/profile_onboarding.html:94
 msgid "Save and continue"
-msgstr "Сохранить и продолжить"
+msgstr ""
 
 #: base/templates/base/recommendations.html:75
 msgid "No recommendations yet."
-msgstr "Пока нет рекомендаций."
+msgstr ""
 
 #: base/templates/base/register.html:18
 msgid "Registration successful!"
-msgstr "Регистрация прошла успешно!"
+msgstr ""
 
 #: base/templates/base/register.html:18
 msgid "You can"
-msgstr "Вы можете"
+msgstr ""
 
 #: base/templates/base/register.html:18
 msgid "log in"
-msgstr "войти"
+msgstr ""
 
 #: base/templates/base/register.html:48
 msgid "Already have an account?"
-msgstr "Уже есть аккаунт?"
+msgstr ""
 
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:9
 msgid "Verify your email"
-msgstr "Подтвердите вашу почту"
+msgstr ""
 
 #: base/templates/base/verify_prompt.html:11
 msgid ""
 "We have sent a confirmation link to your email. Please click the link to "
 "activate your account."
 msgstr ""
-"Мы отправили ссылку подтверждения на ваш email. Пожалуйста, перейдите по "
-"ней, чтобы активировать аккаунт."
 
 #: base/templates/base/verify_prompt.html:15
 msgid "Resend email"
-msgstr "Отправить письмо ещё раз"
+msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
 msgid "To confirm number"
-msgstr "Чтобы подтвердить номер"
+msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:11
 msgid "please place a call to"
-msgstr "пожалуйста, совершите звонок на"
+msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:28
 msgid "Waiting for call"
-msgstr "Ожидание звонка"
+msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:30
 msgid "Enter another number"
-msgstr "Указать другой номер"
+msgstr ""
 
 #: base/views/auth_views.py:34
 msgid "Please fill in all fields."
-msgstr "Пожалуйста, заполните все поля."
+msgstr ""
 
 #: base/views/auth_views.py:36
 msgid "Passwords don't match."
-msgstr "Пароли не совпадают."
+msgstr ""
 
 #: base/views/auth_views.py:38
 msgid "A user with that username already exists."
-msgstr "Пользователь с таким именем уже существует."
+msgstr ""
 
 #: base/views/auth_views.py:40
 msgid "This email is already registered."
-msgstr "Этот email уже зарегистрирован."
+msgstr ""
 
 #: base/views/auth_views.py:70 base/views/auth_views.py:272
 msgid "Registration was successful! A confirmation email will arrive shortly."
-msgstr "Регистрация прошла успешно! Письмо с подтверждением скоро придёт."
+msgstr ""
 
 #: base/views/auth_views.py:84 base/views/auth_views.py:283
 msgid "Invalid username or password."
-msgstr "Неверное имя пользователя или пароль."
+msgstr ""
 
 #: base/views/auth_views.py:112
 msgid "A verification email has been sent. Please confirm your account."
-msgstr "Письмо для подтверждения отправлено. Пожалуйста, подтвердите аккаунт."
+msgstr ""
 
 #: base/views/auth_views.py:132
 msgid "Email verification failed or token is invalid."
-msgstr "Не удалось подтвердить email или токен недействителен."
+msgstr ""
 
 #: base/views/auth_views.py:150
 msgid "Enter phone number."
-msgstr "Введите номер телефона."
+msgstr ""
 
 #: base/views/auth_views.py:156
 msgid "Failed to initiate call."
-msgstr "Не удалось инициировать звонок."
+msgstr ""
 
 #: base/views/auth_views.py:211
 msgid "Please accept all items."
-msgstr "Пожалуйста, примите все пункты."
+msgstr ""
 
 #: base/views/auth_views.py:255
 msgid "You are already signed in."
-msgstr "Вы уже вошли в систему."
+msgstr ""
 
 #: base/views/doctors_views.py:25
 msgid "You don't have permission to view this page."
-msgstr "У вас нет прав для просмотра этой страницы."
+msgstr ""
 
 #: base/views/doctors_views.py:67
 msgid "Recommendation cannot be empty."
-msgstr "Рекомендация не может быть пустой."
+msgstr ""
 
 #: base/views/doctors_views.py:81
 #, python-format
 msgid "Doctor %(docname)s wrote: %(text)s"
-msgstr "Врач %(docname)s написал(а): %(text)s"
+msgstr ""
 
 #: base/views/doctors_views.py:86
 msgid "Recommendation added and the patient has been notified."
-msgstr "Рекомендация добавлена, пациент уведомлён."
+msgstr ""
 
 #: base/views/documents_views.py:96
 msgid "Invalid link(s)"
-msgstr "Некорректные ссылки"
+msgstr ""
 
 #: base/views/documents_views.py:117 base/views/documents_views.py:165
 msgid "Invalid date format"
-msgstr "Неверный формат даты"
+msgstr ""
 
 #: base/views/documents_views.py:119
 msgid "No files selected. You can also add an external link."
-msgstr "Файлы не выбраны. Вы также можете добавить внешнюю ссылку."
+msgstr ""
 
 #: base/views/documents_views.py:136
 msgid "Failed to upload documents. Please try again."
-msgstr "Не удалось загрузить документы. Попробуйте ещё раз."
+msgstr ""
 
 #: base/views/documents_views.py:189
 msgid "Failed to update the exam."
-msgstr "Не удалось обновить обследование."
+msgstr ""
 
 #: base/views/profile_views.py:180
 msgid "Please fill in the required fields."
-msgstr "Пожалуйста, заполните обязательные поля."
+msgstr ""
 
 #: base/views/social_views.py:21
 msgid "Cannot follow yourself."
-msgstr "Нельзя подписаться на самого себя."
+msgstr ""
 
 #: base/views/social_views.py:27
 #, python-format
 msgid "%(username)s has followed you."
-msgstr "%(username)s подписался(ась) на вас."
+msgstr ""
 
 #: blog/models.py:26
 msgid "Intro"
-msgstr "Вступление"
+msgstr ""
 
 #: blog/models.py:115
 msgid "Publication date"
-msgstr "Дата публикации"
+msgstr ""
 
 #: blog/models.py:122
 msgid "Author"
-msgstr "Автор"
+msgstr ""
 
 #: blog/models.py:124 blog/templates/blog/create_article.html:23
 #: blog/templates/blog/edit_article.html:26
 msgid "Short description"
-msgstr "Краткое описание"
+msgstr ""
 
 #: blog/models.py:131 blog/templates/blog/create_article.html:28
 #: blog/templates/blog/edit_article.html:31
 msgid "Main image"
-msgstr "Главное изображение"
+msgstr ""
 
 #: blog/models.py:133 blog/templates/blog/create_article.html:33
 #: blog/templates/blog/edit_article.html:46
 msgid "Article content"
-msgstr "Контент статьи"
+msgstr ""
 
 #: blog/models.py:136 blog/models.py:231
 msgid "Soft-deleted"
-msgstr "Помечено как удалённое"
+msgstr ""
 
 #: blog/models.py:137
 msgid "Likes count"
-msgstr "Количество лайков"
+msgstr ""
 
 #: blog/models.py:138
 msgid "Comments count"
-msgstr "Количество комментариев"
+msgstr ""
 
 #: blog/models.py:140
 msgid "Approved by admin"
-msgstr "Одобрено администратором"
+msgstr ""
 
 #: blog/models.py:141
 msgid "Approved at"
-msgstr "Одобрено"
+msgstr ""
 
 #: blog/models.py:143
 msgid "Approved by"
-msgstr "Кем одобрено"
+msgstr ""
 
 #: blog/models.py:218
 msgid "Article like"
-msgstr "Лайк статьи"
+msgstr ""
 
 #: blog/models.py:219
 msgid "Article likes"
-msgstr "Лайки статьи"
+msgstr ""
 
 #: blog/models.py:228
 msgid "Text"
-msgstr "Текст"
+msgstr ""
 
 #: blog/models.py:229
 msgid "Created at"
-msgstr "Создано"
+msgstr ""
 
 #: blog/models.py:230
 msgid "Edited at"
-msgstr "Изменено"
+msgstr ""
 
 #: blog/models.py:235
 msgid "Article comment"
-msgstr "Комментарий к статье"
+msgstr ""
 
 #: blog/models.py:236
 msgid "Article comments"
-msgstr "Комментарии к статье"
+msgstr ""
 
 #: blog/models.py:240
 msgid "🗑 Deleted comment"
-msgstr "🗑 Удалённый комментарий"
+msgstr ""
 
 #: blog/templates/blog/blocks/image_with_caption.html:5
 msgid "Remove block"
-msgstr "Удалить блок"
+msgstr ""
 
 #: blog/templates/blog/blocks/image_with_caption.html:12
 msgid "Caption..."
-msgstr "Подпись..."
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:7 templates/base.html:61
 msgid "Articles"
-msgstr "Статьи"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:8
 #: blog/templates/blog/create_article.html:4
 #: blog/templates/blog/create_article.html:8
 msgid "New article"
-msgstr "Новая статья"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:16
 msgid "Popular"
-msgstr "Популярные"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:22
 msgid "My articles"
-msgstr "Мои статьи"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:28
 msgid "Subscriptions"
-msgstr "Подписки"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:34
 msgid "Doctors"
-msgstr "Врачи"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:41
 msgid "Pending approval"
-msgstr "Ожидают одобрения"
+msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:55
 msgid "Search by title, author or tags"
-msgstr "Поиск по названию, автору или тегам"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:15
 msgid "This article is awaiting approval."
-msgstr "Эта статья ожидает одобрения."
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:18
 msgid "Approve"
-msgstr "Одобрить"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:23
 msgid ""
 "Your article is awaiting admin approval and is not visible to other users "
 "yet."
 msgstr ""
-"Ваша статья ожидает одобрения администратора и пока не видна другим "
-"пользователям."
 
 #: blog/templates/blog/blog_page.html:33
 msgid "Author avatar"
-msgstr "Аватар автора"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:40
 #, python-format
@@ -1521,173 +1328,159 @@ msgid_plural ""
 "          %(n)s followers\n"
 "        "
 msgstr[0] ""
-"\n"
-"          %(n)s подписчик\n"
-"        "
 msgstr[1] ""
-"\n"
-"          %(n)s подписчика\n"
-"        "
-msgstr[2] ""
-"\n"
-"          %(n)s подписчиков\n"
-"        "
-msgstr[3] ""
-"\n"
-"          %(n)s подписчика\n"
-"        "
 
 #: blog/templates/blog/blog_page.html:47
 msgid "Anonymous author"
-msgstr "Анонимный автор"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:60
 msgid "Unfollow"
-msgstr "Отписаться"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:60
 msgid "Follow"
-msgstr "Подписаться"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:87
 #: blog/templates/blog/edit_article.html:86
 msgid "Delete the article?"
-msgstr "Удалить статью?"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:103
 msgid "Remove like"
-msgstr "Убрать лайк"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:103
 msgid "Like"
-msgstr "Поставить лайк"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:108
 msgid "Log in to like"
-msgstr "Войдите, чтобы лайкнуть"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:116
 msgid "Comments"
-msgstr "Комментарии"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:123
 msgid "Leave a comment..."
-msgstr "Оставьте комментарий..."
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:133
 msgid "to leave a comment"
-msgstr "чтобы оставить комментарий"
+msgstr ""
 
 #: blog/templates/blog/blog_page.html:150
 msgid "edited"
-msgstr "изменено"
+msgstr ""
 
 #: blog/templates/blog/create_article.html:18
 #: blog/templates/blog/edit_article.html:21
 msgid "Title"
-msgstr "Заголовок"
+msgstr ""
 
 #: blog/templates/blog/create_article.html:40
 #: blog/templates/blog/edit_article.html:53
 msgid "Start writing…"
-msgstr "Начните писать…"
+msgstr ""
 
 #: blog/templates/blog/create_article.html:44
 #: blog/templates/blog/edit_article.html:57
 msgid "Tags"
-msgstr "Теги"
+msgstr ""
 
 #: blog/templates/blog/create_article.html:64
 #: blog/templates/blog/edit_article.html:79
 msgid "Save draft"
-msgstr "Сохранить черновик"
+msgstr ""
 
 #: blog/templates/blog/create_article.html:67
 #: blog/templates/blog/edit_article.html:75
 msgid "Publish"
-msgstr "Опубликовать"
+msgstr ""
 
 #: blog/templates/blog/edit_article.html:7
 msgid "Edit article"
-msgstr "Редактировать статью"
+msgstr ""
 
 #: blog/templates/blog/edit_article.html:9
 #: blog/templates/blog/includes/article_cards.html:77
 msgid "Draft"
-msgstr "Черновик"
+msgstr ""
 
 #: blog/templates/blog/edit_article.html:36
 msgid "Current image"
-msgstr "Текущее изображение"
+msgstr ""
 
 #: blog/templates/blog/edit_article.html:39
 msgid "Remove image"
-msgstr "Удалить изображение"
+msgstr ""
 
 #: blog/templates/blog/includes/article_cards.html:79
 msgid "Unpublished changes"
-msgstr "Неопубликованные изменения"
+msgstr ""
 
 #: blog/templates/blog/includes/article_list_fragment.html:10
 msgid "Nothing found."
-msgstr "Ничего не найдено."
+msgstr ""
 
 #: blog/templates/blog/includes/article_list_fragment.html:16
 msgid "Page navigation"
-msgstr "Навигация по страницам"
+msgstr ""
 
 #: blog/views.py:123
 msgid "Title and content are required."
-msgstr "Требуются заголовок и содержимое."
+msgstr ""
 
 #: blog/views.py:176 blog/views.py:235
 #, python-format
 msgid "System error: %(msg)s"
-msgstr "Системная ошибка: %(msg)s"
+msgstr ""
 
 #: blog/views.py:257
 msgid "Insufficient permissions."
-msgstr "Недостаточно прав."
+msgstr ""
 
 #: blog/views.py:294 blog/views.py:365
 msgid "Comment cannot be empty."
-msgstr "Комментарий не может быть пустым."
+msgstr ""
 
 #: blog/views.py:343
 msgid "You cannot delete someone else's comment."
-msgstr "Нельзя удалять чужой комментарий."
+msgstr ""
 
 #: blog/views.py:361
 msgid "You cannot edit someone else's comment."
-msgstr "Нельзя редактировать чужой комментарий."
+msgstr ""
 
 #: blog/views.py:380
 msgid "No file uploaded."
-msgstr "Файл не загружен."
+msgstr ""
 
 #: blog/views.py:404
 msgid "Upload error."
-msgstr "Ошибка загрузки."
+msgstr ""
 
 #: templates/base.html:28
 msgid "Rhymes of Life"
-msgstr "Rhymes of Life"
+msgstr ""
 
 #: templates/base.html:30
 msgid "Toggle navigation"
-msgstr "Переключить навигацию"
+msgstr ""
 
 #: templates/base.html:37
 msgid "About"
-msgstr "О нас"
+msgstr ""
 
 #: templates/base.html:44
 msgid "My profile"
-msgstr "Мой профиль"
+msgstr ""
 
 #: templates/base.html:55
 msgid "Recommendations"
-msgstr "Рекомендации"
+msgstr ""
 
 #: templates/base.html:95
 #, python-format
@@ -1696,67 +1489,27 @@ msgid ""
 "                                <strong>%(username)s</strong> followed you.\n"
 "                              "
 msgstr ""
-"\n"
-"                                <strong>%(username)s</strong> "
-"подписался(ась) на вас.\n"
-"                              "
 
 #: templates/base.html:108
 msgid "No new notifications"
-msgstr "Новых уведомлений нет"
+msgstr ""
 
 #: templates/base.html:115
 msgid "Show all notifications"
-msgstr "Показать все уведомления"
+msgstr ""
 
 #: templates/base.html:124
 msgid "Patients"
-msgstr "Пациенты"
+msgstr ""
 
 #: templates/base.html:132
 msgid "Log out"
-msgstr "Выйти"
+msgstr ""
 
 #: templates/base.html:154 templates/base.html:160
 msgid "Switch language"
-msgstr "Сменить язык"
+msgstr ""
 
 #: templates/base.html:180
 msgid "All rights reserved."
-msgstr "Все права защищены."
-
-#~ msgid "Or external link"
-#~ msgstr "Или внешняя ссылка"
-
-#~ msgid "Use this if your file type is not supported."
-#~ msgstr "Используйте это, если ваш тип файла не поддерживается."
-
-#~ msgid "For examination"
-#~ msgstr "Для обследования"
-
-#~ msgid "Examination"
-#~ msgstr "Обследование"
-
-#~ msgid "Select examination"
-#~ msgstr "Выберите обследование"
-
-#~ msgid "Exam is required."
-#~ msgstr "Необходимо выбрать обследование."
-
-#~ msgid "Syndrome 1"
-#~ msgstr "Синдром 1"
-
-#~ msgid "Syndrome 2"
-#~ msgstr "Синдром 2"
-
-#~ msgid "Syndrome 3"
-#~ msgstr "Синдром 3"
-
-#~ msgid "Syndrome 4"
-#~ msgstr "Синдром 4"
-
-#~ msgid "Syndrome 5"
-#~ msgstr "Синдром 5"
-
-#~ msgid "Syndrome 6"
-#~ msgstr "Синдром 6"
+msgstr ""

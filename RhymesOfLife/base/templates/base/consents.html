@@ -1,35 +1,479 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load static i18n %}
 
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
-  <div class="card shadow-sm p-4" style="max-width:720px;width:100%;">
+  <div class="card shadow-sm p-4" style="max-width:900px;width:100%;">
     <h2 class="mb-3 text-center">{% trans "Agreements" %}</h2>
     {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+
     <div class="mb-3 text-muted">
       <p>{% trans "Please read the following documents and confirm:" %}</p>
-      <ul>
-        <li>{% trans "Terms of Service" %}</li>
-        <li>{% trans "Privacy Policy" %}</li>
-        <li>{% trans "Consent to personal data processing" %}</li>
+      <ul class="mb-0">
+        <li>
+          <a href="#tosModal" class="open-modal" data-modal-target="tosModal">{% trans "Terms of Service" %}</a>
+        </li>
+        <li>
+          <a href="#privacyModal" class="open-modal" data-modal-target="privacyModal">{% trans "Privacy Policy" %}</a>
+        </li>
+        <li>
+          <a href="#patientConsentModal" class="open-modal" data-modal-target="patientConsentModal">
+            {% trans "Consent to personal data processing (Patient)" %}
+          </a>
+        </li>
+        <li>
+          <a href="#expertConsentModal" class="open-modal" data-modal-target="expertConsentModal">
+            {% trans "Consent to personal data processing (Expert/Doctor)" %}
+          </a>
+        </li>
       </ul>
     </div>
-    <form method="post" class="mt-2">
+
+    <form method="post" class="mt-3">
       {% csrf_token %}
       <div class="form-check mb-2">
         <input class="form-check-input" type="checkbox" id="c1" name="tos">
-        <label class="form-check-label" for="c1">{% trans "I agree with Terms of Service" %}</label>
+        <label class="form-check-label" for="c1">
+          {% trans "I agree with Terms of Service" %} —
+          <a href="#tosModal" class="open-modal" data-modal-target="tosModal">{% trans "read" %}</a>
+        </label>
       </div>
       <div class="form-check mb-2">
         <input class="form-check-input" type="checkbox" id="c2" name="privacy">
-        <label class="form-check-label" for="c2">{% trans "I agree with Privacy Policy" %}</label>
+        <label class="form-check-label" for="c2">
+          {% trans "I agree with Privacy Policy" %} —
+          <a href="#privacyModal" class="open-modal" data-modal-target="privacyModal">{% trans "read" %}</a>
+        </label>
       </div>
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" id="c3" name="data">
-        <label class="form-check-label" for="c3">{% trans "I consent to personal data processing" %}</label>
+        <label class="form-check-label" for="c3">
+          {% trans "I consent to personal data processing" %} —
+          <a href="#patientConsentModal" class="open-modal" data-modal-target="patientConsentModal">{% trans "patient version" %}</a>
+          /
+          <a href="#expertConsentModal" class="open-modal" data-modal-target="expertConsentModal">{% trans "expert version" %}</a>
+        </label>
       </div>
+
       <button class="btn btn-success w-100">{% trans "Continue" %}</button>
     </form>
   </div>
 </div>
+
+<!-- Terms of Service Modal -->
+<div class="modal fade" id="tosModal" tabindex="-1" aria-labelledby="tosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tosModalLabel">{% trans "Terms of Service" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans "Close" %}"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% blocktrans trimmed %}
+          These Terms of Service govern your use of the site and services. Please review them carefully before continuing.
+          {% endblocktrans %}
+        </p>
+        <p>
+          {% blocktrans trimmed %}
+          By accessing or using the site, you agree to be bound by these Terms. The Operator may update these Terms from time to time.
+          {% endblocktrans %}
+        </p>
+        <!-- add your full ToS here as needed, all wrapped in blocktrans -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="privacyModalLabel">{% trans "Privacy Policy" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans "Close" %}"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% blocktrans trimmed %}
+          This Privacy Policy describes how we collect, use, and protect your personal data. Please read it carefully.
+          {% endblocktrans %}
+        </p>
+        <!-- add your full Privacy Policy here, wrapped in blocktrans -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Patient Consent Modal -->
+<div class="modal fade" id="patientConsentModal" tabindex="-1" aria-labelledby="patientConsentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="patientConsentModalLabel">
+          {% trans "Consent to Personal Data Processing (Patient)" %}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans "Close" %}"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% blocktrans trimmed %}
+          Acting freely, of my own will and in my own interest, and confirming my legal capacity, I hereby give and
+          confirm my consent to the processing of my personal data by the Charity Foundation for Assistance to People
+          with Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the following conditions:
+          {% endblocktrans %}
+        </p>
+
+        <h6 class="mt-3">{% trans "PROVIDING INFORMATION BY THE USER" %}</h6>
+        <p>
+          {% blocktrans trimmed %}
+          In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal Data”, consent is given to the
+          processing of the following personal data of the User:
+          {% endblocktrans %}
+        </p>
+        <ul>
+          <li>{% trans "last name, first name, middle name (if any);" %}</li>
+          <li>{% trans "date of birth;" %}</li>
+          <li>{% trans "telephone number(s) (landline, mobile);" %}</li>
+          <li>{% trans "email address;" %}</li>
+          <li>{% trans "health-related information necessary for the Operator to perform actions in the User’s interests;" %}</li>
+          <li>{% trans "additional information provided by the User at their own discretion, including biometric personal data (photos and/or videos, audio recordings)." %}</li>
+        </ul>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User consents to the transfer of their personal data, including data constituting medical confidentiality,
+          to the extent necessary for the Operator to act in the User’s interests.
+          {% endblocktrans %}
+        </p>
+
+        <p>{% trans "The Operator uses the personal data provided by the User for the following purposes:" %}</p>
+        <ul>
+          <li>{% trans "informing the User by email, phone calls and messaging about opportunities to participate in studies, new publications, or other information consistent with the Operator’s statutory purposes;" %}</li>
+          <li>{% trans "including the User’s information in the Register of patients with hereditary connective tissue dysplasia (CTD);" %}</li>
+          <li>{% trans "enabling the User to take tests on the Site, and storing and analyzing test results;" %}</li>
+          <li>{% trans "providing the User with informational consultations related to the Operator’s statutory activities;" %}</li>
+          <li>{% trans "enabling registration on the “Rhythms of Life” project website." %}</li>
+        </ul>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User gives consent to the Operator to process personal data when filling out the “Registration” form on the
+          “Rhythms of Life” project website (the “Site”). The scope of information may differ depending on the user
+          category and information provided by the User.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User consents to the processing of personal data for the purpose of allowing the User to enter information
+          about themselves while taking tests on the Operator’s Site.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User consents to the processing of personal data upon adding their information to the Register of patients
+          with hereditary CTD. The Register includes all personal data of the User, including:
+          {% endblocktrans %}
+        </p>
+        <ul>
+          <li>{% trans "health-related information provided when filling in the “Registration” form on the project website;" %}</li>
+          <li>{% trans "information provided while taking tests on the project website, test results and their analysis;" %}</li>
+          <li>{% trans "information necessary for the provision of informational services by the Operator, including data constituting medical confidentiality." %}</li>
+        </ul>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User consents to the transfer of all the above personal data to third parties responsible for processing and
+          storing data during the formation of the Register.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          During processing, the Operator may perform: collection, recording, systematization, accumulation, storage,
+          updating (clarification, modification), retrieval, use, anonymization, blocking, deletion, destruction.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Personal data are processed until the purposes of processing are achieved or until the withdrawal of this
+          Consent.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          When processing the User’s personal data, the Operator is guided by Federal Law “On Personal Data” and the
+          Operator’s internal regulations.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          All communications by the User regarding personal data processing are made as an official request to the
+          Operator, as stipulated by the Operator’s Personal Data Policy for Site users.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User may request clarification, blocking, or destruction of personal data if the data are incomplete,
+          outdated, inaccurate, unlawfully obtained, or unnecessary for the stated purpose, and may take legal measures
+          to protect their rights.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          If inaccuracies are identified, the User may notify the Operator at: info@bfastra.ru to update the data.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The User may withdraw their consent at any time by emailing: info@bfastra.ru with the note “Withdrawal of
+          consent to personal data processing”.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Upon receipt of a written withdrawal, the Operator ceases processing within 5 (five) days from the date of
+          receipt.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The period of personal data processing is determined by achieving the purposes for which the data were
+          collected, unless another period is provided by contract or applicable law.
+          {% endblocktrans %}
+        </p>
+
+        <h6 class="mt-3">{% trans "ORGANIZATION OF PROVISION, PROCESSING AND TRANSFER OF PERSONAL DATA" %}</h6>
+
+        <p>
+          {% blocktrans trimmed %}
+          Personal data obtained from the User are transferred for inclusion in the CTD Register and for analysis.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator ensures protection against unauthorized (including accidental) access to personal data, including
+          detecting and recording such access.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator takes necessary and sufficient organizational and technical measures to protect personal data and
+          performs internal control for compliance with applicable laws and requirements.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Disclosure of Users’ personal data to third parties (tax, law enforcement and other state authorities) is not
+          deemed a breach if required by applicable law.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator is not responsible for information posted by the User on the Site in a publicly accessible form.
+          {% endblocktrans %}
+        </p>
+
+        <p class="mb-0">
+          {% blocktrans trimmed %}
+          All details on processing of Users’ personal data on the Site are set out in the Personal Data Policy
+          (https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). This consent is given both with and without the use of
+          automation tools.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Expert/Doctor Consent Modal -->
+<div class="modal fade" id="expertConsentModal" tabindex="-1" aria-labelledby="expertConsentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="expertConsentModalLabel">
+          {% trans "Consent to Personal Data Processing (Expert/Doctor)" %}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans "Close" %}"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% blocktrans trimmed %}
+          Acting freely, of my own will and in my own interest, and confirming my legal capacity, I hereby give and
+          confirm my consent to the processing of my personal data by the Charity Foundation for Assistance to People
+          with Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the following conditions.
+          {% endblocktrans %}
+        </p>
+
+        <h6 class="mt-3">{% trans "PROVIDING INFORMATION BY THE EXPERT" %}</h6>
+        <p>
+          {% blocktrans trimmed %}
+          In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal Data”, consent is given to the
+          processing of the following personal data of the Expert:
+          {% endblocktrans %}
+        </p>
+        <ul>
+          <li>{% trans "last name, first name, middle name (if any);" %}</li>
+          <li>{% trans "date and place of birth;" %}</li>
+          <li>{% trans "citizenship;" %}</li>
+          <li>{% trans "information on knowledge of foreign languages;" %}</li>
+          <li>{% trans "education (name of educational institution, year of graduation, education document, qualification, specialty);" %}</li>
+          <li>{% trans "profession; length of service;" %}</li>
+          <li>{% trans "passport details (number, date of issue, issuing authority);" %}</li>
+          <li>{% trans "residential address (as per passport, actual address), date of registration at the place of residence;" %}</li>
+          <li>{% trans "telephone number(s) (home, mobile);" %}</li>
+          <li>{% trans "email address;" %}</li>
+          <li>{% trans "information on attestation/certification, advanced training, professional retraining;" %}</li>
+          <li>{% trans "information on awards (commendations), honorary titles;" %}</li>
+          <li>{% trans "information on taxpayer identification number;" %}</li>
+          <li>{% trans "additional information voluntarily provided by the Expert (e.g., nationality, stays abroad, membership in public organizations or elective bodies, etc.), and biometric personal data (personal photos/videos, audio recordings);" %}</li>
+        </ul>
+
+        <p>{% trans "The Operator uses the personal data provided by the Expert for the following purposes:" %}</p>
+        <ul>
+          <li>{% trans "concluding an agreement on the Expert’s participation in the “Rhythms of Life” project;" %}</li>
+          <li>{% trans "informing the Expert by email, phone calls and messaging about opportunities to participate in studies, new publications, or other information consistent with the Operator’s statutory purposes;" %}</li>
+          <li>{% trans "publishing information about the Expert on the “Rhythms of Life” project website;" %}</li>
+          <li>{% trans "providing the possibility to render informational services to Users of the “Rhythms of Life” project website;" %}</li>
+          <li>{% trans "providing the possibility to register on the “Rhythms of Life” project website." %}</li>
+        </ul>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Expert authorizes the Operator, during the processing of personal data, to perform the following actions
+          (operations): collection, recording, systematization, accumulation, storage, updating (clarification,
+          modification), retrieval, use, anonymization, blocking, deletion, and destruction.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Personal data are processed until the purposes of processing are achieved or until the withdrawal of this
+          Consent to personal data processing.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          When processing the Expert’s personal data, the Operator is guided by the Federal Law “On Personal Data” and
+          the Operator’s internal regulations.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          All communications with the Operator regarding the processing of personal data are made as an official request
+          to the Operator in the manner provided for by the Operator’s Personal Data Policy in relation to processing
+          of personal data of the Site’s users.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Expert may request clarification, blocking or destruction of their personal data if the data are
+          incomplete, outdated, inaccurate, unlawfully obtained or unnecessary for the stated purpose of processing, and
+          may take the measures provided by law to protect their rights.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          If inaccuracies are identified in personal data, the Expert may send a notification to the Operator to update
+          the data at: info@bfastra.ru.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Expert may withdraw their consent to personal data processing at any time by sending a notification to the
+          Operator by email at: info@bfastra.ru with the note “Withdrawal of consent to personal data processing”.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Upon receipt of a written statement withdrawing this consent, the Operator ceases processing of personal data
+          within 5 (five) days from the date of receipt of such withdrawal.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The period of personal data processing is determined by achieving the purposes for which the personal data
+          were collected, unless another period is provided by contract or by applicable law.
+          {% endblocktrans %}
+        </p>
+
+        <h6 class="mt-3">{% trans "ORGANIZATION OF PROVISION, PROCESSING AND TRANSFER OF PERSONAL DATA" %}</h6>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator ensures the security of personal data against unauthorized (including accidental) access,
+          including the detection and recording of such access.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator takes necessary and sufficient organizational and technical measures to protect personal data.
+          The Operator carries out internal control for compliance of personal data processing with federal law and
+          subordinate regulations, with requirements for personal data protection, with its personal data processing
+          policy and local acts.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          Disclosure of Users’ personal data to third parties (tax, law enforcement and other state authorities) shall
+          not be deemed a breach if required by applicable law.
+          {% endblocktrans %}
+        </p>
+
+        <p>
+          {% blocktrans trimmed %}
+          The Operator is not liable for information provided by a User on the Site in a publicly accessible form.
+          {% endblocktrans %}
+        </p>
+
+        <p class="mb-0">
+          {% blocktrans trimmed %}
+          All information on the processing of Users’ personal data on the Site is set out in the Personal Data Policy
+          (https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). This consent to personal data processing is given both
+          with and without the use of automation tools.
+          {% endblocktrans %}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- page JS -->
+<script src="{% static 'js/consents_modals.js' %}"></script>
 {% endblock %}
