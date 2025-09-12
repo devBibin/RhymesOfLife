@@ -10,6 +10,7 @@ services:
     volumes:
       - ./RhymesOfLife:/app/RhymesOfLife  # Sync host project files to container
       - ./RhymesOfLifeShadows:/app/RhymesOfLifeShadows  # Sync shadows project files to container
+      - ./media:/app/media   # Sync media files to container
     environment:
       # Database environment variables
       DB_NAME: rhymesoflife
@@ -26,9 +27,10 @@ services:
     command: >
       sh -c "
       /venv/bin/python /app/RhymesOfLifeShadows/send_verifications_loop.py > /app/shadow.log 2>&1 &
+      /venv/bin/python /app/RhymesOfLifeShadows/tg_poller.py > /app/telegram_poller.log 2>&1 &
       yes | /venv/bin/python manage.py makemigrations &&
       /venv/bin/python manage.py migrate &&
-      /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000"
+      /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000 >> /app/django.log 2>&1"
 
     networks:
       - rhymesoflife_network

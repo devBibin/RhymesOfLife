@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Complete your profile" %} — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 700px;">
+    <h2 class="mb-4 text-center">{% trans "Complete your profile" %}</h2>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">{% trans "First name" %}</label>
+          <input type="text" name="first_name" class="form-control" value="{{ info.first_name|default:'' }}" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{% trans "Last name" %}</label>
+          <input type="text" name="last_name" class="form-control" value="{{ info.last_name|default:'' }}" required>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">{% trans "Email" %}</label>
+          <input type="email" name="email" class="form-control" value="{{ info.email|default:'' }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">{% trans "Day" %}</label>
+          <select name="day" class="form-select">
+            <option value=""></option>
+            {% for d in day_range %}
+              <option value="{{ d }}" {% if info.birth_date and info.birth_date.day == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">{% trans "Month" %}</label>
+          <select name="month" class="form-select">
+            <option value=""></option>
+            {% for m,name in months_list %}
+              <option value="{{ m }}" {% if info.birth_date and info.birth_date.month == m %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">{% trans "Year" %}</label>
+          <select name="year" class="form-select">
+            <option value=""></option>
+            {% for y in year_range %}
+              <option value="{{ y }}" {% if info.birth_date and info.birth_date.year == y %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">{% trans "Syndromes" %}</label>
+          <div class="d-flex flex-column gap-2">
+            {% for code,label in syndrome_choices %}
+              <div class="row align-items-center">
+                <div class="col-7">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
+                           {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
+                    <label class="form-check-label" for="s-{{ code }}">{{ label }}</label>
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="confirmed_syndromes"
+                           value="{{ code }}"
+                           id="sc-{{ code }}"
+                           data-main="#s-{{ code }}"
+                           {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
+                           {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
+                    <label class="form-check-label" for="sc-{{ code }}">{% trans "Genetically confirmed" %}</label>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">{% trans "Avatar" %}</label>
+          <input type="file" name="avatar" class="form-control" accept="image/*">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100 mt-4">{% trans "Save and continue" %}</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
+    var mainSel=c.getAttribute("data-main");
+    var m=document.querySelector(mainSel);
+    var sync=function(){
+      var enabled=!!(m&&m.checked);
+      c.disabled=!enabled;
+      if(!enabled){c.checked=false;}
+    };
+    if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
+  });
+});
+</script>
+{% endblock %}

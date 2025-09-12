@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Verify your email" %} — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="max-width: 560px; width: 100%;">
+    <h2 class="mb-3 text-center">{% trans "Verify your email" %}</h2>
+    <p class="mb-4 text-muted text-center">
+      {% trans "We have sent a confirmation link to your email. Please click the link to activate your account." %}
+    </p>
+    <form method="post" action="{% url 'request_verification' %}" class="text-center">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">{% trans "Resend email" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

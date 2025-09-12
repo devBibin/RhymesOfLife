@@ -1,4 +1,3 @@
-# RhymesOfLifeShadows/send_verifications_loop.py
 import time
 import signal
 import traceback
@@ -9,6 +8,7 @@ from base.models import AdditionalUserInfo
 from RhymesOfLifeShadows.create_log import create_log
 
 log = create_log("verification.log", "EmailSender")
+
 
 def shutdown_handler(signum, frame):
     log.info("🛑 Received shutdown signal")
@@ -33,6 +33,7 @@ def process_verifications():
             log.error(f"❌ Error for {info.email or info.user.email}: {str(e)}")
             log.exception(e)
 
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_handler)
     signal.signal(signal.SIGTERM, shutdown_handler)
@@ -45,4 +46,3 @@ if __name__ == "__main__":
         except Exception as e:
             log.critical(f"⚠️ Critical error: {str(e)}")
             time.sleep(60)
-

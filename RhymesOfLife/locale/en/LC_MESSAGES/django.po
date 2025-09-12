@@ -1,0 +1,1515 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-11 11:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: base/middleware.py:46 base/templates/base/home.html:21
+msgid "Email not verified."
+msgstr ""
+
+#: base/models.py:54
+#, python-format
+msgid "Invalid syndrome codes: %(codes)s"
+msgstr ""
+
+#: base/models.py:133
+msgid "Confirmed codes must be a subset of syndromes."
+msgstr ""
+
+#: base/models.py:214
+msgid "Either a file or an external link is required."
+msgstr ""
+
+#: base/signals.py:31
+msgid "New user registered"
+msgstr ""
+
+#: base/signals.py:32 base/templates/base/home.html:92
+#: base/templates/base/home.html:123 base/templates/base/login.html:21
+#: base/templates/base/register.html:25
+msgid "Username"
+msgstr ""
+
+#: base/signals.py:33
+msgid "User ID"
+msgstr ""
+
+#: base/signals.py:34 base/templates/base/home.html:96
+#: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:44
+#: base/templates/base/profile_onboarding.html:27
+#: base/templates/base/register.html:30
+msgid "Email"
+msgstr ""
+
+#: base/signals.py:37 base/signals.py:57
+msgid "Admin"
+msgstr ""
+
+#: base/signals.py:49
+msgid "New medical document uploaded"
+msgstr ""
+
+#: base/signals.py:50
+msgid "Document ID"
+msgstr ""
+
+#: base/signals.py:51
+msgid "File"
+msgstr ""
+
+#: base/signals.py:52
+msgid "Exam ID"
+msgstr ""
+
+#: base/signals.py:53
+msgid "Exam date"
+msgstr ""
+
+#: base/signals.py:54
+msgid "User"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:12
+msgid "Connect Telegram"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:15
+msgid "Email verified."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:19
+msgid "Telegram bot is not configured."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:22
+msgid "Telegram is connected and phone is verified."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:24
+msgid "To continue, please link your Telegram account."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:27
+msgid "Instructions:"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:29
+msgid "Open Telegram and follow this link:"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:30
+msgid "Press \"Start\" in the chat with the bot."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:31
+msgid "The bot will ask you to share your phone number."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:32
+msgid "Return to this page and click \"Continue\"."
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:36
+#, python-format
+msgid "Open @%(bot_username)s"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:43
+msgid "Continue (I've interacted with the bot)"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:47
+msgid "No Telegram or don't want to use it?"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:49
+msgid "Skip Telegram and verify by phone call"
+msgstr ""
+
+#: base/templates/base/consents.html:7
+msgid "Agreements"
+msgstr ""
+
+#: base/templates/base/consents.html:11
+msgid "Please read the following documents and confirm:"
+msgstr ""
+
+#: base/templates/base/consents.html:14 base/templates/base/consents.html:68
+msgid "Terms of Service"
+msgstr ""
+
+#: base/templates/base/consents.html:17 base/templates/base/consents.html:96
+msgid "Privacy Policy"
+msgstr ""
+
+#: base/templates/base/consents.html:21
+msgid "Consent to personal data processing (Patient)"
+msgstr ""
+
+#: base/templates/base/consents.html:26
+msgid "Consent to personal data processing (Expert/Doctor)"
+msgstr ""
+
+#: base/templates/base/consents.html:37
+msgid "I agree with Terms of Service"
+msgstr ""
+
+#: base/templates/base/consents.html:38 base/templates/base/consents.html:45
+msgid "read"
+msgstr ""
+
+#: base/templates/base/consents.html:44
+msgid "I agree with Privacy Policy"
+msgstr ""
+
+#: base/templates/base/consents.html:51
+msgid "I consent to personal data processing"
+msgstr ""
+
+#: base/templates/base/consents.html:52
+msgid "patient version"
+msgstr ""
+
+#: base/templates/base/consents.html:54
+msgid "expert version"
+msgstr ""
+
+#: base/templates/base/consents.html:58
+msgid "Continue"
+msgstr ""
+
+#: base/templates/base/consents.html:69 base/templates/base/consents.html:85
+#: base/templates/base/consents.html:97 base/templates/base/consents.html:108
+#: base/templates/base/consents.html:122 base/templates/base/consents.html:306
+#: base/templates/base/consents.html:320 base/templates/base/consents.html:470
+#: base/templates/base/home.html:27
+msgid "Close"
+msgstr ""
+
+#: base/templates/base/consents.html:73
+msgid ""
+"These Terms of Service govern your use of the site and services. Please "
+"review them carefully before continuing."
+msgstr ""
+
+#: base/templates/base/consents.html:78
+msgid ""
+"By accessing or using the site, you agree to be bound by these Terms. The "
+"Operator may update these Terms from time to time."
+msgstr ""
+
+#: base/templates/base/consents.html:101
+msgid ""
+"This Privacy Policy describes how we collect, use, and protect your personal "
+"data. Please read it carefully."
+msgstr ""
+
+#: base/templates/base/consents.html:120
+msgid "Consent to Personal Data Processing (Patient)"
+msgstr ""
+
+#: base/templates/base/consents.html:126
+msgid ""
+"Acting freely, of my own will and in my own interest, and confirming my "
+"legal capacity, I hereby give and confirm my consent to the processing of my "
+"personal data by the Charity Foundation for Assistance to People with "
+"Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the "
+"following conditions:"
+msgstr ""
+
+#: base/templates/base/consents.html:133
+msgid "PROVIDING INFORMATION BY THE USER"
+msgstr ""
+
+#: base/templates/base/consents.html:135
+msgid ""
+"In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal "
+"Data”, consent is given to the processing of the following personal data of "
+"the User:"
+msgstr ""
+
+#: base/templates/base/consents.html:141 base/templates/base/consents.html:339
+msgid "last name, first name, middle name (if any);"
+msgstr ""
+
+#: base/templates/base/consents.html:142
+msgid "date of birth;"
+msgstr ""
+
+#: base/templates/base/consents.html:143
+msgid "telephone number(s) (landline, mobile);"
+msgstr ""
+
+#: base/templates/base/consents.html:144 base/templates/base/consents.html:348
+msgid "email address;"
+msgstr ""
+
+#: base/templates/base/consents.html:145
+msgid ""
+"health-related information necessary for the Operator to perform actions in "
+"the User’s interests;"
+msgstr ""
+
+#: base/templates/base/consents.html:146
+msgid ""
+"additional information provided by the User at their own discretion, "
+"including biometric personal data (photos and/or videos, audio recordings)."
+msgstr ""
+
+#: base/templates/base/consents.html:150
+msgid ""
+"The User consents to the transfer of their personal data, including data "
+"constituting medical confidentiality, to the extent necessary for the "
+"Operator to act in the User’s interests."
+msgstr ""
+
+#: base/templates/base/consents.html:156
+msgid ""
+"The Operator uses the personal data provided by the User for the following "
+"purposes:"
+msgstr ""
+
+#: base/templates/base/consents.html:158
+msgid ""
+"informing the User by email, phone calls and messaging about opportunities "
+"to participate in studies, new publications, or other information consistent "
+"with the Operator’s statutory purposes;"
+msgstr ""
+
+#: base/templates/base/consents.html:159
+msgid ""
+"including the User’s information in the Register of patients with hereditary "
+"connective tissue dysplasia (CTD);"
+msgstr ""
+
+#: base/templates/base/consents.html:160
+msgid ""
+"enabling the User to take tests on the Site, and storing and analyzing test "
+"results;"
+msgstr ""
+
+#: base/templates/base/consents.html:161
+msgid ""
+"providing the User with informational consultations related to the "
+"Operator’s statutory activities;"
+msgstr ""
+
+#: base/templates/base/consents.html:162
+msgid "enabling registration on the “Rhythms of Life” project website."
+msgstr ""
+
+#: base/templates/base/consents.html:166
+msgid ""
+"The User gives consent to the Operator to process personal data when filling "
+"out the “Registration” form on the “Rhythms of Life” project website (the "
+"“Site”). The scope of information may differ depending on the user category "
+"and information provided by the User."
+msgstr ""
+
+#: base/templates/base/consents.html:174
+msgid ""
+"The User consents to the processing of personal data for the purpose of "
+"allowing the User to enter information about themselves while taking tests "
+"on the Operator’s Site."
+msgstr ""
+
+#: base/templates/base/consents.html:181
+msgid ""
+"The User consents to the processing of personal data upon adding their "
+"information to the Register of patients with hereditary CTD. The Register "
+"includes all personal data of the User, including:"
+msgstr ""
+
+#: base/templates/base/consents.html:187
+msgid ""
+"health-related information provided when filling in the “Registration” form "
+"on the project website;"
+msgstr ""
+
+#: base/templates/base/consents.html:188
+msgid ""
+"information provided while taking tests on the project website, test results "
+"and their analysis;"
+msgstr ""
+
+#: base/templates/base/consents.html:189
+msgid ""
+"information necessary for the provision of informational services by the "
+"Operator, including data constituting medical confidentiality."
+msgstr ""
+
+#: base/templates/base/consents.html:193
+msgid ""
+"The User consents to the transfer of all the above personal data to third "
+"parties responsible for processing and storing data during the formation of "
+"the Register."
+msgstr ""
+
+#: base/templates/base/consents.html:200
+msgid ""
+"During processing, the Operator may perform: collection, recording, "
+"systematization, accumulation, storage, updating (clarification, "
+"modification), retrieval, use, anonymization, blocking, deletion, "
+"destruction."
+msgstr ""
+
+#: base/templates/base/consents.html:207
+msgid ""
+"Personal data are processed until the purposes of processing are achieved or "
+"until the withdrawal of this Consent."
+msgstr ""
+
+#: base/templates/base/consents.html:214
+msgid ""
+"When processing the User’s personal data, the Operator is guided by Federal "
+"Law “On Personal Data” and the Operator’s internal regulations."
+msgstr ""
+
+#: base/templates/base/consents.html:221
+msgid ""
+"All communications by the User regarding personal data processing are made "
+"as an official request to the Operator, as stipulated by the Operator’s "
+"Personal Data Policy for Site users."
+msgstr ""
+
+#: base/templates/base/consents.html:228
+msgid ""
+"The User may request clarification, blocking, or destruction of personal "
+"data if the data are incomplete, outdated, inaccurate, unlawfully obtained, "
+"or unnecessary for the stated purpose, and may take legal measures to "
+"protect their rights."
+msgstr ""
+
+#: base/templates/base/consents.html:236
+msgid ""
+"If inaccuracies are identified, the User may notify the Operator at: "
+"info@bfastra.ru to update the data."
+msgstr ""
+
+#: base/templates/base/consents.html:242
+msgid ""
+"The User may withdraw their consent at any time by emailing: info@bfastra.ru "
+"with the note “Withdrawal of consent to personal data processing”."
+msgstr ""
+
+#: base/templates/base/consents.html:249
+msgid ""
+"Upon receipt of a written withdrawal, the Operator ceases processing within "
+"5 (five) days from the date of receipt."
+msgstr ""
+
+#: base/templates/base/consents.html:256
+msgid ""
+"The period of personal data processing is determined by achieving the "
+"purposes for which the data were collected, unless another period is "
+"provided by contract or applicable law."
+msgstr ""
+
+#: base/templates/base/consents.html:262 base/templates/base/consents.html:430
+msgid "ORGANIZATION OF PROVISION, PROCESSING AND TRANSFER OF PERSONAL DATA"
+msgstr ""
+
+#: base/templates/base/consents.html:265
+msgid ""
+"Personal data obtained from the User are transferred for inclusion in the "
+"CTD Register and for analysis."
+msgstr ""
+
+#: base/templates/base/consents.html:271
+msgid ""
+"The Operator ensures protection against unauthorized (including accidental) "
+"access to personal data, including detecting and recording such access."
+msgstr ""
+
+#: base/templates/base/consents.html:278
+msgid ""
+"The Operator takes necessary and sufficient organizational and technical "
+"measures to protect personal data and performs internal control for "
+"compliance with applicable laws and requirements."
+msgstr ""
+
+#: base/templates/base/consents.html:285
+msgid ""
+"Disclosure of Users’ personal data to third parties (tax, law enforcement "
+"and other state authorities) is not deemed a breach if required by "
+"applicable law."
+msgstr ""
+
+#: base/templates/base/consents.html:292
+msgid ""
+"The Operator is not responsible for information posted by the User on the "
+"Site in a publicly accessible form."
+msgstr ""
+
+#: base/templates/base/consents.html:298
+msgid ""
+"All details on processing of Users’ personal data on the Site are set out in "
+"the Personal Data Policy (https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). "
+"This consent is given both with and without the use of automation tools."
+msgstr ""
+
+#: base/templates/base/consents.html:318
+msgid "Consent to Personal Data Processing (Expert/Doctor)"
+msgstr ""
+
+#: base/templates/base/consents.html:324
+msgid ""
+"Acting freely, of my own will and in my own interest, and confirming my "
+"legal capacity, I hereby give and confirm my consent to the processing of my "
+"personal data by the Charity Foundation for Assistance to People with "
+"Chronic Pain Syndrome “Astra” (hereinafter, the “Operator”) under the "
+"following conditions."
+msgstr ""
+
+#: base/templates/base/consents.html:331
+msgid "PROVIDING INFORMATION BY THE EXPERT"
+msgstr ""
+
+#: base/templates/base/consents.html:333
+msgid ""
+"In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal "
+"Data”, consent is given to the processing of the following personal data of "
+"the Expert:"
+msgstr ""
+
+#: base/templates/base/consents.html:340
+msgid "date and place of birth;"
+msgstr ""
+
+#: base/templates/base/consents.html:341
+msgid "citizenship;"
+msgstr ""
+
+#: base/templates/base/consents.html:342
+msgid "information on knowledge of foreign languages;"
+msgstr ""
+
+#: base/templates/base/consents.html:343
+msgid ""
+"education (name of educational institution, year of graduation, education "
+"document, qualification, specialty);"
+msgstr ""
+
+#: base/templates/base/consents.html:344
+msgid "profession; length of service;"
+msgstr ""
+
+#: base/templates/base/consents.html:345
+msgid "passport details (number, date of issue, issuing authority);"
+msgstr ""
+
+#: base/templates/base/consents.html:346
+msgid ""
+"residential address (as per passport, actual address), date of registration "
+"at the place of residence;"
+msgstr ""
+
+#: base/templates/base/consents.html:347
+msgid "telephone number(s) (home, mobile);"
+msgstr ""
+
+#: base/templates/base/consents.html:349
+msgid ""
+"information on attestation/certification, advanced training, professional "
+"retraining;"
+msgstr ""
+
+#: base/templates/base/consents.html:350
+msgid "information on awards (commendations), honorary titles;"
+msgstr ""
+
+#: base/templates/base/consents.html:351
+msgid "information on taxpayer identification number;"
+msgstr ""
+
+#: base/templates/base/consents.html:352
+msgid ""
+"additional information voluntarily provided by the Expert (e.g., "
+"nationality, stays abroad, membership in public organizations or elective "
+"bodies, etc.), and biometric personal data (personal photos/videos, audio "
+"recordings);"
+msgstr ""
+
+#: base/templates/base/consents.html:355
+msgid ""
+"The Operator uses the personal data provided by the Expert for the following "
+"purposes:"
+msgstr ""
+
+#: base/templates/base/consents.html:357
+msgid ""
+"concluding an agreement on the Expert’s participation in the “Rhythms of "
+"Life” project;"
+msgstr ""
+
+#: base/templates/base/consents.html:358
+msgid ""
+"informing the Expert by email, phone calls and messaging about opportunities "
+"to participate in studies, new publications, or other information consistent "
+"with the Operator’s statutory purposes;"
+msgstr ""
+
+#: base/templates/base/consents.html:359
+msgid ""
+"publishing information about the Expert on the “Rhythms of Life” project "
+"website;"
+msgstr ""
+
+#: base/templates/base/consents.html:360
+msgid ""
+"providing the possibility to render informational services to Users of the "
+"“Rhythms of Life” project website;"
+msgstr ""
+
+#: base/templates/base/consents.html:361
+msgid ""
+"providing the possibility to register on the “Rhythms of Life” project "
+"website."
+msgstr ""
+
+#: base/templates/base/consents.html:365
+msgid ""
+"The Expert authorizes the Operator, during the processing of personal data, "
+"to perform the following actions (operations): collection, recording, "
+"systematization, accumulation, storage, updating (clarification, "
+"modification), retrieval, use, anonymization, blocking, deletion, and "
+"destruction."
+msgstr ""
+
+#: base/templates/base/consents.html:373
+msgid ""
+"Personal data are processed until the purposes of processing are achieved or "
+"until the withdrawal of this Consent to personal data processing."
+msgstr ""
+
+#: base/templates/base/consents.html:380
+msgid ""
+"When processing the Expert’s personal data, the Operator is guided by the "
+"Federal Law “On Personal Data” and the Operator’s internal regulations."
+msgstr ""
+
+#: base/templates/base/consents.html:387
+msgid ""
+"All communications with the Operator regarding the processing of personal "
+"data are made as an official request to the Operator in the manner provided "
+"for by the Operator’s Personal Data Policy in relation to processing of "
+"personal data of the Site’s users."
+msgstr ""
+
+#: base/templates/base/consents.html:395
+msgid ""
+"The Expert may request clarification, blocking or destruction of their "
+"personal data if the data are incomplete, outdated, inaccurate, unlawfully "
+"obtained or unnecessary for the stated purpose of processing, and may take "
+"the measures provided by law to protect their rights."
+msgstr ""
+
+#: base/templates/base/consents.html:403
+msgid ""
+"If inaccuracies are identified in personal data, the Expert may send a "
+"notification to the Operator to update the data at: info@bfastra.ru."
+msgstr ""
+
+#: base/templates/base/consents.html:410
+msgid ""
+"The Expert may withdraw their consent to personal data processing at any "
+"time by sending a notification to the Operator by email at: info@bfastra.ru "
+"with the note “Withdrawal of consent to personal data processing”."
+msgstr ""
+
+#: base/templates/base/consents.html:417
+msgid ""
+"Upon receipt of a written statement withdrawing this consent, the Operator "
+"ceases processing of personal data within 5 (five) days from the date of "
+"receipt of such withdrawal."
+msgstr ""
+
+#: base/templates/base/consents.html:424
+msgid ""
+"The period of personal data processing is determined by achieving the "
+"purposes for which the personal data were collected, unless another period "
+"is provided by contract or by applicable law."
+msgstr ""
+
+#: base/templates/base/consents.html:433
+msgid ""
+"The Operator ensures the security of personal data against unauthorized "
+"(including accidental) access, including the detection and recording of such "
+"access."
+msgstr ""
+
+#: base/templates/base/consents.html:440
+msgid ""
+"The Operator takes necessary and sufficient organizational and technical "
+"measures to protect personal data. The Operator carries out internal control "
+"for compliance of personal data processing with federal law and subordinate "
+"regulations, with requirements for personal data protection, with its "
+"personal data processing policy and local acts."
+msgstr ""
+
+#: base/templates/base/consents.html:449
+msgid ""
+"Disclosure of Users’ personal data to third parties (tax, law enforcement "
+"and other state authorities) shall not be deemed a breach if required by "
+"applicable law."
+msgstr ""
+
+#: base/templates/base/consents.html:456
+msgid ""
+"The Operator is not liable for information provided by a User on the Site in "
+"a publicly accessible form."
+msgstr ""
+
+#: base/templates/base/consents.html:462
+msgid ""
+"All information on the processing of Users’ personal data on the Site is set "
+"out in the Personal Data Policy (https://doc.bfastra.ru/docs/"
+"polozhenie_o_pdn.pdf). This consent to personal data processing is given "
+"both with and without the use of automation tools."
+msgstr ""
+
+#: base/templates/base/enter_phone_number.html:7
+#: base/templates/base/wait_for_phone_call.html:7
+msgid "Confirm your phone"
+msgstr ""
+
+#: base/templates/base/enter_phone_number.html:8
+msgid "Enter your phone number. We will verify it by a short call."
+msgstr ""
+
+#: base/templates/base/enter_phone_number.html:14
+msgid "Your phone number"
+msgstr ""
+
+#: base/templates/base/enter_phone_number.html:23
+msgid "Use international format like +7 999 123-45-67."
+msgstr ""
+
+#: base/templates/base/enter_phone_number.html:25
+msgid "Get code by call"
+msgstr ""
+
+#: base/templates/base/home.html:5
+msgid "Home"
+msgstr ""
+
+#: base/templates/base/home.html:13
+#, python-format
+msgid "Welcome, %(username)s!"
+msgstr ""
+
+#: base/templates/base/home.html:16
+msgid "Welcome!"
+msgstr ""
+
+#: base/templates/base/home.html:22
+msgid "Please verify your email for full access."
+msgstr ""
+
+#: base/templates/base/home.html:25
+msgid "Send email"
+msgstr ""
+
+#: base/templates/base/home.html:33
+msgid "Genetic connective tissue syndromes"
+msgstr ""
+
+#: base/templates/base/home.html:35
+msgid ""
+"Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective "
+"tissue disorders and can be life-threatening without timely diagnosis."
+msgstr ""
+
+#: base/templates/base/home.html:49
+msgid "Learn more"
+msgstr ""
+
+#: base/templates/base/home.html:64
+msgid "Welcome to Rhymes of Life!"
+msgstr ""
+
+#: base/templates/base/home.html:70 base/templates/base/home.html:111
+#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/register.html:44
+msgid "Sign up"
+msgstr ""
+
+#: base/templates/base/home.html:77 base/templates/base/home.html:134
+#: base/templates/base/login.html:4 base/templates/base/login.html:10
+#: base/templates/base/login.html:36 base/templates/base/register.html:48
+#: blog/templates/blog/blog_page.html:131 templates/base.html:141
+msgid "Log in"
+msgstr ""
+
+#: base/templates/base/home.html:100 base/templates/base/home.html:127
+#: base/templates/base/login.html:29 base/templates/base/register.html:35
+msgid "Password"
+msgstr ""
+
+#: base/templates/base/home.html:104 base/templates/base/register.html:40
+msgid "Confirm password"
+msgstr ""
+
+#: base/templates/base/home.html:109 base/templates/base/home.html:132
+msgid "Show password"
+msgstr ""
+
+#: base/templates/base/home.html:136 base/templates/base/login.html:40
+msgid "Don't have an account?"
+msgstr ""
+
+#: base/templates/base/my_documents.html:21
+#: base/templates/base/recommendations.html:19 templates/base.html:50
+msgid "My examinations"
+msgstr ""
+
+#: base/templates/base/my_documents.html:22
+#: base/templates/base/recommendations.html:4
+#: base/templates/base/recommendations.html:18
+msgid "Doctor's recommendations"
+msgstr ""
+
+#: base/templates/base/my_documents.html:27
+msgid "Add examination"
+msgstr ""
+
+#: base/templates/base/my_documents.html:33
+msgid "Examination date"
+msgstr ""
+
+#: base/templates/base/my_documents.html:37
+msgid "Description"
+msgstr ""
+
+#: base/templates/base/my_documents.html:38
+msgid "Short description (optional)"
+msgstr ""
+
+#: base/templates/base/my_documents.html:42
+msgid "Files"
+msgstr ""
+
+#: base/templates/base/my_documents.html:44
+msgid "Drag files here or click"
+msgstr ""
+
+#: base/templates/base/my_documents.html:50
+msgid "Links (optional)"
+msgstr ""
+
+#: base/templates/base/my_documents.html:51
+msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
+msgstr ""
+
+#: base/templates/base/my_documents.html:53
+msgid "Add another link"
+msgstr ""
+
+#: base/templates/base/my_documents.html:54
+msgid ""
+"You can attach links instead of files or together with them. HTTP/HTTPS only."
+msgstr ""
+
+#: base/templates/base/my_documents.html:59
+#: base/templates/base/profile_edit.html:107
+msgid "Save"
+msgstr ""
+
+#: base/templates/base/my_documents.html:91
+#: base/templates/base/patient_exams.html:66
+msgid "No documents"
+msgstr ""
+
+#: base/templates/base/my_documents.html:96
+msgid "No examinations yet."
+msgstr ""
+
+#: base/templates/base/notifications.html:4
+#: base/templates/base/notifications.html:9 templates/base.html:78
+msgid "Notifications"
+msgstr ""
+
+#: base/templates/base/notifications.html:5
+msgid "Your notifications list"
+msgstr ""
+
+#: base/templates/base/notifications.html:15
+#, python-format
+msgid ""
+"\n"
+"            <strong>%(username)s</strong> followed you.\n"
+"          "
+msgstr ""
+
+#: base/templates/base/notifications.html:19
+#, python-format
+msgid ""
+"\n"
+"            <strong>%(username)s</strong> sent you a friend request.\n"
+"          "
+msgstr ""
+
+#: base/templates/base/notifications.html:28
+msgid "No notifications"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:6
+msgid "Patient examinations"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:10
+msgid "Send doctor's recommendation"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:14
+msgid "Enter recommendation..."
+msgstr ""
+
+#: base/templates/base/patient_exams.html:16
+#: blog/templates/blog/blog_page.html:126
+msgid "Send"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:23
+msgid "Sent recommendations"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:31
+#: base/templates/base/recommendations.html:32
+msgid "Doctor"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:61
+msgid "No file attached"
+msgstr ""
+
+#: base/templates/base/patient_exams.html:72
+msgid "No exams available."
+msgstr ""
+
+#: base/templates/base/patients_list.html:7
+msgid "Search patients"
+msgstr ""
+
+#: base/templates/base/patients_list.html:10
+msgid "Enter first or last name..."
+msgstr ""
+
+#: base/templates/base/patients_list.html:11
+#: blog/templates/blog/blog_index_page.html:57
+msgid "Search"
+msgstr ""
+
+#: base/templates/base/patients_list.html:30
+msgid "No genetically confirmed syndromes"
+msgstr ""
+
+#: base/templates/base/patients_list.html:34
+msgid "View examinations"
+msgstr ""
+
+#: base/templates/base/patients_list.html:44
+#: base/templates/base/patients_list.html:47
+#: base/templates/base/recommendations.html:50
+#: base/templates/base/recommendations.html:53
+msgid "Back"
+msgstr ""
+
+#: base/templates/base/patients_list.html:62
+#: base/templates/base/patients_list.html:65
+#: base/templates/base/recommendations.html:66
+#: base/templates/base/recommendations.html:69
+msgid "Next"
+msgstr ""
+
+#: base/templates/base/patients_list.html:72
+msgid "No patients found."
+msgstr ""
+
+#: base/templates/base/patients_list.html:74
+msgid "Enter a query to search for patients."
+msgstr ""
+
+#: base/templates/base/profile.html:12 base/templates/base/profile_edit.html:17
+msgid "User avatar"
+msgstr ""
+
+#: base/templates/base/profile.html:14
+msgid "Default avatar"
+msgstr ""
+
+#: base/templates/base/profile.html:19 base/templates/base/profile_edit.html:36
+#: base/templates/base/profile_onboarding.html:19
+msgid "First name"
+msgstr ""
+
+#: base/templates/base/profile.html:20 base/templates/base/profile_edit.html:40
+#: base/templates/base/profile_onboarding.html:23
+msgid "Last name"
+msgstr ""
+
+#: base/templates/base/profile.html:22 base/templates/base/profile_edit.html:49
+msgid "Date of birth"
+msgstr ""
+
+#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:79
+#: base/templates/base/profile_onboarding.html:59
+msgid "Syndromes"
+msgstr ""
+
+#: base/templates/base/profile.html:40 blog/templates/blog/blog_page.html:83
+msgid "Edit"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:21
+msgid "Upload new"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:22
+#: blog/templates/blog/blog_page.html:89
+#: blog/templates/blog/edit_article.html:88
+msgid "Delete"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:53
+#: base/templates/base/profile_onboarding.html:31
+msgid "Day"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:61
+#: base/templates/base/profile_onboarding.html:40
+msgid "Month"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:69
+#: base/templates/base/profile_onboarding.html:49
+msgid "Year"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:98
+#: base/templates/base/profile_onboarding.html:80
+msgid "Genetically confirmed"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:109
+msgid "Profile updated"
+msgstr ""
+
+#: base/templates/base/profile_onboarding.html:4
+#: base/templates/base/profile_onboarding.html:9
+msgid "Complete your profile"
+msgstr ""
+
+#: base/templates/base/profile_onboarding.html:89
+#: blog/templates/blog/blog_page.html:145
+msgid "Avatar"
+msgstr ""
+
+#: base/templates/base/profile_onboarding.html:94
+msgid "Save and continue"
+msgstr ""
+
+#: base/templates/base/recommendations.html:75
+msgid "No recommendations yet."
+msgstr ""
+
+#: base/templates/base/register.html:18
+msgid "Registration successful!"
+msgstr ""
+
+#: base/templates/base/register.html:18
+msgid "You can"
+msgstr ""
+
+#: base/templates/base/register.html:18
+msgid "log in"
+msgstr ""
+
+#: base/templates/base/register.html:48
+msgid "Already have an account?"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:4
+#: base/templates/base/verify_prompt.html:9
+msgid "Verify your email"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:11
+msgid ""
+"We have sent a confirmation link to your email. Please click the link to "
+"activate your account."
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:15
+msgid "Resend email"
+msgstr ""
+
+#: base/templates/base/wait_for_phone_call.html:10
+msgid "To confirm number"
+msgstr ""
+
+#: base/templates/base/wait_for_phone_call.html:11
+msgid "please place a call to"
+msgstr ""
+
+#: base/templates/base/wait_for_phone_call.html:28
+msgid "Waiting for call"
+msgstr ""
+
+#: base/templates/base/wait_for_phone_call.html:30
+msgid "Enter another number"
+msgstr ""
+
+#: base/views/auth_views.py:34
+msgid "Please fill in all fields."
+msgstr ""
+
+#: base/views/auth_views.py:36
+msgid "Passwords don't match."
+msgstr ""
+
+#: base/views/auth_views.py:38
+msgid "A user with that username already exists."
+msgstr ""
+
+#: base/views/auth_views.py:40
+msgid "This email is already registered."
+msgstr ""
+
+#: base/views/auth_views.py:70 base/views/auth_views.py:272
+msgid "Registration was successful! A confirmation email will arrive shortly."
+msgstr ""
+
+#: base/views/auth_views.py:84 base/views/auth_views.py:283
+msgid "Invalid username or password."
+msgstr ""
+
+#: base/views/auth_views.py:112
+msgid "A verification email has been sent. Please confirm your account."
+msgstr ""
+
+#: base/views/auth_views.py:132
+msgid "Email verification failed or token is invalid."
+msgstr ""
+
+#: base/views/auth_views.py:150
+msgid "Enter phone number."
+msgstr ""
+
+#: base/views/auth_views.py:156
+msgid "Failed to initiate call."
+msgstr ""
+
+#: base/views/auth_views.py:211
+msgid "Please accept all items."
+msgstr ""
+
+#: base/views/auth_views.py:255
+msgid "You are already signed in."
+msgstr ""
+
+#: base/views/doctors_views.py:25
+msgid "You don't have permission to view this page."
+msgstr ""
+
+#: base/views/doctors_views.py:67
+msgid "Recommendation cannot be empty."
+msgstr ""
+
+#: base/views/doctors_views.py:81
+#, python-format
+msgid "Doctor %(docname)s wrote: %(text)s"
+msgstr ""
+
+#: base/views/doctors_views.py:86
+msgid "Recommendation added and the patient has been notified."
+msgstr ""
+
+#: base/views/documents_views.py:96
+msgid "Invalid link(s)"
+msgstr ""
+
+#: base/views/documents_views.py:117 base/views/documents_views.py:165
+msgid "Invalid date format"
+msgstr ""
+
+#: base/views/documents_views.py:119
+msgid "No files selected. You can also add an external link."
+msgstr ""
+
+#: base/views/documents_views.py:136
+msgid "Failed to upload documents. Please try again."
+msgstr ""
+
+#: base/views/documents_views.py:189
+msgid "Failed to update the exam."
+msgstr ""
+
+#: base/views/profile_views.py:180
+msgid "Please fill in the required fields."
+msgstr ""
+
+#: base/views/social_views.py:21
+msgid "Cannot follow yourself."
+msgstr ""
+
+#: base/views/social_views.py:27
+#, python-format
+msgid "%(username)s has followed you."
+msgstr ""
+
+#: blog/models.py:26
+msgid "Intro"
+msgstr ""
+
+#: blog/models.py:115
+msgid "Publication date"
+msgstr ""
+
+#: blog/models.py:122
+msgid "Author"
+msgstr ""
+
+#: blog/models.py:124 blog/templates/blog/create_article.html:23
+#: blog/templates/blog/edit_article.html:26
+msgid "Short description"
+msgstr ""
+
+#: blog/models.py:131 blog/templates/blog/create_article.html:28
+#: blog/templates/blog/edit_article.html:31
+msgid "Main image"
+msgstr ""
+
+#: blog/models.py:133 blog/templates/blog/create_article.html:33
+#: blog/templates/blog/edit_article.html:46
+msgid "Article content"
+msgstr ""
+
+#: blog/models.py:136 blog/models.py:231
+msgid "Soft-deleted"
+msgstr ""
+
+#: blog/models.py:137
+msgid "Likes count"
+msgstr ""
+
+#: blog/models.py:138
+msgid "Comments count"
+msgstr ""
+
+#: blog/models.py:140
+msgid "Approved by admin"
+msgstr ""
+
+#: blog/models.py:141
+msgid "Approved at"
+msgstr ""
+
+#: blog/models.py:143
+msgid "Approved by"
+msgstr ""
+
+#: blog/models.py:218
+msgid "Article like"
+msgstr ""
+
+#: blog/models.py:219
+msgid "Article likes"
+msgstr ""
+
+#: blog/models.py:228
+msgid "Text"
+msgstr ""
+
+#: blog/models.py:229
+msgid "Created at"
+msgstr ""
+
+#: blog/models.py:230
+msgid "Edited at"
+msgstr ""
+
+#: blog/models.py:235
+msgid "Article comment"
+msgstr ""
+
+#: blog/models.py:236
+msgid "Article comments"
+msgstr ""
+
+#: blog/models.py:240
+msgid "🗑 Deleted comment"
+msgstr ""
+
+#: blog/templates/blog/blocks/image_with_caption.html:5
+msgid "Remove block"
+msgstr ""
+
+#: blog/templates/blog/blocks/image_with_caption.html:12
+msgid "Caption..."
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:7 templates/base.html:61
+msgid "Articles"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:8
+#: blog/templates/blog/create_article.html:4
+#: blog/templates/blog/create_article.html:8
+msgid "New article"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:16
+msgid "Popular"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:22
+msgid "My articles"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:28
+msgid "Subscriptions"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:34
+msgid "Doctors"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:41
+msgid "Pending approval"
+msgstr ""
+
+#: blog/templates/blog/blog_index_page.html:55
+msgid "Search by title, author or tags"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:15
+msgid "This article is awaiting approval."
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:18
+msgid "Approve"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:23
+msgid ""
+"Your article is awaiting admin approval and is not visible to other users "
+"yet."
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:33
+msgid "Author avatar"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:40
+#, python-format
+msgid ""
+"\n"
+"          %(n)s follower\n"
+"        "
+msgid_plural ""
+"\n"
+"          %(n)s followers\n"
+"        "
+msgstr[0] ""
+msgstr[1] ""
+
+#: blog/templates/blog/blog_page.html:47
+msgid "Anonymous author"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:60
+msgid "Unfollow"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:60
+msgid "Follow"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:87
+#: blog/templates/blog/edit_article.html:86
+msgid "Delete the article?"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:103
+msgid "Remove like"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:103
+msgid "Like"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:108
+msgid "Log in to like"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:116
+msgid "Comments"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:123
+msgid "Leave a comment..."
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:133
+msgid "to leave a comment"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:150
+msgid "edited"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:18
+#: blog/templates/blog/edit_article.html:21
+msgid "Title"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:40
+#: blog/templates/blog/edit_article.html:53
+msgid "Start writing…"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:44
+#: blog/templates/blog/edit_article.html:57
+msgid "Tags"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:64
+#: blog/templates/blog/edit_article.html:79
+msgid "Save draft"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:67
+#: blog/templates/blog/edit_article.html:75
+msgid "Publish"
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:7
+msgid "Edit article"
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:9
+#: blog/templates/blog/includes/article_cards.html:77
+msgid "Draft"
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:36
+msgid "Current image"
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:39
+msgid "Remove image"
+msgstr ""
+
+#: blog/templates/blog/includes/article_cards.html:79
+msgid "Unpublished changes"
+msgstr ""
+
+#: blog/templates/blog/includes/article_list_fragment.html:10
+msgid "Nothing found."
+msgstr ""
+
+#: blog/templates/blog/includes/article_list_fragment.html:16
+msgid "Page navigation"
+msgstr ""
+
+#: blog/views.py:123
+msgid "Title and content are required."
+msgstr ""
+
+#: blog/views.py:176 blog/views.py:235
+#, python-format
+msgid "System error: %(msg)s"
+msgstr ""
+
+#: blog/views.py:257
+msgid "Insufficient permissions."
+msgstr ""
+
+#: blog/views.py:294 blog/views.py:365
+msgid "Comment cannot be empty."
+msgstr ""
+
+#: blog/views.py:343
+msgid "You cannot delete someone else's comment."
+msgstr ""
+
+#: blog/views.py:361
+msgid "You cannot edit someone else's comment."
+msgstr ""
+
+#: blog/views.py:380
+msgid "No file uploaded."
+msgstr ""
+
+#: blog/views.py:404
+msgid "Upload error."
+msgstr ""
+
+#: templates/base.html:28
+msgid "Rhymes of Life"
+msgstr ""
+
+#: templates/base.html:30
+msgid "Toggle navigation"
+msgstr ""
+
+#: templates/base.html:37
+msgid "About"
+msgstr ""
+
+#: templates/base.html:44
+msgid "My profile"
+msgstr ""
+
+#: templates/base.html:55
+msgid "Recommendations"
+msgstr ""
+
+#: templates/base.html:95
+#, python-format
+msgid ""
+"\n"
+"                                <strong>%(username)s</strong> followed you.\n"
+"                              "
+msgstr ""
+
+#: templates/base.html:108
+msgid "No new notifications"
+msgstr ""
+
+#: templates/base.html:115
+msgid "Show all notifications"
+msgstr ""
+
+#: templates/base.html:124
+msgid "Patients"
+msgstr ""
+
+#: templates/base.html:132
+msgid "Log out"
+msgstr ""
+
+#: templates/base.html:154 templates/base.html:160
+msgid "Switch language"
+msgstr ""
+
+#: templates/base.html:180
+msgid "All rights reserved."
+msgstr ""

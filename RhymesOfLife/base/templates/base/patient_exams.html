@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static i18n form_tags%}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">🧾 {% trans "Patient examinations" %}: {{ patient.first_name }} {{ patient.last_name }}</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">💡 {% trans "Send doctor's recommendation" %}</h5>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-2">
+          <textarea name="content" class="form-control" rows="3" placeholder="{% trans 'Enter recommendation...' %}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+      </form>
+    </div>
+  </div>
+
+  {% if recommendations %}
+    <div class="mb-4">
+      <h5 class="mb-3">{% trans "Sent recommendations" %}</h5>
+      {% for note in recommendations %}
+        <div class="alert alert-secondary">
+          <div class="d-flex justify-content-between">
+            <strong>
+              {% if note.author and note.author.user %}
+                {{ note.author.user.get_full_name|default:note.author.user.username }}
+              {% else %}
+                {% trans "Doctor" %}
+              {% endif %}
+            </strong>
+            <small class="text-muted">{{ note.created_at|date:"d.m.Y H:i" }}</small>
+          </div>
+          <p class="mb-0">{{ note.content }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% for exam in exams %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">📅 {{ exam.exam_date|date:"d.m.Y" }}</h5>
+        {% if exam.description %}
+          <p><em>{{ exam.description }}</em></p>
+        {% endif %}
+        <ul class="list-unstyled">
+          {% for doc in exam.documents.all %}
+            <li class="mb-2">
+              {% if doc.file %}
+                <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer">
+                  📎 {{ doc.file.name|basename }}
+                </a>
+              {% elif doc.external_url %}
+                <a href="{{ doc.external_url }}" target="_blank" rel="noopener noreferrer">
+                  🔗 {{ doc.external_url|truncatechars:60 }}
+                </a>
+              {% else %}
+                <span class="text-muted">{% trans "No file attached" %}</span>
+              {% endif %}
+              <small class="text-muted d-block">🕒 {{ doc.uploaded_at|date:"d.m.Y H:i" }}</small>
+            </li>
+          {% empty %}
+            <li class="text-muted">{% trans "No documents" %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-info">{% trans "No exams available." %}</div>
+  {% endfor %}
+</div>
+{% endblock %}

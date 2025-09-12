@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Notifications" %}{% endblock %}
+{% block meta_description %}{% trans "Your notifications list" %}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-4">{% trans "Notifications" %}</h1>
+  <ul class="list-group">
+    {% for n in notifications %}
+      <li class="list-group-item{% if not n.is_read %} list-group-item-info{% endif %}">
+        <small class="text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</small><br>
+        {% if n.notification_type == 'FOLLOW' %}
+          {% blocktrans with username=n.sender.user.username %}
+            <strong>{{ username }}</strong> followed you.
+          {% endblocktrans %}
+        {% elif n.notification_type == 'FRIEND_REQUEST' %}
+          {% blocktrans with username=n.sender.user.username %}
+            <strong>{{ username }}</strong> sent you a friend request.
+          {% endblocktrans %}
+        {% endif %}
+        {% if n.message %}
+          <div>{{ n.message }}</div>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">{% trans "No notifications" %}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

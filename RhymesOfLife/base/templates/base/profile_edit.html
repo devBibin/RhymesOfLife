@@ -1,9 +1,132 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block extra_css %}{% endblock %}
+
 {% block content %}
-  <h2>Редактировать профиль</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-  </form>
+<div class="container py-5">
+  <div class="card shadow-sm card-profile">
+    <div class="card-body position-relative">
+
+      <div class="d-flex align-items-center mb-4 position-relative">
+        <img
+          id="avatar-img"
+          src="{% if info.avatar %}{{ info.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+          class="rounded-circle avatar-editable me-3"
+          style="width:100px;height:100px;cursor:pointer;"
+          alt="{% trans 'User avatar' %}"
+        >
+
+        <div id="avatar-menu" class="avatar-menu">
+          <button type="button" class="dropdown-item" id="change-avatar-btn">📤 {% trans "Upload new" %}</button>
+          <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 {% trans "Delete" %}</button>
+        </div>
+
+        <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
+        <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
+
+        <div>
+          <h5 class="mb-1">{{ request.user.get_full_name }}</h5>
+        </div>
+      </div>
+
+      <form id="profile-form" method="post" enctype="multipart/form-data" class="row g-3">
+        {% csrf_token %}
+        <div class="col-6">
+          <label class="form-label">{% trans "First name" %}</label>
+          <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}">
+        </div>
+        <div class="col-6">
+          <label class="form-label">{% trans "Last name" %}</label>
+          <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}">
+        </div>
+        <div class="col-6">
+          <label class="form-label">{% trans "Email" %}</label>
+          <input type="email" name="email" class="form-control" value="{{ info.email }}">
+        </div>
+
+        <div class="col-6">
+          <label class="form-label">{% trans "Date of birth" %}</label>
+          <div class="row g-2">
+            <div class="col-4">
+              <select name="day" class="form-select">
+                <option value="">{% trans "Day" %}</option>
+                {% for d in day_range %}
+                  <option value="{{ d }}" {% if info.birth_date and info.birth_date.day == d %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-4">
+              <select name="month" class="form-select">
+                <option value="">{% trans "Month" %}</option>
+                {% for num,name in months_list %}
+                  <option value="{{ num }}" {% if info.birth_date and info.birth_date.month == num %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-4">
+              <select name="year" class="form-select">
+                <option value="">{% trans "Year" %}</option>
+                {% for y in year_range %}
+                  <option value="{{ y }}" {% if info.birth_date and info.birth_date.year == y %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">{% trans "Syndromes" %}</label>
+          <div class="row gy-2">
+            {% for code,label in syndrome_choices %}
+              <div class="col-12 col-md-6">
+                <div class="border rounded p-2 h-100">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
+                           {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
+                    <label class="form-check-label" for="s-{{ code }}">{{ label }}</label>
+                  </div>
+                  <div class="form-check mt-1">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="confirmed_syndromes"
+                           value="{{ code }}"
+                           id="sync-{{ code }}"
+                           data-main="#s-{{ code }}"
+                           {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
+                           {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
+                    <label class="form-check-label" for="sync-{{ code }}">{% trans "Genetically confirmed" %}</label>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-12 text-end mt-3">
+          <button type="submit" class="btn btn-primary px-4">{% trans "Save" %}</button>
+        </div>
+        <div id="form-status" class="col-12 alert alert-success d-none">✔️ {% trans "Profile updated" %}</div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
+    var mainSel=c.getAttribute("data-main");
+    var m=document.querySelector(mainSel);
+    var sync=function(){
+      var enabled=!!(m&&m.checked);
+      c.disabled=!enabled;
+      if(!enabled){c.checked=false;}
+    };
+    if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
+  });
+});
+</script>
 {% endblock %}

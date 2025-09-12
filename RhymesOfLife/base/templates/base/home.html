@@ -1,33 +1,169 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}
-  Главная — {{ block.super }}
+  {% trans "Home" %} — {{ block.super }}
 {% endblock %}
 
 {% block content %}
-  <h2>Добро пожаловать, {{ request.user.username }}!</h2>
-
-  {% if not request.user.additional_info.is_verified %}
-    {% if request.user.additional_info.ready_for_verification %}
-      <p>📩 Письмо для подтверждения уже отправлено.</p>
-      <p>Проверьте почту: <strong>{{ request.user.additional_info.email|default:request.user.email }}</strong></p>
-
-      <form method="post" action="{% url 'resend_verification' %}">
-        {% csrf_token %}
-        <button type="submit">Отправить письмо снова</button>
-      </form>
-
+<div class="container py-4">
+  <div class="text-center mb-5">
+    {% if request.user.is_authenticated %}
+      <h1 class="display-5 fw-bold">
+        {% blocktrans with username=request.user.username %}Welcome, {{ username }}!{% endblocktrans %}
+      </h1>
     {% else %}
-      <p>🔔 Ваш email не подтверждён.</p>
-      <p>Нажмите кнопку ниже, чтобы получить ссылку подтверждения.</p>
-
-      <form method="post" action="{% url 'request_verification' %}">
-        {% csrf_token %}
-        <button type="submit">Подтвердить аккаунт</button>
-      </form>
+      <h1 class="display-5 fw-bold">{% trans "Welcome!" %}</h1>
     {% endif %}
-  {% else %}
-    <p>✅ Ваш email успешно подтверждён. Добро пожаловать в Rhymes of Life!</p>
+
+    {% if request.user.is_authenticated and show_verification_notice %}
+      <div class="alert alert-warning alert-dismissible fade show mt-4 mx-auto" style="max-width: 720px;" role="alert">
+        <strong>{% trans "Email not verified." %}</strong>
+        <span class="ms-1">{% trans "Please verify your email for full access." %}</span>
+        <form method="post" action="{% url 'request_verification' %}" class="d-inline ms-2">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-primary">{% trans "Send email" %}</button>
+        </form>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
+      </div>
+    {% endif %}
+  </div>
+
+  <section class="mb-5">
+    <h2 class="h4 fw-bold mb-3">{% trans "Genetic connective tissue syndromes" %}</h2>
+    <p class="lead">
+      {% trans "Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective tissue disorders and can be life-threatening without timely diagnosis." %}
+    </p>
+  </section>
+
+  {% if syndrome_list %}
+  <section class="row g-4 mb-5">
+    {% for syndrome in syndrome_list %}
+      <div class="col-sm-6 col-md-4">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ syndrome.image_url }}" class="card-img-top" alt="{{ syndrome.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ syndrome.name }}</h5>
+            <p class="card-text">{{ syndrome.short_description|truncatechars:100 }}</p>
+            <a href="{{ syndrome.url }}" class="btn btn-outline-primary w-100" target="_blank" rel="noopener noreferrer">
+              {% trans "Learn more" %}
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
   {% endif %}
+
+  {% if not request.user.is_authenticated %}
+  <section class="mb-5">
+    <div class="row justify-content-center">
+      <div class="col-sm-10 col-md-8 col-lg-6">
+        <div class="card shadow-sm p-4">
+          <div class="text-center mb-3">
+            <h2 class="h5 mb-3">{% trans "Welcome to Rhymes of Life!" %}</h2>
+            <ul class="nav nav-pills nav-justified" id="authTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link {% if active_tab != 'login' %}active{% endif %}" id="signup-tab"
+                        data-bs-toggle="tab" data-bs-target="#signup-pane" type="button" role="tab"
+                        aria-controls="signup-pane" aria-selected="{% if active_tab != 'login' %}true{% else %}false{% endif %}">
+                  {% trans "Sign up" %}
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link {% if active_tab == 'login' %}active{% endif %}" id="login-tab"
+                        data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab"
+                        aria-controls="login-pane" aria-selected="{% if active_tab == 'login' %}true{% else %}false{% endif %}">
+                  {% trans "Log in" %}
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content">
+            <div class="tab-pane fade {% if active_tab != 'login' %}show active{% endif %}" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab">
+              {% if reg_error %}
+                <div class="alert alert-danger">{{ reg_error }}</div>
+              {% endif %}
+              <form method="post" action="{% url 'home' %}" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="signup">
+                <div class="mb-3">
+                  <label for="su-username" class="form-label">{% trans "Username" %}</label>
+                  <input type="text" id="su-username" name="username" class="form-control" required value="{{ reg_values.username|default:'' }}">
+                </div>
+                <div class="mb-3">
+                  <label for="su-email" class="form-label">{% trans "Email" %}</label>
+                  <input type="email" id="su-email" name="email" class="form-control" required value="{{ reg_values.email|default:'' }}">
+                </div>
+                <div class="mb-3">
+                  <label for="su-password1" class="form-label">{% trans "Password" %}</label>
+                  <input type="password" id="su-password1" name="password1" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                  <label for="su-password2" class="form-label">{% trans "Confirm password" %}</label>
+                  <input type="password" id="su-password2" name="password2" class="form-control" required>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" value="" id="su-showpass">
+                  <label class="form-check-label" for="su-showpass">{% trans "Show password" %}</label>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">{% trans "Sign up" %}</button>
+              </form>
+            </div>
+
+            <div class="tab-pane fade {% if active_tab == 'login' %}show active{% endif %}" id="login-pane" role="tabpanel" aria-labelledby="login-tab">
+              {% if login_error %}
+                <div class="alert alert-danger">{{ login_error }}</div>
+              {% endif %}
+              <form method="post" action="{% url 'home' %}" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="login">
+                <div class="mb-3">
+                  <label for="li-username" class="form-label">{% trans "Username" %}</label>
+                  <input type="text" id="li-username" name="username" class="form-control" required value="{{ login_values.username|default:'' }}">
+                </div>
+                <div class="mb-3">
+                  <label for="li-password" class="form-label">{% trans "Password" %}</label>
+                  <input type="password" id="li-password" name="password" class="form-control" required>
+                </div>
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" value="" id="li-showpass">
+                  <label class="form-check-label" for="li-showpass">{% trans "Show password" %}</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">{% trans "Log in" %}</button>
+                <p class="text-center text-muted mt-3 mb-0">
+                  {% trans "Don't have an account?" %} <a class="link-primary" href="#" onclick="document.getElementById('signup-tab').click(); return false;">{% trans "Sign up" %}</a>
+                </p>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const suToggle = document.getElementById('su-showpass');
+        const suP1 = document.getElementById('su-password1');
+        const suP2 = document.getElementById('su-password2');
+        if (suToggle && suP1 && suP2) {
+          suToggle.addEventListener('change', function () {
+            const t = this.checked ? 'text' : 'password';
+            suP1.type = t; suP2.type = t;
+          });
+        }
+        const liToggle = document.getElementById('li-showpass');
+        const liP = document.getElementById('li-password');
+        if (liToggle && liP) {
+          liToggle.addEventListener('change', function () {
+            liP.type = this.checked ? 'text' : 'password';
+          });
+        }
+      })();
+    </script>
+  </section>
+  {% endif %}
+</div>
 {% endblock %}

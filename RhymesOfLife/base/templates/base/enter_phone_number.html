@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <div class="card shadow-sm p-4" style="max-width:520px;width:100%;">
+    <h2 class="mb-3 text-center">{% trans "Confirm your phone" %}</h2>
+    <p class="text-muted text-center mb-4">{% trans "Enter your phone number. We will verify it by a short call." %}</p>
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <label class="form-label">{% trans "Your phone number" %}</label>
+      <input
+        type="tel"
+        name="phone"
+        class="form-control mb-2"
+        placeholder="+7 (___) ___-__-__"
+        required
+      >
+      <small class="text-muted d-block">
+        {% trans "Use international format like +7 999 123-45-67." %}
+      </small>
+      <button class="btn btn-primary w-100 mt-3">{% trans "Get code by call" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

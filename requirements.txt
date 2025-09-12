@@ -5,3 +5,14 @@ sqlparse==0.5.3
 typing_extensions==4.12.2
 watchdog==6.0.0
 requests>=2.31.0
+django-sekizai==4.1.0
+django-mptt==0.16.0
+django_nyt==1.4.2
+python-magic==0.4.27
+pillow==11.3.0
+wagtail==7.0.2
+django-ckeditor==6.7.3
+django-ckeditor-5==0.2.18
+bleach==6.2.0
+pyTelegramBotAPI==4.29.1
+

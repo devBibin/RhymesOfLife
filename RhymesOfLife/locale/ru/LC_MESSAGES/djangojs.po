@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-27 22:09+0000\n"
+"PO-Revision-Date: 2025-08-14 12:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: static/js/article_detail.js:31
+msgid "Remove like"
+msgstr "Убрать лайк"
+
+#: static/js/article_detail.js:31
+msgid "Like"
+msgstr "Поставить лайк"
+
+#: static/js/article_detail.js:55
+msgid "No comments yet."
+msgstr "Пока нет комментариев"
+
+#: static/js/article_detail.js:69
+msgid "Delete?"
+msgstr "Удалить?"
+
+#: static/js/article_detail.js:107
+msgid "Save"
+msgstr "Сохранить"
+
+#: static/js/article_detail.js:162
+msgid "Just now"
+msgstr "Только что"
+
+#: static/js/article_detail.js:164
+msgid "Edit"
+msgstr "Редактировать"
+
+#: static/js/article_detail.js:165
+msgid "Delete"
+msgstr "Удалить"
+
+#: static/js/avatar.js:4
+msgid "Error while saving."
+msgstr "Ошибка при сохранении."
+
+#: static/js/avatar.js:5
+msgid "Network or server error."
+msgstr "Ошибка сети или сервера."
+
+#: static/js/ckeditor-init.js:52
+msgid "Start writing…"
+msgstr "Начните писать…"
+
+#: static/js/ckeditor-init.js:53
+msgid "Content is required."
+msgstr "Необходимо ввести содержимое."
+
+#: static/js/editor.js:44 static/js/editor.js:57
+msgid "Remove block"
+msgstr "Удалить блок"
+
+#: static/js/editor.js:46
+msgid "Enter text…"
+msgstr "Введите текст…"
+
+#: static/js/editor.js:60
+msgid "Image caption…"
+msgstr "Подпись к изображению…"
+
+#: static/js/exam.js:34
+msgid "Paste link"
+msgstr ""
+
+#: static/js/exam.js:35
+#, fuzzy
+#| msgid "Remove like"
+msgid "Remove link"
+msgstr "Убрать лайк"
+
+#: static/js/exam.js:56
+msgid "Unsupported file type: %(name)s"
+msgstr "Неподдерживаемый формат: %(name)s"
+
+#: static/js/exam.js:73 static/js/exam.js:145
+msgid "Remove file"
+msgstr "Удалить файл"
+
+#: static/js/exam.js:91
+msgid "Please specify the exam date."
+msgstr "Укажите дату обследования."
+
+#: static/js/exam.js:121
+msgid "Failed to save."
+msgstr "Не удалось сохранить."
+
+#: static/js/exam.js:124 static/js/exam.js:167 static/js/exam.js:183
+msgid "Network error."
+msgstr "Ошибка сети."
+
+#: static/js/exam.js:152
+msgid "Unable to load data."
+msgstr "Не удалось загрузить данные."
+
+#: static/js/exam.js:160
+msgid "Delete this exam?"
+msgstr "Удалить обследование?"
+
+#: static/js/exam.js:166 static/js/exam.js:182
+msgid "Deletion failed."
+msgstr "Ошибка удаления."
+
+#: static/js/exam.js:176
+msgid "Delete this file?"
+msgstr "Удалить файл?"
+
+#: static/js/follow.js:22
+msgid "Follow"
+msgstr "Подписаться"
+
+#: static/js/follow.js:22
+msgid "Unfollow"
+msgstr "Отписаться"
+
+#: static/js/friends.js:17
+msgid "Success"
+msgstr "Успешно"
+
+#: static/js/friends.js:19
+msgid "Error"
+msgstr "Ошибка"
+
+#: static/js/friends.js:22
+msgid "Network error"
+msgstr "Ошибка сети"

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static wagtailimages_tags i18n %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <h1 class="mb-0">{% trans "Edit article" %}</h1>
+    {% if not page.live %}
+      <span class="badge bg-secondary">{% trans "Draft" %}</span>
+    {% endif %}
+  </div>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" class="mb-3">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">{% trans "Title" %}</label>
+      <input name="title" class="form-control" required value="{{ page.title }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{% trans "Short description" %}</label>
+      <textarea name="intro" class="form-control" required>{{ page.intro }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{% trans "Main image" %}</label>
+      <input type="file" name="main_image" class="form-control" accept="image/*">
+      {% if page.main_image %}
+        <div class="mt-2">
+          {% image page.main_image width-300 as prev %}
+          <img src="{{ prev.url }}" class="img-thumbnail" width="150" alt="{% trans 'Current image' %}">
+          <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" name="main_image-clear" id="main_image-clear">
+            <label class="form-check-label" for="main_image-clear">{% trans "Remove image" %}</label>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{% trans "Article content" %}</label>
+      <textarea id="body"
+                name="body"
+                class="form-control js-ckeditor"
+                rows="12"
+                data-language="{{ LANGUAGE_CODE|slice:':2' }}"
+                data-upload-url="{% url 'ck5_upload' %}"
+                data-placeholder="{% trans 'Start writing…' %}">{{ page.body|safe }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{% trans "Tags" %}</label>
+      <div class="row row-cols-2 row-cols-md-3 g-2">
+        {% for tag in all_tags %}
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="tags"
+                   id="tag-{{ forloop.counter }}"
+                   value="{{ tag }}"
+                   {% if tag in selected_tags %}checked{% endif %}>
+            <label class="form-check-label" for="tag-{{ forloop.counter }}">{{ tag }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 align-items-center">
+      <button type="submit" name="action" value="publish" class="btn btn-primary">
+        {% trans "Publish" %}
+      </button>
+      {% if not page.live %}
+        <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
+          {% trans "Save draft" %}
+        </button>
+      {% endif %}
+    </div>
+  </form>
+
+  <form action="{% url 'delete_article' page.id %}" method="post" class="d-inline"
+        onsubmit="return confirm('{% trans "Delete the article?" %}')">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">{% trans "Delete" %}</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+  {% if LANGUAGE_CODE|slice:":2" == 'ru' %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/translations/ru.js"></script>
+  {% endif %}
+
+  <script src="{% static 'js/ckeditor-init.js' %}"></script>
+
+  <style>.ck-editor__editable_inline{min-height:360px}</style>
+{% endblock %}

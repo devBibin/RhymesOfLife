@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm card-profile">
+    <div class="card-body text-center">
+      {% if info.avatar %}
+        <img src="{{ info.avatar.url }}" class="rounded-circle profile-avatar mb-3" style="width:120px;height:120px;" alt="{% trans 'User avatar' %}">
+      {% else %}
+        <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle profile-avatar mb-3" style="width:120px;height:120px;" alt="{% trans 'Default avatar' %}">
+      {% endif %}
+      <h4>{{ user_profile.get_full_name }}</h4>
+
+      <div class="row text-start gx-3 gy-2 mt-4">
+        <div class="col-6"><strong>{% trans "First name" %}:</strong> {{ info.first_name|default:"—" }}</div>
+        <div class="col-6"><strong>{% trans "Last name" %}:</strong> {{ info.last_name|default:"—" }}</div>
+        <div class="col-6"><strong>{% trans "Email" %}:</strong> {{ info.email|default:user_profile.email }}</div>
+        <div class="col-6"><strong>{% trans "Date of birth" %}:</strong> {{ info.birth_date|date:"d.m.Y"|default:"—" }}</div>
+        <div class="col-12">
+          <strong>{% trans "Syndromes" %}:</strong>
+          {% if info.syndromes %}
+            {% for code,label in syndrome_choices %}
+              {% if code in info.syndromes %}
+                <span class="badge bg-secondary text-dark me-1">{{ label }}</span>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+      </div>
+
+      {% if editable %}
+        <div class="mt-4">
+          <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">
+            <i class="bi bi-pencil-fill me-1"></i> {% trans "Edit" %}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

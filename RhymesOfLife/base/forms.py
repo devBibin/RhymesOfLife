@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import AdditionalUserInfo
 
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -24,10 +25,11 @@ class RegisterForm(UserCreationForm):
 
         return user
 
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = AdditionalUserInfo
-        fields = ['syndrome', 'birth_date']
+        fields = ['avatar','first_name', 'last_name', 'syndrome', 'birth_date']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),
             'syndrome': forms.Textarea(attrs={'rows': 3}),

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static i18n form_tags %}
+
+{% block title %}{{ page.title }}{% endblock %}
+{% block meta_description %}{{ page.intro }}{% endblock %}
+
+{% block content %}
+<input type="hidden" id="page-id" value="{{ page.id }}">
+<div class="container article-container py-4">
+  <h1 class="article-title text-break">{{ page.title }}</h1>
+
+  {% if not page.is_approved %}
+    {% if request.user.is_staff %}
+      <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <div>⏳ {% trans "This article is awaiting approval." %}</div>
+        <form method="post" action="{% url 'approve_article' page.id %}">
+          {% csrf_token %}
+          <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
+        </form>
+      </div>
+    {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+      <div class="alert alert-info">
+        ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
+    {% if page.author and page.author.avatar %}
+      <img src="{{ page.author.avatar.url }}"
+           class="author-avatar rounded-circle me-2"
+           width="48"
+           alt="{% trans 'Author avatar' %}">
+    {% endif %}
+
+    <div class="small text-muted me-2">
+      {% if page.author %}
+        {{ page.author.first_name }} {{ page.author.last_name }}
+        •
+        {% blocktrans count n=page.author.followers_count %}
+          {{ n }} follower
+        {% plural %}
+          {{ n }} followers
+        {% endblocktrans %}
+        • {{ page.date|date:"j E Y" }}
+      {% else %}
+        {% trans "Anonymous author" %} • {{ page.date|date:"j E Y" }}
+      {% endif %}
+    </div>
+
+    {% if request.user.is_authenticated and page.author and request.user != page.author.user %}
+      {% with request.user.additional_info|is_following:page.author as following %}
+        <button
+          id="follow-button"
+          class="btn btn-sm {% if following %}btn-outline-danger{% else %}btn-outline-primary{% endif %}"
+          data-following="{{ following|yesno:'true,false' }}"
+          data-follow-url="{% url 'follow_user' page.author.user.id %}"
+          data-unfollow-url="{% url 'unfollow_user' page.author.user.id %}"
+        >
+          {% if following %}{% trans "Unfollow" %}{% else %}{% trans "Follow" %}{% endif %}
+        </button>
+      {% endwith %}
+    {% endif %}
+  </div>
+
+  {% if page.main_image %}
+    <div class="article-main-image mb-4">
+      {% image page.main_image fill-800x400 class="img-fluid rounded w-100" alt=page.title %}
+    </div>
+  {% endif %}
+
+  <div class="article-intro lead mb-4 text-break">
+    {{ page.intro }}
+  </div>
+
+  <div class="article-body text-break">
+    {{ page.body|richtext }}
+  </div>
+
+  {% if request.user == page.author.user or request.user.is_superuser %}
+    <div class="article-actions mt-4">
+      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary me-2">
+        {% trans "Edit" %}
+      </a>
+      <form action="{% url 'delete_article' page.id %}" method="post"
+            style="display:inline;"
+            onsubmit="return confirm('{% trans 'Delete the article?' %}');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">{% trans "Delete" %}</button>
+      </form>
+    </div>
+  {% endif %}
+
+  <div class="article-interactions mt-4">
+    <div class="d-flex align-items-center mb-3">
+      <span class="me-3"><span id="like-count">{{ page.likes_count }}</span> ❤️</span>
+      <span><span id="comment-count">{{ page.comments_count }}</span> 💬</span>
+    </div>
+
+    {% if request.user.is_authenticated %}
+      <button id="like-btn"
+              class="btn {% if page.is_liked_by|call_method:request.user %}btn-danger{% else %}btn-outline-danger{% endif %}">
+        {% if page.is_liked_by|call_method:request.user %}{% trans "Remove like" %}{% else %}{% trans "Like" %}{% endif %}
+      </button>
+    {% else %}
+      <a href="{% url 'account_login' %}?next={{ request.path }}"
+         class="btn btn-outline-secondary">
+        {% trans "Log in to like" %}
+      </a>
+    {% endif %}
+  </div>
+
+  <hr class="my-4">
+
+  <div class="article-comments">
+    <h5 class="mb-3">{% trans "Comments" %}</h5>
+
+    {% if request.user.is_authenticated %}
+      <form id="comment-form" class="mb-4">
+        {% csrf_token %}
+        <div class="mb-2">
+          <textarea name="text" class="form-control"
+                    placeholder="{% trans 'Leave a comment...' %}"
+                    required rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+      </form>
+    {% else %}
+      <div class="alert alert-info mb-4">
+        <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">
+          {% trans "Log in" %}
+        </a>
+        , {% trans "to leave a comment" %}.
+      </div>
+    {% endif %}
+
+    <div id="comments">
+      {% for comment in page.visible_comments %}
+        <div class="comment mb-3" data-comment-id="{{ comment.id }}">
+          <div class="d-flex align-items-center mb-1">
+            {% if comment.author.avatar %}
+              <img src="{{ comment.author.avatar.url }}"
+                   class="comment-avatar rounded-circle me-2"
+                   width="32"
+                   alt="{% trans 'Avatar' %}">
+            {% endif %}
+            <strong>{{ comment.author.first_name }}</strong>
+            <small class="text-muted ms-2">
+              {{ comment.created_at|date:"d.m.Y H:i" }}
+              {% if comment.edited_at %}({% trans "edited" %}){% endif %}
+            </small>
+            {% if comment.author.user == request.user or request.user.is_superuser %}
+              <div class="ms-auto">
+                <button class="btn btn-sm btn-outline-secondary edit-comment-btn">✏️</button>
+                <button class="btn btn-sm btn-outline-danger delete-comment-btn">🗑</button>
+              </div>
+            {% endif %}
+          </div>
+          <p class="comment-text text-break">{{ comment.text|linebreaks }}</p>
+        </div>
+      {% empty %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+  {% csrf_token %}
+  <script src="{% static 'js/follow.js' %}"></script>
+{% endblock extra_js %}
