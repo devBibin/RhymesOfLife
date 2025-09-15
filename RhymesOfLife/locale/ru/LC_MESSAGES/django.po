@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 11:17+0000\n"
+"POT-Creation-Date: 2025-09-15 17:57+0000\n"
 "PO-Revision-Date: 2025-08-21 00:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -22,16 +22,16 @@ msgstr ""
 msgid "Email not verified."
 msgstr "Email не подтверждён."
 
-#: base/models.py:54
+#: base/models.py:80
 #, python-format
 msgid "Invalid syndrome codes: %(codes)s"
 msgstr "Недопустимые коды синдромов: %(codes)s"
 
-#: base/models.py:133
+#: base/models.py:159
 msgid "Confirmed codes must be a subset of syndromes."
 msgstr "Подтверждённые коды должны быть подмножеством синдромов."
 
-#: base/models.py:214
+#: base/models.py:240
 msgid "Either a file or an external link is required."
 msgstr "Необходимо загрузить файл или указать внешнюю ссылку."
 
@@ -53,6 +53,7 @@ msgstr "ID пользователя"
 #: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:44
 #: base/templates/base/profile_onboarding.html:27
 #: base/templates/base/register.html:30
+#: base/templates/base/reset_request.html:39
 msgid "Email"
 msgstr "Email"
 
@@ -89,7 +90,6 @@ msgid "Connect Telegram"
 msgstr "Подключить Telegram"
 
 #: base/templates/base/connect_telegram.html:15
-#| msgid "Email not verified."
 msgid "Email verified."
 msgstr "Email подтверждён."
 
@@ -127,7 +127,6 @@ msgstr "Вернитесь на эту страницу и нажмите «Пр
 
 #: base/templates/base/connect_telegram.html:36
 #, python-format
-#| msgid "Welcome, %(username)s!"
 msgid "Open @%(bot_username)s"
 msgstr "Открыть @%(bot_username)s"
 
@@ -160,12 +159,10 @@ msgid "Privacy Policy"
 msgstr "Политика конфиденциальности"
 
 #: base/templates/base/consents.html:21
-#| msgid "Consent to personal data processing"
 msgid "Consent to personal data processing (Patient)"
 msgstr "Согласие на обработку персональных данных (Пациент)"
 
 #: base/templates/base/consents.html:26
-#| msgid "Consent to personal data processing"
 msgid "Consent to personal data processing (Expert/Doctor)"
 msgstr "Согласие на обработку персональных данных (Эксперт/Врач)"
 
@@ -186,7 +183,6 @@ msgid "I consent to personal data processing"
 msgstr "Я даю согласие на обработку персональных данных"
 
 #: base/templates/base/consents.html:52
-#| msgid "Patient examinations"
 msgid "patient version"
 msgstr "версия для пациентов"
 
@@ -232,7 +228,6 @@ msgstr ""
 "ней."
 
 #: base/templates/base/consents.html:120
-#| msgid "Consent to personal data processing"
 msgid "Consent to Personal Data Processing (Patient)"
 msgstr "Согласие на обработку персональных данных (Пациент)"
 
@@ -268,7 +263,6 @@ msgid "last name, first name, middle name (if any);"
 msgstr "фамилия, имя, отчество (при наличии);"
 
 #: base/templates/base/consents.html:142
-#| msgid "Date of birth"
 msgid "date of birth;"
 msgstr "дата рождения;"
 
@@ -351,8 +345,7 @@ msgstr ""
 
 #: base/templates/base/consents.html:162
 msgid "enabling registration on the “Rhythms of Life” project website."
-msgstr ""
-"предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
+msgstr "предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
 
 #: base/templates/base/consents.html:166
 msgid ""
@@ -563,12 +556,11 @@ msgid ""
 "This consent is given both with and without the use of automation tools."
 msgstr ""
 "Все сведения об обработке персональных данных Пользователей на Сайте "
-"содержатся в Политике в отношении персональных данных "
-"(https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). Настоящее согласие даётся "
-"как с использованием средств автоматизации, так и без их использования."
+"содержатся в Политике в отношении персональных данных (https://"
+"doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). Настоящее согласие даётся как с "
+"использованием средств автоматизации, так и без их использования."
 
 #: base/templates/base/consents.html:318
-#| msgid "Consent to personal data processing"
 msgid "Consent to Personal Data Processing (Expert/Doctor)"
 msgstr "Согласие на обработку персональных данных (Эксперт/Врач)"
 
@@ -600,7 +592,6 @@ msgstr ""
 "данных Эксперта:"
 
 #: base/templates/base/consents.html:340
-#| msgid "Date of birth"
 msgid "date and place of birth;"
 msgstr "дата и место рождения;"
 
@@ -645,8 +636,8 @@ msgid ""
 "information on attestation/certification, advanced training, professional "
 "retraining;"
 msgstr ""
-"сведения об аттестации/сертификации, повышении квалификации, профессиональной "
-"переподготовке;"
+"сведения об аттестации/сертификации, повышении квалификации, "
+"профессиональной переподготовке;"
 
 #: base/templates/base/consents.html:350
 msgid "information on awards (commendations), honorary titles;"
@@ -680,8 +671,7 @@ msgstr ""
 msgid ""
 "concluding an agreement on the Expert’s participation in the “Rhythms of "
 "Life” project;"
-msgstr ""
-"заключение соглашения об участии Эксперта в проекте «Ритмы жизни»;"
+msgstr "заключение соглашения об участии Эксперта в проекте «Ритмы жизни»;"
 
 #: base/templates/base/consents.html:358
 msgid ""
@@ -697,8 +687,7 @@ msgstr ""
 msgid ""
 "publishing information about the Expert on the “Rhythms of Life” project "
 "website;"
-msgstr ""
-"размещение информации об Эксперте на сайте проекта «Ритмы жизни»;"
+msgstr "размещение информации об Эксперте на сайте проекта «Ритмы жизни»;"
 
 #: base/templates/base/consents.html:360
 msgid ""
@@ -712,8 +701,7 @@ msgstr ""
 msgid ""
 "providing the possibility to register on the “Rhythms of Life” project "
 "website."
-msgstr ""
-"предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
+msgstr "предоставление возможности регистрации на сайте проекта «Ритмы жизни»."
 
 #: base/templates/base/consents.html:365
 msgid ""
@@ -765,9 +753,9 @@ msgid ""
 "the measures provided by law to protect their rights."
 msgstr ""
 "Эксперт вправе требовать разъяснения, блокирования или уничтожения своих "
-"персональных данных, если данные являются неполными, устаревшими, "
-"неточными, получены незаконно или излишни для заявленной цели обработки, а "
-"также принимать предусмотренные законом меры по защите своих прав."
+"персональных данных, если данные являются неполными, устаревшими, неточными, "
+"получены незаконно или излишни для заявленной цели обработки, а также "
+"принимать предусмотренные законом меры по защите своих прав."
 
 #: base/templates/base/consents.html:403
 msgid ""
@@ -813,8 +801,9 @@ msgid ""
 "(including accidental) access, including the detection and recording of such "
 "access."
 msgstr ""
-"Оператор обеспечивает безопасность персональных данных от несанкционированного "
-"(включая случайного) доступа, включая выявление и фиксацию таких случаев."
+"Оператор обеспечивает безопасность персональных данных от "
+"несанкционированного (включая случайного) доступа, включая выявление и "
+"фиксацию таких случаев."
 
 #: base/templates/base/consents.html:440
 msgid ""
@@ -856,10 +845,9 @@ msgid ""
 "both with and without the use of automation tools."
 msgstr ""
 "Вся информация об обработке персональных данных Пользователей на Сайте "
-"приведена в Политике в отношении персональных данных "
-"(https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). Настоящее согласие на "
-"обработку персональных данных даётся как с использованием средств "
-"автоматизации, так и без них."
+"приведена в Политике в отношении персональных данных (https://doc.bfastra.ru/"
+"docs/polozhenie_o_pdn.pdf). Настоящее согласие на обработку персональных "
+"данных даётся как с использованием средств автоматизации, так и без них."
 
 #: base/templates/base/enter_phone_number.html:7
 #: base/templates/base/wait_for_phone_call.html:7
@@ -925,7 +913,7 @@ msgid "Welcome to Rhymes of Life!"
 msgstr "Добро пожаловать в Rhymes of Life!"
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/home.html:137 base/templates/base/login.html:40
 #: base/templates/base/register.html:4 base/templates/base/register.html:11
 #: base/templates/base/register.html:44
 msgid "Sign up"
@@ -944,6 +932,7 @@ msgid "Password"
 msgstr "Пароль"
 
 #: base/templates/base/home.html:104 base/templates/base/register.html:40
+#: base/templates/base/reset_new.html:27
 msgid "Confirm password"
 msgstr "Повторите пароль"
 
@@ -951,7 +940,11 @@ msgstr "Повторите пароль"
 msgid "Show password"
 msgstr "Показать пароль"
 
-#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/home.html:135 base/templates/base/login.html:42
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+#: base/templates/base/home.html:137 base/templates/base/login.html:40
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
@@ -1234,6 +1227,76 @@ msgstr "войти"
 msgid "Already have an account?"
 msgstr "Уже есть аккаунт?"
 
+#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:11
+msgid "Set new password"
+msgstr "Повторите новый пароль пароль"
+
+#: base/templates/base/reset_new.html:22
+msgid "New password"
+msgstr "Новый пароль"
+
+#: base/templates/base/reset_new.html:31
+msgid "Change password"
+msgstr "Сменить пароль"
+
+#: base/templates/base/reset_new.html:35
+#: base/templates/base/reset_request.html:51
+#: base/templates/base/reset_verify.html:46
+msgid "Back to sign in"
+msgstr "Вернуться к входу"
+
+#: base/templates/base/reset_request.html:4
+#: base/templates/base/reset_request.html:11
+msgid "Reset password"
+msgstr "Показать пароль"
+
+#: base/templates/base/reset_request.html:23
+msgid "Username or email"
+msgstr "Подтвердите вашу почту"
+
+#: base/templates/base/reset_request.html:32
+msgid "Your username or email"
+msgstr "Ваш username или email"
+
+#: base/templates/base/reset_request.html:37
+msgid "Delivery channel"
+msgstr "Способ подтверждения"
+
+#: base/templates/base/reset_request.html:40
+msgid "Telegram"
+msgstr "Telegram"
+
+#: base/templates/base/reset_request.html:43
+msgid "If Telegram is not linked to your account, use Email."
+msgstr ""
+"Если Telegram не привязан к вашему аккаунту, воспользуйтесь электронной "
+"почтой."
+
+#: base/templates/base/reset_request.html:47
+msgid "Send code"
+msgstr "Отправить письмо"
+
+#: base/templates/base/reset_verify.html:4
+#: base/templates/base/reset_verify.html:11
+msgid "Enter code"
+msgstr "Введите код"
+
+#: base/templates/base/reset_verify.html:13
+msgid "We have sent a one-time code. Enter it below."
+msgstr "Мы отправили одноразовый код. Введите его ниже."
+
+#: base/templates/base/reset_verify.html:25
+msgid "Code"
+msgstr "Код"
+
+#: base/templates/base/reset_verify.html:40
+msgid "Verify"
+msgstr "Проверить"
+
+#: base/templates/base/reset_verify.html:44
+msgid "Resend code"
+msgstr "Отправить письмо ещё раз"
+
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:9
 msgid "Verify your email"
@@ -1267,13 +1330,85 @@ msgstr "Ожидание звонка"
 msgid "Enter another number"
 msgstr "Указать другой номер"
 
+#: base/templates/emails/password_reset_code.html:8
+#, fuzzy
+#| msgid "Password"
+msgid "Password reset"
+msgstr "Сброс пароля"
+
+#: base/templates/emails/password_reset_code.html:9
+msgid "Use this one-time code to reset your password:"
+msgstr "Используйте этот одноразовый код для сброса вашего пароля:"
+
+#: base/templates/emails/password_reset_code.html:11
+#, python-format
+msgid "The code expires in %(minutes)s minutes."
+msgstr "Срок действия кода истекает через %(minutes)s минут."
+
+#: base/templates/emails/password_reset_code.html:12
+msgid "If you didn't request this, you can ignore this email."
+msgstr "Если вы не запрашивали это письмо, вы можете проигнорировать его."
+
+#: base/utils/password_reset.py:62
+msgid "Password reset code"
+msgstr "Код для сброса пароля"
+
+#: base/utils/password_reset.py:63 base/utils/password_reset.py:97
+#, python-format
+msgid ""
+"Your password reset code is %(code)s. It expires in %(minutes)s minutes."
+msgstr ""
+"Ваш код для сброса пароля — %(code)s. Срок его действия истекает через "
+"%(minutes)s минут."
+
+#: base/views/auth_reset_views.py:38
+msgid "Enter your username or email."
+msgstr "Введите свое имя пользователя или адрес электронной почты."
+
+#: base/views/auth_reset_views.py:47
+msgid "Too many requests. Try again later."
+msgstr "Слишком много запросов. Попробуйте еще раз позже."
+
+#: base/views/auth_reset_views.py:56
+msgid "Telegram is not linked to this account."
+msgstr "Телеграм-бот не настроен."
+
+#: base/views/auth_reset_views.py:60
+msgid "Too many requests for this account. Try again later."
+msgstr ""
+"Слишком много запросов к этой учетной записи. Попробуйте еще раз позже."
+
+#: base/views/auth_reset_views.py:76
+msgid "Failed to send a code. Please try again later."
+msgstr "Не удалось загрузить документы. Попробуйте ещё раз."
+
+#: base/views/auth_reset_views.py:79
+msgid "If the account exists, a code has been sent."
+msgstr "Если учетная запись существует, то код был отправлен."
+
+#: base/views/auth_reset_views.py:92
+msgid "Invalid code."
+msgstr "Неверный код."
+
+#: base/views/auth_reset_views.py:96
+msgid "Code is expired or invalid."
+msgstr "Срок действия кода истёк или он недействителен."
+
+#: base/views/auth_reset_views.py:101
+msgid "Incorrect code."
+msgstr "Неверный код."
+
+#: base/views/auth_reset_views.py:124 base/views/auth_views.py:36
+msgid "Passwords don't match."
+msgstr "Пароли не совпадают."
+
+#: base/views/auth_reset_views.py:132
+msgid "Password has been reset. You can sign in now."
+msgstr "Пароль был сброшен. Теперь вы можете войти в систему."
+
 #: base/views/auth_views.py:34
 msgid "Please fill in all fields."
 msgstr "Пожалуйста, заполните все поля."
-
-#: base/views/auth_views.py:36
-msgid "Passwords don't match."
-msgstr "Пароли не совпадают."
 
 #: base/views/auth_views.py:38
 msgid "A user with that username already exists."

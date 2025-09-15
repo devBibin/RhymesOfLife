@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 11:17+0000\n"
+"POT-Creation-Date: 2025-09-15 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,16 +22,16 @@ msgstr ""
 msgid "Email not verified."
 msgstr ""
 
-#: base/models.py:54
+#: base/models.py:80
 #, python-format
 msgid "Invalid syndrome codes: %(codes)s"
 msgstr ""
 
-#: base/models.py:133
+#: base/models.py:159
 msgid "Confirmed codes must be a subset of syndromes."
 msgstr ""
 
-#: base/models.py:214
+#: base/models.py:240
 msgid "Either a file or an external link is required."
 msgstr ""
 
@@ -53,6 +53,7 @@ msgstr ""
 #: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:44
 #: base/templates/base/profile_onboarding.html:27
 #: base/templates/base/register.html:30
+#: base/templates/base/reset_request.html:39
 msgid "Email"
 msgstr ""
 
@@ -744,7 +745,7 @@ msgid "Welcome to Rhymes of Life!"
 msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/home.html:137 base/templates/base/login.html:40
 #: base/templates/base/register.html:4 base/templates/base/register.html:11
 #: base/templates/base/register.html:44
 msgid "Sign up"
@@ -763,6 +764,7 @@ msgid "Password"
 msgstr ""
 
 #: base/templates/base/home.html:104 base/templates/base/register.html:40
+#: base/templates/base/reset_new.html:27
 msgid "Confirm password"
 msgstr ""
 
@@ -770,7 +772,11 @@ msgstr ""
 msgid "Show password"
 msgstr ""
 
-#: base/templates/base/home.html:136 base/templates/base/login.html:40
+#: base/templates/base/home.html:135 base/templates/base/login.html:42
+msgid "Forgot password?"
+msgstr ""
+
+#: base/templates/base/home.html:137 base/templates/base/login.html:40
 msgid "Don't have an account?"
 msgstr ""
 
@@ -1045,6 +1051,74 @@ msgstr ""
 msgid "Already have an account?"
 msgstr ""
 
+#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:11
+msgid "Set new password"
+msgstr ""
+
+#: base/templates/base/reset_new.html:22
+msgid "New password"
+msgstr ""
+
+#: base/templates/base/reset_new.html:31
+msgid "Change password"
+msgstr ""
+
+#: base/templates/base/reset_new.html:35
+#: base/templates/base/reset_request.html:51
+#: base/templates/base/reset_verify.html:46
+msgid "Back to sign in"
+msgstr ""
+
+#: base/templates/base/reset_request.html:4
+#: base/templates/base/reset_request.html:11
+msgid "Reset password"
+msgstr ""
+
+#: base/templates/base/reset_request.html:23
+msgid "Username or email"
+msgstr ""
+
+#: base/templates/base/reset_request.html:32
+msgid "Your username or email"
+msgstr ""
+
+#: base/templates/base/reset_request.html:37
+msgid "Delivery channel"
+msgstr ""
+
+#: base/templates/base/reset_request.html:40
+msgid "Telegram"
+msgstr ""
+
+#: base/templates/base/reset_request.html:43
+msgid "If Telegram is not linked to your account, use Email."
+msgstr ""
+
+#: base/templates/base/reset_request.html:47
+msgid "Send code"
+msgstr ""
+
+#: base/templates/base/reset_verify.html:4
+#: base/templates/base/reset_verify.html:11
+msgid "Enter code"
+msgstr ""
+
+#: base/templates/base/reset_verify.html:13
+msgid "We have sent a one-time code. Enter it below."
+msgstr ""
+
+#: base/templates/base/reset_verify.html:25
+msgid "Code"
+msgstr ""
+
+#: base/templates/base/reset_verify.html:40
+msgid "Verify"
+msgstr ""
+
+#: base/templates/base/reset_verify.html:44
+msgid "Resend code"
+msgstr ""
+
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:9
 msgid "Verify your email"
@@ -1076,12 +1150,79 @@ msgstr ""
 msgid "Enter another number"
 msgstr ""
 
-#: base/views/auth_views.py:34
-msgid "Please fill in all fields."
+#: base/templates/emails/password_reset_code.html:8
+msgid "Password reset"
 msgstr ""
 
-#: base/views/auth_views.py:36
+#: base/templates/emails/password_reset_code.html:9
+msgid "Use this one-time code to reset your password:"
+msgstr ""
+
+#: base/templates/emails/password_reset_code.html:11
+#, python-format
+msgid "The code expires in %(minutes)s minutes."
+msgstr ""
+
+#: base/templates/emails/password_reset_code.html:12
+msgid "If you didn't request this, you can ignore this email."
+msgstr ""
+
+#: base/utils/password_reset.py:62
+msgid "Password reset code"
+msgstr ""
+
+#: base/utils/password_reset.py:63 base/utils/password_reset.py:97
+#, python-format
+msgid ""
+"Your password reset code is %(code)s. It expires in %(minutes)s minutes."
+msgstr ""
+
+#: base/views/auth_reset_views.py:38
+msgid "Enter your username or email."
+msgstr ""
+
+#: base/views/auth_reset_views.py:47
+msgid "Too many requests. Try again later."
+msgstr ""
+
+#: base/views/auth_reset_views.py:56
+msgid "Telegram is not linked to this account."
+msgstr ""
+
+#: base/views/auth_reset_views.py:60
+msgid "Too many requests for this account. Try again later."
+msgstr ""
+
+#: base/views/auth_reset_views.py:76
+msgid "Failed to send a code. Please try again later."
+msgstr ""
+
+#: base/views/auth_reset_views.py:79
+msgid "If the account exists, a code has been sent."
+msgstr ""
+
+#: base/views/auth_reset_views.py:92
+msgid "Invalid code."
+msgstr ""
+
+#: base/views/auth_reset_views.py:96
+msgid "Code is expired or invalid."
+msgstr ""
+
+#: base/views/auth_reset_views.py:101
+msgid "Incorrect code."
+msgstr ""
+
+#: base/views/auth_reset_views.py:124 base/views/auth_views.py:36
 msgid "Passwords don't match."
+msgstr ""
+
+#: base/views/auth_reset_views.py:132
+msgid "Password has been reset. You can sign in now."
+msgstr ""
+
+#: base/views/auth_views.py:34
+msgid "Please fill in all fields."
 msgstr ""
 
 #: base/views/auth_views.py:38
