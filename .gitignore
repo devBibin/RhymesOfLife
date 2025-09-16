@@ -175,3 +175,6 @@ environment.json
 
 #cache from django-wiki
 media/
+
+#local vscode settings
+.vscode/
