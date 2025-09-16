@@ -81,7 +81,7 @@ msgstr "Подпись к изображению…"
 
 #: static/js/exam.js:34
 msgid "Paste link"
-msgstr ""
+msgstr "Вставить ссылку"
 
 #: static/js/exam.js:35
 #, fuzzy

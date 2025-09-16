@@ -132,6 +132,7 @@
                   <label class="form-check-label" for="li-showpass">{% trans "Show password" %}</label>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">{% trans "Log in" %}</button>
+                <a href="{% url 'password_reset_request' %}">{% trans "Forgot password?" %}</a>
                 <p class="text-center text-muted mt-3 mb-0">
                   {% trans "Don't have an account?" %} <a class="link-primary" href="#" onclick="document.getElementById('signup-tab').click(); return false;">{% trans "Sign up" %}</a>
                 </p>

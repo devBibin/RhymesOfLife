@@ -10,6 +10,32 @@ import uuid
 User = get_user_model()
 
 
+class PasswordResetCode(models.Model):
+    class Channel(models.TextChoices):
+        EMAIL = "email", "email"
+        TELEGRAM = "telegram", "telegram"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="password_reset_codes", db_index=True)
+    channel = models.CharField(max_length=16, choices=Channel.choices, db_index=True)
+    code = models.CharField(max_length=16, db_index=True)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    expires_at = models.DateTimeField(db_index=True)
+    attempts_left = models.PositiveSmallIntegerField(default=5)
+    used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    ua = models.CharField(max_length=256, null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "channel", "expires_at"]),
+            models.Index(fields=["token", "code"]),
+        ]
+
+    def is_active(self):
+        return self.used_at is None and self.expires_at > timezone.now() and self.attempts_left > 0
+
+
 class Config(models.Model):
     key = models.CharField(max_length=64, unique=True, db_index=True)
     value = models.JSONField(default=dict, blank=True)

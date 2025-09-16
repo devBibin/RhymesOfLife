@@ -40,6 +40,12 @@ from .views.social_views import (
     notifications_view,
 )
 
+from .views.auth_reset_views import (
+    password_reset_request_view,
+    password_reset_verify_view,
+    password_reset_new_view,
+)
+
 urlpatterns = [
     path("", home_view, name="home"),
 
@@ -78,4 +84,9 @@ urlpatterns = [
 
     path("connect-telegram/", connect_telegram_view, name="connect_telegram"),
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
+
+    path("password/reset/", password_reset_request_view, name="password_reset_request"),
+    path("password/reset/verify/", password_reset_verify_view, name="password_reset_verify"),
+    path("password/reset/new/", password_reset_new_view, name="password_reset_new"),
+
 ]
