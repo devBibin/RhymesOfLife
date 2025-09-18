@@ -27,7 +27,7 @@
 
   <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
     {% if page.author and page.author.avatar %}
-      <img src="{{ page.author.avatar.url }}" class="author-avatar rounded-circle me-2" width="48" alt="{% trans 'Author avatar' %}">
+      <img src="{{ page.author.avatar.url }}" class="author-avatar rounded-circle me-2 object-fit-cover" width="48" height="48" alt="{% trans 'Author avatar' %}">
     {% endif %}
 
     <div class="small text-muted me-2">
@@ -80,12 +80,23 @@
     {% endif %}
   </div>
 
-
-
-
   {% if page.main_image %}
+    {% image page.main_image fill-640x360 format-webp as hero_640 %}
+    {% image page.main_image fill-1024x576 format-webp as hero_1024 %}
+    {% image page.main_image fill-1280x720 format-webp as hero_1280 %}
     <div class="article-main-image mb-4">
-      {% image page.main_image fill-800x400 class="img-fluid rounded w-100" alt=page.title %}
+      <img
+        src="{{ hero_1280.url }}"
+        width="{{ hero_1280.width }}"
+        height="{{ hero_1280.height }}"
+        alt="{{ page.title }}"
+        class="w-100 h-100"
+        loading="lazy"
+        decoding="async"
+        style="display:block;object-fit:cover;aspect-ratio:16/9;"
+        srcset="{{ hero_640.url }} 640w, {{ hero_1024.url }} 1024w, {{ hero_1280.url }} 1280w"
+        sizes="(max-width:576px) 100vw, (max-width:992px) 90vw, 800px"
+      >
     </div>
   {% endif %}
 
@@ -93,7 +104,7 @@
     {{ page.intro }}
   </div>
 
-  <div class="article-body text-break">
+  <div class="article-body text-break richtext">
     {{ page.body|richtext }}
   </div>
 
@@ -152,7 +163,7 @@
         <div class="comment mb-3" data-comment-id="{{ comment.id }}">
           <div class="d-flex align-items-center mb-1">
             {% if comment.author.avatar %}
-              <img src="{{ comment.author.avatar.url }}" class="comment-avatar rounded-circle me-2" width="32" alt="{% trans 'Avatar' %}">
+              <img src="{{ comment.author.avatar.url }}" class="comment-avatar rounded-circle me-2 object-fit-cover" width="32" height="32" alt="{% trans 'Avatar' %}">
             {% endif %}
             <strong>{{ comment.author.first_name }}</strong>
             <small class="text-muted ms-2">
@@ -168,7 +179,6 @@
           </div>
           <p class="comment-text text-break">{{ comment.text|linebreaks }}</p>
         </div>
-      {% empty %}
       {% endfor %}
     </div>
   </div>
