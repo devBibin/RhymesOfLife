@@ -50,10 +50,30 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "base.middleware.EnforceVerifiedMiddleware",
+    "base.middleware.EnforceOnboardingMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+ONBOARDING_EXEMPT_URLNAMES = {
+    "login",
+    "logout",
+    "register",
+    "home",
+    "verify_email",
+    "request_verification",
+    "verify_prompt",
+    "connect_telegram",
+    "phone_enter",
+    "phone_wait",
+    "phone_status_api",
+    "phone_change",
+    "consents",
+    "profile_onboarding",
+    "set_language",
+    "admin:index",
+}
+ONBOARDING_EXEMPT_PATHS = set()
 
 ROOT_URLCONF = "RhymesOfLife.urls"
 
