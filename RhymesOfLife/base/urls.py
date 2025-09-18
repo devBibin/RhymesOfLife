@@ -12,7 +12,7 @@ from .views.auth_views import (
     verify_email_view,
     verify_prompt_view,
     request_verification_view,
-    home_view,
+    home_public_view,
     phone_enter_view,
     phone_wait_view,
     phone_status_api,
@@ -46,8 +46,16 @@ from .views.auth_reset_views import (
     password_reset_new_view,
 )
 
+from base.views.feed_views import (
+    feed, create_post, edit_post, hide_post, unhide_post,
+    toggle_like, add_comment, delete_comment,
+    approve_post, reject_post,
+)
+
+
 urlpatterns = [
-    path("", home_view, name="home"),
+    path("", feed, name="home"),
+    path("welcome/", home_public_view, name="home_public"),
 
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),
@@ -89,4 +97,13 @@ urlpatterns = [
     path("password/reset/verify/", password_reset_verify_view, name="password_reset_verify"),
     path("password/reset/new/", password_reset_new_view, name="password_reset_new"),
 
+    path("posts/create/", create_post, name="post_create"),
+    path("posts/<int:post_id>/edit/", edit_post, name="post_edit"),
+    path("posts/<int:post_id>/hide/", hide_post, name="post_hide"),
+    path("posts/<int:post_id>/unhide/", unhide_post, name="post_unhide"),
+    path("posts/<int:post_id>/like/", toggle_like, name="post_like"),
+    path("posts/<int:post_id>/comments/add/", add_comment, name="post_comment_add"),
+    path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
+    path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
+    path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
 ]

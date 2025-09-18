@@ -219,7 +219,7 @@ def consents_view(request):
 
 
 @require_http_methods(["GET", "POST"])
-def home_view(request):
+def home_public_view(request):
     is_authed = request.user.is_authenticated
     user = request.user if is_authed else None
 
@@ -245,7 +245,7 @@ def home_view(request):
             return redirect("profile_onboarding")
 
     context = {
-        "show_verification_notice": is_authed and hasattr(user, "additional_info") and not user.additional_info.is_verified,
+        "show_verification_notice": is_authed and hasattr(user, "additional_info") and not user.additional_info.is_verified if is_authed else False,
         "active_tab": "signup",
         "reg_values": {},
         "login_values": {},
@@ -267,7 +267,7 @@ def home_view(request):
                 messages.error(request, error)
                 context["reg_error"] = error
                 log.warning("Home signup validation failed: username=%s email=%s reason=%s", username, email, error)
-                return render(request, "base/home.html", context)
+                return render(request, "base/home_public.html", context)
             _create_user_with_profile(username, email, password1)
             messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
             return redirect("verify_prompt")
@@ -284,5 +284,6 @@ def home_view(request):
             messages.error(request, error)
             context["login_error"] = error
             seclog.warning("Login failed via home: username=%s", request.POST.get("username"))
-            return render(request, "base/home.html", context)
-    return render(request, "base/home.html", context)
+            return render(request, "base/home_public.html", context)
+
+    return render(request, "base/home_public.html", context)

@@ -318,3 +318,85 @@ class Recommendation(SoftDeleteModel):
 
     def __str__(self):
         return f"Recommendation to {self.patient.user.username} by {self.author.user.username}"
+
+
+def post_upload_to(instance, filename):
+    return f"posts/{instance.post_id}/{filename}"
+
+
+class Post(models.Model):
+    author = models.ForeignKey(
+        AdditionalUserInfo,
+        on_delete=models.CASCADE,
+        related_name="posts",
+        verbose_name=_("Author"),
+    )
+    text = models.TextField(_("Text"), blank=True)
+    is_hidden = models.BooleanField(_("Hidden by author"), default=False, db_index=True)
+    is_deleted = models.BooleanField(_("Soft-deleted"), default=False, db_index=True)
+
+    is_approved = models.BooleanField(_("Approved by admin"), default=False, db_index=True)
+    approved_at = models.DateTimeField(_("Approved at"), null=True, blank=True)
+    approved_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="approved_posts", verbose_name=_("Approved by")
+    )
+
+    likes_count = models.PositiveIntegerField(_("Likes count"), default=0)
+    comments_count = models.PositiveIntegerField(_("Comments count"), default=0)
+
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("Post")
+        verbose_name_plural = _("Posts")
+
+    def __str__(self):
+        return f"Post#{self.pk} by {self.author.user.username}"
+
+    @property
+    def visible_comments(self):
+        return self.comments.filter(is_deleted=False)
+
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images", verbose_name=_("Post"))
+    image = models.ImageField(upload_to=post_upload_to, verbose_name=_("Image"))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _("Post image")
+        verbose_name_plural = _("Post images")
+
+
+class PostLike(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
+    author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("post", "author")
+        verbose_name = _("Post like")
+        verbose_name_plural = _("Post likes")
+
+    def __str__(self):
+        return f"👍 {self.author.user.username} → {self.post_id}"
+
+
+class PostComment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE)
+    text = models.TextField(_("Text"))
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    edited_at = models.DateTimeField(_("Edited at"), null=True, blank=True)
+    is_deleted = models.BooleanField(_("Soft-deleted"), default=False)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("Post comment")
+        verbose_name_plural = _("Post comments")
+
+    def __str__(self):
+        return _("🗑 Deleted comment") if self.is_deleted else f"💬 {self.author.user.username}: {self.text[:30]}"
