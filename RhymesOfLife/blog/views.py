@@ -414,3 +414,22 @@ def approve_article_view(request, page_id):
     page.approved_by = request.user
     page.save(update_fields=["is_approved", "approved_at", "approved_by"])
     return redirect(page.url)
+
+
+@login_required
+@require_POST
+@user_passes_test(lambda u: u.is_staff)
+def reject_article_view(request, page_id):
+    page = get_object_or_404(BlogPage, id=page_id).specific
+    page.is_approved = False
+    page.approved_at = None
+    page.approved_by = None
+    page.is_rejected = True
+    page.rejected_at = timezone.now()
+    page.rejected_by = request.user
+    page.save(update_fields=[
+        "is_approved", "approved_at", "approved_by",
+        "is_rejected", "rejected_at", "rejected_by",
+    ])
+    referer = request.META.get("HTTP_REFERER")
+    return redirect(referer or reverse("edit_article", args=[page.id]))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-15 16:03+0000\n"
+"POT-Creation-Date: 2025-09-18 02:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: base/middleware.py:46 base/templates/base/home.html:21
+#: base/templates/base/home_public.html:21
 msgid "Email not verified."
 msgstr ""
 
@@ -35,12 +36,103 @@ msgstr ""
 msgid "Either a file or an external link is required."
 msgstr ""
 
+#: base/models.py:332 blog/models.py:122
+msgid "Author"
+msgstr ""
+
+#: base/models.py:334 base/models.py:391
+#: base/templates/base/post_create.html:15
+#: base/templates/base/post_edit.html:18 blog/models.py:250
+msgid "Text"
+msgstr ""
+
+#: base/models.py:335
+msgid "Hidden by author"
+msgstr ""
+
+#: base/models.py:336 base/models.py:394 blog/models.py:136 blog/models.py:253
+msgid "Soft-deleted"
+msgstr ""
+
+#: base/models.py:338 blog/models.py:140
+msgid "Approved by admin"
+msgstr ""
+
+#: base/models.py:339 blog/models.py:141
+msgid "Approved at"
+msgstr ""
+
+#: base/models.py:341 blog/models.py:144
+msgid "Approved by"
+msgstr ""
+
+#: base/models.py:344 blog/models.py:137
+msgid "Likes count"
+msgstr ""
+
+#: base/models.py:345 blog/models.py:138
+msgid "Comments count"
+msgstr ""
+
+#: base/models.py:347 base/models.py:392 blog/models.py:251
+msgid "Created at"
+msgstr ""
+
+#: base/models.py:348
+msgid "Updated at"
+msgstr ""
+
+#: base/models.py:352 base/models.py:364
+msgid "Post"
+msgstr ""
+
+#: base/models.py:353 base/templates/base/feed.html:9
+msgid "Posts"
+msgstr ""
+
+#: base/models.py:365
+msgid "Image"
+msgstr ""
+
+#: base/models.py:369
+msgid "Post image"
+msgstr ""
+
+#: base/models.py:370
+msgid "Post images"
+msgstr ""
+
+#: base/models.py:381
+msgid "Post like"
+msgstr ""
+
+#: base/models.py:382
+msgid "Post likes"
+msgstr ""
+
+#: base/models.py:393 blog/models.py:252
+msgid "Edited at"
+msgstr ""
+
+#: base/models.py:398
+msgid "Post comment"
+msgstr ""
+
+#: base/models.py:399
+msgid "Post comments"
+msgstr ""
+
+#: base/models.py:402 blog/models.py:262
+msgid "🗑 Deleted comment"
+msgstr ""
+
 #: base/signals.py:31
 msgid "New user registered"
 msgstr ""
 
 #: base/signals.py:32 base/templates/base/home.html:92
-#: base/templates/base/home.html:123 base/templates/base/login.html:21
+#: base/templates/base/home.html:123 base/templates/base/home_public.html:92
+#: base/templates/base/home_public.html:123 base/templates/base/login.html:21
 #: base/templates/base/register.html:25
 msgid "Username"
 msgstr ""
@@ -50,7 +142,8 @@ msgid "User ID"
 msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
-#: base/templates/base/profile.html:21 base/templates/base/profile_edit.html:44
+#: base/templates/base/home_public.html:96 base/templates/base/profile.html:21
+#: base/templates/base/profile_edit.html:44
 #: base/templates/base/profile_onboarding.html:27
 #: base/templates/base/register.html:30
 #: base/templates/base/reset_request.html:39
@@ -198,7 +291,8 @@ msgstr ""
 #: base/templates/base/consents.html:97 base/templates/base/consents.html:108
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
-#: base/templates/base/home.html:27
+#: base/templates/base/home.html:27 base/templates/base/home_public.html:27
+#: blog/templates/blog/blog_page.html:211
 msgid "Close"
 msgstr ""
 
@@ -705,83 +799,127 @@ msgstr ""
 msgid "Get code by call"
 msgstr ""
 
-#: base/templates/base/home.html:5
+#: base/templates/base/feed.html:4
+msgid "Feed"
+msgstr ""
+
+#: base/templates/base/feed.html:10 base/templates/base/post_create.html:3
+msgid "New post"
+msgstr ""
+
+#: base/templates/base/feed.html:19
+msgid "My posts"
+msgstr ""
+
+#: base/templates/base/feed.html:25 blog/templates/blog/blog_index_page.html:28
+msgid "Subscriptions"
+msgstr ""
+
+#: base/templates/base/feed.html:31
+msgid "Latest"
+msgstr ""
+
+#: base/templates/base/feed.html:38 blog/templates/blog/blog_index_page.html:41
+msgid "Pending approval"
+msgstr ""
+
+#: base/templates/base/feed.html:48
+msgid "Search posts"
+msgstr ""
+
+#: base/templates/base/feed.html:49 base/templates/base/patients_list.html:11
+#: blog/templates/blog/blog_index_page.html:57
+msgid "Search"
+msgstr ""
+
+#: base/templates/base/home.html:5 base/templates/base/home_public.html:5
 msgid "Home"
 msgstr ""
 
-#: base/templates/base/home.html:13
+#: base/templates/base/home.html:13 base/templates/base/home_public.html:13
 #, python-format
 msgid "Welcome, %(username)s!"
 msgstr ""
 
-#: base/templates/base/home.html:16
+#: base/templates/base/home.html:16 base/templates/base/home_public.html:16
 msgid "Welcome!"
 msgstr ""
 
-#: base/templates/base/home.html:22
+#: base/templates/base/home.html:22 base/templates/base/home_public.html:22
 msgid "Please verify your email for full access."
 msgstr ""
 
-#: base/templates/base/home.html:25
+#: base/templates/base/home.html:25 base/templates/base/home_public.html:25
 msgid "Send email"
 msgstr ""
 
-#: base/templates/base/home.html:33
+#: base/templates/base/home.html:33 base/templates/base/home_public.html:33
 msgid "Genetic connective tissue syndromes"
 msgstr ""
 
-#: base/templates/base/home.html:35
+#: base/templates/base/home.html:35 base/templates/base/home_public.html:35
 msgid ""
 "Marfan, Loeys–Dietz, Ehlers–Danlos and other syndromes involve connective "
 "tissue disorders and can be life-threatening without timely diagnosis."
 msgstr ""
 
-#: base/templates/base/home.html:49
+#: base/templates/base/home.html:49 base/templates/base/home_public.html:49
 msgid "Learn more"
 msgstr ""
 
-#: base/templates/base/home.html:64
+#: base/templates/base/home.html:64 base/templates/base/home_public.html:64
 msgid "Welcome to Rhymes of Life!"
 msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
+#: base/templates/base/home.html:137 base/templates/base/home_public.html:70
+#: base/templates/base/home_public.html:111
+#: base/templates/base/home_public.html:141 base/templates/base/login.html:40
 #: base/templates/base/register.html:4 base/templates/base/register.html:11
 #: base/templates/base/register.html:44
 msgid "Sign up"
 msgstr ""
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
-#: base/templates/base/login.html:4 base/templates/base/login.html:10
-#: base/templates/base/login.html:36 base/templates/base/register.html:48
-#: blog/templates/blog/blog_page.html:131 templates/base.html:141
+#: base/templates/base/home_public.html:77
+#: base/templates/base/home_public.html:134 base/templates/base/login.html:4
+#: base/templates/base/login.html:10 base/templates/base/login.html:36
+#: base/templates/base/register.html:48 blog/templates/blog/blog_page.html:175
+#: templates/base.html:144
 msgid "Log in"
 msgstr ""
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/login.html:29 base/templates/base/register.html:35
+#: base/templates/base/home_public.html:100
+#: base/templates/base/home_public.html:127 base/templates/base/login.html:29
+#: base/templates/base/register.html:35
 msgid "Password"
 msgstr ""
 
-#: base/templates/base/home.html:104 base/templates/base/register.html:40
-#: base/templates/base/reset_new.html:27
+#: base/templates/base/home.html:104 base/templates/base/home_public.html:104
+#: base/templates/base/register.html:40 base/templates/base/reset_new.html:27
 msgid "Confirm password"
 msgstr ""
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
+#: base/templates/base/home_public.html:109
+#: base/templates/base/home_public.html:132
+#: base/templates/base/reset_new.html:33
 msgid "Show password"
 msgstr ""
 
-#: base/templates/base/home.html:135 base/templates/base/login.html:42
+#: base/templates/base/home.html:135 base/templates/base/home_public.html:137
+#: base/templates/base/login.html:43
 msgid "Forgot password?"
 msgstr ""
 
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
+#: base/templates/base/home.html:137 base/templates/base/home_public.html:141
+#: base/templates/base/login.html:40
 msgid "Don't have an account?"
 msgstr ""
 
 #: base/templates/base/my_documents.html:21
-#: base/templates/base/recommendations.html:19 templates/base.html:50
+#: base/templates/base/recommendations.html:19 templates/base.html:53
 msgid "My examinations"
 msgstr ""
 
@@ -847,7 +985,7 @@ msgid "No examinations yet."
 msgstr ""
 
 #: base/templates/base/notifications.html:4
-#: base/templates/base/notifications.html:9 templates/base.html:78
+#: base/templates/base/notifications.html:9 templates/base.html:81
 msgid "Notifications"
 msgstr ""
 
@@ -888,7 +1026,8 @@ msgid "Enter recommendation..."
 msgstr ""
 
 #: base/templates/base/patient_exams.html:16
-#: blog/templates/blog/blog_page.html:126
+#: base/templates/base/post_cards.html:148
+#: blog/templates/blog/blog_page.html:171
 msgid "Send"
 msgstr ""
 
@@ -917,11 +1056,6 @@ msgstr ""
 msgid "Enter first or last name..."
 msgstr ""
 
-#: base/templates/base/patients_list.html:11
-#: blog/templates/blog/blog_index_page.html:57
-msgid "Search"
-msgstr ""
-
 #: base/templates/base/patients_list.html:30
 msgid "No genetically confirmed syndromes"
 msgstr ""
@@ -932,6 +1066,7 @@ msgstr ""
 
 #: base/templates/base/patients_list.html:44
 #: base/templates/base/patients_list.html:47
+#: base/templates/base/post_edit.html:10
 #: base/templates/base/recommendations.html:50
 #: base/templates/base/recommendations.html:53
 msgid "Back"
@@ -939,6 +1074,7 @@ msgstr ""
 
 #: base/templates/base/patients_list.html:62
 #: base/templates/base/patients_list.html:65
+#: base/templates/base/post_list_fragment.html:15
 #: base/templates/base/recommendations.html:66
 #: base/templates/base/recommendations.html:69
 msgid "Next"
@@ -950,6 +1086,137 @@ msgstr ""
 
 #: base/templates/base/patients_list.html:74
 msgid "Enter a query to search for patients."
+msgstr ""
+
+#: base/templates/base/post_cards.html:25
+#: base/templates/base/post_cards.html:40
+#: base/templates/base/post_cards.html:45 blog/templates/blog/blog_page.html:75
+#: blog/templates/blog/blog_page.html:90 blog/templates/blog/blog_page.html:95
+msgid "Follow"
+msgstr ""
+
+#: base/templates/base/post_cards.html:26
+#: base/templates/base/post_cards.html:30
+#: base/templates/base/post_cards.html:41 blog/templates/blog/blog_page.html:76
+#: blog/templates/blog/blog_page.html:80 blog/templates/blog/blog_page.html:91
+msgid "Unfollow"
+msgstr ""
+
+#: base/templates/base/post_cards.html:28
+#: base/templates/base/post_cards.html:43 blog/templates/blog/blog_page.html:78
+#: blog/templates/blog/blog_page.html:93
+msgid "Toggle follow"
+msgstr ""
+
+#: base/templates/base/post_cards.html:53
+msgid "Pending review"
+msgstr ""
+
+#: base/templates/base/post_cards.html:61
+msgid "More actions"
+msgstr ""
+
+#: base/templates/base/post_cards.html:68
+#: blog/templates/blog/create_article.html:67
+#: blog/templates/blog/edit_article.html:75
+msgid "Publish"
+msgstr ""
+
+#: base/templates/base/post_cards.html:73 blog/templates/blog/blog_page.html:33
+#: blog/templates/blog/blog_page.html:219
+msgid "Reject"
+msgstr ""
+
+#: base/templates/base/post_cards.html:83 base/templates/base/post_edit.html:66
+msgid "Unhide"
+msgstr ""
+
+#: base/templates/base/post_cards.html:89 base/templates/base/post_edit.html:68
+msgid "Hide"
+msgstr ""
+
+#: base/templates/base/post_cards.html:95 base/templates/base/profile.html:40
+#: blog/templates/blog/blog_page.html:131
+#: blog/templates/blog/blog_page.html:193
+msgid "Edit"
+msgstr ""
+
+#: base/templates/base/post_cards.html:103
+msgid "Copy link"
+msgstr ""
+
+#: base/templates/base/post_cards.html:147
+msgid "Write a comment..."
+msgstr ""
+
+#: base/templates/base/post_cards.html:162
+msgid "No posts yet."
+msgstr ""
+
+#: base/templates/base/post_create.html:16
+#: base/templates/base/post_edit.html:19
+msgid "Write something..."
+msgstr ""
+
+#: base/templates/base/post_create.html:20
+msgid "Images"
+msgstr ""
+
+#: base/templates/base/post_create.html:23
+msgid "Add photo"
+msgstr ""
+
+#: base/templates/base/post_create.html:24
+msgid "Drag & drop or click to upload"
+msgstr ""
+
+#: base/templates/base/post_create.html:26
+#: base/templates/base/post_edit.html:55
+msgid "Choose files"
+msgstr ""
+
+#: base/templates/base/post_create.html:31
+msgid "Publish for review"
+msgstr ""
+
+#: base/templates/base/post_edit.html:4 base/templates/base/post_edit.html:9
+msgid "Edit post"
+msgstr ""
+
+#: base/templates/base/post_edit.html:25
+msgid "Current images"
+msgstr ""
+
+#: base/templates/base/post_edit.html:26
+msgid "Click × to mark for removal"
+msgstr ""
+
+#: base/templates/base/post_edit.html:34
+msgid "Remove"
+msgstr ""
+
+#: base/templates/base/post_edit.html:46
+msgid "Add images"
+msgstr ""
+
+#: base/templates/base/post_edit.html:51
+msgid "Upload from device"
+msgstr ""
+
+#: base/templates/base/post_edit.html:52
+msgid "or drag & drop files here"
+msgstr ""
+
+#: base/templates/base/post_edit.html:62
+msgid "Save changes"
+msgstr ""
+
+#: base/templates/base/post_edit.html:63 blog/templates/blog/blog_page.html:218
+msgid "Cancel"
+msgstr ""
+
+#: base/templates/base/post_list_fragment.html:9
+msgid "Previous"
 msgstr ""
 
 #: base/templates/base/profile.html:12 base/templates/base/profile_edit.html:17
@@ -979,16 +1246,13 @@ msgstr ""
 msgid "Syndromes"
 msgstr ""
 
-#: base/templates/base/profile.html:40 blog/templates/blog/blog_page.html:83
-msgid "Edit"
-msgstr ""
-
 #: base/templates/base/profile_edit.html:21
 msgid "Upload new"
 msgstr ""
 
 #: base/templates/base/profile_edit.html:22
-#: blog/templates/blog/blog_page.html:89
+#: blog/templates/blog/blog_page.html:134
+#: blog/templates/blog/blog_page.html:194
 #: blog/templates/blog/edit_article.html:88
 msgid "Delete"
 msgstr ""
@@ -1023,7 +1287,7 @@ msgid "Complete your profile"
 msgstr ""
 
 #: base/templates/base/profile_onboarding.html:89
-#: blog/templates/blog/blog_page.html:145
+#: blog/templates/blog/blog_page.html:184
 msgid "Avatar"
 msgstr ""
 
@@ -1059,11 +1323,11 @@ msgstr ""
 msgid "New password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:31
+#: base/templates/base/reset_new.html:36
 msgid "Change password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:35
+#: base/templates/base/reset_new.html:40
 #: base/templates/base/reset_request.html:51
 #: base/templates/base/reset_verify.html:46
 msgid "Back to sign in"
@@ -1302,17 +1566,34 @@ msgstr ""
 msgid "Failed to update the exam."
 msgstr ""
 
+#: base/views/feed_views.py:27
+msgid "Too many images."
+msgstr ""
+
+#: base/views/feed_views.py:38
+#, python-format
+msgid "%(msg)s"
+msgstr ""
+
+#: base/views/feed_views.py:126
+msgid "Post must contain text or an image."
+msgstr ""
+
 #: base/views/profile_views.py:180
 msgid "Please fill in the required fields."
 msgstr ""
 
-#: base/views/social_views.py:21
+#: base/views/social_views.py:25
 msgid "Cannot follow yourself."
 msgstr ""
 
-#: base/views/social_views.py:27
+#: base/views/social_views.py:40
 #, python-format
 msgid "%(username)s has followed you."
+msgstr ""
+
+#: base/views/social_views.py:61
+msgid "Cannot unfollow yourself."
 msgstr ""
 
 #: blog/models.py:26
@@ -1321,10 +1602,6 @@ msgstr ""
 
 #: blog/models.py:115
 msgid "Publication date"
-msgstr ""
-
-#: blog/models.py:122
-msgid "Author"
 msgstr ""
 
 #: blog/models.py:124 blog/templates/blog/create_article.html:23
@@ -1342,60 +1619,32 @@ msgstr ""
 msgid "Article content"
 msgstr ""
 
-#: blog/models.py:136 blog/models.py:231
-msgid "Soft-deleted"
+#: blog/models.py:147
+msgid "Rejected by admin"
 msgstr ""
 
-#: blog/models.py:137
-msgid "Likes count"
+#: blog/models.py:148
+msgid "Rejected at"
 msgstr ""
 
-#: blog/models.py:138
-msgid "Comments count"
-msgstr ""
-
-#: blog/models.py:140
-msgid "Approved by admin"
-msgstr ""
-
-#: blog/models.py:141
-msgid "Approved at"
-msgstr ""
-
-#: blog/models.py:143
-msgid "Approved by"
-msgstr ""
-
-#: blog/models.py:218
-msgid "Article like"
-msgstr ""
-
-#: blog/models.py:219
-msgid "Article likes"
-msgstr ""
-
-#: blog/models.py:228
-msgid "Text"
-msgstr ""
-
-#: blog/models.py:229
-msgid "Created at"
-msgstr ""
-
-#: blog/models.py:230
-msgid "Edited at"
-msgstr ""
-
-#: blog/models.py:235
-msgid "Article comment"
-msgstr ""
-
-#: blog/models.py:236
-msgid "Article comments"
+#: blog/models.py:151
+msgid "Rejected by"
 msgstr ""
 
 #: blog/models.py:240
-msgid "🗑 Deleted comment"
+msgid "Article like"
+msgstr ""
+
+#: blog/models.py:241
+msgid "Article likes"
+msgstr ""
+
+#: blog/models.py:257
+msgid "Article comment"
+msgstr ""
+
+#: blog/models.py:258
+msgid "Article comments"
 msgstr ""
 
 #: blog/templates/blog/blocks/image_with_caption.html:5
@@ -1406,7 +1655,7 @@ msgstr ""
 msgid "Caption..."
 msgstr ""
 
-#: blog/templates/blog/blog_index_page.html:7 templates/base.html:61
+#: blog/templates/blog/blog_index_page.html:7 templates/base.html:64
 msgid "Articles"
 msgstr ""
 
@@ -1424,96 +1673,90 @@ msgstr ""
 msgid "My articles"
 msgstr ""
 
-#: blog/templates/blog/blog_index_page.html:28
-msgid "Subscriptions"
-msgstr ""
-
 #: blog/templates/blog/blog_index_page.html:34
 msgid "Doctors"
-msgstr ""
-
-#: blog/templates/blog/blog_index_page.html:41
-msgid "Pending approval"
 msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:55
 msgid "Search by title, author or tags"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:15
+#: blog/templates/blog/blog_page.html:16 blog/templates/blog/blog_page.html:20
+msgid "This article has been rejected by an administrator."
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:26
 msgid "This article is awaiting approval."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:18
+#: blog/templates/blog/blog_page.html:30
 msgid "Approve"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:23
+#: blog/templates/blog/blog_page.html:39
 msgid ""
 "Your article is awaiting admin approval and is not visible to other users "
 "yet."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:33
+#: blog/templates/blog/blog_page.html:48
 msgid "Author avatar"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:40
+#: blog/templates/blog/blog_page.html:55
 #, python-format
 msgid ""
 "\n"
-"          %(n)s follower\n"
+"          <span data-followers-count data-author-"
+"id=\"%(page.author.user.id)s\">%(n)s</span> follower\n"
 "        "
 msgid_plural ""
 "\n"
-"          %(n)s followers\n"
+"          <span data-followers-count data-author-"
+"id=\"%(page.author.user.id)s\">%(n)s</span> followers\n"
 "        "
 msgstr[0] ""
 msgstr[1] ""
 
-#: blog/templates/blog/blog_page.html:47
+#: blog/templates/blog/blog_page.html:62
 msgid "Anonymous author"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:60
-msgid "Unfollow"
-msgstr ""
-
-#: blog/templates/blog/blog_page.html:60
-msgid "Follow"
-msgstr ""
-
-#: blog/templates/blog/blog_page.html:87
+#: blog/templates/blog/blog_page.html:132
 #: blog/templates/blog/edit_article.html:86
 msgid "Delete the article?"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:103
-msgid "Remove like"
-msgstr ""
-
-#: blog/templates/blog/blog_page.html:103
-msgid "Like"
-msgstr ""
-
-#: blog/templates/blog/blog_page.html:108
+#: blog/templates/blog/blog_page.html:150
 msgid "Log in to like"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:116
+#: blog/templates/blog/blog_page.html:163
 msgid "Comments"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:123
+#: blog/templates/blog/blog_page.html:169
 msgid "Leave a comment..."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:133
+#: blog/templates/blog/blog_page.html:175
 msgid "to leave a comment"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:150
+#: blog/templates/blog/blog_page.html:189
 msgid "edited"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:210
+msgid "Reject publication"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:214
+msgid "Reason (optional)"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:215
+msgid "Write a short reason..."
 msgstr ""
 
 #: blog/templates/blog/create_article.html:18
@@ -1536,17 +1779,12 @@ msgstr ""
 msgid "Save draft"
 msgstr ""
 
-#: blog/templates/blog/create_article.html:67
-#: blog/templates/blog/edit_article.html:75
-msgid "Publish"
-msgstr ""
-
 #: blog/templates/blog/edit_article.html:7
 msgid "Edit article"
 msgstr ""
 
 #: blog/templates/blog/edit_article.html:9
-#: blog/templates/blog/includes/article_cards.html:77
+#: blog/templates/blog/includes/article_cards.html:87
 msgid "Draft"
 msgstr ""
 
@@ -1558,7 +1796,7 @@ msgstr ""
 msgid "Remove image"
 msgstr ""
 
-#: blog/templates/blog/includes/article_cards.html:79
+#: blog/templates/blog/includes/article_cards.html:89
 msgid "Unpublished changes"
 msgstr ""
 
@@ -1603,27 +1841,27 @@ msgstr ""
 msgid "Upload error."
 msgstr ""
 
-#: templates/base.html:28
+#: templates/base.html:30
 msgid "Rhymes of Life"
 msgstr ""
 
-#: templates/base.html:30
+#: templates/base.html:33
 msgid "Toggle navigation"
 msgstr ""
 
-#: templates/base.html:37
+#: templates/base.html:40
 msgid "About"
 msgstr ""
 
-#: templates/base.html:44
+#: templates/base.html:47
 msgid "My profile"
 msgstr ""
 
-#: templates/base.html:55
+#: templates/base.html:58
 msgid "Recommendations"
 msgstr ""
 
-#: templates/base.html:95
+#: templates/base.html:98
 #, python-format
 msgid ""
 "\n"
@@ -1631,26 +1869,26 @@ msgid ""
 "                              "
 msgstr ""
 
-#: templates/base.html:108
+#: templates/base.html:111
 msgid "No new notifications"
 msgstr ""
 
-#: templates/base.html:115
+#: templates/base.html:118
 msgid "Show all notifications"
 msgstr ""
 
-#: templates/base.html:124
+#: templates/base.html:127
 msgid "Patients"
 msgstr ""
 
-#: templates/base.html:132
+#: templates/base.html:135
 msgid "Log out"
 msgstr ""
 
-#: templates/base.html:154 templates/base.html:160
+#: templates/base.html:157 templates/base.html:163
 msgid "Switch language"
 msgstr ""
 
-#: templates/base.html:180
+#: templates/base.html:183
 msgid "All rights reserved."
 msgstr ""

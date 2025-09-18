@@ -10,20 +10,38 @@
   <h1 class="article-title text-break">{{ page.title }}</h1>
 
   {% if not page.is_approved %}
-    {% if request.user.is_staff %}
-      <div class="alert alert-warning d-flex justify-content-between align-items-center">
-        <div>⏳ {% trans "This article is awaiting approval." %}</div>
-        <form method="post" action="{% url 'approve_article' page.id %}">
-          {% csrf_token %}
-          <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
-        </form>
-      </div>
-    {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
-      <div class="alert alert-info">
-        ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
-      </div>
+    {% if page.is_rejected %}
+      {% if request.user.is_staff %}
+        <div class="alert alert-danger">
+          {% trans "This article has been rejected by an administrator." %}
+        </div>
+      {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+        <div class="alert alert-danger">
+          {% trans "This article has been rejected by an administrator." %}
+        </div>
+      {% endif %}
+    {% else %}
+      {% if request.user.is_staff %}
+        <div class="alert alert-warning d-flex justify-content-between align-items-center gap-2 flex-wrap">
+          <div>⏳ {% trans "This article is awaiting approval." %}</div>
+          <div class="d-flex gap-2">
+            <form method="post" action="{% url 'approve_article' page.id %}">
+              {% csrf_token %}
+              <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
+            </form>
+            <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#rejectModal">
+              ❌ {% trans "Reject" %}
+            </button>
+          </div>
+        </div>
+      {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+        <div class="alert alert-info">
+          ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
+        </div>
+      {% endif %}
     {% endif %}
   {% endif %}
+
 
   <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
     {% if page.author and page.author.avatar %}
@@ -181,6 +199,26 @@
         </div>
       {% endfor %}
     </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'reject_article' page.id %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectModalLabel">{% trans "Reject publication" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+      </div>
+      <div class="modal-body">
+        <label for="reject-reason" class="form-label">{% trans "Reason (optional)" %}</label>
+        <textarea id="reject-reason" name="reason" class="form-control" rows="4" placeholder="{% trans 'Write a short reason...' %}"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-danger">{% trans "Reject" %}</button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock content %}

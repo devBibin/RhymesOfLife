@@ -65,7 +65,7 @@ class BlogIndexPage(Page):
         elif f == "doctors":
             qs = published.filter(author__user__is_staff=True).order_by("-first_published_at")
         elif f == "pending" and request.user.is_staff:
-            qs = base_live.filter(is_approved=False).order_by("-first_published_at")
+            qs = base_live.filter(is_approved=False, is_rejected=False).order_by("-first_published_at")
         else:
             f = "popular"
             qs = published.order_by("-likes_count")
@@ -140,7 +140,15 @@ class BlogPage(Page):
     is_approved = models.BooleanField(_("Approved by admin"), default=False, db_index=True)
     approved_at = models.DateTimeField(_("Approved at"), null=True, blank=True)
     approved_by = models.ForeignKey(
-        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="approved_articles", verbose_name=_("Approved by")
+        User, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name="approved_articles", verbose_name=_("Approved by")
+    )
+
+    is_rejected = models.BooleanField(_("Rejected by admin"), default=False, db_index=True)
+    rejected_at = models.DateTimeField(_("Rejected at"), null=True, blank=True)
+    rejected_by = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name="rejected_articles", verbose_name=_("Rejected by")
     )
 
     content_panels = Page.content_panels + [
@@ -151,6 +159,7 @@ class BlogPage(Page):
         FieldPanel("body"),
         FieldPanel("tags"),
         FieldPanel("is_approved"),
+        FieldPanel("is_rejected"),
     ]
 
     @property
@@ -215,6 +224,10 @@ class BlogPage(Page):
                 me.following.filter(is_active=True).values_list("following__user_id", flat=True)
             )
         return ctx
+
+    @property
+    def is_pending(self):
+        return self.live and not self.is_deleted and not self.is_approved and not self.is_rejected
 
 
 class ArticleLike(models.Model):
