@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="row gy-4">
-{% for p in page_obj %}
+{% for p in posts %}
   <div class="col-12">
     <div class="card post-card" id="p-{{ p.id }}">
       <div class="card-body">
@@ -10,7 +10,43 @@
               <img src="{{ p.author.avatar.url }}" class="rounded-circle me-2 avatar" width="40" height="40" alt="">
             {% endif %}
             <div>
-              <div class="fw-semibold">{{ p.author.user.username }}</div>
+              <div class="fw-semibold d-flex align-items-center gap-2">
+                {{ p.author.user.username }}
+
+                {% if request.user.is_authenticated and p.author.user_id != request.user.id %}
+                  {% if p.author.user_id in following_user_ids %}
+                    <button
+                      type="button"
+                      data-follow-toggle
+                      data-author-id="{{ p.author.user_id }}"
+                      data-url-follow="{% url 'follow_user' p.author.user.id %}"
+                      data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
+                      data-following="1"
+                      data-label-follow="{% trans 'Follow' %}"
+                      data-label-unfollow="{% trans 'Unfollow' %}"
+                      class="btn btn-sm py-0 btn-outline-secondary"
+                      aria-label="{% trans 'Toggle follow' %}"
+                      aria-pressed="true">
+                      {% trans "Unfollow" %}
+                    </button>
+                  {% else %}
+                    <button
+                      type="button"
+                      data-follow-toggle
+                      data-author-id="{{ p.author.user_id }}"
+                      data-url-follow="{% url 'follow_user' p.author.user.id %}"
+                      data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
+                      data-following="0"
+                      data-label-follow="{% trans 'Follow' %}"
+                      data-label-unfollow="{% trans 'Unfollow' %}"
+                      class="btn btn-sm py-0 btn-primary"
+                      aria-label="{% trans 'Toggle follow' %}"
+                      aria-pressed="false">
+                      {% trans "Follow" %}
+                    </button>
+                  {% endif %}
+                {% endif %}
+              </div>
               <div class="post-meta">
                 {{ p.created_at }}
                 {% if not p.is_approved %}

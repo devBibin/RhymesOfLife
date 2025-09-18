@@ -99,8 +99,8 @@ def feed(request):
         "posts": page_obj,
         "current_filter": f,
         "liked_ids": liked_ids,
-        "following_info_ids": following_info_ids,
-        "following_user_ids": following_user_ids,
+        "following_info_ids": list(following_info_ids),
+        "following_user_ids": list(following_user_ids),
     }
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -108,6 +108,7 @@ def feed(request):
         return JsonResponse({"html": html})
 
     return render(request, "base/feed.html", context)
+
 
 
 @login_required

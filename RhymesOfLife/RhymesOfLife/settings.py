@@ -73,6 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "base.context_processors.notifications",
+                "base.context_processors.following_user_ids",
             ],
         },
     },

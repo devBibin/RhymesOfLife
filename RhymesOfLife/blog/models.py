@@ -207,6 +207,15 @@ class BlogPage(Page):
     def visible_comments(self):
         return self.comments.filter(is_deleted=False)
 
+    def get_context(self, request, *args, **kwargs):
+        ctx = super().get_context(request, *args, **kwargs)
+        me = getattr(getattr(request, "user", None), "additional_info", None)
+        if me:
+            ctx["following_user_ids"] = list(
+                me.following.filter(is_active=True).values_list("following__user_id", flat=True)
+            )
+        return ctx
+
 
 class ArticleLike(models.Model):
     article = models.ForeignKey(BlogPage, on_delete=models.CASCADE, related_name="likes")

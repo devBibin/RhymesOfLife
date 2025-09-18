@@ -42,8 +42,13 @@ def follow_view(request, user_id: int):
     except Exception:
         log.exception("Failed to create follow notification: follower=%s target=%s", me.user_id, target.user_id)
 
+    try:
+        followers_count = target.followers.filter(is_active=True).count()
+    except Exception:
+        followers_count = getattr(target, "followers_count", None)
+
     log.info("Follow OK: follower_user_id=%s following_user_id=%s", me.user_id, target.user_id)
-    return JsonResponse({"success": True, "following": True, "user_id": user_id})
+    return JsonResponse({"success": True, "following": True, "user_id": user_id, "followers_count": followers_count})
 
 
 @login_required
@@ -58,7 +63,11 @@ def unfollow_view(request, user_id: int):
     rel = me.following.filter(following=target).first()
     if not rel:
         log.info("Unfollow noop: no relation. follower=%s following=%s", me.user_id, target.user_id)
-        return JsonResponse({"success": True, "following": False, "user_id": user_id})
+        try:
+            followers_count = target.followers.filter(is_active=True).count()
+        except Exception:
+            followers_count = getattr(target, "followers_count", None)
+        return JsonResponse({"success": True, "following": False, "user_id": user_id, "followers_count": followers_count})
 
     if hasattr(rel, "is_active"):
         if rel.is_active:
@@ -67,8 +76,13 @@ def unfollow_view(request, user_id: int):
     else:
         rel.delete()
 
+    try:
+        followers_count = target.followers.filter(is_active=True).count()
+    except Exception:
+        followers_count = getattr(target, "followers_count", None)
+
     log.info("Unfollow OK: follower_user_id=%s following_user_id=%s", me.user_id, target.user_id)
-    return JsonResponse({"success": True, "following": False, "user_id": user_id})
+    return JsonResponse({"success": True, "following": False, "user_id": user_id, "followers_count": followers_count})
 
 
 @login_required

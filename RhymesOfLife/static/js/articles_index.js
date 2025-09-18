@@ -1,6 +1,4 @@
-// static/js/articles_index.js
 document.addEventListener('DOMContentLoaded', () => {
-  // i18n helpers (from Django's javascript-catalog). Kept even if not used yet.
   const _ = (window.gettext) ? window.gettext : (s) => s;
 
   const container = document.getElementById('posts-container');
