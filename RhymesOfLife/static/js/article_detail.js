@@ -1,44 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const _ = (window.gettext) ? window.gettext : (s) => s;
-  const ngettext = (window.ngettext) ? window.ngettext : (s /*sing*/, p /*plur*/, n) => (n === 1 ? s : p);
-  const interpolate = (window.interpolate) ? window.interpolate : ((fmt, obj) => fmt);
-
-  // Clickable card navigation (ignore interactive elements)
-  document.body.addEventListener('click', (e) => {
-    const card = e.target.closest('.js-clickable-card');
-    if (!card) return;
-    if (e.target.closest('a, button, textarea, input, select, label')) return;
-    const href = card.dataset.href;
-    if (href) window.location.href = href;
-  });
-
+  const _ = window.gettext ? window.gettext : (s) => s;
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-  const pageId    = document.getElementById('page-id')?.value;
 
-  // Like button
-  const likeBtn = document.getElementById('like-btn');
-  if (csrftoken && pageId && likeBtn) {
-    likeBtn.addEventListener('click', () => {
-      fetch(`/articles/${pageId}/like/`, {
-        method: 'POST',
-        headers: { 'X-CSRFToken': csrftoken }
-      })
-      .then((r) => r.json())
-      .then((data) => {
-        const likeCountEl = document.getElementById('like-count');
-        if (likeCountEl) likeCountEl.textContent = data.like_count;
-
-        likeBtn.textContent = data.liked ? _('Remove like') : _('Like');
-        likeBtn.classList.toggle('btn-danger', data.liked);
-        likeBtn.classList.toggle('btn-outline-danger', !data.liked);
-      })
-      .catch(() => {
-        // optional: silent fail or toast
-      });
-    });
+  function setLikeState(btn, liked, likeCount) {
+    const icon = btn?.querySelector('.bi');
+    if (icon) {
+      icon.classList.toggle('bi-heart-fill', liked);
+      icon.classList.toggle('bi-heart', !liked);
+      icon.classList.toggle('text-danger', liked);
+    }
+    btn?.classList.toggle('active', liked);
+    btn?.setAttribute('aria-pressed', liked ? 'true' : 'false');
+    btn?.setAttribute('data-liked', liked ? 'true' : 'false');
+    const scope = btn.closest('.post-actions') || document;
+    const countEl = scope.querySelector('.js-like-count') || document.getElementById('like-count');
+    if (countEl && typeof likeCount === 'number') countEl.textContent = likeCount;
   }
 
-  // Comments
+  document.querySelectorAll('.js-like-toggle').forEach((btn) => {
+    const initiallyLiked = btn.getAttribute('data-liked') === 'true';
+    setLikeState(btn, initiallyLiked);
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = btn.getAttribute('data-like-url');
+      if (!url) return;
+      if (!csrftoken) {
+        const loginLink = document.getElementById('like-login-link');
+        if (loginLink) window.location.href = loginLink.href;
+        return;
+      }
+      fetch(url, { method: 'POST', headers: { 'X-CSRFToken': csrftoken } })
+        .then((r) => r.json())
+        .then((data) => setLikeState(btn, !!data.liked, data.like_count))
+        .catch(() => {});
+    });
+  });
+
   const commentsDiv = document.getElementById('comments');
   const commentForm = document.getElementById('comment-form');
 
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function attachCommentHandlers() {
     if (!commentsDiv || !csrftoken) return;
 
-    // Delete
     commentsDiv.querySelectorAll('.delete-comment-btn').forEach((btn) => {
       btn.onclick = () => {
         const el = btn.closest('.comment');
@@ -68,26 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!id) return;
         if (!confirm(_('Delete?'))) return;
 
-        fetch(`/articles/comment/${id}/delete/`, {
-          method: 'POST',
-          headers: { 'X-CSRFToken': csrftoken }
-        })
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.deleted) {
-            el.remove();
-            const cc = document.getElementById('comment-count');
-            if (cc) cc.textContent = d.comment_count;
-            showPlaceholder();
-          }
-        })
-        .catch(() => {
-          // optional error handling
-        });
+        fetch(`/articles/comment/${id}/delete/`, { method: 'POST', headers: { 'X-CSRFToken': csrftoken } })
+          .then((r) => r.json())
+          .then((d) => {
+            if (d.deleted) {
+              el.remove();
+              const cc = document.getElementById('comment-count');
+              if (cc) cc.textContent = d.comment_count;
+              showPlaceholder();
+            }
+          })
+          .catch(() => {});
       };
     });
 
-    // Edit
     commentsDiv.querySelectorAll('.edit-comment-btn').forEach((btn) => {
       btn.onclick = () => {
         const el = btn.closest('.comment');
@@ -112,71 +103,57 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.onclick = () => {
           fetch(`/articles/comment/${id}/edit/`, {
             method: 'POST',
-            headers: {
-              'X-CSRFToken': csrftoken,
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `text=${encodeURIComponent(ta.value)}`
           })
-          .then((r) => r.json())
-          .then((d) => {
-            const np = document.createElement('p');
-            np.className = 'comment-text text-break';
-            np.innerHTML = (d.text || '').replace(/\n/g, '<br>');
-            ta.replaceWith(np);
-            saveBtn.replaceWith(btn);
-          })
-          .catch(() => {
-            // optional error handling
-          });
+            .then((r) => r.json())
+            .then((d) => {
+              const np = document.createElement('p');
+              np.className = 'comment-text text-break';
+              np.innerHTML = (d.text || '').replace(/\n/g, '<br>');
+              ta.replaceWith(np);
+              saveBtn.replaceWith(btn);
+            })
+            .catch(() => {});
         };
       };
     });
   }
 
-  if (csrftoken && pageId && commentForm && commentsDiv) {
+  if (csrftoken && commentsDiv && commentForm) {
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const fd = new FormData(commentForm);
 
-      fetch(`/articles/${pageId}/comment/`, {
-        method: 'POST',
-        headers: { 'X-CSRFToken': csrftoken },
-        body: fd
-      })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.error) {
-          // server-provided message (may already be localized)
-          alert(d.error);
-          return;
-        }
-
-        removePlaceholder();
-
-        const html = `
-          <div class="comment mb-3" data-comment-id="${d.id}">
-            <div class="d-flex align-items-center mb-1">
-              ${d.avatar ? `<img src="${d.avatar}" class="comment-avatar rounded-circle me-2" width="32" alt="">` : ''}
-              <strong>${d.username}</strong>
-              <small class="text-muted ms-2">${_('Just now')}</small>
-              <div class="ms-auto">
-                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="${_('Edit')}">✏️</button>
-                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="${_('Delete')}">🗑</button>
+      const pageId = document.getElementById('page-id')?.value;
+      fetch(`/articles/${pageId}/comment/`, { method: 'POST', headers: { 'X-CSRFToken': csrftoken }, body: fd })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.error) {
+            alert(d.error);
+            return;
+          }
+          removePlaceholder();
+          const html = `
+            <div class="comment mb-3" data-comment-id="${d.id}">
+              <div class="d-flex align-items-center mb-1">
+                ${d.avatar ? `<img src="${d.avatar}" class="comment-avatar rounded-circle me-2" width="32" alt="">` : ''}
+                <strong>${d.username}</strong>
+                <small class="text-muted ms-2">${_('Just now')}</small>
+                <div class="ms-auto">
+                  <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="${_('Edit')}">✏️</button>
+                  <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="${_('Delete')}">🗑</button>
+                </div>
               </div>
-            </div>
-            <p class="comment-text text-break">${(d.text || '').replace(/\n/g, '<br>')}</p>
-          </div>`.trim();
-
-        commentsDiv.insertAdjacentHTML('afterbegin', html);
-        const cc = document.getElementById('comment-count');
-        if (cc) cc.textContent = d.comment_count;
-        commentForm.reset();
-        attachCommentHandlers();
-      })
-      .catch(() => {
-        // optional error handling
-      });
+              <p class="comment-text text-break">${(d.text || '').replace(/\n/g, '<br>')}</p>
+            </div>`.trim();
+          commentsDiv.insertAdjacentHTML('afterbegin', html);
+          const cc = document.getElementById('comment-count');
+          if (cc) cc.textContent = d.comment_count;
+          commentForm.reset();
+          attachCommentHandlers();
+        })
+        .catch(() => {});
     });
   }
 

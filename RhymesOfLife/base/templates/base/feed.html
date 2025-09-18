@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Feed" %} — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3 feed-container">
+    <h1 class="mb-0">{% trans "Posts" %}</h1>
+    <a href="{% url 'post_create' %}" class="btn btn-primary">✍️ {% trans "New post" %}</a>
+  </div>
+
+  <div class="feed-container">
+    <nav class="mb-3">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a href="#" data-filter="mine"
+             class="nav-link {% if current_filter == 'mine' %}active{% endif %}">
+            {% trans "My posts" %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" data-filter="subscriptions"
+             class="nav-link {% if current_filter == 'subscriptions' %}active{% endif %}">
+            {% trans "Subscriptions" %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" data-filter="latest"
+             class="nav-link {% if current_filter == 'latest' %}active{% endif %}">
+            {% trans "Latest" %}
+          </a>
+        </li>
+        {% if request.user.is_staff %}
+        <li class="nav-item">
+          <a href="#" data-filter="pending"
+             class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
+            ⏳ {% trans "Pending approval" %}
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <form id="feed-search" class="mb-4" novalidate>
+      <input type="hidden" name="filter" id="current-filter" value="{{ current_filter }}">
+      <div class="input-group">
+        <input type="text" id="search-input" name="q" class="form-control" placeholder="{% trans 'Search posts' %}">
+        <button type="submit" class="btn btn-outline-secondary">{% trans "Search" %}</button>
+      </div>
+    </form>
+
+    <div id="posts-container">
+      {% include "base/post_list_fragment.html" %}
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/feed_index.js' %}"></script>
+<script src="{% static 'js/posts.js' %}"></script>
+<script src="{% static 'js/follow_toggle.js' %}"></script>
+<script src="{% static 'js/post_menu.js' %}"></script>
+{% endblock %}

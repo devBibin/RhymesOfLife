@@ -20,12 +20,17 @@
       {% csrf_token %}
       <div class="mb-3">
         <label for="password1" class="form-label">{% trans "New password" %}</label>
-        <input type="password" id="password1" name="password1" class="form-control" required autocomplete="new-password" />
+        <input type="password" id="password1" name="password1" class="form-control" required autocomplete="new-password">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-2">
         <label for="password2" class="form-label">{% trans "Confirm password" %}</label>
-        <input type="password" id="password2" name="password2" class="form-control" required autocomplete="new-password" />
+        <input type="password" id="password2" name="password2" class="form-control" required autocomplete="new-password">
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="showpass">
+        <label class="form-check-label" for="showpass">{% trans "Show password" %}</label>
       </div>
 
       <button type="submit" class="btn btn-primary w-100">{% trans "Change password" %}</button>
@@ -36,4 +41,18 @@
     </p>
   </div>
 </div>
+
+<script>
+(function () {
+  const cb = document.getElementById('showpass');
+  const p1 = document.getElementById('password1');
+  const p2 = document.getElementById('password2');
+  if (cb && p1 && p2) {
+    cb.addEventListener('change', function () {
+      const t = this.checked ? 'text' : 'password';
+      p1.type = t; p2.type = t;
+    });
+  }
+})();
+</script>
 {% endblock %}

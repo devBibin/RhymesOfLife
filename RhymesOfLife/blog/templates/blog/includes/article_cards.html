@@ -1,112 +1,117 @@
-  {% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags %}
 
-  {# decide target href: published -> public page, draft -> edit form #}
-  {% if page.live %}
-    {% with href=page.url %}
-      <div class="blog-card card shadow-sm mb-3 js-clickable-card"
-          data-href="{{ href|default:'#' }}"
-          style="cursor: pointer;">
-        <div class="row g-0 align-items-stretch">
+{% if page.live %}
+  {% with href=page.url %}
+    <div class="blog-card card shadow-sm mb-3 js-clickable-card" data-href="{{ href|default:'#' }}" style="cursor:pointer;">
+      <div class="row g-0 align-items-stretch">
 
-          {% if page.main_image %}
-            {% image page.main_image fill-320x240 as img %}
-            <div class="col-auto">
-              <img src="{{ img.url }}"
-                  class="img-fluid rounded-start h-100 object-fit-cover"
-                  alt="{{ page.title }}">
-            </div>
-          {% endif %}
-
-          <div class="col d-flex flex-column">
-            <div class="card-body d-flex flex-column h-100">
-              <h5 class="card-title mb-1">
-                {{ page.title }}
-              </h5>
-
-              <p class="card-text mb-2 text-break small">
-                {{ page.intro|truncatechars:160 }}
-              </p>
-
-              {% if page.tags.all %}
-                <div class="mb-2">
-                  {% for tag in page.tags.all %}
-                    <a href="?q={{ tag.name }}"
-                      class="badge bg-secondary text-decoration-none">
-                      {{ tag.name }}
-                    </a>
-                  {% endfor %}
-                </div>
-              {% endif %}
-
-              <p class="text-muted small mt-auto pt-2">
-                {% if page.author %}
-                  👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;
-                {% endif %}
-                🗓 {{ page.date|date:"j E Y" }}
-                &emsp; ❤️ {{ page.likes_count }}
-                &emsp; 💬 {{ page.comments_count }}
-              </p>
+        {% if page.main_image %}
+          {% image page.main_image fill-320x240 format-webp as img_320 %}
+          {% image page.main_image fill-480x360 format-webp as img_480 %}
+          {% image page.main_image fill-640x480 format-webp as img_640 %}
+          <div class="col-auto">
+            <div class="card-thumb">
+              <img
+                src="{{ img_640.url }}"
+                width="{{ img_640.width }}"
+                height="{{ img_640.height }}"
+                alt="{{ page.title }}"
+                loading="lazy"
+                decoding="async"
+                srcset="{{ img_320.url }} 320w, {{ img_480.url }} 480w, {{ img_640.url }} 640w"
+                sizes="(max-width:576px) 100vw, 160px"
+              >
             </div>
           </div>
+        {% endif %}
 
+        <div class="col d-flex flex-column">
+          <div class="card-body d-flex flex-column h-100">
+            <h5 class="card-title mb-1">{{ page.title }}</h5>
+
+            <p class="card-text mb-2 text-break small">
+              {{ page.intro|truncatechars:160 }}
+            </p>
+
+            {% if page.tags.all %}
+              <div class="mb-2">
+                {% for tag in page.tags.all %}
+                  <a href="?q={{ tag.name }}" class="badge bg-secondary text-decoration-none">{{ tag.name }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <p class="text-muted small mt-auto pt-2">
+              {% if page.author %}👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;{% endif %}
+              🗓 {{ page.date|date:"j E Y" }}
+              &emsp; ❤️ {{ page.likes_count }}
+              &emsp; 💬 {{ page.comments_count }}
+            </p>
+          </div>
         </div>
+
       </div>
-    {% endwith %}
-  {% else %}
-    {% url 'edit_article' page.id as edit_url %}
-    {% with href=edit_url|add:"?edit=1" %}
-      <div class="blog-card card shadow-sm mb-3 js-clickable-card"
-          data-href="{{ href }}"
-          style="cursor: pointer;">
-        <div class="row g-0 align-items-stretch">
+    </div>
+  {% endwith %}
+{% else %}
+  {% url 'edit_article' page.id as edit_url %}
+  {% with href=edit_url|add:"?edit=1" %}
+    <div class="blog-card card shadow-sm mb-3 js-clickable-card" data-href="{{ href }}" style="cursor:pointer;">
+      <div class="row g-0 align-items-stretch">
 
-          {% if page.main_image %}
-            {% image page.main_image fill-320x240 as img %}
-            <div class="col-auto">
-              <img src="{{ img.url }}"
-                  class="img-fluid rounded-start h-100 object-fit-cover"
-                  alt="{{ page.title }}">
-            </div>
-          {% endif %}
-
-          <div class="col d-flex flex-column">
-            <div class="card-body d-flex flex-column h-100">
-              <h5 class="card-title mb-1">
-                {{ page.title }}
-                {% if not page.live %}
-                  <span class="badge bg-warning text-dark">{% trans "Draft" %}</span>
-                {% elif page.has_unpublished_changes %}
-                  <span class="badge bg-info text-dark">{% trans "Unpublished changes" %}</span>
-                {% endif %}
-              </h5>
-
-              <p class="card-text mb-2 text-break small">
-                {{ page.intro|truncatechars:160 }}
-              </p>
-
-              {% if page.tags.all %}
-                <div class="mb-2">
-                  {% for tag in page.tags.all %}
-                    <a href="?q={{ tag.name }}"
-                      class="badge bg-secondary text-decoration-none">
-                      {{ tag.name }}
-                    </a>
-                  {% endfor %}
-                </div>
-              {% endif %}
-
-              <p class="text-muted small mt-auto pt-2">
-                {% if page.author %}
-                  👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;
-                {% endif %}
-                🗓 {{ page.date|date:"j E Y" }}
-                &emsp; ❤️ {{ page.likes_count }}
-                &emsp; 💬 {{ page.comments_count }}
-              </p>
+        {% if page.main_image %}
+          {% image page.main_image fill-320x240 format-webp as img_320 %}
+          {% image page.main_image fill-480x360 format-webp as img_480 %}
+          {% image page.main_image fill-640x480 format-webp as img_640 %}
+          <div class="col-auto">
+            <div class="card-thumb">
+              <img
+                src="{{ img_640.url }}"
+                width="{{ img_640.width }}"
+                height="{{ img_640.height }}"
+                alt="{{ page.title }}"
+                loading="lazy"
+                decoding="async"
+                srcset="{{ img_320.url }} 320w, {{ img_480.url }} 480w, {{ img_640.url }} 640w"
+                sizes="(max-width:576px) 100vw, 160px"
+              >
             </div>
           </div>
+        {% endif %}
 
+        <div class="col d-flex flex-column">
+          <div class="card-body d-flex flex-column h-100">
+            <h5 class="card-title mb-1">
+              {{ page.title }}
+              {% if not page.live %}
+                <span class="badge bg-warning text-dark">{% trans "Draft" %}</span>
+              {% elif page.has_unpublished_changes %}
+                <span class="badge bg-info text-dark">{% trans "Unpublished changes" %}</span>
+              {% endif %}
+            </h5>
+
+            <p class="card-text mb-2 text-break small">
+              {{ page.intro|truncatechars:160 }}
+            </p>
+
+            {% if page.tags.all %}
+              <div class="mb-2">
+                {% for tag in page.tags.all %}
+                  <a href="?q={{ tag.name }}" class="badge bg-secondary text-decoration-none">{{ tag.name }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <p class="text-muted small mt-auto pt-2">
+              {% if page.author %}👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;{% endif %}
+              🗓 {{ page.date|date:"j E Y" }}
+              &emsp; ❤️ {{ page.likes_count }}
+              &emsp; 💬 {{ page.comments_count }}
+            </p>
+          </div>
         </div>
+
       </div>
-    {% endwith %}
-  {% endif %}
+    </div>
+  {% endwith %}
+{% endif %}

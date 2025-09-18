@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Edit post" %} — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container py-4 feed-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">{% trans "Edit post" %}</h1>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">{% trans "Back" %}</a>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="card post-card">
+    {% csrf_token %}
+    <div class="card-body">
+
+      <div class="mb-3">
+        <label for="post-text" class="form-label">{% trans "Text" %}</label>
+        <textarea id="post-text" name="text" rows="4" class="form-control" placeholder="{% trans 'Write something...' %}">{{ post.text }}</textarea>
+      </div>
+
+      {% if post.images.all %}
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-semibold">{% trans "Current images" %}</span>
+          <span class="text-muted small">{% trans "Click × to mark for removal" %}</span>
+        </div>
+        <div class="row g-2" id="existing-images">
+          {% for img in post.images.all %}
+          <div class="col-6 col-md-4">
+            <div class="position-relative border rounded p-1">
+              <img src="{{ img.image.url }}" class="img-fluid rounded" alt="">
+              <button type="button" class="btn btn-sm btn-light position-absolute top-0 end-0 m-1"
+                      data-remove-image="{{ img.id }}" aria-label="{% trans 'Remove' %}">
+                <i class="bi bi-x-lg"></i>
+              </button>
+              <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="mb-3">
+        <label class="form-label d-block">{% trans "Add images" %}</label>
+        <div id="dropzone" class="border border-2 border-dashed rounded-3 p-4 text-center"
+             style="border-style: dashed;">
+          <div class="mb-2">
+            <i class="bi bi-cloud-upload fs-3 d-block"></i>
+            <div class="fw-semibold">{% trans "Upload from device" %}</div>
+            <div class="text-muted small">{% trans "or drag & drop files here" %}</div>
+          </div>
+          <input id="images-input" type="file" name="images" accept="image/*" multiple class="d-none">
+          <button type="button" id="pick-files" class="btn btn-outline-primary btn-sm">{% trans "Choose files" %}</button>
+        </div>
+
+        <div id="new-files" class="row g-2 mt-2" aria-live="polite"></div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+
+        {% if post.is_hidden %}
+          <a href="{% url 'post_unhide' post.id %}" class="btn btn-secondary ms-auto">{% trans "Unhide" %}</a>
+        {% else %}
+          <a href="{% url 'post_hide' post.id %}" class="btn btn-outline-secondary ms-auto">{% trans "Hide" %}</a>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="{% static 'js/post_editor.js' %}"></script>
+{% endblock %}

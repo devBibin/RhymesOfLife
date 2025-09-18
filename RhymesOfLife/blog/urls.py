@@ -3,7 +3,9 @@ from wagtail.images import urls as wagtailimages_urls
 from .views import (
     create_article_view, edit_article_view, delete_article_view,
     like_article_view, comment_article_view, ajax_article_search,
-    delete_comment_view, edit_comment_view, ckeditor5_upload,approve_article_view
+    delete_comment_view, edit_comment_view, ckeditor5_upload,
+    approve_article_view,
+    reject_article_view,
 )
 
 urlpatterns = [
@@ -19,6 +21,7 @@ urlpatterns = [
     path('images/', include(wagtailimages_urls)),
     path('search/', ajax_article_search, name='ajax_article_search'),
     path("<int:page_id>/approve/", approve_article_view, name="approve_article"),
+    path('<int:page_id>/reject/', reject_article_view, name='reject_article'),
 
     path('upload/', ckeditor5_upload, name='ck5_upload'),
 ]

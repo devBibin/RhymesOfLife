@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}{% trans "New post" %} — {{ block.super }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  {% if errors %}
+    <div class="alert alert-danger">
+      <ul class="mb-0">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+    </div>
+  {% endif %}
+
+  <form action="{% url 'post_create' %}" method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">{% trans "Text" %}</label>
+      <textarea name="text" class="form-control" rows="4" placeholder="{% trans 'Write something...' %}">{{ text|default_if_none:'' }}</textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label d-block">{% trans "Images" %}</label>
+      <div id="dropzone" class="border border-2 border-dashed rounded p-5 text-center">
+        <div class="mb-2">⬆️</div>
+        <div class="fw-semibold">{% trans "Add photo" %}</div>
+        <small class="text-muted d-block mb-2">{% trans "Drag & drop or click to upload" %}</small>
+        <input type="file" name="images" id="file-input" accept="image/*" multiple hidden>
+        <button type="button" class="btn btn-outline-primary" data-open-file>{% trans "Choose files" %}</button>
+      </div>
+      <div id="preview" class="row g-2 mt-2"></div>
+    </div>
+
+    <button class="btn btn-primary">{% trans "Publish for review" %}</button>
+  </form>
+</div>
+<script src="{% static 'js/posts.js' %}"></script>
+{% endblock %}

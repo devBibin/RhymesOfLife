@@ -42,3 +42,8 @@ class PhoneVerification(admin.ModelAdmin):
 @admin.register(TelegramAccount)
 class TelegramAccount(admin.ModelAdmin):
     pass
+
+
+@admin.register(Config)
+class Config(admin.ModelAdmin):
+    pass

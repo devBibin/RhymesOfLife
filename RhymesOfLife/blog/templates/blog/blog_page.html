@@ -10,27 +10,42 @@
   <h1 class="article-title text-break">{{ page.title }}</h1>
 
   {% if not page.is_approved %}
-    {% if request.user.is_staff %}
-      <div class="alert alert-warning d-flex justify-content-between align-items-center">
-        <div>⏳ {% trans "This article is awaiting approval." %}</div>
-        <form method="post" action="{% url 'approve_article' page.id %}">
-          {% csrf_token %}
-          <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
-        </form>
-      </div>
-    {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
-      <div class="alert alert-info">
-        ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
-      </div>
+    {% if page.is_rejected %}
+      {% if request.user.is_staff %}
+        <div class="alert alert-danger">
+          {% trans "This article has been rejected by an administrator." %}
+        </div>
+      {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+        <div class="alert alert-danger">
+          {% trans "This article has been rejected by an administrator." %}
+        </div>
+      {% endif %}
+    {% else %}
+      {% if request.user.is_staff %}
+        <div class="alert alert-warning d-flex justify-content-between align-items-center gap-2 flex-wrap">
+          <div>⏳ {% trans "This article is awaiting approval." %}</div>
+          <div class="d-flex gap-2">
+            <form method="post" action="{% url 'approve_article' page.id %}">
+              {% csrf_token %}
+              <button class="btn btn-success btn-sm" type="submit">✅ {% trans "Approve" %}</button>
+            </form>
+            <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#rejectModal">
+              ❌ {% trans "Reject" %}
+            </button>
+          </div>
+        </div>
+      {% elif request.user.is_authenticated and page.author and request.user == page.author.user %}
+        <div class="alert alert-info">
+          ⏳ {% trans "Your article is awaiting admin approval and is not visible to other users yet." %}
+        </div>
+      {% endif %}
     {% endif %}
   {% endif %}
 
+
   <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
     {% if page.author and page.author.avatar %}
-      <img src="{{ page.author.avatar.url }}"
-           class="author-avatar rounded-circle me-2"
-           width="48"
-           alt="{% trans 'Author avatar' %}">
+      <img src="{{ page.author.avatar.url }}" class="author-avatar rounded-circle me-2 object-fit-cover" width="48" height="48" alt="{% trans 'Author avatar' %}">
     {% endif %}
 
     <div class="small text-muted me-2">
@@ -38,9 +53,9 @@
         {{ page.author.first_name }} {{ page.author.last_name }}
         •
         {% blocktrans count n=page.author.followers_count %}
-          {{ n }} follower
+          <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> follower
         {% plural %}
-          {{ n }} followers
+          <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> followers
         {% endblocktrans %}
         • {{ page.date|date:"j E Y" }}
       {% else %}
@@ -49,23 +64,57 @@
     </div>
 
     {% if request.user.is_authenticated and page.author and request.user != page.author.user %}
-      {% with request.user.additional_info|is_following:page.author as following %}
+      {% if page.author.user.id in following_user_ids %}
         <button
-          id="follow-button"
-          class="btn btn-sm {% if following %}btn-outline-danger{% else %}btn-outline-primary{% endif %}"
-          data-following="{{ following|yesno:'true,false' }}"
-          data-follow-url="{% url 'follow_user' page.author.user.id %}"
-          data-unfollow-url="{% url 'unfollow_user' page.author.user.id %}"
-        >
-          {% if following %}{% trans "Unfollow" %}{% else %}{% trans "Follow" %}{% endif %}
+          type="button"
+          data-follow-toggle
+          data-author-id="{{ page.author.user.id }}"
+          data-url-follow="{% url 'follow_user' page.author.user.id %}"
+          data-url-unfollow="{% url 'unfollow_user' page.author.user.id %}"
+          data-following="1"
+          data-label-follow="{% trans 'Follow' %}"
+          data-label-unfollow="{% trans 'Unfollow' %}"
+          class="btn btn-sm btn-outline-secondary"
+          aria-label="{% trans 'Toggle follow' %}"
+          aria-pressed="true">
+          {% trans "Unfollow" %}
         </button>
-      {% endwith %}
+      {% else %}
+        <button
+          type="button"
+          data-follow-toggle
+          data-author-id="{{ page.author.user.id }}"
+          data-url-follow="{% url 'follow_user' page.author.user.id %}"
+          data-url-unfollow="{% url 'unfollow_user' page.author.user.id %}"
+          data-following="0"
+          data-label-follow="{% trans 'Follow' %}"
+          data-label-unfollow="{% trans 'Unfollow' %}"
+          class="btn btn-sm btn-primary"
+          aria-label="{% trans 'Toggle follow' %}"
+          aria-pressed="false">
+          {% trans "Follow" %}
+        </button>
+      {% endif %}
     {% endif %}
   </div>
 
   {% if page.main_image %}
+    {% image page.main_image fill-640x360 format-webp as hero_640 %}
+    {% image page.main_image fill-1024x576 format-webp as hero_1024 %}
+    {% image page.main_image fill-1280x720 format-webp as hero_1280 %}
     <div class="article-main-image mb-4">
-      {% image page.main_image fill-800x400 class="img-fluid rounded w-100" alt=page.title %}
+      <img
+        src="{{ hero_1280.url }}"
+        width="{{ hero_1280.width }}"
+        height="{{ hero_1280.height }}"
+        alt="{{ page.title }}"
+        class="w-100 h-100"
+        loading="lazy"
+        decoding="async"
+        style="display:block;object-fit:cover;aspect-ratio:16/9;"
+        srcset="{{ hero_640.url }} 640w, {{ hero_1024.url }} 1024w, {{ hero_1280.url }} 1280w"
+        sizes="(max-width:576px) 100vw, (max-width:992px) 90vw, 800px"
+      >
     </div>
   {% endif %}
 
@@ -73,18 +122,14 @@
     {{ page.intro }}
   </div>
 
-  <div class="article-body text-break">
+  <div class="article-body text-break richtext">
     {{ page.body|richtext }}
   </div>
 
   {% if request.user == page.author.user or request.user.is_superuser %}
     <div class="article-actions mt-4">
-      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary me-2">
-        {% trans "Edit" %}
-      </a>
-      <form action="{% url 'delete_article' page.id %}" method="post"
-            style="display:inline;"
-            onsubmit="return confirm('{% trans 'Delete the article?' %}');">
+      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary me-2">{% trans "Edit" %}</a>
+      <form action="{% url 'delete_article' page.id %}" method="post" style="display:inline;" onsubmit="return confirm('{% trans 'Delete the article?' %}');">
         {% csrf_token %}
         <button type="submit" class="btn btn-outline-danger">{% trans "Delete" %}</button>
       </form>
@@ -92,22 +137,24 @@
   {% endif %}
 
   <div class="article-interactions mt-4">
-    <div class="d-flex align-items-center mb-3">
-      <span class="me-3"><span id="like-count">{{ page.likes_count }}</span> ❤️</span>
-      <span><span id="comment-count">{{ page.comments_count }}</span> 💬</span>
-    </div>
+    <div class="d-flex align-items-center post-actions">
+      {% if request.user.is_authenticated %}
+        {% with liked=page.is_liked_by|call_method:request.user %}
+          <a href="/articles/{{ page.id }}/like/" data-like data-url="/articles/{{ page.id }}/like/"
+             class="btn btn-sm btn-outline-primary me-3 {% if liked %}active{% endif %}">
+            ❤️ <span data-count id="like-count">{{ page.likes_count }}</span>
+          </a>
+        {% endwith %}
+      {% else %}
+        <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary btn-sm me-3">
+          {% trans "Log in to like" %}
+        </a>
+      {% endif %}
 
-    {% if request.user.is_authenticated %}
-      <button id="like-btn"
-              class="btn {% if page.is_liked_by|call_method:request.user %}btn-danger{% else %}btn-outline-danger{% endif %}">
-        {% if page.is_liked_by|call_method:request.user %}{% trans "Remove like" %}{% else %}{% trans "Like" %}{% endif %}
-      </button>
-    {% else %}
-      <a href="{% url 'account_login' %}?next={{ request.path }}"
-         class="btn btn-outline-secondary">
-        {% trans "Log in to like" %}
-      </a>
-    {% endif %}
+      <div class="text-muted small d-flex align-items-center">
+        <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i><span id="comment-count">{{ page.comments_count }}</span>
+      </div>
+    </div>
   </div>
 
   <hr class="my-4">
@@ -119,18 +166,13 @@
       <form id="comment-form" class="mb-4">
         {% csrf_token %}
         <div class="mb-2">
-          <textarea name="text" class="form-control"
-                    placeholder="{% trans 'Leave a comment...' %}"
-                    required rows="3"></textarea>
+          <textarea name="text" class="form-control" placeholder="{% trans 'Leave a comment...' %}" required rows="3"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
       </form>
     {% else %}
       <div class="alert alert-info mb-4">
-        <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">
-          {% trans "Log in" %}
-        </a>
-        , {% trans "to leave a comment" %}.
+        <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">{% trans "Log in" %}</a>, {% trans "to leave a comment" %}.
       </div>
     {% endif %}
 
@@ -139,10 +181,7 @@
         <div class="comment mb-3" data-comment-id="{{ comment.id }}">
           <div class="d-flex align-items-center mb-1">
             {% if comment.author.avatar %}
-              <img src="{{ comment.author.avatar.url }}"
-                   class="comment-avatar rounded-circle me-2"
-                   width="32"
-                   alt="{% trans 'Avatar' %}">
+              <img src="{{ comment.author.avatar.url }}" class="comment-avatar rounded-circle me-2 object-fit-cover" width="32" height="32" alt="{% trans 'Avatar' %}">
             {% endif %}
             <strong>{{ comment.author.first_name }}</strong>
             <small class="text-muted ms-2">
@@ -151,21 +190,40 @@
             </small>
             {% if comment.author.user == request.user or request.user.is_superuser %}
               <div class="ms-auto">
-                <button class="btn btn-sm btn-outline-secondary edit-comment-btn">✏️</button>
-                <button class="btn btn-sm btn-outline-danger delete-comment-btn">🗑</button>
+                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="{% trans 'Edit' %}">✏️</button>
+                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="{% trans 'Delete' %}">🗑</button>
               </div>
             {% endif %}
           </div>
           <p class="comment-text text-break">{{ comment.text|linebreaks }}</p>
         </div>
-      {% empty %}
       {% endfor %}
     </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'reject_article' page.id %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectModalLabel">{% trans "Reject publication" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+      </div>
+      <div class="modal-body">
+        <label for="reject-reason" class="form-label">{% trans "Reason (optional)" %}</label>
+        <textarea id="reject-reason" name="reason" class="form-control" rows="4" placeholder="{% trans 'Write a short reason...' %}"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-danger">{% trans "Reject" %}</button>
+      </div>
+    </form>
   </div>
 </div>
 {% endblock content %}
 
 {% block extra_js %}
   {% csrf_token %}
-  <script src="{% static 'js/follow.js' %}"></script>
+  <script src="{% static 'js/follow_toggle.js' %}"></script>
 {% endblock extra_js %}
