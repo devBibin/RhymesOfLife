@@ -128,7 +128,7 @@ def verify_email_view(request, uidb64, token):
         info.save(update_fields=["is_verified"])
         login(request, user)
         seclog.info("Email verified: user_id=%s", user.id)
-        return redirect("connect_telegram")  # go to Telegram link step first
+        return redirect("connect_telegram")
     messages.error(request, _("Email verification failed or token is invalid."))
     seclog.warning("Email verification failed: uid=%s", uidb64)
     return render(request, "base/verification_failed.html")
