@@ -103,21 +103,23 @@ def profile_edit_view(request):
                 )
                 if not ok:
                     return JsonResponse({"success": False, "error": _(err)}, status=400)
-                info.avatar = image
-
-            try:
-                info.full_clean()
-            except Exception as e:
                 try:
-                    from django.core.exceptions import ValidationError
-                    if isinstance(e, ValidationError):
-                        msgs = []
-                        for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
-                            msgs.extend(errs if isinstance(errs, (list, tuple)) else [errs])
-                        return JsonResponse({"success": False, "error": "; ".join(msgs) or _("Validation failed.")}, status=400)
+                    image.seek(0)
                 except Exception:
                     pass
-                return JsonResponse({"success": False, "error": _("Validation failed.")}, status=400)
+                info.avatar = image
+
+            from django.core.exceptions import ValidationError
+            try:
+                info.full_clean()
+            except ValidationError as e:
+                msgs = []
+                for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
+                    if isinstance(errs, (list, tuple)):
+                        msgs.extend(errs)
+                    else:
+                        msgs.append(errs)
+                return JsonResponse({"success": False, "error": "; ".join(msgs) or _("Validation failed.")}, status=400)
 
             info.save()
             return JsonResponse({"success": True})
