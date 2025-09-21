@@ -140,10 +140,15 @@
     <div class="d-flex align-items-center post-actions">
       {% if request.user.is_authenticated %}
         {% with liked=page.is_liked_by|call_method:request.user %}
-          <a href="/articles/{{ page.id }}/like/" data-like data-url="/articles/{{ page.id }}/like/"
-             class="btn btn-sm btn-outline-primary me-3 {% if liked %}active{% endif %}">
-            ❤️ <span data-count id="like-count">{{ page.likes_count }}</span>
-          </a>
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary me-3 js-like-toggle {% if liked %}active{% endif %}"
+            data-like-url="{% url 'like_article' page.id %}"
+            data-liked="{% if liked %}true{% else %}false{% endif %}"
+            aria-pressed="{% if liked %}true{% else %}false{% endif %}">
+            <i class="bi {% if liked %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" aria-hidden="true"></i>
+            <span class="js-like-count" id="like-count">{{ page.likes_count }}</span>
+          </button>
         {% endwith %}
       {% else %}
         <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary btn-sm me-3">
@@ -225,5 +230,6 @@
 
 {% block extra_js %}
   {% csrf_token %}
+  <script src="{% static 'js/article_detail.js' %}"></script>
   <script src="{% static 'js/follow_toggle.js' %}"></script>
 {% endblock extra_js %}
