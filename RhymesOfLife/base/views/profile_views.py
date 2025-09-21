@@ -54,44 +54,76 @@ def profile_edit_view(request):
     day_range = range(1, 32)
 
     if request.method == "POST":
-        info.first_name = request.POST.get("first_name", "").strip()
-        info.last_name = request.POST.get("last_name", "").strip()
-        info.email = request.POST.get("email", "").strip()
+        try:
+            info.first_name = request.POST.get("first_name", "").strip()
+            info.last_name = request.POST.get("last_name", "").strip()
+            new_email = (request.POST.get("email", "") or "").strip().lower()
 
-        day = request.POST.get("day")
-        month = request.POST.get("month")
-        year = request.POST.get("year")
-        if day and month and year:
-            try:
-                info.birth_date = datetime(int(year), int(month), int(day)).date()
-            except ValueError:
+            day = request.POST.get("day")
+            month = request.POST.get("month")
+            year = request.POST.get("year")
+            if day and month and year:
+                try:
+                    info.birth_date = datetime(int(year), int(month), int(day)).date()
+                except ValueError:
+                    return JsonResponse({"success": False, "error": _("Invalid date of birth.")}, status=400)
+            else:
                 info.birth_date = None
-        else:
-            info.birth_date = None
 
-        selected = request.POST.getlist("syndromes")
-        confirmed = request.POST.getlist("confirmed_syndromes")
-        confirmed = [c for c in confirmed if c in selected]
-        info.syndromes = selected
-        info.confirmed_syndromes = confirmed
+            selected = request.POST.getlist("syndromes")
+            confirmed = request.POST.getlist("confirmed_syndromes")
+            confirmed = [c for c in confirmed if c in selected]
+            info.syndromes = selected
+            info.confirmed_syndromes = confirmed
 
-        image = request.FILES.get("avatar")
-        if image:
-            ok, err = validate_image_upload(
-                image,
-                max_size_bytes=MAX_AVATAR_SIZE_BYTES,
-                max_side_px=MAX_AVATAR_DIMENSION,
-                allowed_mimes=ALLOWED_IMAGE_MIMES,
-                allowed_formats=ALLOWED_IMAGE_FORMATS,
-                max_total_pixels=50_000_000,
-            )
-            if not ok:
-                return JsonResponse({"success": False, "error": _(err)})
-            data = image.read()
-            info.avatar.save(image.name, ContentFile(data), save=False)
+            if new_email:
+                if User.objects.filter(email=new_email).exclude(pk=request.user.pk).exists():
+                    return JsonResponse({"success": False, "error": _("This email is already registered.")}, status=400)
+                if request.user.email != new_email:
+                    request.user.email = new_email
+                    request.user.save(update_fields=["email"])
+                info.email = new_email
 
-        info.save()
-        return JsonResponse({"success": True})
+            delete_flag = request.POST.get("delete_avatar") == "1"
+            image = request.FILES.get("avatar")
+
+            if delete_flag:
+                if info.avatar:
+                    info.avatar.delete(save=False)
+                info.avatar = None
+
+            elif image:
+                ok, err = validate_image_upload(
+                    image,
+                    max_size_bytes=MAX_AVATAR_SIZE_BYTES,
+                    max_side_px=MAX_AVATAR_DIMENSION,
+                    allowed_mimes=ALLOWED_IMAGE_MIMES,
+                    allowed_formats=ALLOWED_IMAGE_FORMATS,
+                    max_total_pixels=50_000_000,
+                )
+                if not ok:
+                    return JsonResponse({"success": False, "error": _(err)}, status=400)
+                info.avatar = image
+
+            try:
+                info.full_clean()
+            except Exception as e:
+                try:
+                    from django.core.exceptions import ValidationError
+                    if isinstance(e, ValidationError):
+                        msgs = []
+                        for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
+                            msgs.extend(errs if isinstance(errs, (list, tuple)) else [errs])
+                        return JsonResponse({"success": False, "error": "; ".join(msgs) or _("Validation failed.")}, status=400)
+                except Exception:
+                    pass
+                return JsonResponse({"success": False, "error": _("Validation failed.")}, status=400)
+
+            info.save()
+            return JsonResponse({"success": True})
+
+        except Exception:
+            return JsonResponse({"success": False, "error": _("Error while saving.")}, status=500)
 
     return render(
         request,
