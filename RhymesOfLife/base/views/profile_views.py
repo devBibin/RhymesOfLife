@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
+from django.core.exceptions import ValidationError
 
 from ..models import AdditionalUserInfo, get_syndrome_choices
 from ..utils.files import validate_image_upload
@@ -56,12 +57,12 @@ def profile_edit_view(request):
     if request.method == "POST":
         try:
             info.first_name = request.POST.get("first_name", "").strip()
-            info.last_name = request.POST.get("last_name", "").strip()
+            info.last_name  = request.POST.get("last_name", "").strip()
             new_email = (request.POST.get("email", "") or "").strip().lower()
 
-            day = request.POST.get("day")
+            day   = request.POST.get("day")
             month = request.POST.get("month")
-            year = request.POST.get("year")
+            year  = request.POST.get("year")
             if day and month and year:
                 try:
                     info.birth_date = datetime(int(year), int(month), int(day)).date()
@@ -70,7 +71,7 @@ def profile_edit_view(request):
             else:
                 info.birth_date = None
 
-            selected = request.POST.getlist("syndromes")
+            selected  = request.POST.getlist("syndromes")
             confirmed = request.POST.getlist("confirmed_syndromes")
             confirmed = [c for c in confirmed if c in selected]
             info.syndromes = selected
@@ -91,7 +92,6 @@ def profile_edit_view(request):
                 if info.avatar:
                     info.avatar.delete(save=False)
                 info.avatar = None
-
             elif image:
                 ok, err = validate_image_upload(
                     image,
@@ -109,7 +109,6 @@ def profile_edit_view(request):
                     pass
                 info.avatar = image
 
-            from django.core.exceptions import ValidationError
             try:
                 info.full_clean()
             except ValidationError as e:
