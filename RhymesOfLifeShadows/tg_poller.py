@@ -49,7 +49,12 @@ if not TOKEN:
     log.critical(_("User bot token not found. Set TG_USER_BOT_TOKEN or environment.json[TELEGRAM_BOT_TOKEN_USERS]."))
     sys.exit(1)
 
-BASE_URL = (os.environ.get("TG_BASE_URL") or env.get("TG_BASE_URL", "").strip()) or ""
+BASE_URL = (
+    os.environ.get("TG_BASE_URL")
+    or env.get("TG_BASE_URL", "")
+    or env.get("BASE_URL", "")
+).strip()
+
 FORWARD_URL_ENV = os.environ.get("TG_FORWARD_URL")
 
 
@@ -84,7 +89,8 @@ def _describe_message(msg: telebot.types.Message) -> str:
 
 def _build_default_endpoint() -> str:
     if BASE_URL:
-        return f"{BASE_URL.rstrip('/')}/telegram/webhook/{TOKEN}/"
+        base = BASE_URL.rstrip("/")
+        return f"{base}/telegram/webhook/{TOKEN}/"
     if (os.environ.get("ENV", "").lower() in {"prod", "production"}) or env.get("ENV", "").lower() in {"prod", "production"}:
         return f"http://127.0.0.1/telegram/webhook/{TOKEN}/"
     return f"http://127.0.0.1:8000/telegram/webhook/{TOKEN}/"
