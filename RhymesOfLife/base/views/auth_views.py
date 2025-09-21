@@ -8,12 +8,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render 
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET
 from django.contrib.auth.decorators import login_required
 import random
 
@@ -171,22 +171,34 @@ def phone_wait_view(request):
 
 
 @login_required
-@require_http_methods(["GET"])
+@require_GET
 def phone_status_api(request):
-    info = request.user.additional_info
+    info, _ = AdditionalUserInfo.objects.get_or_create(user=request.user)
+
     if not info.phone:
-        return JsonResponse({"status": "error", "message": "no phone"})
+        return JsonResponse({"status": "error", "message": str(_("No phone number set."))}, status=400)
+
     if info.phone_verified:
-        return JsonResponse({"status": "done"})
-    api = poll_zvonok_status(info.phone)
+        return JsonResponse({"status": "done", "next": "/consents/"})
+
+    try:
+        api = poll_zvonok_status(info.phone)
+    except Exception:
+        log.exception("Phone status provider error: user_id=%s", request.user.id)
+        return JsonResponse({"status": "error", "message": str(_("Provider error"))}, status=502)
+
     if not api.get("ok"):
-        return JsonResponse({"status": "error", "message": api.get("message", "provider error")})
+        return JsonResponse({"status": "error", "message": api.get("message") or str(_("Provider error"))}, status=502)
+
     if api.get("verified"):
         info.phone_verified = True
         info.save(update_fields=["phone_verified"])
         return JsonResponse({"status": "success", "next": "/consents/"})
-    return JsonResponse({"status": "pending", "dial_status": api.get("dial_status_display")})
 
+    return JsonResponse({
+        "status": "pending",
+        "dial_status": api.get("dial_status_display") or ""
+    })
 
 @login_required
 @require_http_methods(["POST"])
