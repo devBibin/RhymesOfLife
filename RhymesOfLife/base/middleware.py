@@ -72,7 +72,6 @@ class EnforceOnboardingMiddleware:
             "login",
             "logout",
             "register",
-            "home",
             "verify_email",
             "request_verification",
             "verify_prompt",
