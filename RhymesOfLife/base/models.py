@@ -125,6 +125,7 @@ class SoftDeleteModel(models.Model):
 
 class AdditionalUserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_info")
+    language = models.CharField(max_length=10, choices=settings.LANGUAGES, default="ru")
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)

@@ -52,6 +52,8 @@ from base.views.feed_views import (
     approve_post, reject_post,
 )
 
+from .views import language_views
+
 
 urlpatterns = [
     path("", feed, name="home"),
@@ -106,4 +108,6 @@ urlpatterns = [
     path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
+
+    path("set-language/", language_views.set_language, name="set_language"),
 ]

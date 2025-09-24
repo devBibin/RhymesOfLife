@@ -151,18 +151,13 @@
               <li class="nav-item ms-2">
                 <form action="{% url 'set_language' %}" method="post" class="d-inline">
                   {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}">
                   {% if code == "en" %}
                     <input type="hidden" name="language" value="ru">
-                    <input type="hidden" name="next" value="{% lang_path 'ru' %}">
-                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">
-                      <span aria-hidden="true">EN</span><span class="visually-hidden">RU</span>
-                    </button>
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">EN</button>
                   {% else %}
                     <input type="hidden" name="language" value="en">
-                    <input type="hidden" name="next" value="{% lang_path 'en' %}">
-                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">
-                      <span aria-hidden="true">RU</span><span class="visually-hidden">EN</span>
-                    </button>
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">RU</button>
                   {% endif %}
                 </form>
               </li>
