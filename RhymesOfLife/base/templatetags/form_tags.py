@@ -52,32 +52,9 @@ def blog_index_url(context):
     if not page:
         return "/"
     try:
-        current_lang = ((getattr(request, "LANGUAGE_CODE", "") or "").split("-")[0]) if request else ""
-        default = settings.LANGUAGE_CODE.split("-")[0]
-
-        try:
-            locale = WagtailLocale.objects.get(language_code=current_lang) if current_lang else None
-            translated = page.get_translation_or_none(locale) if locale else None
-        except Exception:
-            translated = None
-
-        base_url = (translated or page).get_url(request) if request else (translated or page).url
-        parts = urlsplit(base_url)
-        path = parts.path
-
-        langs = [code.split("-")[0] for code, _ in settings.LANGUAGES]
-        for code in langs:
-            pref = f"/{code}/"
-            if path.startswith(pref):
-                path = "/" + path[len(pref):]
-                break
-
-        if current_lang and current_lang != default:
-            path = f"/{current_lang}{path}"
-
-        return urlunsplit((parts.scheme, parts.netloc, path, parts.query, parts.fragment))
+        return page.get_url(request) if request else page.url
     except Exception:
-        return (page.get_url(request) if request else page.url)
+        return "/"
 
 
 @register.filter

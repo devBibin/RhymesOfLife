@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n avatar_tags %}
 
 {% block extra_css %}{% endblock %}
 
@@ -11,26 +11,21 @@
       <div class="d-flex align-items-center mb-4 position-relative">
         <img
           id="avatar-img"
-          src="{% if info.avatar %}{{ info.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+          src="{% avatar_url info %}"
+          data-default-src="{% static 'images/default-avatar.png' %}"
           class="rounded-circle avatar-editable me-3"
           style="width:100px;height:100px;cursor:pointer;"
-          alt="{% trans 'User avatar' %}"
-        >
-
+          alt="{% trans 'User avatar' %}">
         <div id="avatar-menu" class="avatar-menu">
           <button type="button" class="dropdown-item" id="change-avatar-btn">📤 {% trans "Upload new" %}</button>
           <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 {% trans "Delete" %}</button>
         </div>
-
         <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
         <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
-
-        <div>
-          <h5 class="mb-1">{{ request.user.get_full_name }}</h5>
-        </div>
+        <div><h5 class="mb-1">{{ request.user.get_full_name }}</h5></div>
       </div>
 
-      <form id="profile-form" method="post" enctype="multipart/form-data" class="row g-3">
+      <form id="profile-form" action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data" class="row g-3">
         {% csrf_token %}
         <div class="col-6">
           <label class="form-label">{% trans "First name" %}</label>
@@ -106,7 +101,12 @@
         <div class="col-12 text-end mt-3">
           <button type="submit" class="btn btn-primary px-4">{% trans "Save" %}</button>
         </div>
-        <div id="form-status" class="col-12 alert alert-success d-none">✔️ {% trans "Profile updated" %}</div>
+
+        {% if error %}
+          <div class="col-12">
+            <div class="alert alert-danger mt-2">{{ error }}</div>
+          </div>
+        {% endif %}
       </form>
 
     </div>
@@ -118,13 +118,8 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
-    var mainSel=c.getAttribute("data-main");
-    var m=document.querySelector(mainSel);
-    var sync=function(){
-      var enabled=!!(m&&m.checked);
-      c.disabled=!enabled;
-      if(!enabled){c.checked=false;}
-    };
+    var m=document.querySelector(c.getAttribute("data-main"));
+    var sync=function(){var on=!!(m&&m.checked);c.disabled=!on;if(!on)c.checked=false;};
     if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
   });
 });

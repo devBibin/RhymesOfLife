@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-18 03:06+0000\n"
+"POT-Creation-Date: 2025-09-25 18:37+0000\n"
 "PO-Revision-Date: 2025-08-14 12:00+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <EMAIL@ADDRESS>\n"
@@ -43,14 +43,6 @@ msgstr "Редактировать"
 msgid "Delete"
 msgstr "Удалить"
 
-#: static/js/avatar.js:4
-msgid "Error while saving."
-msgstr "Ошибка при сохранении."
-
-#: static/js/avatar.js:5
-msgid "Network or server error."
-msgstr "Ошибка сети или сервера."
-
 #: static/js/ckeditor-init.js:52
 msgid "Start writing…"
 msgstr "Начните писать…"
@@ -76,7 +68,6 @@ msgid "Paste link"
 msgstr "Вставить ссылку"
 
 #: static/js/exam.js:35
-#| msgid "Remove like"
 msgid "Remove link"
 msgstr "Убрать лайк"
 
@@ -124,9 +115,19 @@ msgstr "Отписаться"
 msgid "Follow"
 msgstr "Подписаться"
 
+#: static/js/phone_wait.js:26 static/js/phone_wait.js:36
+msgid "Status"
+msgstr "Статус"
+
 #: static/js/post_menu.js:8
 msgid "Link copied"
 msgstr "Ссылка скопирована"
+
+#~ msgid "Error while saving."
+#~ msgstr "Ошибка при сохранении."
+
+#~ msgid "Network or server error."
+#~ msgstr "Ошибка сети или сервера."
 
 #~ msgid "Remove like"
 #~ msgstr "Убрать лайк"

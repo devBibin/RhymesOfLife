@@ -1,4 +1,3 @@
-# base/views/auth_views.py
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -8,11 +7,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render 
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, activate
 from django.views.decorators.http import require_http_methods, require_GET
 from django.contrib.auth.decorators import login_required
 import random
@@ -25,8 +24,22 @@ from ..utils.phone_calls import (
     normalize_phone_e164_with_plus,
 )
 
+try:
+    from django.utils.translation import LANGUAGE_SESSION_KEY as LANG_SESSION_KEY
+except Exception:
+    LANG_SESSION_KEY = "django_language"
+
 log = get_app_logger(__name__)
 seclog = get_security_logger()
+
+PHONE_VERIFY_MAX_WAIT_SEC = getattr(settings, "PHONE_VERIFY_MAX_WAIT_SEC", 120)
+
+
+def _apply_user_language(request, user):
+    lang = getattr(getattr(user, "additional_info", None), "language", None) or settings.LANGUAGE_CODE
+    activate(lang)
+    request.session[LANG_SESSION_KEY] = lang
+    return lang
 
 
 def _validate_signup_input(username: str, email: str, password1: str, password2: str):
@@ -79,8 +92,11 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            lang = _apply_user_language(request, user)
             seclog.info("Login success: user_id=%s username=%s", user.id, user.username)
-            return redirect("home")
+            response = redirect("home")
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
+            return response
         messages.error(request, _("Invalid username or password."))
         seclog.warning("Login failed: username=%s ip=%s", request.POST.get("username"), request.META.get("REMOTE_ADDR"))
     else:
@@ -127,8 +143,11 @@ def verify_email_view(request, uidb64, token):
         info.is_verified = True
         info.save(update_fields=["is_verified"])
         login(request, user)
+        lang = _apply_user_language(request, user)
         seclog.info("Email verified: user_id=%s", user.id)
-        return redirect("connect_telegram")
+        response = redirect("connect_telegram")
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
+        return response
     messages.error(request, _("Email verification failed or token is invalid."))
     seclog.warning("Email verification failed: uid=%s", uidb64)
     return render(request, "base/verification_failed.html")
@@ -138,28 +157,30 @@ def verify_email_view(request, uidb64, token):
 @require_http_methods(["GET", "POST"])
 def phone_enter_view(request):
     info = request.user.additional_info
-    if info.phone_verified:
-        consents_ok = info.tos_accepted and info.privacy_accepted and info.data_processing_accepted
-        if not consents_ok:
-            return redirect("consents")
-        return redirect("home")
-    context = {}
     if request.method == "POST":
         phone = request.POST.get("phone", "").strip()
         if not phone:
-            context["error"] = _("Enter phone number.")
-            return render(request, "base/enter_phone_number.html", context)
+            return render(request, "base/enter_phone_number.html", {"error": _("Enter phone number.")})
+
         normalized = normalize_phone_e164_with_plus(phone)
         pin = f"{random.randint(1000, 9999)}"
+
         resp = initiate_zvonok_verification(normalized, pincode=pin)
         if not resp.get("ok"):
-            context["error"] = resp.get("message") or _("Failed to initiate call.")
-            return render(request, "base/enter_phone_number.html", context)
+            return render(request, "base/enter_phone_number.html", {"error": resp.get("message") or _("Failed to initiate call.")})
+
         info.phone = normalized
-        info.save(update_fields=["phone"])
+        info.phone_verified = False
+        info.save(update_fields=["phone", "phone_verified"])
+
         request.session["call_number"] = resp.get("call_number") or getattr(settings, "ZVONOK_STATIC_GATEWAY", "")
+        request.session["phone_verify_tracking_id"] = resp.get("tracking_id") or ""
+        request.session["phone_verify_started_at"] = timezone.now().isoformat()
+
         return redirect("phone_wait")
-    return render(request, "base/enter_phone_number.html", context)
+
+    return render(request, "base/enter_phone_number.html", {})
+
 
 
 @login_required
@@ -174,15 +195,23 @@ def phone_wait_view(request):
 @require_GET
 def phone_status_api(request):
     info, _ = AdditionalUserInfo.objects.get_or_create(user=request.user)
-
     if not info.phone:
         return JsonResponse({"status": "error", "message": str(_("No phone number set."))}, status=400)
-
     if info.phone_verified:
         return JsonResponse({"status": "done", "next": "/consents/"})
 
+    tracking_id = request.session.get("phone_verify_tracking_id") or None
+    started_iso = request.session.get("phone_verify_started_at")
+    started_at = None
     try:
-        api = poll_zvonok_status(info.phone)
+        started_at = timezone.datetime.fromisoformat(started_iso) if started_iso else None
+        if started_at and timezone.is_naive(started_at):
+            started_at = timezone.make_aware(started_at, timezone.get_current_timezone())
+    except Exception:
+        started_at = None
+
+    try:
+        api = poll_zvonok_status(info.phone, tracking_id=tracking_id)
     except Exception:
         log.exception("Phone status provider error: user_id=%s", request.user.id)
         return JsonResponse({"status": "error", "message": str(_("Provider error"))}, status=502)
@@ -195,10 +224,26 @@ def phone_status_api(request):
         info.save(update_fields=["phone_verified"])
         return JsonResponse({"status": "success", "next": "/consents/"})
 
+    if started_at:
+        if timezone.now() - started_at > timedelta(seconds=PHONE_VERIFY_MAX_WAIT_SEC):
+            return JsonResponse({
+                "status": "timeout",
+                "message": str(_("Verification timed out. Try again.")),
+                "dial_status": api.get("dial_status_display") or ""
+            }, status=200)
+
+    if api.get("failed"):
+        return JsonResponse({
+            "status": "failed",
+            "message": str(_("Call failed. Try again.")),
+            "dial_status": api.get("dial_status_display") or ""
+        }, status=200)
+
     return JsonResponse({
         "status": "pending",
         "dial_status": api.get("dial_status_display") or ""
     })
+
 
 @login_required
 @require_http_methods(["POST"])
@@ -290,8 +335,11 @@ def home_public_view(request):
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)
+                lang = _apply_user_language(request, user)
                 seclog.info("Login success via home: user_id=%s", user.id)
-                return redirect("home")
+                response = redirect("home")
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
+                return response
             error = _("Invalid username or password.")
             messages.error(request, error)
             context["login_error"] = error

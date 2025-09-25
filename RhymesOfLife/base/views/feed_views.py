@@ -19,6 +19,7 @@ ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024
 MAX_IMAGE_SIDE_PX = 10_000
 MAX_IMAGES_PER_POST = 10
+FIRST_COMMENTS_LIMIT = 3
 
 
 def _validate_images(files):
@@ -101,6 +102,7 @@ def feed(request):
         "liked_ids": liked_ids,
         "following_info_ids": list(following_info_ids),
         "following_user_ids": list(following_user_ids),
+        "FIRST_COMMENTS_LIMIT": FIRST_COMMENTS_LIMIT,
     }
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -108,7 +110,6 @@ def feed(request):
         return JsonResponse({"html": html})
 
     return render(request, "base/feed.html", context)
-
 
 
 @login_required
@@ -217,12 +218,13 @@ def add_comment(request, post_id: int):
     text = (request.POST.get("text") or "").strip()
     if not text:
         return JsonResponse({"error": "empty"}, status=400)
+
     c = PostComment.objects.create(post=post, author=me, text=text)
     post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
     post.save(update_fields=["comments_count"])
-    return JsonResponse(
-        {"id": c.id, "text": c.text, "author": request.user.username, "created": c.created_at.isoformat(), "post": post.id}
-    )
+
+    html = render_to_string("base/comment_items.html", {"comments": [c]}, request=request)
+    return JsonResponse({"id": c.id, "post": post.id, "html": html, "count": post.comments_count})
 
 
 @login_required
@@ -254,3 +256,21 @@ def reject_post(request, post_id: int):
     post.is_deleted = True
     post.save(update_fields=["is_deleted"])
     return redirect("home")
+
+
+@login_required
+def comments_more(request, post_id: int):
+    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+    try:
+        offset = int(request.GET.get("offset", 0))
+        limit = int(request.GET.get("limit", 10))
+    except ValueError:
+        offset, limit = 0, 10
+
+    base_qs = PostComment.objects.filter(post=post, is_deleted=False).order_by("created_at")
+    total = base_qs.count()
+    comments = list(base_qs[offset : offset + limit])
+    html = render_to_string("base/comment_items.html", {"comments": comments}, request=request)
+    has_more = offset + limit < total
+    next_offset = offset + limit
+    return JsonResponse({"html": html, "has_more": has_more, "next_offset": next_offset})

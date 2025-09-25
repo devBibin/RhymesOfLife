@@ -26,12 +26,46 @@ function initCommentForms() {
       const data = await r.json();
       const ul = document.getElementById('comments-' + data.post);
       if (!ul) return;
-      const li = document.createElement('li');
-      li.className = 'mb-2';
-      li.innerHTML = `<strong>${data.author}</strong>: ${data.text}`;
-      ul.prepend(li);
+      if (data.html) {
+        const t = document.createElement('template');
+        t.innerHTML = data.html.trim();
+        ul.prepend(t.content);
+      }
       form.reset();
     });
+  });
+}
+
+function initCommentsMore() {
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-comments-more]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const postId = btn.dataset.postId;
+    const url = btn.dataset.url || `/posts/${postId}/comments/`;
+    const offset = parseInt(btn.dataset.offset || '0', 10);
+    const limit = parseInt(btn.dataset.limit || '10', 10);
+
+    const qs = new URLSearchParams({ offset: String(offset), limit: String(limit) });
+    const r = await fetch(`${url}?${qs.toString()}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    if (!r.ok) return;
+
+    const data = await r.json();
+    const ul = document.getElementById(`comments-${postId}`);
+    if (!ul) return;
+
+    if (data.html) {
+      const t = document.createElement('template');
+      t.innerHTML = data.html.trim();
+      ul.append(t.content);
+    }
+
+    if (data.has_more) {
+      btn.dataset.offset = String(data.next_offset || offset + limit);
+    } else {
+      btn.remove();
+    }
   });
 }
 
@@ -64,5 +98,6 @@ function initDropzone() {
 document.addEventListener('DOMContentLoaded', () => {
   initLikes();
   initCommentForms();
+  initCommentsMore();
   initDropzone();
 });

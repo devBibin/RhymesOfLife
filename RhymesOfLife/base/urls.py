@@ -49,10 +49,16 @@ from .views.auth_reset_views import (
 from base.views.feed_views import (
     feed, create_post, edit_post, hide_post, unhide_post,
     toggle_like, add_comment, delete_comment,
-    approve_post, reject_post,
+    approve_post, reject_post, comments_more,
 )
 
-from .views import language_views
+from .views.language_views import (
+    set_language
+)
+
+from .views.public_profile_views import (
+    public_profile_view
+)
 
 
 urlpatterns = [
@@ -77,6 +83,7 @@ urlpatterns = [
     path("profile/", profile_view, name="my_profile"),
     path("profile/edit/", profile_edit_view, name="profile_edit"),
     path("profile/<str:username>/", profile_view, name="user_profile"),
+    path("u/<str:username>/", public_profile_view, name="public_profile"),
     path("onboarding/profile/", profile_onboarding_view, name="profile_onboarding"),
 
     path("my-documents/", my_documents_view, name="my_documents"),
@@ -105,9 +112,10 @@ urlpatterns = [
     path("posts/<int:post_id>/unhide/", unhide_post, name="post_unhide"),
     path("posts/<int:post_id>/like/", toggle_like, name="post_like"),
     path("posts/<int:post_id>/comments/add/", add_comment, name="post_comment_add"),
+    path("posts/<int:post_id>/comments/", comments_more, name="post_comments_more"),
     path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
 
-    path("set-language/", language_views.set_language, name="set_language"),
+    path("set-language/", set_language, name="set_language"),
 ]
