@@ -6,10 +6,14 @@
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between mb-2 post-header">
           <div class="d-flex align-items-center">
-            <img src="{% avatar_url p.author %}" class="rounded-circle me-2 avatar" width="40" height="40" alt="{% trans 'User avatar' %}">
+            <a href="{% url 'public_profile' p.author.user.username %}">
+              <img src="{% avatar_url p.author %}" class="rounded-circle me-2 avatar" width="40" height="40" alt="{% trans 'User avatar' %}">
+            </a>
             <div>
               <div class="fw-semibold d-flex align-items-center gap-2">
-                {{ p.author.user.username }}
+                <a class="text-decoration-none" href="{% url 'public_profile' p.author.user.username %}">
+                  {{ p.author.user.username }}
+                </a>
 
                 {% if request.user.is_authenticated and p.author.user_id != request.user.id %}
                   {% if p.author.user_id in following_user_ids %}

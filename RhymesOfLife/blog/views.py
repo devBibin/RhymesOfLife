@@ -50,6 +50,9 @@ ALLOWED_ATTRS = {
 ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
 
 
+staff_required = user_passes_test(lambda u: (u.is_staff or u.is_superuser))
+
+
 def _sanitize_html(html: str) -> str:
     return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, protocols=ALLOWED_PROTOCOLS, strip=True)
 
@@ -105,6 +108,7 @@ def _filter_tags_to_predefined(tags):
 
 
 @login_required
+@staff_required
 @require_http_methods(["GET", "POST"])
 def create_article_view(request):
     ctx = {"all_tags": PREDEFINED_TAGS}
@@ -180,6 +184,7 @@ def create_article_view(request):
 
 
 @login_required
+@staff_required
 @require_http_methods(["GET", "POST"])
 def edit_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
@@ -250,6 +255,7 @@ def edit_article_view(request, page_id):
 
 
 @login_required
+@staff_required
 @require_POST
 def delete_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
@@ -373,6 +379,7 @@ def edit_comment_view(request, comment_id):
 
 
 @login_required
+@staff_required
 @require_POST
 def ckeditor5_upload(request):
     f = request.FILES.get("upload")

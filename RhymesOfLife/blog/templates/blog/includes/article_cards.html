@@ -1,4 +1,4 @@
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags static avatar_tags %}
 
 {% if page.live %}
   {% with href=page.url %}
@@ -27,7 +27,7 @@
 
         <div class="col d-flex flex-column">
           <div class="card-body d-flex flex-column h-100">
-            <h5 class="card-title mb-1">{{ page.title }}</h5>
+            <h5 class="card-title mb-2">{{ page.title }}</h5>
 
             <p class="card-text mb-2 text-break small">
               {{ page.intro|truncatechars:160 }}
@@ -41,12 +41,18 @@
               </div>
             {% endif %}
 
-            <p class="text-muted small mt-auto pt-2">
-              {% if page.author %}👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;{% endif %}
-              🗓 {{ page.date|date:"j E Y" }}
-              &emsp; ❤️ {{ page.likes_count }}
-              &emsp; 💬 {{ page.comments_count }}
-            </p>
+            <div class="d-flex align-items-center gap-2 text-muted small mt-auto pt-2">
+              {% if page.author %}
+                <a href="{% url 'public_profile' page.author.user.username %}" class="d-inline-flex align-items-center text-decoration-none">
+                  <img src="{% avatar_url page.author %}" class="rounded-circle me-2" width="24" height="24" alt="{% trans 'Avatar' %}">
+                  <span>{{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}</span>
+                </a>
+                <span class="mx-1">|</span>
+              {% endif %}
+              <span>🗓 {{ page.date|date:"j E Y" }}</span>
+              <span class="mx-2">❤️ {{ page.likes_count }}</span>
+              <span>💬 {{ page.comments_count }}</span>
+            </div>
           </div>
         </div>
 
@@ -81,7 +87,7 @@
 
         <div class="col d-flex flex-column">
           <div class="card-body d-flex flex-column h-100">
-            <h5 class="card-title mb-1">
+            <h5 class="card-title mb-2">
               {{ page.title }}
               {% if not page.live %}
                 <span class="badge bg-warning text-dark">{% trans "Draft" %}</span>
@@ -102,12 +108,18 @@
               </div>
             {% endif %}
 
-            <p class="text-muted small mt-auto pt-2">
-              {% if page.author %}👤 {{ page.author.first_name }} {{ page.author.last_name }} &nbsp;|&nbsp;{% endif %}
-              🗓 {{ page.date|date:"j E Y" }}
-              &emsp; ❤️ {{ page.likes_count }}
-              &emsp; 💬 {{ page.comments_count }}
-            </p>
+            <div class="d-flex align-items-center gap-2 text-muted small mt-auto pt-2">
+              {% if page.author %}
+                <a href="{% url 'public_profile' page.author.user.username %}" class="d-inline-flex align-items-center text-decoration-none">
+                  <img src="{% avatar_url page.author %}" class="rounded-circle me-2" width="24" height="24" alt="{% trans 'Avatar' %}">
+                  <span>{{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}</span>
+                </a>
+                <span class="mx-1">|</span>
+              {% endif %}
+              <span>🗓 {{ page.date|date:"j E Y" }}</span>
+              <span class="mx-2">❤️ {{ page.likes_count }}</span>
+              <span>💬 {{ page.comments_count }}</span>
+            </div>
           </div>
         </div>
 

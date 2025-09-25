@@ -52,7 +52,13 @@ from base.views.feed_views import (
     approve_post, reject_post, comments_more,
 )
 
-from .views import language_views
+from .views.language_views import (
+    set_language
+)
+
+from .views.public_profile_views import (
+    public_profile_view
+)
 
 
 urlpatterns = [
@@ -77,6 +83,7 @@ urlpatterns = [
     path("profile/", profile_view, name="my_profile"),
     path("profile/edit/", profile_edit_view, name="profile_edit"),
     path("profile/<str:username>/", profile_view, name="user_profile"),
+    path("u/<str:username>/", public_profile_view, name="public_profile"),
     path("onboarding/profile/", profile_onboarding_view, name="profile_onboarding"),
 
     path("my-documents/", my_documents_view, name="my_documents"),
@@ -110,5 +117,5 @@ urlpatterns = [
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
 
-    path("set-language/", language_views.set_language, name="set_language"),
+    path("set-language/", set_language, name="set_language"),
 ]

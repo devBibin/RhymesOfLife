@@ -1,17 +1,15 @@
-import calendar
 from datetime import date, datetime
+import calendar
 
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.utils.translation import gettext_lazy as _
-from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
-from django.contrib import messages
+from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_http_methods
 
-from ..models import AdditionalUserInfo, get_syndrome_choices
+from ..models import get_syndrome_choices
 from ..utils.files import validate_image_upload
 
 User = get_user_model()
@@ -24,15 +22,29 @@ ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp"}
 ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP"}
 
 
+def _parse_birth_date(day: str | None, month: str | None, year: str | None):
+    if not (day and month and year):
+        return None
+    try:
+        return datetime(int(year), int(month), int(day)).date()
+    except ValueError:
+        return "invalid"
+
+
+def _clean_about(text: str | None, limit: int = 500) -> str:
+    text = (text or "").strip()
+    if len(text) > limit:
+        return text[:limit]
+    return text
+
+
 @login_required
 @require_http_methods(["GET"])
 def profile_view(request, username=None):
-    if username:
-        user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
-        editable = user == request.user
-    else:
-        user = request.user
-        editable = True
+    if username and username != request.user.username:
+        return redirect("public_profile", username=username)
+
+    user = request.user
     info = getattr(user, "additional_info", None)
     return render(
         request,
@@ -40,7 +52,7 @@ def profile_view(request, username=None):
         {
             "user_profile": user,
             "info": info,
-            "editable": editable,
+            "editable": True,
             "syndrome_choices": SYNDROME_CHOICES,
         },
     )
@@ -59,25 +71,26 @@ def profile_edit_view(request):
         try:
             info.first_name = request.POST.get("first_name", "").strip()
             info.last_name = request.POST.get("last_name", "").strip()
+            info.about_me = _clean_about(request.POST.get("about_me"))
+
             new_email = (request.POST.get("email", "") or "").strip().lower()
 
-            day = request.POST.get("day")
-            month = request.POST.get("month")
-            year = request.POST.get("year")
-            if day and month and year:
-                try:
-                    info.birth_date = datetime(int(year), int(month), int(day)).date()
-                except ValueError:
-                    return render(request, "base/profile_edit.html", {
+            bd = _parse_birth_date(request.POST.get("day"), request.POST.get("month"), request.POST.get("year"))
+            if bd == "invalid":
+                return render(
+                    request,
+                    "base/profile_edit.html",
+                    {
                         "info": info,
                         "syndrome_choices": SYNDROME_CHOICES,
                         "months_list": months_list,
                         "year_range": year_range,
                         "day_range": day_range,
                         "error": _("Invalid date of birth."),
-                    }, status=400)
-            else:
-                info.birth_date = None
+                    },
+                    status=400,
+                )
+            info.birth_date = bd
 
             selected = request.POST.getlist("syndromes")
             confirmed = request.POST.getlist("confirmed_syndromes")
@@ -86,15 +99,21 @@ def profile_edit_view(request):
             info.confirmed_syndromes = confirmed
 
             if new_email:
-                if User.objects.filter(email=new_email).exclude(pk=request.user.pk).exists():
-                    return render(request, "base/profile_edit.html", {
-                        "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": _("This email is already registered."),
-                    }, status=400)
+                exists = User.objects.filter(email=new_email).exclude(pk=request.user.pk).exists()
+                if exists:
+                    return render(
+                        request,
+                        "base/profile_edit.html",
+                        {
+                            "info": info,
+                            "syndrome_choices": SYNDROME_CHOICES,
+                            "months_list": months_list,
+                            "year_range": year_range,
+                            "day_range": day_range,
+                            "error": _("This email is already registered."),
+                        },
+                        status=400,
+                    )
                 if request.user.email != new_email:
                     request.user.email = new_email
                     request.user.save(update_fields=["email"])
@@ -117,14 +136,19 @@ def profile_edit_view(request):
                     max_total_pixels=50_000_000,
                 )
                 if not ok:
-                    return render(request, "base/profile_edit.html", {
-                        "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": _(err),
-                    }, status=400)
+                    return render(
+                        request,
+                        "base/profile_edit.html",
+                        {
+                            "info": info,
+                            "syndrome_choices": SYNDROME_CHOICES,
+                            "months_list": months_list,
+                            "year_range": year_range,
+                            "day_range": day_range,
+                            "error": _(err),
+                        },
+                        status=400,
+                    )
                 try:
                     image.seek(0)
                 except Exception:
@@ -137,36 +161,49 @@ def profile_edit_view(request):
                 msgs = []
                 for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
                     msgs.extend(errs if isinstance(errs, (list, tuple)) else [errs])
-                return render(request, "base/profile_edit.html", {
-                    "info": info,
-                    "syndrome_choices": SYNDROME_CHOICES,
-                    "months_list": months_list,
-                    "year_range": year_range,
-                    "day_range": day_range,
-                    "error": "; ".join(msgs) or _("Validation failed."),
-                }, status=400)
+                return render(
+                    request,
+                    "base/profile_edit.html",
+                    {
+                        "info": info,
+                        "syndrome_choices": SYNDROME_CHOICES,
+                        "months_list": months_list,
+                        "year_range": year_range,
+                        "day_range": day_range,
+                        "error": "; ".join(msgs) or _("Validation failed."),
+                    },
+                    status=400,
+                )
 
             info.save()
             return redirect("my_profile")
 
         except Exception:
-            return render(request, "base/profile_edit.html", {
-                "info": info,
-                "syndrome_choices": SYNDROME_CHOICES,
-                "months_list": months_list,
-                "year_range": year_range,
-                "day_range": day_range,
-                "error": _("Error while saving."),
-            }, status=500)
+            return render(
+                request,
+                "base/profile_edit.html",
+                {
+                    "info": info,
+                    "syndrome_choices": SYNDROME_CHOICES,
+                    "months_list": months_list,
+                    "year_range": year_range,
+                    "day_range": day_range,
+                    "error": _("Error while saving."),
+                },
+                status=500,
+            )
 
-    return render(request, "base/profile_edit.html", {
-        "info": info,
-        "syndrome_choices": SYNDROME_CHOICES,
-        "months_list": months_list,
-        "year_range": year_range,
-        "day_range": day_range,
-    })
-
+    return render(
+        request,
+        "base/profile_edit.html",
+        {
+            "info": info,
+            "syndrome_choices": SYNDROME_CHOICES,
+            "months_list": months_list,
+            "year_range": year_range,
+            "day_range": day_range,
+        },
+    )
 
 
 @login_required
@@ -182,17 +219,10 @@ def profile_onboarding_view(request):
         info.first_name = request.POST.get("first_name", "").strip()
         info.last_name = request.POST.get("last_name", "").strip()
         info.email = request.POST.get("email", "").strip()
+        info.about_me = _clean_about(request.POST.get("about_me"))
 
-        day = request.POST.get("day")
-        month = request.POST.get("month")
-        year = request.POST.get("year")
-        if day and month and year:
-            try:
-                info.birth_date = datetime(int(year), int(month), int(day)).date()
-            except ValueError:
-                info.birth_date = None
-        else:
-            info.birth_date = None
+        bd = _parse_birth_date(request.POST.get("day"), request.POST.get("month"), request.POST.get("year"))
+        info.birth_date = None if bd == "invalid" else bd
 
         selected = request.POST.getlist("syndromes")
         confirmed = request.POST.getlist("confirmed_syndromes")

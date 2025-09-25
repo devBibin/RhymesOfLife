@@ -5,45 +5,54 @@
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">{% trans "Articles"%}</h1>
+    {% if request.user.is_staff %}
     <a href="{% url 'create_article' %}" class="btn btn-primary">✍️ {% trans "New article" %}</a>
+    {% endif %}
   </div>
+
 
   <nav class="mb-4">
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a href="#" data-filter="popular"
-           class="nav-link {% if current_filter == 'popular' %}active{% endif %}">
+          class="nav-link {% if current_filter == 'popular' %}active{% endif %}">
           {% trans "Popular" %}
         </a>
       </li>
+
+      {% if request.user.is_staff %}
       <li class="nav-item">
         <a href="#" data-filter="mine"
-           class="nav-link {% if current_filter == 'mine' %}active{% endif %}">
+          class="nav-link {% if current_filter == 'mine' %}active{% endif %}">
           {% trans "My articles" %}
         </a>
       </li>
+      {% endif %}
+
       <li class="nav-item">
         <a href="#" data-filter="subscriptions"
-           class="nav-link {% if current_filter == 'subscriptions' %}active{% endif %}">
+          class="nav-link {% if current_filter == 'subscriptions' %}active{% endif %}">
           {% trans "Subscriptions" %}
         </a>
       </li>
       <li class="nav-item">
         <a href="#" data-filter="doctors"
-           class="nav-link {% if current_filter == 'doctors' %}active{% endif %}">
+          class="nav-link {% if current_filter == 'doctors' %}active{% endif %}">
           {% trans "Doctors" %}
         </a>
       </li>
+
       {% if request.user.is_staff %}
       <li class="nav-item">
         <a href="#" data-filter="pending"
-           class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
+          class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
           ⏳ {% trans "Pending approval" %}
         </a>
       </li>
       {% endif %}
     </ul>
   </nav>
+
 
   <form id="search-form" class="mb-4" novalidate>
     <input type="hidden" name="filter" id="current-filter" value="{{ current_filter }}">

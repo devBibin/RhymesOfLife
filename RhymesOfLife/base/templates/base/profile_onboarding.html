@@ -12,24 +12,32 @@
       <div class="alert alert-danger">{{ error }}</div>
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" id="onboarding-form">
       {% csrf_token %}
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label">{% trans "First name" %}</label>
-          <input type="text" name="first_name" class="form-control" value="{{ info.first_name|default:'' }}" required>
+          <label class="form-label" for="first_name">{% trans "First name" %}</label>
+          <input id="first_name" type="text" name="first_name" class="form-control" value="{{ info.first_name|default:'' }}" required>
         </div>
         <div class="col-md-6">
-          <label class="form-label">{% trans "Last name" %}</label>
-          <input type="text" name="last_name" class="form-control" value="{{ info.last_name|default:'' }}" required>
+          <label class="form-label" for="last_name">{% trans "Last name" %}</label>
+          <input id="last_name" type="text" name="last_name" class="form-control" value="{{ info.last_name|default:'' }}" required>
         </div>
+
         <div class="col-md-12">
-          <label class="form-label">{% trans "Email" %}</label>
-          <input type="email" name="email" class="form-control" value="{{ info.email|default:'' }}" required>
+          <label class="form-label" for="email">{% trans "Email" %}</label>
+          <input id="email" type="email" name="email" class="form-control" value="{{ info.email|default:'' }}" required>
         </div>
+
+        <div class="col-12">
+          <label class="form-label" for="about_me">{% trans "About me" %}</label>
+          <textarea id="about_me" name="about_me" class="form-control" rows="4" maxlength="500" placeholder="{% trans 'A short bio (max 500 characters)' %}">{{ info.about_me }}</textarea>
+          <div class="form-text"><span id="about-count">0</span>/500</div>
+        </div>
+
         <div class="col-md-4">
-          <label class="form-label">{% trans "Day" %}</label>
-          <select name="day" class="form-select">
+          <label class="form-label" for="day">{% trans "Day" %}</label>
+          <select id="day" name="day" class="form-select">
             <option value=""></option>
             {% for d in day_range %}
               <option value="{{ d }}" {% if info.birth_date and info.birth_date.day == d %}selected{% endif %}>{{ d }}</option>
@@ -37,8 +45,8 @@
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">{% trans "Month" %}</label>
-          <select name="month" class="form-select">
+          <label class="form-label" for="month">{% trans "Month" %}</label>
+          <select id="month" name="month" class="form-select">
             <option value=""></option>
             {% for m,name in months_list %}
               <option value="{{ m }}" {% if info.birth_date and info.birth_date.month == m %}selected{% endif %}>{{ name }}</option>
@@ -46,8 +54,8 @@
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">{% trans "Year" %}</label>
-          <select name="year" class="form-select">
+          <label class="form-label" for="year">{% trans "Year" %}</label>
+          <select id="year" name="year" class="form-select">
             <option value=""></option>
             {% for y in year_range %}
               <option value="{{ y }}" {% if info.birth_date and info.birth_date.year == y %}selected{% endif %}>{{ y }}</option>
@@ -86,8 +94,8 @@
         </div>
 
         <div class="col-12">
-          <label class="form-label">{% trans "Avatar" %}</label>
-          <input type="file" name="avatar" class="form-control" accept="image/*">
+          <label class="form-label" for="avatar">{% trans "Avatar" %}</label>
+          <input id="avatar" type="file" name="avatar" class="form-control" accept="image/*">
         </div>
       </div>
 
@@ -99,15 +107,12 @@
 <script>
 document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
-    var mainSel=c.getAttribute("data-main");
-    var m=document.querySelector(mainSel);
-    var sync=function(){
-      var enabled=!!(m&&m.checked);
-      c.disabled=!enabled;
-      if(!enabled){c.checked=false;}
-    };
+    var m=document.querySelector(c.getAttribute("data-main"));
+    var sync=function(){var on=!!(m&&m.checked);c.disabled=!on;if(!on)c.checked=false;};
     if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
   });
+  var ta=document.getElementById("about_me"), cnt=document.getElementById("about-count");
+  if(ta&&cnt){var u=function(){cnt.textContent=String(ta.value.length)};ta.addEventListener("input",u);u();}
 });
 </script>
 {% endblock %}
