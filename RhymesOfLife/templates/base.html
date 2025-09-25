@@ -182,23 +182,7 @@
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   <script>
-  (() => {
-    const orig = Element.prototype.appendChild;
-    Element.prototype.appendChild = function(node) {
-      try {
-        if (node && node.tagName === 'SCRIPT') {
-          const s = node.getAttribute('src') || '';
-          if (s.includes('/connect-telegram/')) {
-            console.warn('SCRIPT SRC DETECTED:', s);
-            console.warn(new Error('Stack trace').stack);
-          }
-        }
-      } catch {}
-      return orig.call(this, node);
-    };
-  })();
-  </script>
+
   <script src="{% url 'javascript-catalog' %}"></script>
   <script src="{% static 'js/articles_index.js' %}"></script>
   <script src="{% static 'js/avatar.js' %}"></script>
