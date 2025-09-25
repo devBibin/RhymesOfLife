@@ -1,7 +1,6 @@
 {% load i18n %}
 <div>
   {% include "base/post_cards.html" with page_obj=posts liked_ids=liked_ids %}
-
   <nav class="mt-3">
     <ul class="pagination">
       {% if posts.has_previous %}

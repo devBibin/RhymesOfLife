@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n avatar_tags %}
 <div class="row gy-4">
 {% for p in posts %}
   <div class="col-12">
@@ -6,44 +6,36 @@
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between mb-2 post-header">
           <div class="d-flex align-items-center">
-            {% if p.author.avatar %}
-              <img src="{{ p.author.avatar.url }}" class="rounded-circle me-2 avatar" width="40" height="40" alt="">
-            {% endif %}
+            <img src="{% avatar_url p.author %}" class="rounded-circle me-2 avatar" width="40" height="40" alt="{% trans 'User avatar' %}">
             <div>
               <div class="fw-semibold d-flex align-items-center gap-2">
                 {{ p.author.user.username }}
 
                 {% if request.user.is_authenticated and p.author.user_id != request.user.id %}
                   {% if p.author.user_id in following_user_ids %}
-                    <button
-                      type="button"
-                      data-follow-toggle
-                      data-author-id="{{ p.author.user_id }}"
-                      data-url-follow="{% url 'follow_user' p.author.user.id %}"
-                      data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
-                      data-following="1"
-                      data-label-follow="{% trans 'Follow' %}"
-                      data-label-unfollow="{% trans 'Unfollow' %}"
-                      class="btn btn-sm py-0 btn-outline-secondary"
-                      aria-label="{% trans 'Toggle follow' %}"
-                      aria-pressed="true">
-                      {% trans "Unfollow" %}
-                    </button>
+                    <button type="button"
+                            data-follow-toggle
+                            data-author-id="{{ p.author.user_id }}"
+                            data-url-follow="{% url 'follow_user' p.author.user.id %}"
+                            data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
+                            data-following="1"
+                            data-label-follow="{% trans 'Follow' %}"
+                            data-label-unfollow="{% trans 'Unfollow' %}"
+                            class="btn btn-sm py-0 btn-outline-secondary"
+                            aria-label="{% trans 'Toggle follow' %}"
+                            aria-pressed="true">{% trans "Unfollow" %}</button>
                   {% else %}
-                    <button
-                      type="button"
-                      data-follow-toggle
-                      data-author-id="{{ p.author.user_id }}"
-                      data-url-follow="{% url 'follow_user' p.author.user.id %}"
-                      data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
-                      data-following="0"
-                      data-label-follow="{% trans 'Follow' %}"
-                      data-label-unfollow="{% trans 'Unfollow' %}"
-                      class="btn btn-sm py-0 btn-primary"
-                      aria-label="{% trans 'Toggle follow' %}"
-                      aria-pressed="false">
-                      {% trans "Follow" %}
-                    </button>
+                    <button type="button"
+                            data-follow-toggle
+                            data-author-id="{{ p.author.user_id }}"
+                            data-url-follow="{% url 'follow_user' p.author.user.id %}"
+                            data-url-unfollow="{% url 'unfollow_user' p.author.user.id %}"
+                            data-following="0"
+                            data-label-follow="{% trans 'Follow' %}"
+                            data-label-unfollow="{% trans 'Unfollow' %}"
+                            class="btn btn-sm py-0 btn-primary"
+                            aria-label="{% trans 'Toggle follow' %}"
+                            aria-pressed="false">{% trans "Follow" %}</button>
                   {% endif %}
                 {% endif %}
               </div>
@@ -63,46 +55,28 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
               {% if request.user.is_staff and not p.is_approved %}
-                <li>
-                  <a class="dropdown-item" href="{% url 'post_approve' p.id %}">
-                    <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{% trans "Publish" %}
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item text-danger" href="{% url 'post_reject' p.id %}">
-                    <i class="bi bi-x-circle me-2" aria-hidden="true"></i>{% trans "Reject" %}
-                  </a>
-                </li>
+                <li><a class="dropdown-item" href="{% url 'post_approve' p.id %}">
+                  <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{% trans "Publish" %}</a></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'post_reject' p.id %}">
+                  <i class="bi bi-x-circle me-2" aria-hidden="true"></i>{% trans "Reject" %}</a></li>
                 <li><hr class="dropdown-divider"></li>
               {% endif %}
 
               {% if p.author.user_id == request.user.id or request.user.is_superuser %}
                 {% if p.is_hidden %}
-                  <li>
-                    <a class="dropdown-item" href="{% url 'post_unhide' p.id %}">
-                      <i class="bi bi-eye me-2" aria-hidden="true"></i>{% trans "Unhide" %}
-                    </a>
-                  </li>
+                  <li><a class="dropdown-item" href="{% url 'post_unhide' p.id %}">
+                    <i class="bi bi-eye me-2" aria-hidden="true"></i>{% trans "Unhide" %}</a></li>
                 {% else %}
-                  <li>
-                    <a class="dropdown-item" href="{% url 'post_hide' p.id %}">
-                      <i class="bi bi-eye-slash me-2" aria-hidden="true"></i>{% trans "Hide" %}
-                    </a>
-                  </li>
+                  <li><a class="dropdown-item" href="{% url 'post_hide' p.id %}">
+                    <i class="bi bi-eye-slash me-2" aria-hidden="true"></i>{% trans "Hide" %}</a></li>
                 {% endif %}
-                <li>
-                  <a class="dropdown-item" href="{% url 'post_edit' p.id %}">
-                    <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>{% trans "Edit" %}
-                  </a>
-                </li>
+                <li><a class="dropdown-item" href="{% url 'post_edit' p.id %}">
+                  <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>{% trans "Edit" %}</a></li>
                 <li><hr class="dropdown-divider"></li>
               {% endif %}
 
-              <li>
-                <a class="dropdown-item" href="#" data-copy-link data-url="#p-{{ p.id }}">
-                  <i class="bi bi-link-45deg me-2" aria-hidden="true"></i>{% trans "Copy link" %}
-                </a>
-              </li>
+              <li><a class="dropdown-item" href="#" data-copy-link data-url="#p-{{ p.id }}">
+                <i class="bi bi-link-45deg me-2" aria-hidden="true"></i>{% trans "Copy link" %}</a></li>
             </ul>
           </div>
         </div>
@@ -121,9 +95,7 @@
           {% elif count > 1 %}
             <div class="post-gallery mb-3">
               {% for img in p.images.all %}
-                <div class="post-thumb">
-                  <img src="{{ img.image.url }}" class="img-fluid" alt="">
-                </div>
+                <div class="post-thumb"><img src="{{ img.image.url }}" class="img-fluid" alt=""></div>
               {% endfor %}
             </div>
           {% endif %}
@@ -134,7 +106,6 @@
              class="btn btn-sm btn-outline-primary me-3 {% if p.id in liked_ids %}active{% endif %}">
             ❤️ <span data-count>{{ p.likes_count }}</span>
           </a>
-
           <div class="text-muted small d-flex align-items-center">
             <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ p.comments_count }}
           </div>
@@ -149,11 +120,22 @@
               <i class="bi bi-send-fill" aria-hidden="true"></i>
             </button>
           </form>
+
           <ul class="list-unstyled mt-3" id="comments-{{ p.id }}">
-            {% for c in p.visible_comments|slice:':3' %}
-              <li class="mb-2"><strong>{{ c.author.user.username }}</strong>: {{ c.text }}</li>
-            {% endfor %}
+            {% include "base/comment_items.html" with comments=p.visible_comments|slice:":3" %}
           </ul>
+
+          {% if p.comments_count > 3 %}
+            <button type="button"
+                    class="btn btn-link btn-sm"
+                    data-comments-more
+                    data-post-id="{{ p.id }}"
+                    data-offset="3"
+                    data-limit="10"
+                    data-url="{% url 'post_comments_more' p.id %}">
+              {% trans "Show more" %}
+            </button>
+          {% endif %}
         </div>
       </div>
     </div>

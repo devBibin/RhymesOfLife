@@ -49,7 +49,7 @@ from .views.auth_reset_views import (
 from base.views.feed_views import (
     feed, create_post, edit_post, hide_post, unhide_post,
     toggle_like, add_comment, delete_comment,
-    approve_post, reject_post,
+    approve_post, reject_post, comments_more,
 )
 
 from .views import language_views
@@ -105,6 +105,7 @@ urlpatterns = [
     path("posts/<int:post_id>/unhide/", unhide_post, name="post_unhide"),
     path("posts/<int:post_id>/like/", toggle_like, name="post_like"),
     path("posts/<int:post_id>/comments/add/", add_comment, name="post_comment_add"),
+    path("posts/<int:post_id>/comments/", comments_more, name="post_comments_more"),
     path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),

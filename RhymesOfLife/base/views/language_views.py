@@ -20,5 +20,5 @@ def set_language(request):
         request.session["user_lang"] = lang
     translation.activate(lang)
     request.LANGUAGE_CODE = lang
-    next_url = request.POST.get("next") or "/"
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or "/"
     return redirect(next_url)

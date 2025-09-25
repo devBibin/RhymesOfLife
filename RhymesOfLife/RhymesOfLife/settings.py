@@ -165,7 +165,7 @@ BASE_URL = environment.get("BASE_URL")
 SITE_ID = 1
 
 WAGTAIL_SITE_NAME = "Rhymes of Life"
-WAGTAIL_I18N_ENABLED = True
+WAGTAIL_I18N_ENABLED = False
 WAGTAIL_CONTENT_LANGUAGES = [
     ("en", "English"),
     ("ru", "Russian"),

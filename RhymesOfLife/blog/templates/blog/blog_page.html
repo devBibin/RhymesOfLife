@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags static i18n form_tags %}
+{% load wagtailcore_tags wagtailimages_tags static i18n form_tags avatar_tags %}
 
 {% block title %}{{ page.title }}{% endblock %}
 {% block meta_description %}{{ page.intro }}{% endblock %}
@@ -42,10 +42,9 @@
     {% endif %}
   {% endif %}
 
-
   <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
-    {% if page.author and page.author.avatar %}
-      <img src="{{ page.author.avatar.url }}" class="author-avatar rounded-circle me-2 object-fit-cover" width="48" height="48" alt="{% trans 'Author avatar' %}">
+    {% if page.author %}
+      <img src="{% avatar_url page.author %}" class="author-avatar rounded-circle me-2 object-fit-cover" width="48" height="48" alt="{% trans 'Author avatar' %}">
     {% endif %}
 
     <div class="small text-muted me-2">
@@ -185,8 +184,8 @@
       {% for comment in page.visible_comments %}
         <div class="comment mb-3" data-comment-id="{{ comment.id }}">
           <div class="d-flex align-items-center mb-1">
-            {% if comment.author.avatar %}
-              <img src="{{ comment.author.avatar.url }}" class="comment-avatar rounded-circle me-2 object-fit-cover" width="32" height="32" alt="{% trans 'Avatar' %}">
+            {% if comment.author %}
+              <img src="{% avatar_url comment.author %}" class="comment-avatar rounded-circle me-2 object-fit-cover" width="32" height="32" alt="{% trans 'Avatar' %}">
             {% endif %}
             <strong>{{ comment.author.first_name }}</strong>
             <small class="text-muted ms-2">

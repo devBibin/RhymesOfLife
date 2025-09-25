@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 from ..models import AdditionalUserInfo, get_syndrome_choices
 from ..utils.files import validate_image_upload
@@ -57,21 +58,28 @@ def profile_edit_view(request):
     if request.method == "POST":
         try:
             info.first_name = request.POST.get("first_name", "").strip()
-            info.last_name  = request.POST.get("last_name", "").strip()
+            info.last_name = request.POST.get("last_name", "").strip()
             new_email = (request.POST.get("email", "") or "").strip().lower()
 
-            day   = request.POST.get("day")
+            day = request.POST.get("day")
             month = request.POST.get("month")
-            year  = request.POST.get("year")
+            year = request.POST.get("year")
             if day and month and year:
                 try:
                     info.birth_date = datetime(int(year), int(month), int(day)).date()
                 except ValueError:
-                    return JsonResponse({"success": False, "error": _("Invalid date of birth.")}, status=400)
+                    return render(request, "base/profile_edit.html", {
+                        "info": info,
+                        "syndrome_choices": SYNDROME_CHOICES,
+                        "months_list": months_list,
+                        "year_range": year_range,
+                        "day_range": day_range,
+                        "error": _("Invalid date of birth."),
+                    }, status=400)
             else:
                 info.birth_date = None
 
-            selected  = request.POST.getlist("syndromes")
+            selected = request.POST.getlist("syndromes")
             confirmed = request.POST.getlist("confirmed_syndromes")
             confirmed = [c for c in confirmed if c in selected]
             info.syndromes = selected
@@ -79,7 +87,14 @@ def profile_edit_view(request):
 
             if new_email:
                 if User.objects.filter(email=new_email).exclude(pk=request.user.pk).exists():
-                    return JsonResponse({"success": False, "error": _("This email is already registered.")}, status=400)
+                    return render(request, "base/profile_edit.html", {
+                        "info": info,
+                        "syndrome_choices": SYNDROME_CHOICES,
+                        "months_list": months_list,
+                        "year_range": year_range,
+                        "day_range": day_range,
+                        "error": _("This email is already registered."),
+                    }, status=400)
                 if request.user.email != new_email:
                     request.user.email = new_email
                     request.user.save(update_fields=["email"])
@@ -102,7 +117,14 @@ def profile_edit_view(request):
                     max_total_pixels=50_000_000,
                 )
                 if not ok:
-                    return JsonResponse({"success": False, "error": _(err)}, status=400)
+                    return render(request, "base/profile_edit.html", {
+                        "info": info,
+                        "syndrome_choices": SYNDROME_CHOICES,
+                        "months_list": months_list,
+                        "year_range": year_range,
+                        "day_range": day_range,
+                        "error": _(err),
+                    }, status=400)
                 try:
                     image.seek(0)
                 except Exception:
@@ -114,29 +136,37 @@ def profile_edit_view(request):
             except ValidationError as e:
                 msgs = []
                 for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
-                    if isinstance(errs, (list, tuple)):
-                        msgs.extend(errs)
-                    else:
-                        msgs.append(errs)
-                return JsonResponse({"success": False, "error": "; ".join(msgs) or _("Validation failed.")}, status=400)
+                    msgs.extend(errs if isinstance(errs, (list, tuple)) else [errs])
+                return render(request, "base/profile_edit.html", {
+                    "info": info,
+                    "syndrome_choices": SYNDROME_CHOICES,
+                    "months_list": months_list,
+                    "year_range": year_range,
+                    "day_range": day_range,
+                    "error": "; ".join(msgs) or _("Validation failed."),
+                }, status=400)
 
             info.save()
-            return JsonResponse({"success": True})
+            return redirect("my_profile")
 
         except Exception:
-            return JsonResponse({"success": False, "error": _("Error while saving.")}, status=500)
+            return render(request, "base/profile_edit.html", {
+                "info": info,
+                "syndrome_choices": SYNDROME_CHOICES,
+                "months_list": months_list,
+                "year_range": year_range,
+                "day_range": day_range,
+                "error": _("Error while saving."),
+            }, status=500)
 
-    return render(
-        request,
-        "base/profile_edit.html",
-        {
-            "info": info,
-            "syndrome_choices": SYNDROME_CHOICES,
-            "months_list": months_list,
-            "year_range": year_range,
-            "day_range": day_range,
-        },
-    )
+    return render(request, "base/profile_edit.html", {
+        "info": info,
+        "syndrome_choices": SYNDROME_CHOICES,
+        "months_list": months_list,
+        "year_range": year_range,
+        "day_range": day_range,
+    })
+
 
 
 @login_required

@@ -1,0 +1,22 @@
+{% load i18n avatar_tags %}
+{% for c in comments %}
+<li class="mb-2 d-flex align-items-start" id="c-{{ c.id }}">
+  <img src="{% avatar_url c.author %}" class="rounded-circle me-2" width="32" height="32" alt="{% trans 'Avatar' %}">
+  <div class="flex-grow-1">
+    <div class="d-flex align-items-center gap-2">
+      <strong>{{ c.author.user.username }}</strong>
+      <small class="text-muted">{{ c.created_at|date:"d.m.Y H:i" }}</small>
+      {% if c.edited_at %}<small class="text-muted">({% trans "edited" %})</small>{% endif %}
+      {% if request.user.is_authenticated and c.author.user_id == request.user.id or request.user.is_superuser %}
+        <button type="button"
+                class="btn btn-sm btn-outline-danger ms-auto"
+                data-comment-delete
+                data-post="{{ c.post_id }}"
+                data-comment="{{ c.id }}"
+                aria-label="{% trans 'Delete' %}">🗑</button>
+      {% endif %}
+    </div>
+    <div class="text-break">{{ c.text|linebreaksbr }}</div>
+  </div>
+</li>
+{% endfor %}
