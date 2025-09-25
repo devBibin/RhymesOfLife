@@ -58,7 +58,7 @@ class EnforceOnboardingMiddleware:
     def _default_exempt_paths():
         static_url = getattr(settings, "STATIC_URL", "/static/")
         media_url = getattr(settings, "MEDIA_URL", "/media/")
-        return [static_url, media_url, "/favicon.ico", "/robots.txt"]
+        return [static_url, media_url, "/favicon.ico", "/robots.txt", "/jsi18n/"]
 
     @staticmethod
     def _default_exempt_names():
@@ -77,5 +77,7 @@ class EnforceOnboardingMiddleware:
             "consents",
             "profile_onboarding",
             "set_language",
+            "javascript-catalog",
+            "admin:jsi18n",
             "admin:index",
         }
