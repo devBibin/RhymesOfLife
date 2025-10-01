@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 18:32+0000\n"
+"POT-Creation-Date: 2025-10-01 02:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,8 +85,8 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: base/models.py:358 base/templates/base/feed.html:9
-#: base/templates/base/public_profile.html:42
+#: base/models.py:358 base/templates/base/feed.html:10
+#: base/templates/base/public_profile.html:17
 msgid "Posts"
 msgstr ""
 
@@ -142,9 +142,8 @@ msgid "User ID"
 msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
-#: base/templates/base/home_public.html:96 base/templates/base/profile.html:26
-#: base/templates/base/profile_edit.html:39
-#: base/templates/base/profile_onboarding.html:28
+#: base/templates/base/home_public.html:96 base/templates/base/profile.html:36
+#: base/templates/base/profile_edit.html:42
 #: base/templates/base/register.html:30
 #: base/templates/base/reset_request.html:39
 msgid "Email"
@@ -179,9 +178,7 @@ msgid "User"
 msgstr ""
 
 #: base/templates/base/comment_items.html:4
-#: base/templates/base/profile_onboarding.html:97
-#: base/templates/base/public_profile.html:7
-#: base/templates/base/public_profile.html:54
+#: base/templates/base/includes/profile_header.html:6
 #: blog/templates/blog/blog_page.html:188
 #: blog/templates/blog/includes/article_cards.html:47
 #: blog/templates/blog/includes/article_cards.html:114
@@ -194,7 +191,7 @@ msgid "edited"
 msgstr ""
 
 #: base/templates/base/comment_items.html:16
-#: base/templates/base/profile_edit.html:21
+#: base/templates/base/profile_edit.html:20
 #: blog/templates/blog/blog_page.html:133
 #: blog/templates/blog/blog_page.html:198
 #: blog/templates/blog/edit_article.html:88
@@ -826,31 +823,31 @@ msgstr ""
 msgid "Feed"
 msgstr ""
 
-#: base/templates/base/feed.html:10 base/templates/base/post_create.html:3
+#: base/templates/base/feed.html:11 base/templates/base/post_create.html:3
 msgid "New post"
 msgstr ""
 
-#: base/templates/base/feed.html:19
+#: base/templates/base/feed.html:20
 msgid "My posts"
 msgstr ""
 
-#: base/templates/base/feed.html:25 blog/templates/blog/blog_index_page.html:35
+#: base/templates/base/feed.html:26 blog/templates/blog/blog_index_page.html:35
 msgid "Subscriptions"
 msgstr ""
 
-#: base/templates/base/feed.html:31
+#: base/templates/base/feed.html:32
 msgid "Latest"
 msgstr ""
 
-#: base/templates/base/feed.html:38 blog/templates/blog/blog_index_page.html:49
+#: base/templates/base/feed.html:39 blog/templates/blog/blog_index_page.html:49
 msgid "Pending approval"
 msgstr ""
 
-#: base/templates/base/feed.html:48
+#: base/templates/base/feed.html:49
 msgid "Search posts"
 msgstr ""
 
-#: base/templates/base/feed.html:49 base/templates/base/patients_list.html:11
+#: base/templates/base/feed.html:50 base/templates/base/patients_list.html:11
 #: blog/templates/blog/blog_index_page.html:66
 msgid "Search"
 msgstr ""
@@ -945,15 +942,37 @@ msgstr ""
 msgid "Don't have an account?"
 msgstr ""
 
+#: base/templates/base/includes/profile_header.html:13
+msgid "Edit profile"
+msgstr ""
+
+#: base/templates/base/includes/profile_header.html:31
+#, python-format
+msgid "%(n)s post"
+msgid_plural "%(n)s posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: base/templates/base/includes/profile_header.html:35
+#, python-format
+msgid "%(n)s follower"
+msgid_plural "%(n)s followers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: base/templates/base/includes/profile_header.html:43
+#: base/templates/base/profile.html:32
+msgid "No bio yet."
+msgstr ""
+
 #: base/templates/base/my_documents.html:21
 #: base/templates/base/recommendations.html:19 templates/base.html:53
 msgid "My examinations"
 msgstr ""
 
 #: base/templates/base/my_documents.html:22
-#: base/templates/base/recommendations.html:4
-#: base/templates/base/recommendations.html:18
-msgid "Doctor's recommendations"
+#: base/templates/base/recommendations.html:18 templates/base.html:58
+msgid "Doctor's comments"
 msgstr ""
 
 #: base/templates/base/my_documents.html:27
@@ -998,7 +1017,7 @@ msgid ""
 msgstr ""
 
 #: base/templates/base/my_documents.html:59
-#: base/templates/base/profile_edit.html:102
+#: base/templates/base/profile_edit.html:117
 msgid "Save"
 msgstr ""
 
@@ -1053,7 +1072,7 @@ msgid "Enter recommendation..."
 msgstr ""
 
 #: base/templates/base/patient_exams.html:16
-#: base/templates/base/post_cards.html:123
+#: base/templates/base/post_cards.html:137
 #: blog/templates/blog/blog_page.html:175
 msgid "Send"
 msgstr ""
@@ -1102,10 +1121,10 @@ msgstr ""
 #: base/templates/base/patients_list.html:62
 #: base/templates/base/patients_list.html:65
 #: base/templates/base/post_list_fragment.html:14
-#: base/templates/base/public_profile.html:84
-#: base/templates/base/public_profile.html:86
-#: base/templates/base/public_profile.html:117
-#: base/templates/base/public_profile.html:119
+#: base/templates/base/public_profile.html:38
+#: base/templates/base/public_profile.html:40
+#: base/templates/base/public_profile.html:71
+#: base/templates/base/public_profile.html:73
 #: base/templates/base/recommendations.html:66
 #: base/templates/base/recommendations.html:69
 msgid "Next"
@@ -1120,7 +1139,7 @@ msgid "Enter a query to search for patients."
 msgstr ""
 
 #: base/templates/base/post_cards.html:10 base/templates/base/profile.html:10
-#: base/templates/base/profile_edit.html:18
+#: base/templates/base/profile_edit.html:17
 msgid "User avatar"
 msgstr ""
 
@@ -1171,7 +1190,7 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:78 base/templates/base/profile.html:46
+#: base/templates/base/post_cards.html:78 base/templates/base/profile.html:56
 #: blog/templates/blog/blog_page.html:130
 #: blog/templates/blog/blog_page.html:197
 msgid "Edit"
@@ -1181,16 +1200,21 @@ msgstr ""
 msgid "Copy link"
 msgstr ""
 
-#: base/templates/base/post_cards.html:122
+#: base/templates/base/post_cards.html:121
+#: blog/templates/blog/blog_page.html:154
+msgid "Log in to like"
+msgstr ""
+
+#: base/templates/base/post_cards.html:136
 msgid "Write a comment..."
 msgstr ""
 
-#: base/templates/base/post_cards.html:140
+#: base/templates/base/post_cards.html:154
 msgid "Show more"
 msgstr ""
 
-#: base/templates/base/post_cards.html:148
-#: base/templates/base/public_profile.html:92
+#: base/templates/base/post_cards.html:162
+#: base/templates/base/public_profile.html:46
 msgid "No posts yet."
 msgstr ""
 
@@ -1260,87 +1284,72 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: base/templates/base/profile.html:16
-#: base/templates/base/profile_onboarding.html:33
-#: base/templates/base/public_profile.html:28
+#: base/templates/base/profile.html:28 base/templates/base/profile_edit.html:77
 msgid "About me"
 msgstr ""
 
-#: base/templates/base/profile.html:20
-#: base/templates/base/public_profile.html:32
-msgid "No bio yet."
-msgstr ""
-
-#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:31
-#: base/templates/base/profile_onboarding.html:19
-msgid "First name"
-msgstr ""
-
-#: base/templates/base/profile.html:25 base/templates/base/profile_edit.html:35
-#: base/templates/base/profile_onboarding.html:23
-msgid "Last name"
-msgstr ""
-
-#: base/templates/base/profile.html:27 base/templates/base/profile_edit.html:44
+#: base/templates/base/profile.html:37 base/templates/base/profile_edit.html:47
 msgid "Date of birth"
 msgstr ""
 
-#: base/templates/base/profile.html:30 base/templates/base/profile_edit.html:74
-#: base/templates/base/profile_onboarding.html:67
+#: base/templates/base/profile.html:40 base/templates/base/profile_edit.html:83
 msgid "Syndromes"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:20
+#: base/templates/base/profile_edit.html:19
 msgid "Upload new"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:48
-#: base/templates/base/profile_onboarding.html:39
+#: base/templates/base/profile_edit.html:33
+msgid "First name"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:37
+msgid "Last name"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:51
 msgid "Day"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:56
-#: base/templates/base/profile_onboarding.html:48
+#: base/templates/base/profile_edit.html:59
 msgid "Month"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:64
-#: base/templates/base/profile_onboarding.html:57
+#: base/templates/base/profile_edit.html:67
 msgid "Year"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:93
-#: base/templates/base/profile_onboarding.html:88
+#: base/templates/base/profile_edit.html:78
+msgid "A few words about yourself"
+msgstr ""
+
+#: base/templates/base/profile_edit.html:79
+msgid "Up to 1000 characters."
+msgstr ""
+
+#: base/templates/base/profile_edit.html:102
 msgid "Genetically confirmed"
 msgstr ""
 
-#: base/templates/base/profile_onboarding.html:4
-#: base/templates/base/profile_onboarding.html:9
-msgid "Complete your profile"
-msgstr ""
-
-#: base/templates/base/profile_onboarding.html:34
-msgid "A short bio (max 500 characters)"
-msgstr ""
-
-#: base/templates/base/profile_onboarding.html:102
-msgid "Save and continue"
-msgstr ""
-
-#: base/templates/base/public_profile.html:39
+#: base/templates/base/public_profile.html:13
 #: blog/templates/blog/blog_index_page.html:7 templates/base.html:64
 msgid "Articles"
 msgstr ""
 
-#: base/templates/base/public_profile.html:74
-#: base/templates/base/public_profile.html:76
-#: base/templates/base/public_profile.html:107
-#: base/templates/base/public_profile.html:109
+#: base/templates/base/public_profile.html:28
+#: base/templates/base/public_profile.html:30
+#: base/templates/base/public_profile.html:61
+#: base/templates/base/public_profile.html:63
 msgid "Prev"
 msgstr ""
 
-#: base/templates/base/public_profile.html:125
+#: base/templates/base/public_profile.html:79
 msgid "No articles yet."
+msgstr ""
+
+#: base/templates/base/recommendations.html:4
+msgid "Doctor's recommendations"
 msgstr ""
 
 #: base/templates/base/recommendations.html:75
@@ -1541,7 +1550,7 @@ msgstr ""
 msgid "A user with that username already exists."
 msgstr ""
 
-#: base/views/auth_views.py:51 base/views/profile_views.py:113
+#: base/views/auth_views.py:51 base/views/profile_views.py:110
 msgid "This email is already registered."
 msgstr ""
 
@@ -1622,36 +1631,36 @@ msgstr ""
 msgid "Failed to update the exam."
 msgstr ""
 
-#: base/views/feed_views.py:28
+#: base/views/feed_views.py:29
 msgid "Too many images."
 msgstr ""
 
-#: base/views/feed_views.py:39
+#: base/views/feed_views.py:40
 #, python-format
 msgid "%(msg)s"
 msgstr ""
 
-#: base/views/feed_views.py:127
+#: base/views/feed_views.py:131
 msgid "Post must contain text or an image."
 msgstr ""
 
-#: base/views/profile_views.py:89
+#: base/views/profile_views.py:86
 msgid "Invalid date of birth."
 msgstr ""
 
-#: base/views/profile_views.py:173
+#: base/views/profile_views.py:165
+msgid "Please fill in first name, last name, email, and date of birth."
+msgstr ""
+
+#: base/views/profile_views.py:185
 msgid "Validation failed."
 msgstr ""
 
-#: base/views/profile_views.py:191
+#: base/views/profile_views.py:203
 msgid "Error while saving."
 msgstr ""
 
-#: base/views/profile_views.py:273
-msgid "Please fill in the required fields."
-msgstr ""
-
-#: base/views/public_profile_views.py:52
+#: base/views/public_profile_views.py:71
 msgid "Profile"
 msgstr ""
 
@@ -1795,10 +1804,6 @@ msgstr ""
 msgid "Delete the article?"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:154
-msgid "Log in to like"
-msgstr ""
-
 #: blog/templates/blog/blog_page.html:167
 msgid "Comments"
 msgstr ""
@@ -1919,10 +1924,6 @@ msgstr ""
 
 #: templates/base.html:47
 msgid "My profile"
-msgstr ""
-
-#: templates/base.html:58
-msgid "Recommendations"
 msgstr ""
 
 #: templates/base.html:98

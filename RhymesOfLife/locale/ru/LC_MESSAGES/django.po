@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 18:32+0000\n"
-"PO-Revision-Date: 2025-08-21 00:56+0000\n"
+"POT-Creation-Date: 2025-10-01 02:07+0000\n"
+"PO-Revision-Date: 2025-10-01 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: base/middleware/enforce_onboarding.py:41
 msgid "Complete onboarding."
-msgstr ""
+msgstr "Завершите онбординг."
 
 #: base/models.py:83
 #, python-format
@@ -85,8 +85,8 @@ msgstr "Изменено"
 msgid "Post"
 msgstr "Пост"
 
-#: base/models.py:358 base/templates/base/feed.html:9
-#: base/templates/base/public_profile.html:42
+#: base/models.py:358 base/templates/base/feed.html:10
+#: base/templates/base/public_profile.html:17
 msgid "Posts"
 msgstr "Посты"
 
@@ -142,13 +142,12 @@ msgid "User ID"
 msgstr "ID пользователя"
 
 #: base/signals.py:34 base/templates/base/home.html:96
-#: base/templates/base/home_public.html:96 base/templates/base/profile.html:26
-#: base/templates/base/profile_edit.html:39
-#: base/templates/base/profile_onboarding.html:28
+#: base/templates/base/home_public.html:96 base/templates/base/profile.html:36
+#: base/templates/base/profile_edit.html:42
 #: base/templates/base/register.html:30
 #: base/templates/base/reset_request.html:39
 msgid "Email"
-msgstr "Email"
+msgstr "Эл. почта"
 
 #: base/signals.py:37 base/signals.py:57
 msgid "Admin"
@@ -179,9 +178,7 @@ msgid "User"
 msgstr "Пользователь"
 
 #: base/templates/base/comment_items.html:4
-#: base/templates/base/profile_onboarding.html:97
-#: base/templates/base/public_profile.html:7
-#: base/templates/base/public_profile.html:54
+#: base/templates/base/includes/profile_header.html:6
 #: blog/templates/blog/blog_page.html:188
 #: blog/templates/blog/includes/article_cards.html:47
 #: blog/templates/blog/includes/article_cards.html:114
@@ -194,7 +191,7 @@ msgid "edited"
 msgstr "изменено"
 
 #: base/templates/base/comment_items.html:16
-#: base/templates/base/profile_edit.html:21
+#: base/templates/base/profile_edit.html:20
 #: blog/templates/blog/blog_page.html:133
 #: blog/templates/blog/blog_page.html:198
 #: blog/templates/blog/edit_article.html:88
@@ -991,31 +988,31 @@ msgstr "Получить код звонком"
 msgid "Feed"
 msgstr "Лента"
 
-#: base/templates/base/feed.html:10 base/templates/base/post_create.html:3
+#: base/templates/base/feed.html:11 base/templates/base/post_create.html:3
 msgid "New post"
 msgstr "Новая запись"
 
-#: base/templates/base/feed.html:19
+#: base/templates/base/feed.html:20
 msgid "My posts"
 msgstr "Мои публикации"
 
-#: base/templates/base/feed.html:25 blog/templates/blog/blog_index_page.html:35
+#: base/templates/base/feed.html:26 blog/templates/blog/blog_index_page.html:35
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: base/templates/base/feed.html:31
+#: base/templates/base/feed.html:32
 msgid "Latest"
 msgstr "Последние"
 
-#: base/templates/base/feed.html:38 blog/templates/blog/blog_index_page.html:49
+#: base/templates/base/feed.html:39 blog/templates/blog/blog_index_page.html:49
 msgid "Pending approval"
 msgstr "Ожидают одобрения"
 
-#: base/templates/base/feed.html:48
+#: base/templates/base/feed.html:49
 msgid "Search posts"
 msgstr "Поиск записей"
 
-#: base/templates/base/feed.html:49 base/templates/base/patients_list.html:11
+#: base/templates/base/feed.html:50 base/templates/base/patients_list.html:11
 #: blog/templates/blog/blog_index_page.html:66
 msgid "Search"
 msgstr "Поиск"
@@ -1113,15 +1110,45 @@ msgstr "Забыли пароль?"
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
+#: base/templates/base/includes/profile_header.html:13
+#| msgid "Edit article"
+msgid "Edit profile"
+msgstr "Редактировать профиль"
+
+#: base/templates/base/includes/profile_header.html:31
+#, python-format
+msgid "%(n)s post"
+msgid_plural "%(n)s posts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: base/templates/base/includes/profile_header.html:35
+#, fuzzy, python-format
+#| msgid "Unfollow"
+msgid "%(n)s follower"
+msgid_plural "%(n)s followers"
+msgstr[0] "Отписаться"
+msgstr[1] "Отписаться"
+msgstr[2] "Отписаться"
+msgstr[3] "Отписаться"
+
+#: base/templates/base/includes/profile_header.html:43
+#: base/templates/base/profile.html:32
+#| msgid "No posts yet."
+msgid "No bio yet."
+msgstr "Пока нет публикаций."
+
 #: base/templates/base/my_documents.html:21
 #: base/templates/base/recommendations.html:19 templates/base.html:53
 msgid "My examinations"
 msgstr "Мои обследования"
 
 #: base/templates/base/my_documents.html:22
-#: base/templates/base/recommendations.html:4
-#: base/templates/base/recommendations.html:18
-msgid "Doctor's recommendations"
+#: base/templates/base/recommendations.html:18 templates/base.html:58
+#| msgid "Doctor's recommendations"
+msgid "Doctor's comments"
 msgstr "Рекомендации врача"
 
 #: base/templates/base/my_documents.html:27
@@ -1168,7 +1195,7 @@ msgstr ""
 "HTTPS."
 
 #: base/templates/base/my_documents.html:59
-#: base/templates/base/profile_edit.html:102
+#: base/templates/base/profile_edit.html:117
 msgid "Save"
 msgstr "Сохранить"
 
@@ -1229,7 +1256,7 @@ msgid "Enter recommendation..."
 msgstr "Введите рекомендацию..."
 
 #: base/templates/base/patient_exams.html:16
-#: base/templates/base/post_cards.html:123
+#: base/templates/base/post_cards.html:137
 #: blog/templates/blog/blog_page.html:175
 msgid "Send"
 msgstr "Отправить"
@@ -1278,10 +1305,10 @@ msgstr "Назад"
 #: base/templates/base/patients_list.html:62
 #: base/templates/base/patients_list.html:65
 #: base/templates/base/post_list_fragment.html:14
-#: base/templates/base/public_profile.html:84
-#: base/templates/base/public_profile.html:86
-#: base/templates/base/public_profile.html:117
-#: base/templates/base/public_profile.html:119
+#: base/templates/base/public_profile.html:38
+#: base/templates/base/public_profile.html:40
+#: base/templates/base/public_profile.html:71
+#: base/templates/base/public_profile.html:73
 #: base/templates/base/recommendations.html:66
 #: base/templates/base/recommendations.html:69
 msgid "Next"
@@ -1296,7 +1323,7 @@ msgid "Enter a query to search for patients."
 msgstr "Введите запрос для поиска пациентов."
 
 #: base/templates/base/post_cards.html:10 base/templates/base/profile.html:10
-#: base/templates/base/profile_edit.html:18
+#: base/templates/base/profile_edit.html:17
 msgid "User avatar"
 msgstr "Аватар пользователя"
 
@@ -1347,7 +1374,7 @@ msgstr "Показать"
 msgid "Hide"
 msgstr "Скрыть"
 
-#: base/templates/base/post_cards.html:78 base/templates/base/profile.html:46
+#: base/templates/base/post_cards.html:78 base/templates/base/profile.html:56
 #: blog/templates/blog/blog_page.html:130
 #: blog/templates/blog/blog_page.html:197
 msgid "Edit"
@@ -1357,18 +1384,22 @@ msgstr "Редактировать"
 msgid "Copy link"
 msgstr "Копировать ссылку"
 
-#: base/templates/base/post_cards.html:122
+#: base/templates/base/post_cards.html:121
+#: blog/templates/blog/blog_page.html:154
+msgid "Log in to like"
+msgstr "Войдите, чтобы лайкнуть"
+
+#: base/templates/base/post_cards.html:136
 msgid "Write a comment..."
 msgstr "Напишите комментарий..."
 
-#: base/templates/base/post_cards.html:140
-#, fuzzy
+#: base/templates/base/post_cards.html:154
 #| msgid "Show password"
 msgid "Show more"
 msgstr "Показать пароль"
 
-#: base/templates/base/post_cards.html:148
-#: base/templates/base/public_profile.html:92
+#: base/templates/base/post_cards.html:162
+#: base/templates/base/public_profile.html:46
 msgid "No posts yet."
 msgstr "Пока нет публикаций."
 
@@ -1438,96 +1469,76 @@ msgstr "Отмена"
 msgid "Previous"
 msgstr "Предыдущая"
 
-#: base/templates/base/profile.html:16
-#: base/templates/base/profile_onboarding.html:33
-#: base/templates/base/public_profile.html:28
-#, fuzzy
+#: base/templates/base/profile.html:28 base/templates/base/profile_edit.html:77
 #| msgid "About"
 msgid "About me"
-msgstr "О нас"
+msgstr "Обо мне"
 
-#: base/templates/base/profile.html:20
-#: base/templates/base/public_profile.html:32
-#, fuzzy
-#| msgid "No posts yet."
-msgid "No bio yet."
-msgstr "Пока нет публикаций."
-
-#: base/templates/base/profile.html:24 base/templates/base/profile_edit.html:31
-#: base/templates/base/profile_onboarding.html:19
-msgid "First name"
-msgstr "Имя"
-
-#: base/templates/base/profile.html:25 base/templates/base/profile_edit.html:35
-#: base/templates/base/profile_onboarding.html:23
-msgid "Last name"
-msgstr "Фамилия"
-
-#: base/templates/base/profile.html:27 base/templates/base/profile_edit.html:44
+#: base/templates/base/profile.html:37 base/templates/base/profile_edit.html:47
 msgid "Date of birth"
 msgstr "Дата рождения"
 
-#: base/templates/base/profile.html:30 base/templates/base/profile_edit.html:74
-#: base/templates/base/profile_onboarding.html:67
+#: base/templates/base/profile.html:40 base/templates/base/profile_edit.html:83
 msgid "Syndromes"
 msgstr "Синдромы"
 
-#: base/templates/base/profile_edit.html:20
+#: base/templates/base/profile_edit.html:19
 msgid "Upload new"
 msgstr "Загрузить новую"
 
-#: base/templates/base/profile_edit.html:48
-#: base/templates/base/profile_onboarding.html:39
+#: base/templates/base/profile_edit.html:33
+msgid "First name"
+msgstr "Имя"
+
+#: base/templates/base/profile_edit.html:37
+msgid "Last name"
+msgstr "Фамилия"
+
+#: base/templates/base/profile_edit.html:51
 msgid "Day"
 msgstr "День"
 
-#: base/templates/base/profile_edit.html:56
-#: base/templates/base/profile_onboarding.html:48
+#: base/templates/base/profile_edit.html:59
 msgid "Month"
 msgstr "Месяц"
 
-#: base/templates/base/profile_edit.html:64
-#: base/templates/base/profile_onboarding.html:57
+#: base/templates/base/profile_edit.html:67
 msgid "Year"
 msgstr "Год"
 
-#: base/templates/base/profile_edit.html:93
-#: base/templates/base/profile_onboarding.html:88
+#: base/templates/base/profile_edit.html:78
+msgid "A few words about yourself"
+msgstr "Пара слов о себе"
+
+#: base/templates/base/profile_edit.html:79
+msgid "Up to 1000 characters."
+msgstr "До 1000 символов."
+
+#: base/templates/base/profile_edit.html:102
 msgid "Genetically confirmed"
 msgstr "Генетически подтверждено"
 
-#: base/templates/base/profile_onboarding.html:4
-#: base/templates/base/profile_onboarding.html:9
-msgid "Complete your profile"
-msgstr "Заполните профиль"
-
-#: base/templates/base/profile_onboarding.html:34
-msgid "A short bio (max 500 characters)"
-msgstr ""
-
-#: base/templates/base/profile_onboarding.html:102
-msgid "Save and continue"
-msgstr "Сохранить и продолжить"
-
-#: base/templates/base/public_profile.html:39
+#: base/templates/base/public_profile.html:13
 #: blog/templates/blog/blog_index_page.html:7 templates/base.html:64
 msgid "Articles"
 msgstr "Статьи"
 
-#: base/templates/base/public_profile.html:74
-#: base/templates/base/public_profile.html:76
-#: base/templates/base/public_profile.html:107
-#: base/templates/base/public_profile.html:109
-#, fuzzy
+#: base/templates/base/public_profile.html:28
+#: base/templates/base/public_profile.html:30
+#: base/templates/base/public_profile.html:61
+#: base/templates/base/public_profile.html:63
 #| msgid "Previous"
 msgid "Prev"
 msgstr "Предыдущая"
 
-#: base/templates/base/public_profile.html:125
-#, fuzzy
+#: base/templates/base/public_profile.html:79
 #| msgid "No posts yet."
 msgid "No articles yet."
 msgstr "Пока нет публикаций."
+
+#: base/templates/base/recommendations.html:4
+msgid "Doctor's recommendations"
+msgstr "Рекомендации врача"
 
 #: base/templates/base/recommendations.html:75
 msgid "No recommendations yet."
@@ -1590,9 +1601,7 @@ msgstr "Telegram"
 
 #: base/templates/base/reset_request.html:43
 msgid "If Telegram is not linked to your account, use Email."
-msgstr ""
-"Если Telegram не привязан к вашему аккаунту, воспользуйтесь электронной "
-"почтой."
+msgstr "Если Telegram не привязан к вашей учётной записи, используйте эл. почту."
 
 #: base/templates/base/reset_request.html:47
 msgid "Send code"
@@ -1617,7 +1626,7 @@ msgstr "Проверить"
 
 #: base/templates/base/reset_verify.html:44
 msgid "Resend code"
-msgstr "Отправить письмо ещё раз"
+msgstr "Отправить код ещё раз"
 
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:9
@@ -1695,8 +1704,7 @@ msgstr "Телеграм-бот не настроен."
 
 #: base/views/auth_reset_views.py:60
 msgid "Too many requests for this account. Try again later."
-msgstr ""
-"Слишком много запросов к этой учетной записи. Попробуйте еще раз позже."
+msgstr "Слишком много запросов для этой учётной записи. Попробуйте позже."
 
 #: base/views/auth_reset_views.py:76
 msgid "Failed to send a code. Please try again later."
@@ -1734,7 +1742,7 @@ msgstr "Пожалуйста, заполните все поля."
 msgid "A user with that username already exists."
 msgstr "Пользователь с таким именем уже существует."
 
-#: base/views/auth_views.py:51 base/views/profile_views.py:113
+#: base/views/auth_views.py:51 base/views/profile_views.py:110
 msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
@@ -1763,14 +1771,13 @@ msgid "Failed to initiate call."
 msgstr "Не удалось инициировать звонок."
 
 #: base/views/auth_views.py:196
-#, fuzzy
 #| msgid "Your phone number"
 msgid "No phone number set."
 msgstr "Ваш номер телефона"
 
 #: base/views/auth_views.py:205 base/views/auth_views.py:208
 msgid "Provider error"
-msgstr ""
+msgstr "Ошибка провайдера"
 
 #: base/views/auth_views.py:241
 msgid "Please accept all items."
@@ -1817,42 +1824,40 @@ msgstr "Не удалось загрузить документы. Попроб�
 msgid "Failed to update the exam."
 msgstr "Не удалось обновить обследование."
 
-#: base/views/feed_views.py:28
+#: base/views/feed_views.py:29
 msgid "Too many images."
 msgstr "Главное изображение"
 
-#: base/views/feed_views.py:39
+#: base/views/feed_views.py:40
 #, python-format
 msgid "%(msg)s"
-msgstr ""
+msgstr "%(msg)s"
 
-#: base/views/feed_views.py:127
+#: base/views/feed_views.py:131
 msgid "Post must contain text or an image."
 msgstr "Пост должен содержать текст или изображение."
 
-#: base/views/profile_views.py:89
-#, fuzzy
+#: base/views/profile_views.py:86
 #| msgid "Invalid date format"
 msgid "Invalid date of birth."
 msgstr "Неверный формат даты"
 
-#: base/views/profile_views.py:173
+#: base/views/profile_views.py:165
+msgid "Please fill in first name, last name, email, and date of birth."
+msgstr "Пожалуйста, укажите имя, фамилию, эл. почту и дату рождения."
+
+#: base/views/profile_views.py:185
 msgid "Validation failed."
-msgstr ""
+msgstr "Ошибка проверки данных."
 
-#: base/views/profile_views.py:191
+#: base/views/profile_views.py:203
 msgid "Error while saving."
-msgstr ""
+msgstr "Ошибка при сохранении."
 
-#: base/views/profile_views.py:273
-msgid "Please fill in the required fields."
-msgstr "Пожалуйста, заполните обязательные поля."
-
-#: base/views/public_profile_views.py:52
-#, fuzzy
+#: base/views/public_profile_views.py:71
 #| msgid "My profile"
 msgid "Profile"
-msgstr "Мой профиль"
+msgstr "Профиль"
 
 #: base/views/social_views.py:25
 msgid "Cannot follow yourself."
@@ -1998,10 +2003,6 @@ msgstr "Анонимный автор"
 msgid "Delete the article?"
 msgstr "Удалить статью?"
 
-#: blog/templates/blog/blog_page.html:154
-msgid "Log in to like"
-msgstr "Войдите, чтобы лайкнуть"
-
 #: blog/templates/blog/blog_page.html:167
 msgid "Comments"
 msgstr "Комментарии"
@@ -2124,10 +2125,6 @@ msgstr "О нас"
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: templates/base.html:58
-msgid "Recommendations"
-msgstr "Рекомендации"
-
 #: templates/base.html:98
 #, python-format
 msgid ""
@@ -2163,6 +2160,18 @@ msgstr "Сменить язык"
 #: templates/base.html:178
 msgid "All rights reserved."
 msgstr "Все права защищены."
+
+#~ msgid "Complete your profile"
+#~ msgstr "Заполните профиль"
+
+#~ msgid "Save and continue"
+#~ msgstr "Сохранить и продолжить"
+
+#~ msgid "Please fill in the required fields."
+#~ msgstr "Пожалуйста, заполните обязательные поля."
+
+#~ msgid "Recommendations"
+#~ msgstr "Рекомендации"
 
 #~ msgid "Default avatar"
 #~ msgstr "Аватар по умолчанию"

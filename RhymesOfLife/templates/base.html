@@ -55,7 +55,7 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'recommendations' %}">
-                  <i class="bi bi-lightbulb"></i> {% trans "Recommendations" %}
+                  <i class="bi bi-lightbulb"></i> {% trans "Doctor's comments" %}
                 </a>
               </li>
               <li class="nav-item">
@@ -188,6 +188,7 @@
   <script src="{% static 'js/avatar.js' %}"></script>
   <script src="{% static 'js/exam.js' %}"></script>
   <script src="{% static 'js/phone_wait.js' %}"></script>
+  <script src="{% static 'js/clickable_cards.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

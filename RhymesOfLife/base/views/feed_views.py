@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 
 from base.models import AdditionalUserInfo
 from base.models import Post, PostImage, PostLike, PostComment
@@ -89,12 +90,12 @@ def feed(request):
             PostLike.objects.filter(author=me, is_active=True, post__in=page_obj.object_list)
             .values_list("post_id", flat=True)
         )
-        following_info_ids = set(
-            me.following.filter(is_active=True).values_list("following_id", flat=True)
-        )
-        following_user_ids = set(
-            me.following.filter(is_active=True).values_list("following__user_id", flat=True)
-        )
+        following_info_ids = set(me.following.filter(is_active=True).values_list("following_id", flat=True))
+        following_user_ids = set(me.following.filter(is_active=True).values_list("following__user_id", flat=True))
+
+    posts_total = Post.objects.filter(
+        author=me, is_deleted=False, is_hidden=False, is_approved=True
+    ).count() if me else 0
 
     context = {
         "posts": page_obj,
@@ -103,6 +104,9 @@ def feed(request):
         "following_info_ids": list(following_info_ids),
         "following_user_ids": list(following_user_ids),
         "FIRST_COMMENTS_LIMIT": FIRST_COMMENTS_LIMIT,
+        "info": me,
+        "profile_user": request.user,
+        "posts_total": posts_total,
     }
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -200,15 +204,19 @@ def unhide_post(request, post_id: int):
 
 
 @login_required
+@require_POST
 def toggle_like(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = AdditionalUserInfo.objects.get(user=request.user)
-    like, _ = PostLike.objects.get_or_create(post=post, author=me)
-    like.is_active = not like.is_active
-    like.save(update_fields=["is_active"])
+    like, created = PostLike.objects.get_or_create(post=post, author=me, defaults={"is_active": True})
+    if not created:
+        like.is_active = not like.is_active
+        like.save(update_fields=["is_active"])
+
     post.likes_count = PostLike.objects.filter(post=post, is_active=True).count()
     post.save(update_fields=["likes_count"])
-    return JsonResponse({"likes": post.likes_count, "active": like.is_active})
+
+    return JsonResponse({"liked": like.is_active, "like_count": post.likes_count})
 
 
 @login_required
@@ -267,9 +275,15 @@ def comments_more(request, post_id: int):
     except ValueError:
         offset, limit = 0, 10
 
-    base_qs = PostComment.objects.filter(post=post, is_deleted=False).order_by("created_at")
+    base_qs = (
+        PostComment.objects
+        .filter(post=post, is_deleted=False)
+        .order_by("-created_at", "-id")
+    )
+
     total = base_qs.count()
-    comments = list(base_qs[offset : offset + limit])
+    comments = list(base_qs[offset: offset + limit])
+
     html = render_to_string("base/comment_items.html", {"comments": comments}, request=request)
     has_more = offset + limit < total
     next_offset = offset + limit

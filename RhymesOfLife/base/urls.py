@@ -22,7 +22,6 @@ from .views.auth_views import (
 from .views.profile_views import (
     profile_view,
     profile_edit_view,
-    profile_onboarding_view,
 )
 from .views.documents_views import (
     my_documents_view,
@@ -84,7 +83,6 @@ urlpatterns = [
     path("profile/edit/", profile_edit_view, name="profile_edit"),
     path("profile/<str:username>/", profile_view, name="user_profile"),
     path("u/<str:username>/", public_profile_view, name="public_profile"),
-    path("onboarding/profile/", profile_onboarding_view, name="profile_onboarding"),
 
     path("my-documents/", my_documents_view, name="my_documents"),
     path("api/exams/<int:exam_id>/", exam_detail_api, name="exam_detail_api"),

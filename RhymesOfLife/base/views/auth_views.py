@@ -244,7 +244,7 @@ def consents_view(request):
         info.data_processing_accepted = True
         info.consents_accepted_at = timezone.now()
         info.save(update_fields=["tos_accepted", "privacy_accepted", "data_processing_accepted", "consents_accepted_at"])
-        return redirect("profile_onboarding")
+        return redirect("profile_edit")
     return render(request, "base/consents.html")
 
 
@@ -271,8 +271,8 @@ def home_public_view(request):
         if info.is_verified and info.phone_verified and not has_consents(info) and current_name != "consents":
             return redirect("consents")
 
-        if info.is_verified and info.phone_verified and has_consents(info) and not profile_complete(info) and current_name != "profile_onboarding":
-            return redirect("profile_onboarding")
+        if info.is_verified and info.phone_verified and has_consents(info) and not profile_complete(info) and current_name != "profile_edit":
+            return redirect("profile_edit")
 
     context = {
         "show_verification_notice": is_authed and hasattr(user, "additional_info") and not user.additional_info.is_verified if is_authed else False,

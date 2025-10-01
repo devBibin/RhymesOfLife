@@ -1,50 +1,53 @@
 {% extends 'base.html' %}
 {% load static i18n avatar_tags %}
 
-{% block extra_css %}{% endblock %}
-
 {% block content %}
 <div class="container py-5">
   <div class="card shadow-sm card-profile">
-    <div class="card-body position-relative">
+    <div class="card-body">
 
-      <div class="d-flex align-items-center mb-4 position-relative">
-        <img
-          id="avatar-img"
-          src="{% avatar_url info %}"
-          data-default-src="{% static 'images/default-avatar.png' %}"
-          class="rounded-circle avatar-editable me-3"
-          style="width:100px;height:100px;cursor:pointer;"
-          alt="{% trans 'User avatar' %}">
-        <div id="avatar-menu" class="avatar-menu">
-          <button type="button" class="dropdown-item" id="change-avatar-btn">📤 {% trans "Upload new" %}</button>
-          <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 {% trans "Delete" %}</button>
+      <div class="text-center mb-4">
+        <div class="d-inline-block position-relative">
+          <img
+            id="avatar-img"
+            src="{% avatar_url info %}"
+            data-default-src="{% static 'images/default-avatar.png' %}"
+            class="rounded-circle avatar-editable"
+            style="width:140px;height:140px;object-fit:cover;"
+            alt="{% trans 'User avatar' %}">
+          <div id="avatar-menu" class="avatar-menu">
+            <button type="button" class="dropdown-item" id="change-avatar-btn">📤 {% trans "Upload new" %}</button>
+            <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 {% trans "Delete" %}</button>
+          </div>
         </div>
-        <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
-        <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
-        <div><h5 class="mb-1">{{ request.user.get_full_name }}</h5></div>
+        <h5 class="mb-0 mt-3">{{ request.user.get_full_name|default:request.user.username }}</h5>
       </div>
+
+      <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
+      <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
 
       <form id="profile-form" action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data" class="row g-3">
         {% csrf_token %}
+
         <div class="col-6">
-          <label class="form-label">{% trans "First name" %}</label>
-          <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}">
+          <label class="form-label">{% trans "First name" %} <span class="text-danger">*</span></label>
+          <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}" required aria-required="true">
         </div>
         <div class="col-6">
-          <label class="form-label">{% trans "Last name" %}</label>
-          <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}">
+          <label class="form-label">{% trans "Last name" %} <span class="text-danger">*</span></label>
+          <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}" required aria-required="true">
         </div>
+
         <div class="col-6">
           <label class="form-label">{% trans "Email" %}</label>
           <input type="email" name="email" class="form-control" value="{{ info.email }}">
         </div>
 
         <div class="col-6">
-          <label class="form-label">{% trans "Date of birth" %}</label>
+          <label class="form-label">{% trans "Date of birth" %} <span class="text-danger">*</span></label>
           <div class="row g-2">
             <div class="col-4">
-              <select name="day" class="form-select">
+              <select name="day" class="form-select" required aria-required="true">
                 <option value="">{% trans "Day" %}</option>
                 {% for d in day_range %}
                   <option value="{{ d }}" {% if info.birth_date and info.birth_date.day == d %}selected{% endif %}>{{ d }}</option>
@@ -52,7 +55,7 @@
               </select>
             </div>
             <div class="col-4">
-              <select name="month" class="form-select">
+              <select name="month" class="form-select" required aria-required="true">
                 <option value="">{% trans "Month" %}</option>
                 {% for num,name in months_list %}
                   <option value="{{ num }}" {% if info.birth_date and info.birth_date.month == num %}selected{% endif %}>{{ name }}</option>
@@ -60,7 +63,7 @@
               </select>
             </div>
             <div class="col-4">
-              <select name="year" class="form-select">
+              <select name="year" class="form-select" required aria-required="true">
                 <option value="">{% trans "Year" %}</option>
                 {% for y in year_range %}
                   <option value="{{ y }}" {% if info.birth_date and info.birth_date.year == y %}selected{% endif %}>{{ y }}</option>
@@ -68,6 +71,12 @@
               </select>
             </div>
           </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label">{% trans "About me" %}</label>
+          <textarea name="about_me" class="form-control" rows="4" maxlength="1000" placeholder="{% trans 'A few words about yourself' %}">{{ info.about_me }}</textarea>
+          <div class="form-text">{% trans "Up to 1000 characters." %}</div>
         </div>
 
         <div class="col-12">
@@ -98,15 +107,15 @@
           </div>
         </div>
 
-        <div class="col-12 text-end mt-3">
-          <button type="submit" class="btn btn-primary px-4">{% trans "Save" %}</button>
-        </div>
-
         {% if error %}
           <div class="col-12">
             <div class="alert alert-danger mt-2">{{ error }}</div>
           </div>
         {% endif %}
+
+        <div class="col-12 text-end mt-2">
+          <button type="submit" class="btn btn-primary px-4">{% trans "Save" %}</button>
+        </div>
       </form>
 
     </div>

@@ -1,31 +1,104 @@
-function initLikes() {
-  document.addEventListener('click', async (e) => {
-    const likeBtn = e.target.closest('[data-like]');
-    if (!likeBtn) return;
-    e.preventDefault();
-    const url = likeBtn.getAttribute('href');
-    const r = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-    if (!r.ok) return;
-    const data = await r.json();
-    const countEl = likeBtn.querySelector('[data-count]');
-    if (countEl) countEl.textContent = data.likes;
-    likeBtn.classList.toggle('active', data.active);
-  });
+function getCookie(name) {
+  const parts = (document.cookie || '').split('; ');
+  for (const p of parts) {
+    const [k, v] = p.split('=');
+    if (k === name) return decodeURIComponent(v || '');
+  }
+  return '';
 }
 
+function getCSRF(scopeEl) {
+  const local = scopeEl && scopeEl.querySelector
+    ? scopeEl.querySelector('[name=csrfmiddlewaretoken]')
+    : null;
+  return (local && local.value) || getCookie('csrftoken') || '';
+}
+
+function setLikeState(btn, liked, likeCount) {
+  const icon = btn?.querySelector('.bi');
+  if (icon) {
+    icon.classList.toggle('bi-heart-fill', liked);
+    icon.classList.toggle('bi-heart', !liked);
+    icon.classList.toggle('text-danger', liked);
+  }
+  btn?.classList.toggle('active', liked);
+  btn?.setAttribute('aria-pressed', liked ? 'true' : 'false');
+  btn?.setAttribute('data-liked', liked ? 'true' : 'false');
+
+  const scope = btn.closest('.post-actions') || document;
+  const countEl = scope.querySelector('.js-like-count');
+  if (countEl && typeof likeCount === 'number') countEl.textContent = likeCount;
+}
+
+// ------- likes (delegated) -------
+(function initLikesDelegated() {
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.js-like-toggle');
+    if (!btn) return;
+    e.preventDefault();
+
+    const url = btn.getAttribute('data-like-url');
+    if (!url) return;
+
+    const csrftoken = getCSRF(document);
+    if (!csrftoken) {
+      const loginLink = document.getElementById('like-login-link');
+      if (loginLink) window.location.href = loginLink.href;
+      return;
+    }
+
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    try {
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (r.status === 401) {
+        const login = document.getElementById('like-login-link');
+        if (login) window.location.href = login.href;
+        return;
+      }
+      if (!r.ok) return;
+
+      const data = await r.json();
+      setLikeState(btn, !!data.liked, data.like_count);
+    } catch (_) {
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+
+// ------- comments: add -------
 function initCommentForms() {
   document.querySelectorAll('form[data-comment-form]').forEach((form) => {
+    if (form.dataset.commentBound === '1') return;
+    form.dataset.commentBound = '1';
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const csrftoken = getCSRF(form);
       const r = await fetch(form.action, {
         method: 'POST',
         body: new FormData(form),
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': csrftoken
+        }
       });
       if (!r.ok) return;
+
       const data = await r.json();
       const ul = document.getElementById('comments-' + data.post);
       if (!ul) return;
+
       if (data.html) {
         const t = document.createElement('template');
         t.innerHTML = data.html.trim();
@@ -36,7 +109,11 @@ function initCommentForms() {
   });
 }
 
-function initCommentsMore() {
+// ------- comments: more (delegated) -------
+(function initCommentsMoreDelegated() {
+  if (document.body.dataset.commentsMoreBound === '1') return;
+  document.body.dataset.commentsMoreBound = '1';
+
   document.addEventListener('click', async (e) => {
     const btn = e.target.closest('[data-comments-more]');
     if (!btn) return;
@@ -67,7 +144,7 @@ function initCommentsMore() {
       btn.remove();
     }
   });
-}
+})();
 
 function initDropzone() {
   const dz = document.getElementById('dropzone');
@@ -91,13 +168,17 @@ function initDropzone() {
   dz.addEventListener('click', () => fi.click());
   dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('bg-light'); });
   dz.addEventListener('dragleave', () => dz.classList.remove('bg-light'));
-  dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('bg-light'); fi.files = e.dataTransfer.files; renderPreview(); });
+  dz.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dz.classList.remove('bg-light');
+    fi.files = e.dataTransfer.files;
+    renderPreview();
+  });
   fi.addEventListener('change', renderPreview);
 }
 
+// ------- boot -------
 document.addEventListener('DOMContentLoaded', () => {
-  initLikes();
   initCommentForms();
-  initCommentsMore();
   initDropzone();
 });
