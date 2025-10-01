@@ -24,5 +24,5 @@ def next_onboarding_url(request) -> str | None:
     if not has_consents(info):
         return reverse("consents")
     if not is_profile_complete(info):
-        return reverse("profile_onboarding")
+        return reverse("profile_edit")
     return None

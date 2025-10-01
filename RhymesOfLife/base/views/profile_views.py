@@ -4,8 +4,7 @@ import calendar
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.core.files.base import ContentFile
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
@@ -33,9 +32,7 @@ def _parse_birth_date(day: str | None, month: str | None, year: str | None):
 
 def _clean_about(text: str | None, limit: int = 500) -> str:
     text = (text or "").strip()
-    if len(text) > limit:
-        return text[:limit]
-    return text
+    return text[:limit] if len(text) > limit else text
 
 
 @login_required
@@ -155,6 +152,21 @@ def profile_edit_view(request):
                     pass
                 info.avatar = image
 
+            if not (info.first_name and info.last_name and info.email and info.birth_date):
+                return render(
+                    request,
+                    "base/profile_edit.html",
+                    {
+                        "info": info,
+                        "syndrome_choices": SYNDROME_CHOICES,
+                        "months_list": months_list,
+                        "year_range": year_range,
+                        "day_range": day_range,
+                        "error": _("Please fill in first name, last name, email, and date of birth."),
+                    },
+                    status=400,
+                )
+
             try:
                 info.full_clean()
             except ValidationError as e:
@@ -196,87 +208,6 @@ def profile_edit_view(request):
     return render(
         request,
         "base/profile_edit.html",
-        {
-            "info": info,
-            "syndrome_choices": SYNDROME_CHOICES,
-            "months_list": months_list,
-            "year_range": year_range,
-            "day_range": day_range,
-        },
-    )
-
-
-@login_required
-@require_http_methods(["GET", "POST"])
-def profile_onboarding_view(request):
-    info = request.user.additional_info
-    months_list = [(i, calendar.month_name[i]) for i in range(1, 13)]
-    today = date.today()
-    year_range = list(range(today.year - 100, today.year + 1))[::-1]
-    day_range = range(1, 32)
-
-    if request.method == "POST":
-        info.first_name = request.POST.get("first_name", "").strip()
-        info.last_name = request.POST.get("last_name", "").strip()
-        info.email = request.POST.get("email", "").strip()
-        info.about_me = _clean_about(request.POST.get("about_me"))
-
-        bd = _parse_birth_date(request.POST.get("day"), request.POST.get("month"), request.POST.get("year"))
-        info.birth_date = None if bd == "invalid" else bd
-
-        selected = request.POST.getlist("syndromes")
-        confirmed = request.POST.getlist("confirmed_syndromes")
-        confirmed = [c for c in confirmed if c in selected]
-        info.syndromes = selected
-        info.confirmed_syndromes = confirmed
-
-        image = request.FILES.get("avatar")
-        if image:
-            ok, err = validate_image_upload(
-                image,
-                max_size_bytes=MAX_AVATAR_SIZE_BYTES,
-                max_side_px=MAX_AVATAR_DIMENSION,
-                allowed_mimes=ALLOWED_IMAGE_MIMES,
-                allowed_formats=ALLOWED_IMAGE_FORMATS,
-                max_total_pixels=50_000_000,
-            )
-            if not ok:
-                return render(
-                    request,
-                    "base/profile_onboarding.html",
-                    {
-                        "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": _(err),
-                    },
-                )
-            data = image.read()
-            info.avatar.save(image.name, ContentFile(data), save=False)
-
-        info.save()
-
-        if info.first_name and info.last_name and info.email and info.birth_date:
-            return redirect("home")
-
-        return render(
-            request,
-            "base/profile_onboarding.html",
-            {
-                "info": info,
-                "syndrome_choices": SYNDROME_CHOICES,
-                "months_list": months_list,
-                "year_range": year_range,
-                "day_range": day_range,
-                "error": _("Please fill in the required fields."),
-            },
-        )
-
-    return render(
-        request,
-        "base/profile_onboarding.html",
         {
             "info": info,
             "syndrome_choices": SYNDROME_CHOICES,

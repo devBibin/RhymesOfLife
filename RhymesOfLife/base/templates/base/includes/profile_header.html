@@ -1,0 +1,48 @@
+{% load i18n static avatar_tags %}
+
+<div class="mb-4">
+  <div class="d-flex align-items-start gap-4 flex-wrap justify-content-center justify-content-md-start text-center text-md-start" style="max-width:860px;margin:0 auto;">
+    <div class="flex-shrink-0">
+      <img src="{% avatar_url info %}" class="rounded-circle" alt="{% trans 'Avatar' %}" width="150" height="150" style="object-fit:cover;">
+    </div>
+
+    <div class="flex-grow-1 min-w-0">
+      <div class="d-flex align-items-center justify-content-center justify-content-md-start flex-wrap gap-2 mb-1">
+        <h1 class="h4 mb-0 text-break">@{{ profile_user.username }}</h1>
+        {% if request.user.is_authenticated and request.user == profile_user %}
+          <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary ms-md-2">{% trans "Edit profile" %}</a>
+        {% endif %}
+      </div>
+
+      {% with fn=info.first_name ln=info.last_name ufn=profile_user.first_name uln=profile_user.last_name %}
+        <div class="text-muted mb-2">
+          {% if fn or ln %}
+            {{ fn }}{% if fn and ln %} {% endif %}{{ ln }}
+          {% elif ufn or uln %}
+            {{ ufn }}{% if ufn and uln %} {% endif %}{{ uln }}
+          {% else %}
+            {{ profile_user.username }}
+          {% endif %}
+        </div>
+      {% endwith %}
+
+      <ul class="list-inline small text-muted mb-3">
+        <li class="list-inline-item">
+          {% blocktrans count n=posts_count|default:0 %}{{ n }} post{% plural %}{{ n }} posts{% endblocktrans %}
+        </li>
+        <li class="list-inline-item d-none d-md-inline">•</li>
+        <li class="list-inline-item">
+          {% blocktrans count n=followers_count|default:0 %}{{ n }} follower{% plural %}{{ n }} followers{% endblocktrans %}
+        </li>
+      </ul>
+
+      <div class="text-break">
+        {% if info.about_me %}
+          {{ info.about_me }}
+        {% else %}
+          <span class="text-muted">{% trans "No bio yet." %}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

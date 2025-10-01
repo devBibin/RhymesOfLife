@@ -106,14 +106,28 @@
         {% endwith %}
 
         <div class="d-flex align-items-center post-actions">
-          <a href="{% url 'post_like' p.id %}" data-like
-             class="btn btn-sm btn-outline-primary me-3 {% if p.id in liked_ids %}active{% endif %}">
-            ❤️ <span data-count>{{ p.likes_count }}</span>
-          </a>
+          {% if request.user.is_authenticated %}
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary me-3 js-like-toggle {% if p.id in liked_ids %}active{% endif %}"
+              data-like-url="{% url 'post_like' p.id %}"
+              data-liked="{% if p.id in liked_ids %}true{% else %}false{% endif %}"
+              aria-pressed="{% if p.id in liked_ids %}true{% else %}false{% endif %}">
+              <i class="bi {% if p.id in liked_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" aria-hidden="true"></i>
+              <span class="js-like-count">{{ p.likes_count }}</span>
+            </button>
+          {% else %}
+            <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary btn-sm me-3">
+              {% trans "Log in to like" %}
+            </a>
+          {% endif %}
+
           <div class="text-muted small d-flex align-items-center">
             <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ p.comments_count }}
           </div>
         </div>
+
+
 
         <div class="mt-3">
           <form action="{% url 'post_comment_add' p.id %}" method="post"

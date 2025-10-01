@@ -75,7 +75,7 @@ class EnforceOnboardingMiddleware:
             "phone_status_api",
             "phone_change",
             "consents",
-            "profile_onboarding",
+            "profile_edit",
             "set_language",
             "javascript-catalog",
             "admin:jsi18n",
