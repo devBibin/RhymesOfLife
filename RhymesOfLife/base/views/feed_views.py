@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
+from django.utils.timezone import localtime
 
 from base.models import AdditionalUserInfo
 from base.models import Post, PostImage, PostLike, PostComment
@@ -219,6 +220,24 @@ def toggle_like(request, post_id: int):
     return JsonResponse({"liked": like.is_active, "like_count": post.likes_count})
 
 
+def serialize_comment(c, request):
+    info = c.author
+    user = info.user
+    can_delete = (user == request.user) or request.user.is_staff
+    avatar_url = getattr(getattr(info, "avatar", None), "url", "/static/img/avatar-default.png")
+    return {
+        "id": c.id,
+        "post": c.post_id,
+        "author": {
+            "username": user.username,
+            "avatar": avatar_url,
+        },
+        "created_at": localtime(c.created_at).isoformat(),
+        "can_delete": can_delete,
+        "text": c.text,
+    }
+
+
 @login_required
 def add_comment(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
@@ -231,8 +250,8 @@ def add_comment(request, post_id: int):
     post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
     post.save(update_fields=["comments_count"])
 
-    html = render_to_string("base/comment_items.html", {"comments": [c]}, request=request)
-    return JsonResponse({"id": c.id, "post": post.id, "html": html, "count": post.comments_count})
+    data = serialize_comment(c, request)
+    return JsonResponse({"item": data, "post": post.id, "count": post.comments_count})
 
 
 @login_required
@@ -280,11 +299,10 @@ def comments_more(request, post_id: int):
         .filter(post=post, is_deleted=False)
         .order_by("-created_at", "-id")
     )
-
     total = base_qs.count()
     comments = list(base_qs[offset: offset + limit])
+    items = [serialize_comment(c, request) for c in comments]
 
-    html = render_to_string("base/comment_items.html", {"comments": comments}, request=request)
     has_more = offset + limit < total
     next_offset = offset + limit
-    return JsonResponse({"html": html, "has_more": has_more, "next_offset": next_offset})
+    return JsonResponse({"items": items, "has_more": has_more, "next_offset": next_offset})
