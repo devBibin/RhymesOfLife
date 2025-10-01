@@ -1138,7 +1138,7 @@ msgstr[3] "Отписаться"
 #: base/templates/base/profile.html:32
 #| msgid "No posts yet."
 msgid "No bio yet."
-msgstr "Пока нет публикаций."
+msgstr "Пока нет информации о себе."
 
 #: base/templates/base/my_documents.html:21
 #: base/templates/base/recommendations.html:19 templates/base.html:53
@@ -1149,7 +1149,7 @@ msgstr "Мои обследования"
 #: base/templates/base/recommendations.html:18 templates/base.html:58
 #| msgid "Doctor's recommendations"
 msgid "Doctor's comments"
-msgstr "Рекомендации врача"
+msgstr "Комментарии врача"
 
 #: base/templates/base/my_documents.html:27
 msgid "Add examination"
@@ -1394,9 +1394,8 @@ msgid "Write a comment..."
 msgstr "Напишите комментарий..."
 
 #: base/templates/base/post_cards.html:154
-#| msgid "Show password"
 msgid "Show more"
-msgstr "Показать пароль"
+msgstr "Показать еще"
 
 #: base/templates/base/post_cards.html:162
 #: base/templates/base/public_profile.html:46
@@ -1536,10 +1535,6 @@ msgstr "Предыдущая"
 msgid "No articles yet."
 msgstr "Пока нет публикаций."
 
-#: base/templates/base/recommendations.html:4
-msgid "Doctor's recommendations"
-msgstr "Рекомендации врача"
-
 #: base/templates/base/recommendations.html:75
 msgid "No recommendations yet."
 msgstr "Пока нет рекомендаций."
@@ -1581,7 +1576,7 @@ msgstr "Вернуться к входу"
 #: base/templates/base/reset_request.html:4
 #: base/templates/base/reset_request.html:11
 msgid "Reset password"
-msgstr "Показать пароль"
+msgstr "Восстановить пароль"
 
 #: base/templates/base/reset_request.html:23
 msgid "Username or email"
