@@ -64,7 +64,7 @@ h2 {
 
 h3 {
   font-family: var(--font-styled);
-  font-size: 18px;
+  font-size: 20px;
   line-height: 120%;
   font-weight: 700;
 }
@@ -95,7 +95,7 @@ a {
 }
 
 li {
-  margin: 5px 0;
+  line-height: 150%;
 }
 
 img {
@@ -982,7 +982,7 @@ img {
   .diagnostic__content,
   .attention__content,
   .help__content {
-    width: 50%;
+    width: 60%;
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -1146,7 +1146,6 @@ img {
 
 .ndst-cover-mobile__subtitle {
   padding-bottom: 50px;
-  background: var(--block4-color);
 }
 
 .ndst-cover-mobile__subtitle p {
@@ -1316,7 +1315,7 @@ img {
   .beiton__content,
   .gentest__content,
   .ndst-diagnostic__content {
-    width: 50%;
+    width: 60%;
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -1411,5 +1410,241 @@ img {
   .gentest__list {
     column-count: 2;
     column-gap: 30px;
+  }
+}
+
+/* =========================================================
+   SED PAGE (mobile-first)
+   ========================================================= */
+.sed-cover {
+  background-color: var(--block1-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Mobile version shown by default */
+.sed-cover-mobile {
+  display: block;
+}
+
+.sed-cover-desktop {
+  display: none;
+}
+
+.container.sed {
+  padding: 0;
+}
+
+.sed-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.sed-cover-mobile__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(202, 232, 234, 0.5) 30%, var(--block1-color) 85%);
+  z-index: 1;
+}
+
+.sed-cover-mobile__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Масштабирование и обрезка */
+  object-position: right bottom;
+  /* Фокус на правом нижнем углу */
+  flex-shrink: 0;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.sed-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+
+.sed-cover-mobile__subtitle {
+  padding: 0 16px 50px 16px;
+}
+
+
+/* === Accordion Section === */
+.sed-types {
+  background-color: var(--block2-color);
+  padding: 50px 0;
+}
+
+/* Контейнер аккордеона */
+/* .sed-types__content {
+  border: 2px solid var(--block5-color); 
+  border-radius: 8px;
+  overflow: hidden;
+} */
+
+/* Элементы аккордеона */
+.accordion-items.sed {
+  margin-bottom: 0;
+}
+
+/* Заголовок секции */
+.accordion-header.sed {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  width: 100%;
+  background: var(--block2-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 20px;
+  color: var(--black-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Активный заголовок */
+.accordion-header.sed[aria-expanded="true"] {
+  background: var(--block5-color);
+}
+
+/* Ховер по заголовку */
+.accordion-header.sed:hover {
+  background: var(--block5-color);
+}
+
+/* Иконка стрелки */
+.accordion-icon.sed {
+  width: 16px;
+  height: 16px;
+  border-right: 2px solid var(--black-color);
+  border-bottom: 2px solid var(--black-color);;
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+  padding-left: 10px;
+}
+
+/* Поворот стрелки при открытии */
+.accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
+  transform: rotate(-135deg);
+}
+
+/* Контент аккордеона */
+.accordion-body.sed {
+  max-height: 0;
+  overflow: hidden;
+  background: var(--white-color);
+  color: var(--black-color);
+  transition: max-height 0.4s ease;
+  padding: 0;
+}
+
+/* Плавное раскрытие */
+.accordion-header.sed[aria-expanded="true"] + .accordion-body.sed {
+  max-height: 2000px; /* достаточно большое значение для любых блоков */
+}
+
+/* Внутренние элементы */
+.accordion-item.sed {
+  padding: 20px;
+  margin: 0;
+}
+
+.accordion-item-header.sed h3 {
+  margin-bottom: 10px;
+}
+
+.accordion-item-info.sed p {
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.accordion-item-info.sed li {
+  font-weight: 400;
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+.accordion-item-info.sed li::before {
+  content: "•";
+  margin-right: 8px;
+  color: var(--block5-color);
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Разделительная полоса */
+.accordion-divider {
+  border: none;
+  border-top: 1px solid var(--block5-color);
+  margin: 0;
+}
+
+
+
+/* SED desktop (>768px) */
+@media (min-width: 768px) {
+
+  .sed-cover-mobile {
+    display: none;
+  }
+
+  .sed-cover-desktop {
+    display: block;
+  }
+
+  .sed-cover-desktop__content {
+    display: flex;
+    flex-direction: row;
+    max-width: 90%;
+    margin: 0 auto;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .sed-cover-desktop__text {
+    flex: 0 0 51%;
+    padding: 50px 70px 50px 0;
+    box-sizing: border-box;
+  }
+
+  .sed-cover-desktop__title h1 {
+    font-size: 35px;
+    padding-bottom: 30px;
+  }
+
+  .sed-cover-desktop__subtitle p {
+    font-size: 15px;
+    line-height: 150%;
+  }
+
+  .sed-cover-desktop__image-wrapper {
+    flex: 0 0 35%;
+    max-width: 350px;
+    height: 100%;
+  }
+
+  .sed-cover-desktop__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right center;
+  }
+
+  .sed-types__content {
+    width: 60%;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 }

@@ -20,7 +20,7 @@ from .views.auth_views import (
     consents_view,
     info_ndst,
     info_sed,
-    info_sm,
+    info_marfan,
     info_sld,
 )
 from .views.profile_views import (
@@ -69,7 +69,7 @@ urlpatterns = [
     path("welcome/", home_public_view, name="home_public"),
     path("ndst/", info_ndst, name="info_ndst"),
     path("sed/", info_sed, name="info_sed"),
-    path("sm/", info_ndst, name="info_sm"),
+    path("marfan/", info_marfan, name="info_marfan"),
     path("sld/", info_sed, name="info_sld"),
 
     path("register/", register_view, name="register"),

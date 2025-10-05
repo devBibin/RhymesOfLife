@@ -333,8 +333,8 @@ def info_sed(request):
 
 
 @require_http_methods(["GET"])
-def info_sm(request):
-    return render(request, "base/info/sm.html")
+def info_marfan(request):
+    return render(request, "base/info/marfan.html")
 
 
 @require_http_methods(["GET"])
