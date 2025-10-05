@@ -24,6 +24,7 @@ body {
   --block3-color: #1F5654;
   --block4-color: #EADBCA;
   --block5-color: #CFB4A1;
+  --block6-color: #E2F6F3;
 
   /* Fonts */
   --font-styled: 'Sofia Sans', sans-serif;
@@ -710,7 +711,7 @@ img {
 }
 
 .class__dst {
-  padding-bottom: 50px;
+  padding-bottom: 30px;
 }
 
 .class__header-subtitle {
@@ -728,6 +729,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 500;
+    padding-bottom: 10px;
 }
 
 .class__list-item::before {
@@ -766,6 +768,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
+    padding-bottom: 10px;
 }
 
 .diagnostic__list-item::before {
@@ -852,6 +855,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
+    padding-bottom: 10px;
 }
 
 .help__list-item::before {
@@ -1047,23 +1051,23 @@ img {
 
   /* Spacing for sections */
   .info {
-    padding: 60px 0 80px;
+    padding: 50px 0 80px;
   }
 
   .class {
-    padding: 60px 0;
+    padding: 50px 0;
   }
 
   .diagnostic {
-    padding: 60px 0;
+    padding: 50px 0;
   }
 
   .attention {
-    padding: 60px 0;
+    padding: 50px 0;
   }
 
   .help {
-    padding: 60px 0 0;
+    padding: 50px 0 0;
   }
 
   .help__content {
@@ -1083,12 +1087,12 @@ img {
   }
 
   .subscription {
-    padding: 60px 0 20px;
+    padding: 50px 0 20px;
   }
 }
 
 /* =========================================================
-   NDST PAGE (mobile-first)
+   NDST PAGE (mobile)
    ========================================================= */
 .ndst-cover {
   background-color: var(--block4-color);
@@ -1163,13 +1167,16 @@ img {
 .hypermob__header,
 .beiton__header,
 .gentest__header,
-.ndst-diagnostic__header,
-.beiton-result__header {
+.ndst-diagnostic__header {
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
   padding-bottom: 30px;
+}
+
+.beiton-result__header {
+    padding-bottom: 10px;
 }
 
 .hypermob__icon,
@@ -1190,6 +1197,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 500;
+    padding-bottom: 10px;
 }
 
 .hypermob__list-item::before {
@@ -1293,6 +1301,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
+    padding-bottom: 10px;
 }
 
 .gentest__list-item::before {
@@ -1329,7 +1338,6 @@ img {
     flex-direction: row;
     text-align: left;
     align-items: center;
-    padding-bottom: 30px;
   }
 
   .hypermob__icon,
@@ -1387,13 +1395,12 @@ img {
     object-position: right center;
   }
 
-  .hypermob {
-    padding: 60px 0;
+  .hypermob,
+  .beiton,
+  .gentest {
+    padding: 50px 0;
   }
 
-  .beiton {
-    padding: 60px 0;
-  }
 
   .beiton__test-list {
     grid-template-columns: repeat(2, 1fr);
@@ -1401,10 +1408,6 @@ img {
 
   .beiton__test-item-header {
     padding: 20px;
-  }
-
-  .gentest {
-    padding: 60px 0;
   }
 
   .gentest__list {
@@ -1528,7 +1531,8 @@ img {
   width: 16px;
   height: 16px;
   border-right: 2px solid var(--black-color);
-  border-bottom: 2px solid var(--black-color);;
+  border-bottom: 2px solid var(--black-color);
+  ;
   transform: rotate(45deg);
   transition: transform 0.3s ease;
   padding-left: 10px;
@@ -1550,8 +1554,9 @@ img {
 }
 
 /* Плавное раскрытие */
-.accordion-header.sed[aria-expanded="true"] + .accordion-body.sed {
-  max-height: 2000px; /* достаточно большое значение для любых блоков */
+.accordion-header.sed[aria-expanded="true"]+.accordion-body.sed {
+  max-height: 2000px;
+  /* достаточно большое значение для любых блоков */
 }
 
 /* Внутренние элементы */
@@ -1589,7 +1594,6 @@ img {
   border-top: 1px solid var(--block5-color);
   margin: 0;
 }
-
 
 
 /* SED desktop (>768px) */
@@ -1647,4 +1651,299 @@ img {
     max-width: 1200px;
     margin: 0 auto;
   }
+}
+
+
+/* =========================================================
+   MARFAN PAGE (mobile)
+   ========================================================= */
+
+.marfan-cover {
+  background-color: var(--block2-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Mobile version shown by default */
+.marfan-cover-mobile {
+  display: block;
+}
+
+.marfan-cover-desktop {
+  display: none;
+}
+
+.container.marfan {
+  padding: 0;
+}
+
+.marfan-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.marfan-cover-mobile__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--block2-color) 30%, var(--block2-color) 85%);
+  z-index: 1;
+}
+
+.marfan-cover-mobile__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Масштабирование и обрезка */
+  object-position: right bottom;
+  /* Фокус на правом нижнем углу */
+  flex-shrink: 0;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.marfan-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.marfan-cover-mobile__subtitle {
+  padding: 0 16px 50px 16px;
+}
+
+.marfan-signs__header,
+.marfan-diagnostic__header,
+.marfan-treatment__header,
+.marfan-prognosis__header,
+.marfan-attention__header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+.marfan-attention__header {
+      display: flex
+;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.marfan-signs__item-header {
+  padding-bottom: 10px;
+}
+
+.marfan-signs__icon,
+.marfan-diagnostic__icon,
+.marfan-treatment__icon,
+.marfan-prognosis__icon {
+  padding-bottom: 10px;
+  padding-right: 0;
+}
+
+.marfan-signs,
+.marfan-diagnostic,
+.marfan-treatment,
+.marfan-prognosis,
+.marfan-attention {
+  padding: 50px 0;
+}
+
+/* Симптомы синдрома Марфана */
+.marfan-signs {
+  background-color: var(--white-color);
+}
+
+.marfan-signs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+    padding-bottom: 10px;
+}
+
+.marfan-signs__list-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  bottom: auto;
+  color: var(--block5-color);
+  font-size: 25px;
+}
+
+.marfan-signs__text {
+  padding-bottom: 40px;
+}
+
+/* Диагностика Марфана */
+.marfan-diagnostic {
+  background-color: var(--block1-color);
+}
+
+.marfan-diagnostic__text {
+  padding-bottom: 50px;
+}
+
+.marfan-diagnostic__instrument {
+padding-bottom: 20px;
+}
+
+.marfan-diagnostic__list {
+  padding: 0 20px;
+  margin: 0;
+}
+
+.marfan-diagnostic__list-item {
+  position: relative;
+  padding-left: 10px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
+.marfan-diagnostic__list-item::before {
+  position: absolute;
+  left: 0;
+  bottom: auto;
+}
+
+/* Как лечить синдром Марфана */
+.marfan-treatment {
+  background-color: var(--white-color);
+}
+
+/* Прогноз */
+.marfan-prognosis {
+  background-color: var(--block2-color);
+}
+
+/* Важно */
+.marfan-attention {
+  background-color: var(--block3-color);
+}
+
+.marfan-attention__content {
+display: flex
+;
+    flex-direction: column;
+    align-items: center;
+}
+
+.marfan-attention__header {
+  color: var(--white-color);
+}
+
+     .marfan-attention__icon {
+    padding-bottom: 40px;
+  }
+
+.marfan-attention__icon-img {
+  width: 85px;
+    height: 89px;
+    object-fit: contain;
+}
+
+.marfan-attention__text p {
+  color: var(--white-color);
+    text-align: center;
+}
+
+
+
+/* MARFAN desktop (>768px) */
+@media (min-width: 768px) {
+
+  .marfan-signs__content,
+  .marfan-diagnostic__content,
+  .marfan-treatment__content,
+  .marfan-prognosis__content,
+  .marfan-attention__content {
+    width: 60%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .marfan-signs__header,
+  .marfan-diagnostic__header,
+  .marfan-treatment__header,
+  .marfan-prognosis__header {
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+  }
+
+  .marfan-signs__icon,
+  .marfan-diagnostic__icon,
+  .marfan-treatment__icon,
+  .marfan-prognosis__icon {
+    margin-right: 15px;
+    padding-bottom: 0;
+  }
+
+  .marfan-cover-mobile {
+    display: none;
+  }
+
+  .marfan-cover-desktop {
+    display: block;
+  }
+
+  .marfan-cover-desktop__content {
+    display: flex;
+    flex-direction: row;
+    max-width: 90%;
+    margin: 0 auto;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .marfan-cover-desktop__text {
+    flex: 0 0 51%;
+    padding: 50px 70px 50px 0;
+    box-sizing: border-box;
+  }
+
+  .marfan-cover-desktop__title h1 {
+    font-size: 35px;
+    padding-bottom: 30px;
+  }
+
+  .marfan-cover-desktop__subtitle p {
+    font-size: 15px;
+    line-height: 150%;
+  }
+
+  .marfan-cover-desktop__image-wrapper {
+    flex: 0 0 35%;
+    max-width: 350px;
+    height: 100%;
+  }
+
+  .marfan-cover-desktop__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right center;
+  }
+
+
+
+
+
 }
