@@ -5,26 +5,31 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /app   # <<< добавляем эту строку
     ports:
-      - "8000:8000"  # Expose Django development server
+      - "8000:8000"
+
     volumes:
-      - ./RhymesOfLife:/app/RhymesOfLife  # Sync host project files to container
+      - .:/app
+      - ./environment.json:/environment.json
+
     environment:
-      # Database environment variables
       DB_NAME: rhymesoflife
       DB_USER: isenlord
       DB_PASSWORD: we_will_never_stop
       DB_HOST: db
       DB_PORT: 5432
-      # Redis environment variables
       REDIS_HOST: redis
       REDIS_PORT: 6379
     depends_on:
       - db
       - redis
     command: >
-      sh -c "yes | /venv/bin/python manage.py makemigrations && /venv/bin/python manage.py migrate &&
-             /venv/bin/watchmedo auto-restart --patterns='*.py;*.html;*.css;*.js' --recursive -- /venv/bin/python manage.py runserver 0.0.0.0:8000"      
+      sh -c "
+      /venv/bin/python manage.py makemigrations &&
+      /venv/bin/python manage.py migrate &&
+      /venv/bin/python manage.py runserver 0.0.0.0:8000"
+
     networks:
       - rhymesoflife_network
 

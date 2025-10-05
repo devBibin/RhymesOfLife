@@ -131,3 +131,28 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Email config (Yandex SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = environment["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = environment["EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Mailgun config
+MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
+MAILGUN_URL = environment.get("MAILGUN_URL")
+MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
+DEFAULT_FROM_EMAIL = "Rhymes of Life <admin@igstan.com>"
+
+BASE_URL = environment.get("BASE_URL")
+
+# Authentication redirects
+LOGIN_URL = '/login/' 
+LOGIN_REDIRECT_URL = '/' 
+LOGOUT_REDIRECT_URL = '/' 
