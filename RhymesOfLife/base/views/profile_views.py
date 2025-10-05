@@ -1,10 +1,11 @@
 from datetime import date, datetime
-import calendar
+from functools import lru_cache
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
+from django.utils.dates import MONTHS
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
@@ -13,12 +14,15 @@ from ..utils.files import validate_image_upload
 
 User = get_user_model()
 
-SYNDROME_CHOICES = [(c, n) for c, n in get_syndrome_choices()]
-
 MAX_AVATAR_SIZE_BYTES = 10 * 1024 * 1024
 MAX_AVATAR_DIMENSION = 4096
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp"}
 ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP"}
+
+
+@lru_cache(maxsize=1)
+def syndrome_choices():
+    return [(c, n) for c, n in get_syndrome_choices()]
 
 
 def _parse_birth_date(day: str | None, month: str | None, year: str | None):
@@ -50,7 +54,7 @@ def profile_view(request, username=None):
             "user_profile": user,
             "info": info,
             "editable": True,
-            "syndrome_choices": SYNDROME_CHOICES,
+            "syndrome_choices": syndrome_choices(),
         },
     )
 
@@ -59,7 +63,9 @@ def profile_view(request, username=None):
 @require_http_methods(["GET", "POST"])
 def profile_edit_view(request):
     info = request.user.additional_info
-    months_list = [(i, calendar.month_name[i]) for i in range(1, 13)]
+
+    # Localized month names provided by Django
+    months_list = list(MONTHS.items())  # [(1, "January"/localized), ...]
     today = date.today()
     year_range = list(range(today.year - 100, today.year + 1))[::-1]
     day_range = range(1, 32)
@@ -79,7 +85,7 @@ def profile_edit_view(request):
                     "base/profile_edit.html",
                     {
                         "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
+                        "syndrome_choices": syndrome_choices(),
                         "months_list": months_list,
                         "year_range": year_range,
                         "day_range": day_range,
@@ -103,7 +109,7 @@ def profile_edit_view(request):
                         "base/profile_edit.html",
                         {
                             "info": info,
-                            "syndrome_choices": SYNDROME_CHOICES,
+                            "syndrome_choices": syndrome_choices(),
                             "months_list": months_list,
                             "year_range": year_range,
                             "day_range": day_range,
@@ -138,7 +144,7 @@ def profile_edit_view(request):
                         "base/profile_edit.html",
                         {
                             "info": info,
-                            "syndrome_choices": SYNDROME_CHOICES,
+                            "syndrome_choices": syndrome_choices(),
                             "months_list": months_list,
                             "year_range": year_range,
                             "day_range": day_range,
@@ -158,7 +164,7 @@ def profile_edit_view(request):
                     "base/profile_edit.html",
                     {
                         "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
+                        "syndrome_choices": syndrome_choices(),
                         "months_list": months_list,
                         "year_range": year_range,
                         "day_range": day_range,
@@ -178,7 +184,7 @@ def profile_edit_view(request):
                     "base/profile_edit.html",
                     {
                         "info": info,
-                        "syndrome_choices": SYNDROME_CHOICES,
+                        "syndrome_choices": syndrome_choices(),
                         "months_list": months_list,
                         "year_range": year_range,
                         "day_range": day_range,
@@ -196,7 +202,7 @@ def profile_edit_view(request):
                 "base/profile_edit.html",
                 {
                     "info": info,
-                    "syndrome_choices": SYNDROME_CHOICES,
+                    "syndrome_choices": syndrome_choices(),
                     "months_list": months_list,
                     "year_range": year_range,
                     "day_range": day_range,
@@ -210,7 +216,7 @@ def profile_edit_view(request):
         "base/profile_edit.html",
         {
             "info": info,
-            "syndrome_choices": SYNDROME_CHOICES,
+            "syndrome_choices": syndrome_choices(),
             "months_list": months_list,
             "year_range": year_range,
             "day_range": day_range,

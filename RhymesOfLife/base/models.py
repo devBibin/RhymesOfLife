@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.db.utils import ProgrammingError, OperationalError
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
@@ -54,7 +55,10 @@ class Config(models.Model):
     @classmethod
     def get_list(cls, key: str, default=None):
         default = default if default is not None else []
-        rec = cls.objects.filter(key=key).values_list("value", flat=True).first()
+        try:
+            rec = cls.objects.filter(key=key).values_list("value", flat=True).first()
+        except (ProgrammingError, OperationalError):
+            return default
         if isinstance(rec, list):
             return rec
         return default

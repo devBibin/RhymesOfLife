@@ -18,6 +18,10 @@ from .views.auth_views import (
     phone_status_api,
     phone_change_view,
     consents_view,
+    info_ndst,
+    info_sed,
+    info_sm,
+    info_sld,
 )
 from .views.profile_views import (
     profile_view,
@@ -63,6 +67,10 @@ from .views.public_profile_views import (
 urlpatterns = [
     path("", feed, name="home"),
     path("welcome/", home_public_view, name="home_public"),
+    path("ndst/", info_ndst, name="info_ndst"),
+    path("sed/", info_sed, name="info_sed"),
+    path("sm/", info_ndst, name="info_sm"),
+    path("sld/", info_sed, name="info_sld"),
 
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),

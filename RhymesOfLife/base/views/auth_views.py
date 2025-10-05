@@ -320,3 +320,23 @@ def home_public_view(request):
             return render(request, "base/home_public.html", context)
 
     return render(request, "base/home_public.html", context)
+
+
+@require_http_methods(["GET"])
+def info_ndst(request):
+    return render(request, "base/info/ndst.html")
+
+
+@require_http_methods(["GET"])
+def info_sed(request):
+    return render(request, "base/info/sed.html")
+
+
+@require_http_methods(["GET"])
+def info_sm(request):
+    return render(request, "base/info/sm.html")
+
+
+@require_http_methods(["GET"])
+def info_sld(request):
+    return render(request, "base/info/sld.html")
