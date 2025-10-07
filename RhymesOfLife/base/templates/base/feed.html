@@ -43,13 +43,7 @@
       </ul>
     </nav>
 
-    <form id="feed-search" class="mb-4" novalidate>
-      <input type="hidden" name="filter" id="current-filter" value="{{ current_filter }}">
-      <div class="input-group">
-        <input type="text" id="search-input" name="q" class="form-control" placeholder="{% trans 'Search posts' %}">
-        <button type="submit" class="btn btn-outline-secondary">{% trans "Search" %}</button>
-      </div>
-    </form>
+    <input type="hidden" id="current-filter" value="{{ current_filter }}">
 
     <div id="posts-container">
       {% include "base/post_list_fragment.html" %}

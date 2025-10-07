@@ -65,8 +65,8 @@ from .views.public_profile_views import (
 
 
 urlpatterns = [
-    path("", feed, name="home"),
-    path("welcome/", home_public_view, name="home_public"),
+    path("ma/", feed, name="home"),
+    path("", home_public_view, name="home_public"),
     path("ndst/", info_ndst, name="info_ndst"),
     path("sed/", info_sed, name="info_sed"),
     path("marfan/", info_marfan, name="info_marfan"),

@@ -140,7 +140,7 @@ class AdditionalUserInfo(models.Model):
     syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
     confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
     birth_date = models.DateField(blank=True, null=True)
-    about_me = models.TextField(blank=True, validators=[MaxLengthValidator(400)])
+    about_me = models.TextField(blank=True, validators=[MaxLengthValidator(250)])
     is_verified = models.BooleanField(default=False, db_index=True)
     ready_for_verification = models.BooleanField(default=False, db_index=True)
     email_verified = models.BooleanField(default=False, db_index=True)

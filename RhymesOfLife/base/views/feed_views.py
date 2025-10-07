@@ -43,7 +43,6 @@ def _validate_images(files):
 
 
 def _feed_queryset(request):
-    q = (request.GET.get("q") or "").strip()
     default_f = "mine" if request.user.is_authenticated else "latest"
     f = request.GET.get("filter", default_f)
 
@@ -62,9 +61,6 @@ def _feed_queryset(request):
     else:
         f = "latest"
         qs = published.order_by("-created_at")
-
-    if q:
-        qs = qs.filter(Q(text__icontains=q) | Q(author__user__username__icontains=q))
 
     return f, qs
 
