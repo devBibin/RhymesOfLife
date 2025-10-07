@@ -258,9 +258,11 @@ def delete_comment(request, post_id: int, comment_id: int):
         return HttpResponseForbidden()
     c.is_deleted = True
     c.save(update_fields=["is_deleted"])
+
     post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
     post.save(update_fields=["comments_count"])
-    return JsonResponse({"ok": True})
+
+    return JsonResponse({"ok": True, "count": post.comments_count})
 
 
 @user_passes_test(lambda u: u.is_staff)
