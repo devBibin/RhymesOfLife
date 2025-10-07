@@ -27,10 +27,11 @@
         <div class="col-12">
           <strong class="d-block mb-1">{% trans "About me" %}</strong>
           {% if info.about_me %}
-            <div class="text-break">{{ info.about_me }}</div>
+            <div class="text-break">{{ info.about_me|linebreaksbr }}</div>
           {% else %}
             <div class="text-muted">{% trans "No bio yet." %}</div>
           {% endif %}
+
         </div>
 
         <div class="col-6"><strong>{% trans "Email" %}:</strong> {{ info.email|default:user_profile.email }}</div>

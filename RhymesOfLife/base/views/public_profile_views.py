@@ -1,25 +1,42 @@
+from functools import lru_cache
+
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 from wagtail.models import Page
-
 from blog.models import BlogIndexPage, BlogPage
 from base.models import Post, PostLike
 from ..models import get_syndrome_choices
 
 User = get_user_model()
-SYNDROME_CHOICES = [(c, n) for c, n in get_syndrome_choices()]
+
+
+@lru_cache(maxsize=1)
+def syndrome_choices():
+    return [(c, n) for c, n in get_syndrome_choices()]
+
+
+def _to_int(value, default=1):
+    try:
+        return int(value)
+    except Exception:
+        return default
+
 
 def public_profile_view(request, username: str):
     user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
     info = getattr(user, "additional_info", None)
 
-    can_see_articles = bool(user.is_staff or user.is_superuser or (request.user.is_authenticated and request.user.is_staff))
+    can_see_articles = bool(user.is_staff or user.is_superuser)
 
-    tab = request.GET.get("tab") or ("articles" if can_see_articles else "posts")
-    ap = int(request.GET.get("apage") or 1)
-    pp = int(request.GET.get("ppage") or 1)
+    tab_param = request.GET.get("tab")
+    tab = tab_param if tab_param in ("articles", "posts") else ("articles" if can_see_articles else "posts")
+    if not can_see_articles:
+        tab = "posts"
+
+    ap = _to_int(request.GET.get("apage"), 1)
+    pp = _to_int(request.GET.get("ppage"), 1)
 
     articles_qs = BlogPage.objects.none()
     if can_see_articles:
@@ -60,14 +77,14 @@ def public_profile_view(request, username: str):
         {
             "profile_user": user,
             "info": info,
-            "tab": tab if tab in ("articles", "posts") else ("articles" if can_see_articles else "posts"),
+            "tab": tab,
             "articles": articles,
             "posts": posts,
             "posts_total": posts_total,
             "liked_ids": liked_ids,
             "following_user_ids": following_user_ids,
             "can_see_articles": can_see_articles,
-            "syndrome_choices": SYNDROME_CHOICES,
+            "syndrome_choices": syndrome_choices(),
             "title": _("Profile"),
         },
     )

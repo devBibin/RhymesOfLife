@@ -3,14 +3,14 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
 from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from ..models import AdditionalUserInfo, MedicalExam, Notification, Recommendation, get_syndrome_choices
+from ..models import AdditionalUserInfo, Notification, Recommendation, get_syndrome_choices
 from ..utils.logging import get_app_logger
 
 User = get_user_model()
@@ -45,12 +45,16 @@ def patients_list_view(request):
         page_obj = paginator.page(1)
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
-    return render(request, "base/patients_list.html", {
-        "patients": page_obj.object_list,
-        "page_obj": page_obj,
-        "query": "",
-        "syndrome_choices": get_syndrome_choices(),
-    })
+    return render(
+        request,
+        "base/patients_list.html",
+        {
+            "patients": page_obj.object_list,
+            "page_obj": page_obj,
+            "query": query,
+            "syndrome_choices": get_syndrome_choices(),  # evaluated at request time
+        },
+    )
 
 
 @login_required
