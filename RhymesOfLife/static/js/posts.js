@@ -98,17 +98,18 @@ function renderCommentItem(item) {
 }
 
 function updatePostCommentsCount(scopeEl, count) {
-  const meta = scopeEl.querySelector('.post-actions');
-  if (!meta) return;
-  const wrap = meta.querySelector('.bi-chat-left-text')?.parentElement;
+  const actions = scopeEl.querySelector('.post-actions');
+  if (!actions) return;
+  const wrap = actions.querySelector('.bi-chat-left-text')?.parentElement;
   if (!wrap) return;
-  const numEl = wrap.querySelector('.js-comments-count');
-  if (numEl) {
-    numEl.textContent = String(count);
-  } else {
-    const tn = document.createTextNode(' ' + String(count));
-    wrap.appendChild(tn);
+
+  let numEl = wrap.querySelector('.js-comments-count');
+  if (!numEl) {
+    numEl = document.createElement('span');
+    numEl.className = 'js-comments-count';
+    wrap.appendChild(numEl);
   }
+  numEl.textContent = String(count);
 }
 
 (function initLikesDelegated() {
@@ -250,18 +251,20 @@ function initCommentForms() {
       }
     });
     if (!r.ok) return;
+
     const data = await r.json();
     if (!data.ok) return;
 
-    const li = document.getElementById(`c-${commentId}`);
     const postCard = btn.closest('.post-card') || document;
+    const li = document.getElementById(`c-${commentId}`);
     if (li) li.remove();
 
     if (typeof data.count === 'number') {
       updatePostCommentsCount(postCard, data.count);
     } else {
-      const wrap = document.getElementById('comments-' + postId);
-      if (wrap) updatePostCommentsCount(postCard, wrap.querySelectorAll('li[id^="c-"]').length);
+      const numEl = postCard.querySelector('.js-comments-count');
+      const prev = parseInt((numEl && numEl.textContent) || '0', 10);
+      updatePostCommentsCount(postCard, Math.max(0, prev - 1));
     }
   });
 })();
@@ -301,3 +304,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCommentForms();
   initDropzone();
 });
+
+window.initCommentForms = initCommentForms;
