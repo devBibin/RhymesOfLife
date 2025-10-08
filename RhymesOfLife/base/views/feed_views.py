@@ -43,7 +43,6 @@ def _validate_images(files):
 
 
 def _feed_queryset(request):
-    q = (request.GET.get("q") or "").strip()
     default_f = "mine" if request.user.is_authenticated else "latest"
     f = request.GET.get("filter", default_f)
 
@@ -62,9 +61,6 @@ def _feed_queryset(request):
     else:
         f = "latest"
         qs = published.order_by("-created_at")
-
-    if q:
-        qs = qs.filter(Q(text__icontains=q) | Q(author__user__username__icontains=q))
 
     return f, qs
 
@@ -262,9 +258,11 @@ def delete_comment(request, post_id: int, comment_id: int):
         return HttpResponseForbidden()
     c.is_deleted = True
     c.save(update_fields=["is_deleted"])
+
     post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
     post.save(update_fields=["comments_count"])
-    return JsonResponse({"ok": True})
+
+    return JsonResponse({"ok": True, "count": post.comments_count})
 
 
 @user_passes_test(lambda u: u.is_staff)

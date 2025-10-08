@@ -36,12 +36,8 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav align-items-center gap-2">
-            <li class="nav-item">
-              <a class="nav-link text-white fw-semibold" href="#">{% trans "About" %}</a>
-            </li>
-
+            
             {% if request.user.is_authenticated %}
-
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'my_profile' %}">
                   <i class="bi bi-person-circle"></i> {% trans "My profile" %}
@@ -154,10 +150,10 @@
                   <input type="hidden" name="next" value="{{ request.get_full_path }}">
                   {% if code == "en" %}
                     <input type="hidden" name="language" value="ru">
-                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">EN</button>
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">RU</button>
                   {% else %}
                     <input type="hidden" name="language" value="en">
-                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">RU</button>
+                    <button type="submit" class="btn btn-link nav-link p-0 border-0" title="{% trans 'Switch language' %}">EN</button>
                   {% endif %}
                 </form>
               </li>

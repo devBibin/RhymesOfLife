@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db import transaction
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage
 
 from wagtail.models import Page
 from wagtail.images import get_image_model
@@ -320,22 +321,40 @@ def comment_article_view(request, page_id):
 
 def ajax_article_search(request):
     query = request.GET.get("q", "").strip()
+    sort = request.GET.get("sort", "date").strip()
+    page_num = request.GET.get("page", "1")
     blog_index = BlogIndexPage.objects.first()
+
     results = BlogPage.objects.none()
     if blog_index:
-        base = BlogPage.objects.live().descendant_of(blog_index).filter(is_deleted=False)
-        results = base.filter(is_approved=True)
+        results = (
+            BlogPage.objects.live()
+            .descendant_of(blog_index)
+            .filter(is_deleted=False, is_approved=True)
+        )
+
     if query:
         results = results.filter(
-            Q(title__icontains=query) |
-            Q(tags__name__icontains=query) |
-            Q(author__first_name__icontains=query) |
-            Q(author__last_name__icontains=query)
+            Q(title__icontains=query)
+            | Q(tags__name__icontains=query)
+            | Q(author__first_name__icontains=query)
+            | Q(author__last_name__icontains=query)
         ).distinct()
+
+    if sort == "popular":
+        results = results.order_by("-likes_count", "-date")
+    else:
+        results = results.order_by("-date", "-likes_count")
+
+    paginator = Paginator(results, 10)
+    try:
+        page_obj = paginator.page(page_num)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
 
     html = render_to_string(
         "blog/includes/article_list_fragment.html",
-        {"posts": results, "current_filter": request.GET.get("filter", "popular"), "query": query},
+        {"posts": page_obj, "sort": sort, "query": query},
         request=request,
     )
     return JsonResponse({"html": html})

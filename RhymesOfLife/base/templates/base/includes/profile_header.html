@@ -4,13 +4,19 @@
   <div class="d-flex align-items-start gap-4 flex-wrap justify-content-center justify-content-md-start text-center text-md-start" style="max-width:860px;margin:0 auto;">
     <div class="flex-shrink-0">
       <img src="{% avatar_url info %}" class="rounded-circle" alt="{% trans 'Avatar' %}" width="150" height="150" style="object-fit:cover;">
+
+      {% if request.user.is_authenticated and request.user == profile_user %}
+        <div class="mt-2 d-md-none">
+          <a href="{% url 'profile_edit' %}" class="btn btn-primary btn-sm w-100">{% trans "Edit profile" %}</a>
+        </div>
+      {% endif %}
     </div>
 
     <div class="flex-grow-1 min-w-0">
       <div class="d-flex align-items-center justify-content-center justify-content-md-start flex-wrap gap-2 mb-1">
         <h1 class="h4 mb-0 text-break">@{{ profile_user.username }}</h1>
         {% if request.user.is_authenticated and request.user == profile_user %}
-          <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary ms-md-2">{% trans "Edit profile" %}</a>
+          <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-primary ms-md-2 d-none d-md-inline-flex">{% trans "Edit profile" %}</a>
         {% endif %}
       </div>
 
@@ -38,7 +44,7 @@
 
       <div class="text-break">
         {% if info.about_me %}
-          {{ info.about_me }}
+          {{ info.about_me|linebreaksbr }}
         {% else %}
           <span class="text-muted">{% trans "No bio yet." %}</span>
         {% endif %}

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
-from wagtail.models import Page  # keeps Wagtail registry loaded
+from wagtail.models import Page
 from blog.models import BlogIndexPage, BlogPage
 from base.models import Post, PostLike
 from ..models import get_syndrome_choices
@@ -28,13 +28,13 @@ def public_profile_view(request, username: str):
     user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
     info = getattr(user, "additional_info", None)
 
-    can_see_articles = bool(
-        user.is_staff
-        or user.is_superuser
-        or (request.user.is_authenticated and request.user.is_staff)
-    )
+    can_see_articles = bool(user.is_staff or user.is_superuser)
 
-    tab = request.GET.get("tab") or ("articles" if can_see_articles else "posts")
+    tab_param = request.GET.get("tab")
+    tab = tab_param if tab_param in ("articles", "posts") else ("articles" if can_see_articles else "posts")
+    if not can_see_articles:
+        tab = "posts"
+
     ap = _to_int(request.GET.get("apage"), 1)
     pp = _to_int(request.GET.get("ppage"), 1)
 
@@ -77,7 +77,7 @@ def public_profile_view(request, username: str):
         {
             "profile_user": user,
             "info": info,
-            "tab": tab if tab in ("articles", "posts") else ("articles" if can_see_articles else "posts"),
+            "tab": tab,
             "articles": articles,
             "posts": posts,
             "posts_total": posts_total,

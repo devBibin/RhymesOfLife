@@ -18,7 +18,7 @@
     {% if posts.has_previous %}
       <li class="page-item">
         <a class="page-link"
-           href="?filter={{ current_filter }}&page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+           href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
           &laquo;
         </a>
       </li>
@@ -29,7 +29,7 @@
     {% for num in posts.paginator.page_range %}
       <li class="page-item {% if posts.number == num %}active{% endif %}">
         <a class="page-link"
-           href="?filter={{ current_filter }}&page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+           href="?page={{ num }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
           {{ num }}
         </a>
       </li>
@@ -38,7 +38,7 @@
     {% if posts.has_next %}
       <li class="page-item">
         <a class="page-link"
-           href="?filter={{ current_filter }}&page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+           href="?page={{ posts.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
           &raquo;
         </a>
       </li>

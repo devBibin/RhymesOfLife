@@ -64,8 +64,7 @@ def profile_view(request, username=None):
 def profile_edit_view(request):
     info = request.user.additional_info
 
-    # Localized month names provided by Django
-    months_list = list(MONTHS.items())  # [(1, "January"/localized), ...]
+    months_list = list(MONTHS.items())
     today = date.today()
     year_range = list(range(today.year - 100, today.year + 1))[::-1]
     day_range = range(1, 32)

@@ -4,38 +4,101 @@
 {% block content %}
 <div class="container py-4">
 
-   {% include "base/includes/profile_header.html" with profile_user=profile_user info=info posts_count=posts_total followers_count=info.followers_count request=request only %}
+  {% include "base/includes/profile_header.html" with profile_user=profile_user info=info posts_count=posts_total followers_count=info.followers_count request=request only %}
 
   <div class="feed-container">
-    <ul class="nav nav-pills mb-3">
-      {% if can_see_articles %}
+
+    {% if can_see_articles %}
+      <ul class="nav nav-pills mb-3">
         <li class="nav-item">
           <a class="nav-link {% if tab == 'articles' %}active{% endif %}" href="?tab=articles">{% trans "Articles" %}</a>
         </li>
-      {% endif %}
-      <li class="nav-item">
-        <a class="nav-link {% if tab == 'posts' or not can_see_articles %}active{% endif %}" href="?tab=posts">{% trans "Posts" %}</a>
-      </li>
-    </ul>
+        <li class="nav-item">
+          <a class="nav-link {% if tab == 'posts' %}active{% endif %}" href="?tab=posts">{% trans "Posts" %}</a>
+        </li>
+      </ul>
+    {% endif %}
 
-    {% if tab == 'posts' or not can_see_articles %}
+    {% if can_see_articles %}
+      {% if tab == 'articles' %}
+        {% if articles and articles.object_list %}
+          <div class="row">
+            {% for post in articles %}
+              <div class="col-12 mb-3">
+                {% include "blog/includes/article_cards.html" with page=post %}
+              </div>
+            {% endfor %}
+          </div>
+          {% if articles.has_other_pages %}
+            <nav class="mt-3">
+              <ul class="pagination">
+                {% if articles.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?tab=articles&apage={{ articles.previous_page_number }}">{% trans "Prev" %}</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">{% trans "Prev" %}</span></li>
+                {% endif %}
+                {% for n in articles.paginator.page_range %}
+                  <li class="page-item {% if articles.number == n %}active{% endif %}">
+                    <a class="page-link" href="?tab=articles&apage={{ n }}">{{ n }}</a>
+                  </li>
+                {% endfor %}
+                {% if articles.has_next %}
+                  <li class="page-item"><a class="page-link" href="?tab=articles&apage={{ articles.next_page_number }}">{% trans "Next" %}</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">{% trans "Next" %}</span></li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="alert alert-info">{% trans "No articles yet." %}</div>
+        {% endif %}
+      {% else %}
+        {% if posts %}
+          {% include "base/post_cards.html" with posts=posts liked_ids=liked_ids following_user_ids=following_user_ids %}
+          {% if posts.has_other_pages %}
+            <nav class="mt-3">
+              <ul class="pagination">
+                {% if posts.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?tab=posts&ppage={{ posts.previous_page_number }}">{% trans "Prev" %}</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">{% trans "Prev" %}</span></li>
+                {% endif %}
+                {% for n in posts.paginator.page_range %}
+                  <li class="page-item {% if posts.number == n %}active{% endif %}">
+                    <a class="page-link" href="?tab=posts&ppage={{ n }}">{{ n }}</a>
+                  </li>
+                {% endfor %}
+                {% if posts.has_next %}
+                  <li class="page-item"><a class="page-link" href="?tab=posts&ppage={{ posts.next_page_number }}">{% trans "Next" %}</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span class="page-link">{% trans "Next" %}</span></li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="alert alert-info">{% trans "No posts yet." %}</div>
+        {% endif %}
+      {% endif %}
+    {% else %}
       {% if posts %}
         {% include "base/post_cards.html" with posts=posts liked_ids=liked_ids following_user_ids=following_user_ids %}
         {% if posts.has_other_pages %}
           <nav class="mt-3">
             <ul class="pagination">
               {% if posts.has_previous %}
-                <li class="page-item"><a class="page-link" href="?tab=posts&ppage={{ posts.previous_page_number }}">{% trans "Prev" %}</a></li>
+                <li class="page-item"><a class="page-link" href="?ppage={{ posts.previous_page_number }}">{% trans "Prev" %}</a></li>
               {% else %}
                 <li class="page-item disabled"><span class="page-link">{% trans "Prev" %}</span></li>
               {% endif %}
               {% for n in posts.paginator.page_range %}
                 <li class="page-item {% if posts.number == n %}active{% endif %}">
-                  <a class="page-link" href="?tab=posts&ppage={{ n }}">{{ n }}</a>
+                  <a class="page-link" href="?ppage={{ n }}">{{ n }}</a>
                 </li>
               {% endfor %}
               {% if posts.has_next %}
-                <li class="page-item"><a class="page-link" href="?tab=posts&ppage={{ posts.next_page_number }}">{% trans "Next" %}</a></li>
+                <li class="page-item"><a class="page-link" href="?ppage={{ posts.next_page_number }}">{% trans "Next" %}</a></li>
               {% else %}
                 <li class="page-item disabled"><span class="page-link">{% trans "Next" %}</span></li>
               {% endif %}
@@ -45,40 +108,8 @@
       {% else %}
         <div class="alert alert-info">{% trans "No posts yet." %}</div>
       {% endif %}
-    {% else %}
-      {% if articles and articles.object_list %}
-        <div class="row">
-          {% for post in articles %}
-            <div class="col-12 mb-3">
-              {% include "blog/includes/article_cards.html" with page=post %}
-            </div>
-          {% endfor %}
-        </div>
-        {% if articles.has_other_pages %}
-          <nav class="mt-3">
-            <ul class="pagination">
-              {% if articles.has_previous %}
-                <li class="page-item"><a class="page-link" href="?tab=articles&apage={{ articles.previous_page_number }}">{% trans "Prev" %}</a></li>
-              {% else %}
-                <li class="page-item disabled"><span class="page-link">{% trans "Prev" %}</span></li>
-              {% endif %}
-              {% for n in articles.paginator.page_range %}
-                <li class="page-item {% if articles.number == n %}active{% endif %}">
-                  <a class="page-link" href="?tab=articles&apage={{ n }}">{{ n }}</a>
-                </li>
-              {% endfor %}
-              {% if articles.has_next %}
-                <li class="page-item"><a class="page-link" href="?tab=articles&apage={{ articles.next_page_number }}">{% trans "Next" %}</a></li>
-              {% else %}
-                <li class="page-item disabled"><span class="page-link">{% trans "Next" %}</span></li>
-              {% endif %}
-            </ul>
-          </nav>
-        {% endif %}
-      {% else %}
-        <div class="alert alert-info">{% trans "No articles yet." %}</div>
-      {% endif %}
     {% endif %}
+
   </div>
 </div>
 {% endblock %}
