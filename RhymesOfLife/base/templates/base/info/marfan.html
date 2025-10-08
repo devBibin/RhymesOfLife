@@ -1,103 +1,11 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
+{% extends "info_base.html" %}
+{% block title %}Синдром Марфана{% endblock %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}My Django App{% endblock %}</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-
-    <!-- Google Fonts (loaded once in <head>) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap"
-        rel="stylesheet" />
-
-    <!-- Base CSS files -->
-    <link rel="stylesheet" href="{% static 'css/info_normalize.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/info_styles.css' %}" />
-</head>
-
-<body>
-    <!-- ================= HEADER ================= -->
-    <!-- Top site navigation with mobile hamburger -->
-    <!-- ================= HEADER ================= -->
-    <!-- Top site navigation with mobile hamburger -->
-    <header class="header" role="banner">
-        <div class="header__container">
-            <a class="header__logo" href="/">Ритмы Жизней</a>
-
-            <nav class="header__nav" role="navigation" aria-label="Primary">
-                <!-- Hamburger button (mobile only) -->
-                <button type="button" class="header__nav-menu-btn" aria-label="Open main menu" aria-controls="main-menu"
-                    aria-expanded="false">
-                    <span class="menu-icon" aria-hidden="true"></span>
-                </button>
-
-                <!-- Main menu list -->
-                <ul id="main-menu" class="header__nav-list" role="menubar">
-                    <!-- Close button (mobile only) -->
-
-                    <!-- Title shown in mobile menu -->
-                    <li class="menu-title" role="none">Меню</li>
-
-                    <!-- Simple items -->
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">О проекте</a>
-                    </li>
-
-                    <!-- Dropdown / accordion item -->
-                    <li class="header__nav-list-item dropdown" role="none">
-                        <button class="text--bold header__nav-list-item-link dropdown-toggle" type="button"
-                            aria-haspopup="true" aria-expanded="false" aria-controls="sections-menu">
-                            Классификация
-                        </button>
-                        <ul id="sections-menu" class="dropdown-menu" role="menu" aria-label="Submenu: классификация">
-                            <li role="none"><a href="{% url 'info_ndst' %}" class="dropdown-item"
-                                    role="menuitem">Недифференцированная
-                                    дисплазия соединительной ткани</a></li>
-                            <li role="none"><a href="{% url 'info_sed' %}" class="dropdown-item" role="menuitem">Синдром
-                                    Элерса-Данло</a>
-                            </li>
-                            <li role="none"><a href="{% url 'info_marfan' %}" class="dropdown-item"
-                                    role="menuitem">Синдром Марфана</a></li>
-                            <li role="none"><a href="#" class="dropdown-item" role="menuitem">Синдром Лойса-Дитца</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Диагностика</a>
-                    </li>
-
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Контакты</a>
-                    </li>
-
-                    <!-- Special CTA button -->
-                    <li class="header__nav-list-item help-astra" role="none">
-                        <div class="header__help-astra-icon" aria-hidden="true">
-                            <img src="{% static 'images/header__help-astra-icon-img.png' %}" alt=""
-                                class="header__help-astra-icon-img" />
-                        </div>
-                        <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei" role="menuitem">Получить
-                            помощь</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Content -->
-    <main class="content">
-        <!-- Cover -->
+{% block content %}
+        <!-- ========== Cover ========== -->
         <section class="marfan-cover">
             <div class="container marfan">
-                <!-- Мобильная версия -->
+                <!-- ========== Mobile ========== -->
                 <div class="marfan-cover-mobile">
                     <div class="marfan-cover-mobile__image-wrapper">
                         <img src="\static\images\" alt="Иллюстрация синдрома Марфана"
@@ -121,7 +29,7 @@
                     </div>
                 </div>
 
-                <!-- Десктопная версия -->
+                <!-- ========== Desktop ========== -->
                 <div class="marfan-cover-desktop">
                     <div class="marfan-cover-desktop__content">
                         <div class="marfan-cover-desktop__text">
@@ -154,7 +62,7 @@
             </div>
         </section>
 
-        <!-- Signs of Marfan syndrome -->
+        <!-- ========== Signs of Marfan syndrome ========== -->
         <section class="marfan-signs">
             <div class="container">
                 <div class="marfan-signs__content">
@@ -246,7 +154,7 @@
             </div>
         </section>
 
-        <!-- ========== Marfan diagnostic section ========== -->
+        <!-- ========== Diagnostic ========== -->
         <section class="marfan-diagnostic" aria-labelledby="marfan-diagnostic__title">
             <div class="container">
                 <div class="marfan-diagnostic__content">
@@ -306,7 +214,7 @@
             </div>
         </section>
 
-        <!-- ========== Marfan treatment section ========== -->
+        <!-- ========== Treatment ========== -->
         <section class="marfan-treatment" aria-labelledby="marfan-treatment__title">
             <div class="container">
                 <div class="marfan-treatment__content">
@@ -335,7 +243,7 @@
                 </div>
         </section>
 
-        <!-- ========== Marfan prognosis section ========== -->
+        <!-- ========== Prognosis ========== -->
         <section class="marfan-prognosis" aria-labelledby="marfan-prognosis__title">
             <div class="container">
                 <div class="marfan-prognosis__content">
@@ -360,7 +268,7 @@
                 </div>
         </section>
 
-        <!-- ========== Marfan attention section ========== -->
+        <!-- ========== Attention ========== -->
         <section class="marfan-attention" aria-labelledby="marfan-attention__title">
             <div class="container">
                 <div class="marfan-attention__content">
@@ -387,84 +295,4 @@
                     </div>
                 </div>
         </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </main>
-    <!-- ========== Subscription section ========== -->
-    <section class="subscription" aria-labelledby="subscription-title">
-        <div class="container">
-            <div class="subscription__content">
-                <header class="subscription__header">
-                    <div class="subscription__header-title">
-                        <h2 id="subscription-title">Станьте частью сообщества!</h2>
-                    </div>
-                    <div class="subscription__header-text">
-                        <p>
-                            Join us in the fight for victory over genetic aortic and vascular conditions.<br />
-                            Sign up to get the latest news and updates.
-                        </p>
-                    </div>
-                </header>
-
-                <form class="subscription__form" action="/subscribe" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="first-name">Имя:</label>
-                        <input type="text" id="first-name" name="first_name" class="form-input"
-                            placeholder="Введите ваше имя" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="last-name">Фамилия:</label>
-                        <input type="text" id="last-name" name="last_name" class="form-input"
-                            placeholder="Введите вашу фамилию" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-mail:</label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="your@mail.ru"
-                            required />
-                    </div>
-                    <button type="submit" class="subscription__button button_black">Подписаться</button>
-                    <h5 class="subscription__disclaimer">
-                        Нажимая на кнопку, вы даёте согласие на обработку персональных данных и соглашаетесь c
-                        <a href="/privacy-policy" class="privacy-link">политикой конфиденциальности</a>
-                    </h5>
-                </form>
-
-                <div class="subscription__contacts">
-                    <h4 class="contacts__privacy-block">
-                        <a href="#" class="contacts__privacy">Конфиденциальность</a>
-                    </h4>
-                    <h4 class="contacts__mail-block">
-                        Связаться с нами:<br />
-                        <a href="mailto:hello@rimt.ru" class="contacts-email">hello@rimt.ru</a>
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </section>
-    </main>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer" role="contentmarfan-diagnostic">
-        <p class="text footer__text">&copy; 2025 «Ритмы жизней»</p>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="{% static 'js/marfan-diagnostic_scripts.js' %}" defer></script>
-</body>
-
-</html>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}My Django App{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+    <!-- Google Fonts (loaded once in <head>) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap"
+        rel="stylesheet" />
+
+    <!-- Base CSS files -->
+    <link rel="stylesheet" href="{% static 'css/info_normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/info_styles.css' %}" />
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- ================= HEADER ================= -->
+    <!-- Top site navigation with mobile hamburger -->
+    <header class="header" role="banner">
+        <div class="header__container">
+            <a class="header__logo" href="/">Ритмы Жизней</a>
+
+            <nav class="header__nav" role="navigation" aria-label="Primary">
+                <!-- Hamburger button (mobile only) -->
+                <button type="button" class="header__nav-menu-btn" aria-label="Open main menu" aria-controls="main-menu"
+                    aria-expanded="false">
+                    <span class="menu-icon" aria-hidden="true"></span>
+                </button>
+
+                <!-- Main menu list -->
+                <ul id="main-menu" class="header__nav-list" role="menubar">
+                    <!-- Close button (mobile only) -->
+
+                    <!-- Title shown in mobile menu -->
+                    <li class="menu-title" role="none">Меню</li>
+
+                    <!-- Simple items -->
+                    <li class="header__nav-list-item" role="none">
+                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">О проекте</a>
+                    </li>
+
+                    <!-- Dropdown / accordion item -->
+                    <li class="header__nav-list-item dropdown" role="none">
+                        <button class="text--bold header__nav-list-item-link dropdown-toggle" type="button"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="sections-menu">
+                            Классификация
+                        </button>
+                        <ul id="sections-menu" class="dropdown-menu" role="menu" aria-label="Submenu: классификация">
+                            <li role="none"><a href="{% url 'info_ndst' %}" class="dropdown-item"
+                                    role="menuitem">Недифференцированная
+                                    дисплазия соединительной ткани</a></li>
+                            <li role="none"><a href="{% url 'info_sed' %}" class="dropdown-item" role="menuitem">Синдром
+                                    Элерса-Данло</a>
+                            </li>
+                            <li role="none"><a href="{% url 'info_marfan' %}" class="dropdown-item"
+                                    role="menuitem">Синдром Марфана</a></li>
+                            <li role="none"><a href="#" class="dropdown-item" role="menuitem">Синдром Лойса-Дитца</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="header__nav-list-item" role="none">
+                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Диагностика</a>
+                    </li>
+
+                    <li class="header__nav-list-item" role="none">
+                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Контакты</a>
+                    </li>
+
+                    <!-- Special CTA button -->
+                    <li class="header__nav-list-item help-astra" role="none">
+                        <div class="header__help-astra-icon" aria-hidden="true">
+                            <img src="{% static 'images/header__help-astra-icon-img.png' %}" alt=""
+                                class="header__help-astra-icon-img" />
+                        </div>
+                        <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei" role="menuitem">Получить
+                            помощь</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ================= Main ================= -->
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ================= Footer ================= -->
+    <footer class="footer" role="contentinfo">
+        <p class="text footer__text">&copy; 2025 «Ритмы жизней»</p>
+    </footer>
+
+    <!-- ================= Scripts ================= -->
+    <script src="{% static 'js/info_scripts.js' %}" defer></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
