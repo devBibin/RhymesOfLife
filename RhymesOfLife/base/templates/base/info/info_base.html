@@ -31,40 +31,41 @@
             <a class="header__logo" href="/">Ритмы Жизней</a>
 
             <nav class="header__nav" role="navigation" aria-label="Primary">
-                <!-- Hamburger button (mobile only) -->
-                <button type="button" class="header__nav-menu-btn" aria-label="Open main menu" aria-controls="main-menu"
+                <!-- Hamburger button -->
+                <button type="button" class="header__nav-menu-btn" aria-label="Открыть меню" aria-controls="main-menu"
                     aria-expanded="false">
                     <span class="menu-icon" aria-hidden="true"></span>
                 </button>
 
-                <!-- Main menu list -->
+                <!-- Main menu -->
                 <ul id="main-menu" class="header__nav-list" role="menubar">
-                    <!-- Close button (mobile only) -->
+                    <li class="menu-title" role="none">Ритмы Жизней</li>
 
-                    <!-- Title shown in mobile menu -->
-                    <li class="menu-title" role="none">Меню</li>
-
-                    <!-- Simple items -->
                     <li class="header__nav-list-item" role="none">
                         <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">О проекте</a>
                     </li>
 
-                    <!-- Dropdown / accordion item -->
+                    <!-- Dropdown -->
                     <li class="header__nav-list-item dropdown" role="none">
                         <button class="text--bold header__nav-list-item-link dropdown-toggle" type="button"
                             aria-haspopup="true" aria-expanded="false" aria-controls="sections-menu">
-                            Классификация
+                            Классификация ДСТ
                         </button>
                         <ul id="sections-menu" class="dropdown-menu" role="menu" aria-label="Submenu: классификация">
-                            <li role="none"><a href="{% url 'info_ndst' %}" class="dropdown-item"
-                                    role="menuitem">Недифференцированная
-                                    дисплазия соединительной ткани</a></li>
-                            <li role="none"><a href="{% url 'info_sed' %}" class="dropdown-item" role="menuitem">Синдром
-                                    Элерса-Данло</a>
+                            <li role="none">
+                                <a href="{% url 'info_ndst' %}" class="dropdown-item" role="menuitem">
+                                    Недифференцированная дисплазия соединительной ткани
+                                </a>
                             </li>
-                            <li role="none"><a href="{% url 'info_marfan' %}" class="dropdown-item"
-                                    role="menuitem">Синдром Марфана</a></li>
-                            <li role="none"><a href="#" class="dropdown-item" role="menuitem">Синдром Лойса-Дитца</a>
+                            <li role="none">
+                                <a href="{% url 'info_sed' %}" class="dropdown-item" role="menuitem">
+                                    Синдром Элерса-Данло
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'info_marfan' %}" class="dropdown-item" role="menuitem">
+                                    Синдром Марфана
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -74,10 +75,11 @@
                     </li>
 
                     <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Контакты</a>
+                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Вступить в
+                            сообщество</a>
                     </li>
 
-                    <!-- Special CTA button -->
+                    <!-- Help Astra -->
                     <li class="header__nav-list-item help-astra" role="none">
                         <div class="header__help-astra-icon" aria-hidden="true">
                             <img src="{% static 'images/header__help-astra-icon-img.png' %}" alt=""
