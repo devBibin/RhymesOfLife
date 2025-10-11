@@ -13,8 +13,9 @@ from django.views.decorators.http import require_POST
 from django.utils.timezone import localtime
 
 from base.models import AdditionalUserInfo
-from base.models import Post, PostImage, PostLike, PostComment
+from base.models import Post, PostImage, PostLike, PostComment, PostReport
 from base.utils.files import validate_mixed_upload
+from base.utils.moderation import get_moderation_config, set_moderation_config
 
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
@@ -42,25 +43,41 @@ def _validate_images(files):
     return errors
 
 
+def _effective_mode(request):
+    user_mode = request.session.get("feed_user_mode")
+    if user_mode in ("censored", "uncensored"):
+        return user_mode
+    mode, _ = get_moderation_config()
+    return mode
+
+
+def _report_threshold():
+    _, threshold = get_moderation_config()
+    return threshold
+
+
 def _feed_queryset(request):
+    mode = _effective_mode(request)
     default_f = "mine" if request.user.is_authenticated else "latest"
     f = request.GET.get("filter", default_f)
 
     base = Post.objects.filter(is_deleted=False)
-    published = base.filter(is_hidden=False, is_approved=True)
+    public_base = base.filter(is_hidden=False, is_hidden_by_reports=False)
+    if mode == "censored":
+        public_base = public_base.filter(is_approved=True)
 
     if f == "mine" and request.user.is_authenticated:
-        me = AdditionalUserInfo.objects.filter(user=request.user).first()
+        me = _me(request)
         qs = base.filter(author=me).order_by("-created_at")
     elif f == "subscriptions" and request.user.is_authenticated:
-        me = AdditionalUserInfo.objects.filter(user=request.user).first()
+        me = _me(request)
         follow_ids = me.following.filter(is_active=True).values_list("following_id", flat=True)
-        qs = published.filter(author__in=follow_ids).order_by("-created_at")
+        qs = public_base.filter(author__in=follow_ids).order_by("-created_at")
     elif f == "pending" and request.user.is_staff:
-        qs = base.filter(is_approved=False).order_by("-created_at")
+        qs = base.filter(is_approved=False, is_hidden_by_reports=False).order_by("-created_at")
     else:
         f = "latest"
-        qs = published.order_by("-created_at")
+        qs = public_base.order_by("-created_at")
 
     return f, qs
 
@@ -69,6 +86,7 @@ def _me(request):
     return AdditionalUserInfo.objects.filter(user=request.user).first() if request.user.is_authenticated else None
 
 
+@login_required
 def feed(request):
     if not request.user.is_authenticated:
         return render(request, "base/home_public.html")
@@ -78,7 +96,6 @@ def feed(request):
     page_obj = paginator.get_page(request.GET.get("page"))
 
     liked_ids = []
-    following_info_ids = set()
     following_user_ids = set()
 
     me = _me(request)
@@ -87,23 +104,29 @@ def feed(request):
             PostLike.objects.filter(author=me, is_active=True, post__in=page_obj.object_list)
             .values_list("post_id", flat=True)
         )
-        following_info_ids = set(me.following.filter(is_active=True).values_list("following_id", flat=True))
         following_user_ids = set(me.following.filter(is_active=True).values_list("following__user_id", flat=True))
 
-    posts_total = Post.objects.filter(
-        author=me, is_deleted=False, is_hidden=False, is_approved=True
-    ).count() if me else 0
+    mode = _effective_mode(request)
+    threshold = _report_threshold()
+
+    my_base = Post.objects.filter(
+        author=me, is_deleted=False, is_hidden=False, is_hidden_by_reports=False
+    ) if me else Post.objects.none()
+    if mode == "censored":
+        my_base = my_base.filter(is_approved=True)
+    posts_total = my_base.count() if me else 0
 
     context = {
         "posts": page_obj,
         "current_filter": f,
         "liked_ids": liked_ids,
-        "following_info_ids": list(following_info_ids),
         "following_user_ids": list(following_user_ids),
         "FIRST_COMMENTS_LIMIT": FIRST_COMMENTS_LIMIT,
         "info": me,
         "profile_user": request.user,
         "posts_total": posts_total,
+        "moderation_mode": mode,
+        "report_threshold": threshold,
     }
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -129,14 +152,15 @@ def create_post(request):
     if errors:
         return render(request, "base/post_create.html", {"errors": errors, "text": text})
 
+    auto = request.user.is_staff
+
     post = Post.objects.create(
         author=me,
         text=text,
-        is_approved=request.user.is_staff,
-        approved_at=timezone.now() if request.user.is_staff else None,
+        is_approved=auto,
+        approved_at=timezone.now() if auto else None,
         approved_by=request.user if request.user.is_staff else None,
     )
-
     for f in files:
         PostImage.objects.create(post=post, image=f)
 
@@ -176,6 +200,39 @@ def edit_post(request, post_id: int):
         return redirect("home")
 
     return render(request, "base/post_edit.html", {"post": post})
+
+
+@login_required
+@require_POST
+def user_mode_set(request):
+    mode = (request.POST.get("mode") or "").strip()
+    if mode not in ("censored", "uncensored"):
+        return JsonResponse({"ok": False}, status=400)
+    request.session["feed_user_mode"] = mode
+    return JsonResponse({"ok": True, "mode": mode})
+
+
+@login_required
+@require_POST
+def report_post(request, post_id: int):
+    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+    me = AdditionalUserInfo.objects.get(user=request.user)
+    if post.author_id == me.id:
+        return JsonResponse({"error": _("You cannot report your own post.")}, status=400)
+
+    threshold = _report_threshold()
+    _, created = PostReport.objects.get_or_create(post=post, author=me)
+    if created:
+        cnt = PostReport.objects.filter(post=post).count()
+        hide = cnt >= threshold
+        if hide and not post.is_hidden_by_reports:
+            post.is_hidden_by_reports = True
+            post.reports_count = cnt
+            post.save(update_fields=["is_hidden_by_reports", "reports_count"])
+        else:
+            post.reports_count = cnt
+            post.save(update_fields=["reports_count"])
+    return JsonResponse({"ok": True, "reports": post.reports_count, "hidden": post.is_hidden_by_reports})
 
 
 @login_required
@@ -304,3 +361,17 @@ def comments_more(request, post_id: int):
     has_more = offset + limit < total
     next_offset = offset + limit
     return JsonResponse({"items": items, "has_more": has_more, "next_offset": next_offset})
+
+
+@user_passes_test(lambda u: u.is_staff)
+@require_POST
+def moderation_mode_set(request):
+    mode = request.POST.get("mode") or "censored"
+    threshold = request.POST.get("threshold") or ""
+    try:
+        t = int(threshold) if threshold != "" else None
+    except ValueError:
+        t = None
+    set_moderation_config(mode, t or 5)
+    mode_now, thr_now = get_moderation_config()
+    return JsonResponse({"ok": True, "mode": mode_now, "threshold": thr_now})

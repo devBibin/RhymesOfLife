@@ -53,6 +53,7 @@ from base.views.feed_views import (
     feed, create_post, edit_post, hide_post, unhide_post,
     toggle_like, add_comment, delete_comment,
     approve_post, reject_post, comments_more,
+    report_post, moderation_mode_set, user_mode_set,
 )
 
 from .views.language_views import (
@@ -122,6 +123,9 @@ urlpatterns = [
     path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
+    path("posts/<int:post_id>/report/", report_post, name="post_report"),
+    path("moderation/mode/set/", moderation_mode_set, name="moderation_mode_set"),
+    path("moderation/user-mode/set/", user_mode_set, name="user_mode_set"),
 
     path("set-language/", set_language, name="set_language"),
 ]

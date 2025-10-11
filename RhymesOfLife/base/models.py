@@ -356,6 +356,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
+    is_hidden_by_reports = models.BooleanField(_("Hidden by reports"), default=False, db_index=True)
+    reports_count = models.PositiveIntegerField(_("Reports count"), default=0)
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = _("Post")
@@ -367,6 +370,19 @@ class Post(models.Model):
     @property
     def visible_comments(self):
         return self.comments.filter(is_deleted=False)
+
+
+class PostReport(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="reports", db_index=True)
+    author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name="post_reports", db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        unique_together = ("post", "author")
+        indexes = [models.Index(fields=["post", "author"])]
+
+    def __str__(self):
+        return f"🚩 {self.author.user.username} → {self.post_id}"
 
 
 class PostImage(models.Model):

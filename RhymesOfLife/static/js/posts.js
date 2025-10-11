@@ -269,6 +269,33 @@ function initCommentForms() {
   });
 })();
 
+(function initReportDelegated() {
+  document.addEventListener('click', async (e) => {
+    const a = e.target.closest('[data-report]');
+    if (!a) return;
+    e.preventDefault();
+
+    const url = a.getAttribute('data-url');
+    const csrftoken = getCSRF(document);
+    if (!url || !csrftoken) return;
+
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: {'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken, 'Accept': 'application/json'}
+    });
+    if (!r.ok) return;
+
+    const data = await r.json();
+    const card = a.closest('.post-card');
+
+    if (data.hidden && card) {
+      card.remove();
+      return;
+    }
+    alert(t('Report submitted'));
+  });
+})();
+
 function initDropzone() {
   const dz = document.getElementById('dropzone');
   const fi = document.getElementById('file-input');
