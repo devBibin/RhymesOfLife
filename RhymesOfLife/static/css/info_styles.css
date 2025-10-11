@@ -147,6 +147,8 @@ img {
 /* =========================================================
    HEADER
    ========================================================= */
+
+/* === Desktop menu === */
 .header {
   background: var(--white-color);
   position: sticky;
@@ -178,7 +180,6 @@ img {
   color: var(--block3-color);
 }
 
-/* === Desktop menu === */
 .header__nav-menu-btn {
   display: none;
   background: none;
@@ -235,7 +236,7 @@ img {
 .header__nav-list-item-link {
   color: var(--black-color);
   font-family: var(--font-basic);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   padding: 10px 5px;
@@ -295,7 +296,7 @@ img {
   background: var(--white-color);
   color: var(--black-color);
   font-family: var(--font-basic);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
   transition: background .2s ease, color .2s ease;
@@ -361,51 +362,77 @@ img {
   color: var(--block3-color);
 }
 
-/* ---------- Hamburger (mobile) ---------- */
-.header__nav-menu-btn {
-  display: none;
-  /* hidden on desktop */
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  position: relative;
-  z-index: 1100;
+/* =========================================================
+   DESKTOP NAV (>=769px)
+   ========================================================= */
+@media (min-width: 769px) {
+
+  .header__nav-menu-btn,
+  .close-menu,
+  .menu-title {
+    display: none !important;
+  }
+
+  /* Make dropdown toggle look like a link on desktop */
+  .dropdown-toggle {
+    background: none;
+    border: none;
+    padding: 10px 5px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .dropdown-toggle::after {
+    display: none;
+  }
 }
 
-.menu-icon {
-  display: block;
-  width: 25px;
-  height: 3px;
-  background: var(--black-color);
-  position: relative;
-  transition: background .3s ease;
-}
-
-.menu-icon::before,
-.menu-icon::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 3px;
-  background: var(--black-color);
-  left: 0;
-  transition: transform .3s ease;
-}
-
-.menu-icon::before {
-  top: -8px;
-}
-
-.menu-icon::after {
-  top: 8px;
-}
 
 /* ===================================================
    MOBILE NAV (<=768px)
    =================================================== */
 @media (max-width: 768px) {
+  .header__nav-menu-btn {
+    display: none;
+    /* hidden on desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    z-index: 1100;
+  }
+
+  .menu-icon {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: var(--black-color);
+    position: relative;
+    transition: background .3s ease;
+  }
+
+  .menu-icon::before,
+  .menu-icon::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background: var(--black-color);
+    left: 0;
+    transition: transform .3s ease;
+  }
+
+  .menu-icon::before {
+    top: -8px;
+  }
+
+  .menu-icon::after {
+    top: 8px;
+  }
+
   .header__nav-menu-btn {
     display: block;
   }
@@ -428,6 +455,10 @@ img {
   .header__nav.active .header__nav-list {
     display: flex;
   }
+
+  .header__nav-list-item-link:hover {
+  color: var(--black-color);
+}
 
   .menu-title {
     display: block;
@@ -542,7 +573,7 @@ img {
   }
 
   .header__nav.active .menu-icon::before {
-    transform: rotate(45deg) translate(5px, 5px);
+    transform: rotate(45deg) translate(6px, 6px);
   }
 
   .header__nav.active .menu-icon::after {
@@ -555,47 +586,22 @@ img {
   }
 }
 
-/* =========================================================
-   DESKTOP NAV (>=769px)
-   ========================================================= */
-@media (min-width: 769px) {
-
-  .header__nav-menu-btn,
-  .close-menu,
-  .menu-title {
-    display: none !important;
-  }
-
-  /* Make dropdown toggle look like a link on desktop */
-  .dropdown-toggle {
-    background: none;
-    border: none;
-    padding: 10px 5px;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .dropdown-toggle::after {
-    display: none;
-  }
-}
 
 /* =========================================================
    FOOTER
    ========================================================= */
 .footer {
-  background: var(--block1-color);
+  background: var(--black-color);
 }
 
 .footer__text {
+  color: var(--white-color);
   font-family: var(--font-styled);
   font-weight: 700;
   width: 90%;
   padding-top: 20px;
   padding-bottom: 30px;
   text-align: center;
-  border-top: 1px solid var(--black-color);
   margin: 0 auto;
 }
 
@@ -729,7 +735,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 500;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .class__list-item::before {
@@ -768,7 +774,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .diagnostic__list-item::before {
@@ -855,7 +861,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .help__list-item::before {
@@ -1176,7 +1182,7 @@ img {
 }
 
 .beiton-result__header {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .hypermob__icon,
@@ -1197,7 +1203,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 500;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .hypermob__list-item::before {
@@ -1301,7 +1307,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .gentest__list-item::before {
@@ -1733,11 +1739,10 @@ img {
 }
 
 .marfan-attention__header {
-      display: flex
-;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .marfan-signs__item-header {
@@ -1775,7 +1780,7 @@ img {
   position: relative;
   padding-left: 20px;
   font-weight: 400;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .marfan-signs__list-item::before {
@@ -1801,7 +1806,7 @@ img {
 }
 
 .marfan-diagnostic__instrument {
-padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .marfan-diagnostic__list {
@@ -1838,29 +1843,28 @@ padding-bottom: 20px;
 }
 
 .marfan-attention__content {
-display: flex
-;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .marfan-attention__header {
   color: var(--white-color);
 }
 
-     .marfan-attention__icon {
-    padding-bottom: 40px;
-  }
+.marfan-attention__icon {
+  padding-bottom: 40px;
+}
 
 .marfan-attention__icon-img {
   width: 85px;
-    height: 89px;
-    object-fit: contain;
+  height: 89px;
+  object-fit: contain;
 }
 
 .marfan-attention__text p {
   color: var(--white-color);
-    text-align: center;
+  text-align: center;
 }
 
 
