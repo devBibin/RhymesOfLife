@@ -89,7 +89,7 @@ def _me(request):
 @login_required
 def feed(request):
     if not request.user.is_authenticated:
-        return render(request, "base/home_public.html")
+        return render(request, "base/info/main.html")
 
     f, qs = _feed_queryset(request)
     paginator = Paginator(qs, 10)

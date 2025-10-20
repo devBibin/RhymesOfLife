@@ -297,7 +297,7 @@ def home_public_view(request):
                 messages.error(request, error)
                 context["reg_error"] = error
                 log.warning("Home signup validation failed: username=%s email=%s reason=%s", username, email, error)
-                return render(request, "base/home_public.html", context)
+                return render(request, "base/info/main.html", context)
             _create_user_with_profile(username, email, password1)
             messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
             return redirect("verify_prompt")
@@ -317,9 +317,9 @@ def home_public_view(request):
             messages.error(request, error)
             context["login_error"] = error
             seclog.warning("Login failed via home: username=%s", request.POST.get("username"))
-            return render(request, "base/home_public.html", context)
+            return render(request, "base/info/main.html", context)
 
-    return render(request, "base/home_public.html", context)
+    return render(request, "base/info/main.html", context)
 
 
 @require_http_methods(["GET"])

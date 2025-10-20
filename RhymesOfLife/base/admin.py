@@ -47,3 +47,15 @@ class TelegramAccount(admin.ModelAdmin):
 @admin.register(Config)
 class Config(admin.ModelAdmin):
     pass
+
+
+@admin.register(HelpRequest)
+class HelpRequestAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'email', 'created_at')
+    search_fields = ('email', 'name', 'message')
+    readonly_fields = ('created_at',)
+
+
+@admin.register(WellnessEntry)
+class WellnessEntry(admin.ModelAdmin):
+    pass

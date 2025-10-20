@@ -31,7 +31,8 @@
               {% endif %}
             </div>
           </div>
-          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary">📄 {% trans "View examinations" %}</a>
+          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary me-2">📄 {% trans "View examinations" %}</a>
+          <a href="{% url 'patient_wellness' info.user.id %}" class="btn btn-sm btn-outline-success">🩺 {% trans "View wellness" %}</a>
         </li>
       {% endfor %}
     </ul>

@@ -1,0 +1,32 @@
+{% load i18n %}
+{% for r in page_obj.object_list %}
+<tr>
+  <td>{{ r.id }}</td>
+  <td>{{ r.created_at|date:"Y-m-d H:i" }}</td>
+  <td>{{ r.name|default:"—" }}</td>
+  <td>
+    {% if r.email %}<a href="mailto:{{ r.email }}">{{ r.email }}</a>{% else %}—{% endif %}
+  </td>
+  <td style="white-space:pre-wrap">{{ r.message }}</td>
+  <td>
+    {% if r.is_processed %}
+      <span class="badge bg-success">{% trans "Processed" %}</span>
+    {% else %}
+      <span class="badge bg-secondary">{% trans "Open" %}</span>
+    {% endif %}
+  </td>
+  <td class="text-end">
+    {% if r.is_processed %}
+      <button class="btn btn-sm btn-outline-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
+        {% trans "Undo" %}
+      </button>
+    {% else %}
+      <button class="btn btn-sm btn-outline-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
+        {% trans "Mark as processed" %}
+      </button>
+    {% endif %}
+  </td>
+</tr>
+{% empty %}
+<tr><td colspan="7" class="text-center text-muted py-4">{% trans "Nothing found." %}</td></tr>
+{% endfor %}

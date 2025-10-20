@@ -60,7 +60,16 @@
                   <i class="bi bi-journal-text"></i> {% trans "Articles" %}
                 </a>
               </li>
-
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'help_request' %}">
+                  <i class="bi bi-life-preserver"></i> {% trans "Help" %}
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'my_wellness' %}">
+                  <i class="bi bi-life-preserver"></i> {% trans "Help" %}
+                </a>
+              </li>
               <!-- Notifications dropdown -->
               <li class="nav-item dropdown">
                 <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
@@ -86,20 +95,36 @@
                       <li>
                         <a class="dropdown-item d-flex align-items-start {% if not n.is_read %}bg-light{% endif %}" href="{% url 'notifications' %}#n-{{ n.id }}">
                           <div class="me-2">
-                            <i class="bi bi-{{ n.notification_type|lower }} fs-5 text-primary"></i>
+                            {% with icon="bell" %}
+                              {% if n.notification_type == 'FOLLOW' %}{% with icon="person-plus" %}{% endwith %}{% endif %}
+                              {% if n.notification_type == 'EXAM_COMMENT' %}{% with icon="chat-dots" %}{% endwith %}{% endif %}
+                              {% if n.notification_type == 'RECOMMENDATION' %}{% with icon="lightbulb" %}{% endwith %}{% endif %}
+                              {% if n.notification_type == 'ADMIN_MESSAGE' %}{% with icon="megaphone" %}{% endwith %}{% endif %}
+                              {% if n.notification_type == 'SYSTEM_MESSAGE' %}{% with icon="gear" %}{% endwith %}{% endif %}
+                              <i class="bi bi-{{ icon }} fs-5 text-primary"></i>
+                            {% endwith %}
                           </div>
                           <div class="flex-grow-1">
                             <div class="small text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</div>
-                            {% if n.notification_type == 'FOLLOW' %}
-                              {% blocktrans with username=n.sender.user.username %}
-                                <strong>{{ username }}</strong> followed you.
-                              {% endblocktrans %}
-                            {% else %}
-                              {{ n.message }}
+                            {% if n.title %}
+                              <div class="fw-semibold text-break">{{ n.title }}</div>
                             {% endif %}
+                            <div class="text-break">
+                              {% if n.notification_type == 'FOLLOW' %}
+                                {% blocktrans with username=n.sender.user.username %}
+                                  <strong>{{ username }}</strong> followed you.
+                                {% endblocktrans %}
+                              {% else %}
+                                {{ n.message }}
+                                {% if n.url %}
+                                  <a class="ms-1" href="{{ n.url }}">{% trans "Details" %}</a>
+                                {% endif %}
+                              {% endif %}
+                            </div>
                           </div>
                         </a>
                       </li>
+
                     {% endfor %}
                     <li><hr class="dropdown-divider"></li>
                   {% else %}
@@ -121,6 +146,16 @@
                 <li class="nav-item">
                   <a class="nav-link text-warning" href="{% url 'patients_list' %}">
                     <i class="bi bi-people-fill"></i> {% trans "Patients" %}
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-warning" href="{% url 'admin_notify' %}">
+                    <i class="bi bi-megaphone-fill"></i> {% trans "Notify users" %}
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-warning" href="{% url 'staff_help_requests' %}">
+                    <i class="bi bi-life-preserver"></i> {% trans "Help requests" %}
                   </a>
                 </li>
               {% endif %}

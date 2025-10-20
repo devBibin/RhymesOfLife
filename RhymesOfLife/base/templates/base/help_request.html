@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h1 class="h4 mb-3">{% trans "Ask for help" %}</h1>
+
+          <p class="mb-4">
+            {% trans "If you need support or assistance, you can request help from our partner fund. Describe below what you need and leave contact details so we can follow up." %}
+          </p>
+
+          <a href="{{ fund_url }}" target="_blank" rel="noopener noreferrer"
+             class="btn btn-outline-primary mb-4">
+            {% trans "Go to the fund website" %}
+          </a>
+
+          {% if messages %}
+            {% for m in messages %}
+              <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="hr-name" class="form-label">{% trans "Your name (optional)" %}</label>
+              <input id="hr-name"
+                     class="form-control{% if errors.name %} is-invalid{% endif %}"
+                     name="name" type="text" value="{{ values.name }}">
+              {% if errors.name %}
+                <div class="invalid-feedback d-block">{{ errors.name }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-email" class="form-label">{% trans "Email (optional)" %}</label>
+              <input id="hr-email"
+                     class="form-control{% if errors.email %} is-invalid{% endif %}"
+                     name="email" type="email" value="{{ values.email }}">
+              {% if errors.email %}
+                <div class="invalid-feedback d-block">{{ errors.email }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-message" class="form-label">{% trans "What do you need?" %}</label>
+              <textarea id="hr-message"
+                        class="form-control{% if errors.message %} is-invalid{% endif %}"
+                        name="message" rows="6"
+                        placeholder="{% trans "Describe what you need..." %}">{{ values.message }}</textarea>
+              {% if errors.message %}
+                <div class="invalid-feedback d-block">{{ errors.message }}</div>
+              {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">{% trans "Send request" %}</button>
+          </form>
+
+          <hr>
+          <small class="text-muted">
+            {% trans "By sending you agree that volunteers may contact you to clarify details." %}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

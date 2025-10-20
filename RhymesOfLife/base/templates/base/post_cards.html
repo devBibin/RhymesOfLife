@@ -103,7 +103,7 @@
         </div>
 
         {% if p.text %}
-          <p class="mb-3 fs-6">{{ p.text|linebreaksbr }}</p>
+          <p class="mb-3 text-break post-text">{{ p.text|linebreaksbr }}</p>
         {% endif %}
 
         {% with count=p.images.count %}

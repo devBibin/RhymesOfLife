@@ -64,6 +64,24 @@ from .views.public_profile_views import (
     public_profile_view
 )
 
+from .views.admin_notifications import (
+    admin_notify_page, admin_notify_api,
+    admin_user_suggest,
+)
+
+from .views.help_request_views import (
+    help_request_view, staff_help_requests_page,
+    staff_help_requests_api, staff_help_requests_data,
+)
+
+from .views.wellness_views import (
+    my_wellness_view,
+    wellness_entries_api,
+    wellness_settings_api,
+)
+from .views.doctors_wellness_views import (
+    patient_wellness_view,
+)
 
 urlpatterns = [
     path("ma/", feed, name="home"),
@@ -71,7 +89,7 @@ urlpatterns = [
     path("ndst/", info_ndst, name="info_ndst"),
     path("sed/", info_sed, name="info_sed"),
     path("marfan/", info_marfan, name="info_marfan"),
-    path("sld/", info_sed, name="info_sld"),
+    path("sld/", info_sld, name="info_sld"),
 
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),
@@ -126,6 +144,21 @@ urlpatterns = [
     path("posts/<int:post_id>/report/", report_post, name="post_report"),
     path("moderation/mode/set/", moderation_mode_set, name="moderation_mode_set"),
     path("moderation/user-mode/set/", user_mode_set, name="user_mode_set"),
+
+    path("staff/notify/", admin_notify_page, name="admin_notify"),
+    path("staff/notify/api/", admin_notify_api, name="admin_notify_api"),
+    path("staff/notify/user-suggest/", admin_user_suggest, name="admin_user_suggest"),
+
+    path('help/request/', help_request_view, name='help_request'),
+    path("staff/help-requests/", staff_help_requests_page, name="staff_help_requests"),
+    path("staff/help-requests/data/", staff_help_requests_data, name="staff_help_requests_data"),
+    path("staff/help-requests/api/", staff_help_requests_api, name="staff_help_requests_api"),
+
+    path("my-wellness/", my_wellness_view, name="my_wellness"),
+    path("api/wellness/entries/", wellness_entries_api, name="wellness_entries_api"),
+    path("api/wellness/settings/", wellness_settings_api, name="wellness_settings_api"),
+    path("patients/<int:user_id>/wellness/", patient_wellness_view, name="patient_wellness"),
+
 
     path("set-language/", set_language, name="set_language"),
 ]
