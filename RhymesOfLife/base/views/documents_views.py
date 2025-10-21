@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.cache import never_cache
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 from django.core.paginator import Paginator
@@ -100,6 +101,8 @@ def _create_external_links_for_exam(exam, urls: list[str]):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
 def my_documents_view(request):
     user_info = request.user.additional_info
     if request.method == "POST":
@@ -142,6 +145,8 @@ def my_documents_view(request):
 
 @login_required
 @require_http_methods(["GET", "POST", "DELETE"])
+@csrf_protect
+@never_cache
 def exam_detail_api(request, exam_id):
     exam = get_object_or_404(MedicalExam, id=exam_id, user_info=request.user.additional_info)
     if request.method == "GET":
@@ -197,6 +202,7 @@ def exam_detail_api(request, exam_id):
 @login_required
 @require_http_methods(["DELETE"])
 @csrf_exempt
+@never_cache
 def delete_document_api(request, doc_id):
     hard = request.GET.get("hard") == "1"
     document = get_object_or_404(
@@ -217,6 +223,7 @@ def delete_document_api(request, doc_id):
 
 @login_required
 @require_http_methods(["GET"])
+@never_cache
 def recommendations_view(request):
     qs = (
         Recommendation.objects

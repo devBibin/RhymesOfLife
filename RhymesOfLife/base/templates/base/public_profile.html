@@ -11,6 +11,7 @@
     {% include "base/profile_content_fragment.html" %}
   </div>
 </div>
+<form style="display:none">{% csrf_token %}</form>
 {% endblock %}
 
 {% block extra_js %}
@@ -18,4 +19,6 @@
 <script src="{% static 'js/posts.js' %}"></script>
 <script src="{% static 'js/follow_toggle.js' %}"></script>
 <script src="{% static 'js/post_menu.js' %}"></script>
+<script src="{% static 'js/censorship_toggle.js' %}"></script>
+<script src="{% static 'js/ban_toggle.js' %}"></script>
 {% endblock %}

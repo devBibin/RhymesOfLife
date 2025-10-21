@@ -8,6 +8,9 @@ from django.shortcuts import redirect, render
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 
 from ..models import get_syndrome_choices
 from ..utils.files import validate_image_upload
@@ -61,6 +64,9 @@ def profile_view(request, username=None):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
+@sensitive_post_parameters("first_name", "last_name", "email", "day", "month", "year", "about_me", "syndromes", "confirmed_syndromes")
 def profile_edit_view(request):
     info = request.user.additional_info
 

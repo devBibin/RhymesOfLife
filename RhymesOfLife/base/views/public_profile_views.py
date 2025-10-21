@@ -6,10 +6,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
-from wagtail.models import Page  # optional
+from django.views.decorators.http import require_http_methods
+
 from blog.models import BlogIndexPage, BlogPage
 from base.models import Post, PostLike
-from base.utils.moderation import get_moderation_config
 from ..models import get_syndrome_choices
 
 User = get_user_model()
@@ -27,14 +27,7 @@ def _to_int(value, default=1):
         return default
 
 
-def _effective_mode(request):
-    user_mode = request.session.get("feed_user_mode")
-    if user_mode in ("censored", "uncensored"):
-        return user_mode
-    mode, _ = get_moderation_config()
-    return mode
-
-
+@require_http_methods(["GET"])
 def public_profile_view(request, username: str):
     user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
     info = getattr(user, "additional_info", None)
@@ -49,32 +42,28 @@ def public_profile_view(request, username: str):
     ap = _to_int(request.GET.get("apage"), 1)
     pp = _to_int(request.GET.get("ppage"), 1)
 
-    mode = _effective_mode(request)
-
-    # Articles
     articles_qs = BlogPage.objects.none()
     if can_see_articles:
         root = BlogIndexPage.objects.first()
         if root:
-            base_articles = (
+            articles_qs = (
                 BlogPage.objects.live()
                 .descendant_of(root)
-                .filter(is_deleted=False, author=info)
+                .filter(is_deleted=False, author=info, is_approved=True)
                 .order_by("-date", "-first_published_at")
             )
-            if mode == "censored":
-                base_articles = base_articles.filter(is_approved=True)
-            articles_qs = base_articles
 
-    # Posts
-    posts_qs = (
+    base_posts = (
         Post.objects
         .filter(author=info, is_deleted=False, is_hidden=False, is_hidden_by_reports=False)
         .select_related("author__user")
         .order_by("-created_at")
     )
-    if mode == "censored":
-        posts_qs = posts_qs.filter(is_approved=True)
+
+    if request.user.is_authenticated and request.user == user:
+        posts_qs = base_posts
+    else:
+        posts_qs = base_posts.filter(is_approved=True)
 
     posts_total = posts_qs.count()
 
@@ -104,7 +93,6 @@ def public_profile_view(request, username: str):
         "following_user_ids": following_user_ids,
         "can_see_articles": can_see_articles,
         "syndrome_choices": syndrome_choices(),
-        "moderation_mode": mode,
         "title": _("Profile"),
     }
 

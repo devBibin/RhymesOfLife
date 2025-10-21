@@ -148,6 +148,14 @@ class AdditionalUserInfo(models.Model):
     privacy_accepted = models.BooleanField(default=False)
     data_processing_accepted = models.BooleanField(default=False)
     consents_accepted_at = models.DateTimeField(null=True, blank=True)
+    censorship_enabled = models.BooleanField(default=False, db_index=True, verbose_name=_("Pre-moderation enabled"))
+    is_banned = models.BooleanField(default=False, db_index=True, verbose_name=_("Banned"))
+    banned_reason = models.CharField(max_length=255, blank=True, default="", verbose_name=_("Ban reason"))
+    banned_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Banned at"))
+    banned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="banned_users",
+        verbose_name=_("Banned by")
+    )
 
     class Meta:
         indexes = [
@@ -156,6 +164,7 @@ class AdditionalUserInfo(models.Model):
             models.Index(fields=["ready_for_verification"]),
             models.Index(fields=["email_verified"]),
             models.Index(fields=["phone_verified"]),
+            models.Index(fields=["is_banned"]),
         ]
         permissions = [
             ("view_patient_list", _("Can view patient list")),
@@ -174,6 +183,21 @@ class AdditionalUserInfo(models.Model):
     @property
     def followers_count(self):
         return self.followers.filter(is_active=True).count()
+
+    def ban(self, by=None, reason=""):
+        from django.utils import timezone
+        self.is_banned = True
+        self.banned_at = timezone.now()
+        self.banned_by = by
+        self.banned_reason = reason or ""
+        self.save(update_fields=["is_banned", "banned_at", "banned_by", "banned_reason"])
+
+    def unban(self):
+        self.is_banned = False
+        self.banned_at = None
+        self.banned_by = None
+        self.banned_reason = ""
+        self.save(update_fields=["is_banned", "banned_at", "banned_by", "banned_reason"])
 
 
 class TelegramAccount(models.Model):
@@ -469,6 +493,7 @@ class PostComment(models.Model):
 class HelpRequest(models.Model):
     name = models.CharField(_('name'), max_length=200, blank=True)
     email = models.EmailField(_('email'), blank=True)
+    telegram = models.CharField(_('telegram'), max_length=100, blank=True)
     message = models.TextField(_('message'))
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
 

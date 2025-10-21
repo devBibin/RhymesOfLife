@@ -4,54 +4,56 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from ..models import HelpRequest
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.db.models import Q
-from ..utils.decorators import staff_required
 from django.utils import timezone
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+
+import re
+
+from ..models import HelpRequest
+from ..utils.decorators import permission_or_staff_required
+
+TG_RE = re.compile(r"^@?[A-Za-z0-9_]{5,32}$")
+PER_PAGE = 10
 
 
 def _prefill_contact(user):
+    data = {"username": "", "email": "", "telegram": "", "has_tg": False}
     if not user.is_authenticated:
-        return "", ""
+        return data
     info = getattr(user, "additional_info", None)
-
-    def full_name(first, last):
-        first = (first or "").strip()
-        last = (last or "").strip()
-        return (first + " " + last).strip()
-
-    name = ""
-    email = ""
-    if info:
-        name = full_name(info.first_name, info.last_name)
-        email = (info.email or "").strip()
-    if not name:
-        name = full_name(getattr(user, "first_name", ""), getattr(user, "last_name", ""))
-    if not name:
-        name = (getattr(user, "username", "") or "").strip()
-    if not email:
-        email = (getattr(user, "email", "") or "").strip()
-    return name, email
+    data["username"] = (getattr(user, "username", "") or "").strip()
+    data["email"] = ((getattr(info, "email", None) or getattr(user, "email", "") or "")).strip()
+    if info and getattr(info, "telegram_account", None):
+        tg = (info.telegram_account.username or "").strip()
+        if tg:
+            data["has_tg"] = True
+            data["telegram"] = tg if tg.startswith("@") else f"@{tg}"
+    return data
 
 
+@require_http_methods(["GET", "POST"])
 def help_request_view(request):
-    pre_name, pre_email = _prefill_contact(request.user)
+    pre = _prefill_contact(request.user)
     context = {
         "fund_url": "https://bfastra.ru/ritmy_zhiznei",
-        "values": {"name": pre_name, "email": pre_email, "message": ""},
+        "values": {"username": pre["username"], "email": pre["email"], "telegram": pre["telegram"], "message": ""},
+        "has_tg": pre["has_tg"],
         "errors": {},
     }
 
     if request.method == "POST":
-        name = (request.POST.get("name") or pre_name).strip()
-        email = (request.POST.get("email") or pre_email).strip()
+        username = pre["username"]
+        email = (request.POST.get("email") or pre["email"]).strip()
+        telegram = pre["telegram"] if pre["has_tg"] else (request.POST.get("telegram") or "").strip()
         message = (request.POST.get("message") or "").strip()
 
-        context["values"] = {"name": name, "email": email, "message": message}
+        context["values"] = {"username": username, "email": email, "telegram": telegram, "message": message}
         errors = {}
 
         if not message:
@@ -63,17 +65,24 @@ def help_request_view(request):
             except ValidationError:
                 errors["email"] = _("Enter a valid email address.")
 
+        if not pre["has_tg"] and telegram:
+            handle = telegram[1:] if telegram.startswith("@") else telegram
+            if not TG_RE.match(telegram) and not TG_RE.match(handle):
+                errors["telegram"] = _("Enter a valid Telegram username (e.g. @john_doe).")
+
         if errors:
             context["errors"] = errors
         else:
-            HelpRequest.objects.create(name=name, email=email, message=message)
+            HelpRequest.objects.create(
+                name=username or "",
+                email=email,
+                telegram=telegram,
+                message=message,
+            )
             messages.success(request, _("Your request has been sent. We will contact you soon."))
             return redirect(reverse("help_request"))
 
     return render(request, "base/help_request.html", context)
-
-
-PER_PAGE = 10
 
 
 def _filter_requests(status, q):
@@ -84,17 +93,24 @@ def _filter_requests(status, q):
     elif s == "processed":
         qs = qs.filter(is_processed=True)
     if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(email__icontains=q) | Q(message__icontains=q))
+        qs = qs.filter(
+            Q(name__icontains=q)
+            | Q(email__icontains=q)
+            | Q(telegram__icontains=q)
+            | Q(message__icontains=q)
+        )
     return qs
 
 
-@staff_required
+@login_required
+@permission_or_staff_required("base.view_help_requests")
 @require_http_methods(["GET"])
 def staff_help_requests_page(request):
     return render(request, "base/staff_help_requests.html")
 
 
-@staff_required
+@login_required
+@permission_or_staff_required("base.view_help_requests")
 @require_http_methods(["GET"])
 def staff_help_requests_data(request):
     status = (request.GET.get("status") or "open").lower()
@@ -118,8 +134,10 @@ def staff_help_requests_data(request):
     return JsonResponse({"ok": True, "rows": rows_html, "pager": pager_html})
 
 
-@staff_required
+@login_required
+@permission_or_staff_required("base.process_help_requests")
 @require_http_methods(["POST"])
+@csrf_protect
 def staff_help_requests_api(request):
     try:
         req_id = int(request.POST.get("id"))

@@ -13,8 +13,10 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import constant_time_compare
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.cache import never_cache
+from django.utils.translation import gettext as _
 
 from ..models import AdditionalUserInfo, TelegramAccount
 
@@ -39,7 +41,7 @@ def _send_text(chat_id: int, text: str) -> None:
 
 def _send_contact_request(chat_id: int, text: str) -> None:
     keyboard = {
-        "keyboard": [[{"text": "Share phone", "request_contact": True}]],
+        "keyboard": [[{"text": _("Share phone"), "request_contact": True}]],
         "resize_keyboard": True,
         "one_time_keyboard": True,
     }
@@ -50,7 +52,6 @@ def _send_contact_request(chat_id: int, text: str) -> None:
 
 
 def _get_bot_username() -> str | None:
-
     name = getattr(settings, "TELEGRAM_BOT_USERNAME", "") or cache.get("tg_bot_username")
     if name:
         return name
@@ -114,8 +115,9 @@ def _norm_phone(phone: str) -> str:
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
 def connect_telegram_view(request: HttpRequest) -> HttpResponse:
-
     user_info = request.user.additional_info
     acc, _ = TelegramAccount.objects.get_or_create(user_info=user_info)
 
@@ -177,16 +179,16 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         try:
             uuid.UUID(token_str)
         except Exception:
-            _send_text(ctx.chat_id, "Invalid activation token.")
+            _send_text(ctx.chat_id, _("Invalid activation token."))
             return JsonResponse({"ok": True})
 
         acc = TelegramAccount.objects.filter(activation_token=token_str).first()
         if not acc:
-            _send_text(ctx.chat_id, "Activation token not found or already used.")
+            _send_text(ctx.chat_id, _("Activation token not found or already used."))
             return JsonResponse({"ok": True})
 
         if acc.telegram_verified and acc.telegram_id:
-            _send_text(ctx.chat_id, "Account already linked.")
+            _send_text(ctx.chat_id, _("Account already linked."))
             return JsonResponse({"ok": True})
 
         acc.telegram_id = str(ctx.chat_id)
@@ -197,7 +199,7 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         acc.save(update_fields=["telegram_id", "username", "first_name", "last_name", "language_code"])
 
         cache.set(f"tg_bind:{ctx.chat_id}", acc.user_info_id, 15 * 60)
-        _send_contact_request(ctx.chat_id, "Share your phone number to link your account.")
+        _send_contact_request(ctx.chat_id, _("Share your phone number to link your account."))
         return JsonResponse({"ok": True})
 
     # contact
@@ -210,7 +212,7 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
                 info_id = acc.user_info_id
 
         if not info_id:
-            _send_text(ctx.chat_id, "No active link session. Open the link from the site again.")
+            _send_text(ctx.chat_id, _("No active link session. Open the link from the site again."))
             return JsonResponse({"ok": True})
 
         phone = _norm_phone(ctx.phone)
@@ -226,8 +228,8 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
             acc.activation_token = None
             acc.save(update_fields=["telegram_verified", "activation_token"])
 
-        _send_text(ctx.chat_id, "Phone linked. You can return to the site.")
+        _send_text(ctx.chat_id, _("Phone linked. You can return to the site."))
         return JsonResponse({"ok": True})
 
-    _send_text(ctx.chat_id, "Tap the button and share your phone to finish linking.")
+    _send_text(ctx.chat_id, _("Tap the button and share your phone to finish linking."))
     return JsonResponse({"ok": True})

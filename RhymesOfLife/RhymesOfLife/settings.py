@@ -51,16 +51,28 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "base.middleware.user_language.SetUserLanguageMiddleware",
-    "base.middleware.EnforceOnboardingMiddleware",
+    "base.middleware.enforce_onboarding.EnforceOnboardingMiddleware",
+    "base.middleware.banned_users.BannedUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+ONBOARDING_REQUIRE_CONSENTS = True
+ONBOARDING_REQUIRE_PHONE = True
+ONBOARDING_SKIP_FOR_STAFF = True
+ONBOARDING_REQUIRED_PROFILE_FIELDS = ("first_name", "last_name", "email", "birth_date")
+ONBOARDING_DEFAULT_EXEMPT_PATHS_EXTRA = [
+    "/admin/jsi18n/",
+    "/static/admin/",
+]
+
+
 ONBOARDING_EXEMPT_URLNAMES = {
+    "home",
+    "home_public",
     "login",
     "logout",
     "register",
-    "home",
     "verify_email",
     "request_verification",
     "verify_prompt",
@@ -70,7 +82,7 @@ ONBOARDING_EXEMPT_URLNAMES = {
     "phone_status_api",
     "phone_change",
     "consents",
-    "profile_onboarding",
+    "profile_edit",
     "set_language",
     "admin:index",
 }

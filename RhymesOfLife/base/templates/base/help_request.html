@@ -13,8 +13,7 @@
             {% trans "If you need support or assistance, you can request help from our partner fund. Describe below what you need and leave contact details so we can follow up." %}
           </p>
 
-          <a href="{{ fund_url }}" target="_blank" rel="noopener noreferrer"
-             class="btn btn-outline-primary mb-4">
+          <a href="{{ fund_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary mb-4">
             {% trans "Go to the fund website" %}
           </a>
 
@@ -28,14 +27,31 @@
             {% csrf_token %}
 
             <div class="mb-3">
-              <label for="hr-name" class="form-label">{% trans "Your name (optional)" %}</label>
-              <input id="hr-name"
-                     class="form-control{% if errors.name %} is-invalid{% endif %}"
-                     name="name" type="text" value="{{ values.name }}">
-              {% if errors.name %}
-                <div class="invalid-feedback d-block">{{ errors.name }}</div>
-              {% endif %}
+              <label class="form-label">{% trans "Username" %}</label>
+              <input class="form-control" type="text" value="{{ values.username }}" readonly>
+              <div class="form-text">{% trans "Your account username will be attached to the request." %}</div>
             </div>
+
+            {% if has_tg %}
+              <div class="mb-3">
+                <label class="form-label">{% trans "Telegram" %}</label>
+                <input class="form-control" type="text" value="{{ values.telegram }}" readonly>
+                <div class="form-text">{% trans "Telegram is connected to your account." %}</div>
+              </div>
+            {% else %}
+              <div class="mb-3">
+                <label for="hr-telegram" class="form-label">{% trans "Telegram (optional)" %}</label>
+                <input id="hr-telegram"
+                       class="form-control{% if errors.telegram %} is-invalid{% endif %}"
+                       name="telegram" type="text" placeholder="@username"
+                       value="{{ values.telegram }}">
+                {% if errors.telegram %}
+                  <div class="invalid-feedback d-block">{{ errors.telegram }}</div>
+                {% else %}
+                  <div class="form-text">{% trans "Provide your Telegram handle so we can contact you faster." %}</div>
+                {% endif %}
+              </div>
+            {% endif %}
 
             <div class="mb-3">
               <label for="hr-email" class="form-label">{% trans "Email (optional)" %}</label>

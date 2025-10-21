@@ -21,48 +21,59 @@ class EnforceOnboardingMiddleware:
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         user = getattr(request, "user", None)
-        if not user or not user.is_authenticated or user.is_superuser:
+        if not user or not user.is_authenticated:
             return None
+        if user.is_superuser or (getattr(user, "is_staff", False) and getattr(settings, "ONBOARDING_SKIP_FOR_STAFF", True)):
+            return None
+
         path = request.path
         if self._is_path_exempt(path):
             return None
+
         try:
             match = resolve(path)
             name = match.url_name or ""
         except Resolver404:
             name = ""
+
         if self._is_name_exempt(name):
             return None
+
         nxt = next_onboarding_url(request)
         if not nxt:
             return None
-        if request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest":
-            seclog.info("Blocked not-onboarded AJAX: user_id=%s path=%s next=%s", user.id, path, nxt)
+
+        if self._wants_json(request):
+            seclog.info("Blocked not-onboarded JSON: user_id=%s path=%s next=%s", user.id, path, nxt)
             return JsonResponse({"detail": _("Complete onboarding."), "next": nxt}, status=412)
+
         seclog.info("Blocked not-onboarded access: user_id=%s path=%s next=%s", user.id, path, nxt)
         return redirect(nxt)
 
     def _is_path_exempt(self, path: str) -> bool:
-        defaults = self._default_exempt_paths()
-        if any(path.startswith(p) for p in defaults):
-            return True
-        if any(path.startswith(p) for p in self.exempt_paths):
-            return True
+        for p in self._default_exempt_paths():
+            if path.startswith(p):
+                return True
+        for p in self.exempt_paths:
+            if path.startswith(p):
+                return True
         return False
 
     def _is_name_exempt(self, name: str) -> bool:
-        defaults = self._default_exempt_names()
-        return name in defaults or name in self.exempt_names
+        return name in self._default_exempt_names() or name in self.exempt_names
 
     @staticmethod
     def _default_exempt_paths():
         static_url = getattr(settings, "STATIC_URL", "/static/")
         media_url = getattr(settings, "MEDIA_URL", "/media/")
-        return [static_url, media_url, "/favicon.ico", "/robots.txt", "/jsi18n/"]
+        extra = getattr(settings, "ONBOARDING_DEFAULT_EXEMPT_PATHS_EXTRA", [])
+        return [static_url, media_url, "/favicon.ico", "/robots.txt", "/jsi18n/", "/admin/jsi18n/"] + list(extra)
 
     @staticmethod
     def _default_exempt_names():
         return {
+            "home",
+            "home_public",
             "login",
             "logout",
             "register",
@@ -76,8 +87,21 @@ class EnforceOnboardingMiddleware:
             "phone_change",
             "consents",
             "profile_edit",
+            "my_profile",
+            "user_profile",
             "set_language",
             "javascript-catalog",
             "admin:jsi18n",
             "admin:index",
         }
+
+    @staticmethod
+    def _wants_json(request) -> bool:
+        if request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest":
+            return True
+        accept = request.headers.get("Accept", "")
+        if "application/json" in accept or "text/json" in accept:
+            return True
+        if request.path.startswith("/api/"):
+            return True
+        return False

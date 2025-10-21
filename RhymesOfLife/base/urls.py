@@ -53,7 +53,7 @@ from base.views.feed_views import (
     feed, create_post, edit_post, hide_post, unhide_post,
     toggle_like, add_comment, delete_comment,
     approve_post, reject_post, comments_more,
-    report_post, moderation_mode_set, user_mode_set,
+    report_post,
 )
 
 from .views.language_views import (
@@ -82,6 +82,14 @@ from .views.wellness_views import (
 from .views.doctors_wellness_views import (
     patient_wellness_view,
 )
+
+from .views.users_views import (
+    set_user_censorship, toggle_user_ban,
+)
+
+from .views.account_restrictions import (
+    banned_view
+    )
 
 urlpatterns = [
     path("ma/", feed, name="home"),
@@ -142,14 +150,14 @@ urlpatterns = [
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
     path("posts/<int:post_id>/report/", report_post, name="post_report"),
-    path("moderation/mode/set/", moderation_mode_set, name="moderation_mode_set"),
-    path("moderation/user-mode/set/", user_mode_set, name="user_mode_set"),
+
+    path("users/<int:user_id>/censorship/", set_user_censorship, name="set_user_censorship"),
 
     path("staff/notify/", admin_notify_page, name="admin_notify"),
     path("staff/notify/api/", admin_notify_api, name="admin_notify_api"),
     path("staff/notify/user-suggest/", admin_user_suggest, name="admin_user_suggest"),
 
-    path('help/request/', help_request_view, name='help_request'),
+    path("help/request/", help_request_view, name="help_request"),
     path("staff/help-requests/", staff_help_requests_page, name="staff_help_requests"),
     path("staff/help-requests/data/", staff_help_requests_data, name="staff_help_requests_data"),
     path("staff/help-requests/api/", staff_help_requests_api, name="staff_help_requests_api"),
@@ -159,6 +167,8 @@ urlpatterns = [
     path("api/wellness/settings/", wellness_settings_api, name="wellness_settings_api"),
     path("patients/<int:user_id>/wellness/", patient_wellness_view, name="patient_wellness"),
 
+    path("banned/", banned_view, name="banned"),
+    path("staff/users/<int:user_id>/ban/", toggle_user_ban, name="toggle_user_ban"),
 
     path("set-language/", set_language, name="set_language"),
 ]

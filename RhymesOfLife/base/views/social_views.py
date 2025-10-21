@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.cache import never_cache
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_http_methods, require_POST
 
 from django.contrib.auth import get_user_model
 
@@ -17,6 +19,8 @@ log = get_app_logger(__name__)
 
 @login_required
 @require_POST
+@csrf_protect
+@never_cache
 def follow_view(request, user_id: int):
     me: AdditionalUserInfo = request.user.additional_info
     target: AdditionalUserInfo = get_object_or_404(AdditionalUserInfo, user_id=user_id)
@@ -53,6 +57,8 @@ def follow_view(request, user_id: int):
 
 @login_required
 @require_POST
+@csrf_protect
+@never_cache
 def unfollow_view(request, user_id: int):
     me: AdditionalUserInfo = request.user.additional_info
     target: AdditionalUserInfo = get_object_or_404(AdditionalUserInfo, user_id=user_id)
@@ -87,6 +93,7 @@ def unfollow_view(request, user_id: int):
 
 @login_required
 @require_http_methods(["GET"])
+@never_cache
 def notifications_view(request):
     user_info = request.user.additional_info
     qs = user_info.notifications.select_related("sender__user").order_by("-created_at")

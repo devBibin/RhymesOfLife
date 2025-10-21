@@ -1,21 +1,22 @@
 from __future__ import annotations
 
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import Q
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 from django.utils.timezone import localtime
+from django.views.decorators.csrf import csrf_protect
 
 from base.models import AdditionalUserInfo
 from base.models import Post, PostImage, PostLike, PostComment, PostReport
 from base.utils.files import validate_mixed_upload
-from base.utils.moderation import get_moderation_config, set_moderation_config
+from base.utils.moderation import get_moderation_config
+from base.utils.decorators import permission_or_staff_required
 
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
@@ -23,6 +24,7 @@ MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024
 MAX_IMAGE_SIDE_PX = 10_000
 MAX_IMAGES_PER_POST = 10
 FIRST_COMMENTS_LIMIT = 3
+AUTO_CENSOR_REPORTS = 15
 
 
 def _validate_images(files):
@@ -43,28 +45,28 @@ def _validate_images(files):
     return errors
 
 
-def _effective_mode(request):
-    user_mode = request.session.get("feed_user_mode")
-    if user_mode in ("censored", "uncensored"):
-        return user_mode
-    mode, _ = get_moderation_config()
-    return mode
-
-
 def _report_threshold():
     _, threshold = get_moderation_config()
     return threshold
 
 
+def _me(request):
+    return AdditionalUserInfo.objects.filter(user=request.user).first() if request.user.is_authenticated else None
+
+
+def _can_view_pending(user):
+    return user.is_staff or user.has_perm("base.view_pending_posts")
+
+
+def _can_moderate(user):
+    return user.is_staff or user.has_perm("base.moderate_posts")
+
+
 def _feed_queryset(request):
-    mode = _effective_mode(request)
-    default_f = "mine" if request.user.is_authenticated else "latest"
-    f = request.GET.get("filter", default_f)
+    f = request.GET.get("filter", "mine" if request.user.is_authenticated else "latest")
 
     base = Post.objects.filter(is_deleted=False)
-    public_base = base.filter(is_hidden=False, is_hidden_by_reports=False)
-    if mode == "censored":
-        public_base = public_base.filter(is_approved=True)
+    public_base = base.filter(is_hidden=False, is_hidden_by_reports=False, is_approved=True)
 
     if f == "mine" and request.user.is_authenticated:
         me = _me(request)
@@ -73,17 +75,13 @@ def _feed_queryset(request):
         me = _me(request)
         follow_ids = me.following.filter(is_active=True).values_list("following_id", flat=True)
         qs = public_base.filter(author__in=follow_ids).order_by("-created_at")
-    elif f == "pending" and request.user.is_staff:
+    elif f == "pending" and _can_view_pending(request.user):
         qs = base.filter(is_approved=False, is_hidden_by_reports=False).order_by("-created_at")
     else:
         f = "latest"
         qs = public_base.order_by("-created_at")
 
     return f, qs
-
-
-def _me(request):
-    return AdditionalUserInfo.objects.filter(user=request.user).first() if request.user.is_authenticated else None
 
 
 @login_required
@@ -106,15 +104,15 @@ def feed(request):
         )
         following_user_ids = set(me.following.filter(is_active=True).values_list("following__user_id", flat=True))
 
-    mode = _effective_mode(request)
     threshold = _report_threshold()
 
-    my_base = Post.objects.filter(
-        author=me, is_deleted=False, is_hidden=False, is_hidden_by_reports=False
-    ) if me else Post.objects.none()
-    if mode == "censored":
-        my_base = my_base.filter(is_approved=True)
-    posts_total = my_base.count() if me else 0
+    if me:
+        my_base = Post.objects.filter(
+            author=me, is_deleted=False, is_hidden=False, is_hidden_by_reports=False
+        )
+        posts_total = my_base.filter(is_approved=True).count()
+    else:
+        posts_total = 0
 
     context = {
         "posts": page_obj,
@@ -125,7 +123,6 @@ def feed(request):
         "info": me,
         "profile_user": request.user,
         "posts_total": posts_total,
-        "moderation_mode": mode,
         "report_threshold": threshold,
     }
 
@@ -137,6 +134,8 @@ def feed(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
+@csrf_protect
 @transaction.atomic
 def create_post(request):
     if request.method != "POST":
@@ -152,14 +151,14 @@ def create_post(request):
     if errors:
         return render(request, "base/post_create.html", {"errors": errors, "text": text})
 
-    auto = request.user.is_staff
+    auto = _can_moderate(request.user) or not me.censorship_enabled
 
     post = Post.objects.create(
         author=me,
         text=text,
         is_approved=auto,
         approved_at=timezone.now() if auto else None,
-        approved_by=request.user if request.user.is_staff else None,
+        approved_by=request.user if auto else None,
     )
     for f in files:
         PostImage.objects.create(post=post, image=f)
@@ -168,6 +167,8 @@ def create_post(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
+@csrf_protect
 def edit_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = _me(request)
@@ -204,16 +205,7 @@ def edit_post(request, post_id: int):
 
 @login_required
 @require_POST
-def user_mode_set(request):
-    mode = (request.POST.get("mode") or "").strip()
-    if mode not in ("censored", "uncensored"):
-        return JsonResponse({"ok": False}, status=400)
-    request.session["feed_user_mode"] = mode
-    return JsonResponse({"ok": True, "mode": mode})
-
-
-@login_required
-@require_POST
+@csrf_protect
 def report_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = AdditionalUserInfo.objects.get(user=request.user)
@@ -232,6 +224,12 @@ def report_post(request, post_id: int):
         else:
             post.reports_count = cnt
             post.save(update_fields=["reports_count"])
+
+        if cnt >= AUTO_CENSOR_REPORTS and not post.author.censorship_enabled:
+            info = post.author
+            info.censorship_enabled = True
+            info.save(update_fields=["censorship_enabled"])
+
     return JsonResponse({"ok": True, "reports": post.reports_count, "hidden": post.is_hidden_by_reports})
 
 
@@ -259,6 +257,7 @@ def unhide_post(request, post_id: int):
 
 @login_required
 @require_POST
+@csrf_protect
 def toggle_like(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = AdditionalUserInfo.objects.get(user=request.user)
@@ -276,7 +275,7 @@ def toggle_like(request, post_id: int):
 def serialize_comment(c, request):
     info = c.author
     user = info.user
-    can_delete = (user == request.user) or request.user.is_staff
+    can_delete = (user == request.user) or _can_moderate(request.user)
     avatar_url = getattr(getattr(info, "avatar", None), "url", "/static/img/avatar-default.png")
     return {
         "id": c.id,
@@ -292,6 +291,8 @@ def serialize_comment(c, request):
 
 
 @login_required
+@require_POST
+@csrf_protect
 def add_comment(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = AdditionalUserInfo.objects.get(user=request.user)
@@ -308,10 +309,12 @@ def add_comment(request, post_id: int):
 
 
 @login_required
+@require_POST
+@csrf_protect
 def delete_comment(request, post_id: int, comment_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     c = get_object_or_404(PostComment, pk=comment_id, post=post)
-    if c.author.user != request.user and not request.user.is_staff:
+    if c.author.user != request.user and not _can_moderate(request.user):
         return HttpResponseForbidden()
     c.is_deleted = True
     c.save(update_fields=["is_deleted"])
@@ -322,25 +325,8 @@ def delete_comment(request, post_id: int, comment_id: int):
     return JsonResponse({"ok": True, "count": post.comments_count})
 
 
-@user_passes_test(lambda u: u.is_staff)
-def approve_post(request, post_id: int):
-    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
-    post.is_approved = True
-    post.approved_at = timezone.now()
-    post.approved_by = request.user
-    post.save(update_fields=["is_approved", "approved_at", "approved_by"])
-    return redirect("home")
-
-
-@user_passes_test(lambda u: u.is_staff)
-def reject_post(request, post_id: int):
-    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
-    post.is_deleted = True
-    post.save(update_fields=["is_deleted"])
-    return redirect("home")
-
-
 @login_required
+@require_http_methods(["GET"])
 def comments_more(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     try:
@@ -363,15 +349,23 @@ def comments_more(request, post_id: int):
     return JsonResponse({"items": items, "has_more": has_more, "next_offset": next_offset})
 
 
-@user_passes_test(lambda u: u.is_staff)
-@require_POST
-def moderation_mode_set(request):
-    mode = request.POST.get("mode") or "censored"
-    threshold = request.POST.get("threshold") or ""
-    try:
-        t = int(threshold) if threshold != "" else None
-    except ValueError:
-        t = None
-    set_moderation_config(mode, t or 5)
-    mode_now, thr_now = get_moderation_config()
-    return JsonResponse({"ok": True, "mode": mode_now, "threshold": thr_now})
+@login_required
+@permission_or_staff_required("base.moderate_posts")
+@require_http_methods(["POST"])
+def approve_post(request, post_id: int):
+    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+    post.is_approved = True
+    post.approved_at = timezone.now()
+    post.approved_by = request.user
+    post.save(update_fields=["is_approved", "approved_at", "approved_by"])
+    return redirect("home")
+
+
+@login_required
+@permission_or_staff_required("base.moderate_posts")
+@require_http_methods(["POST"])
+def reject_post(request, post_id: int):
+    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+    post.is_deleted = True
+    post.save(update_fields=["is_deleted"])
+    return redirect("home")
