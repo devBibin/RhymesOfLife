@@ -31,11 +31,20 @@
           {% else %}
             <div class="text-muted">{% trans "No bio yet." %}</div>
           {% endif %}
-
         </div>
 
         <div class="col-6"><strong>{% trans "Email" %}:</strong> {{ info.email|default:user_profile.email }}</div>
         <div class="col-6"><strong>{% trans "Date of birth" %}:</strong> {{ info.birth_date|date:"d.m.Y"|default:"—" }}</div>
+
+        <div class="col-6">
+          <strong>{% trans "Telegram" %}:</strong>
+          {% if tg_is_verified %}
+            <span class="badge bg-success">{% trans "Linked" %}</span>
+            {% if tg_username %}<span class="ms-2">@{{ tg_username }}</span>{% endif %}
+          {% else %}
+            <span class="badge bg-secondary">{% trans "Not linked" %}</span>
+          {% endif %}
+        </div>
 
         <div class="col-12">
           <strong class="d-block mb-1">{% trans "Syndromes" %}</strong>

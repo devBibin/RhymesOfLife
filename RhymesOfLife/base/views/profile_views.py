@@ -1,19 +1,22 @@
 from datetime import date, datetime
 from functools import lru_cache
 
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext as _
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+from django.views.decorators.http import require_http_methods
 
 from ..models import get_syndrome_choices
 from ..utils.files import validate_image_upload
+from ..models import TelegramAccount
+from ..views.telegram_views import _get_bot_username
 
 User = get_user_model()
 
@@ -50,6 +53,7 @@ def profile_view(request, username=None):
 
     user = request.user
     info = getattr(user, "additional_info", None)
+    acc = getattr(info, "telegram_account", None)
     return render(
         request,
         "base/profile.html",
@@ -58,6 +62,8 @@ def profile_view(request, username=None):
             "info": info,
             "editable": True,
             "syndrome_choices": syndrome_choices(),
+            "tg_is_verified": bool(getattr(acc, "telegram_verified", False)),
+            "tg_username": getattr(acc, "username", None),
         },
     )
 
@@ -66,7 +72,17 @@ def profile_view(request, username=None):
 @require_http_methods(["GET", "POST"])
 @csrf_protect
 @never_cache
-@sensitive_post_parameters("first_name", "last_name", "email", "day", "month", "year", "about_me", "syndromes", "confirmed_syndromes")
+@sensitive_post_parameters(
+    "first_name",
+    "last_name",
+    "email",
+    "day",
+    "month",
+    "year",
+    "about_me",
+    "syndromes",
+    "confirmed_syndromes",
+)
 def profile_edit_view(request):
     info = request.user.additional_info
 
@@ -74,6 +90,21 @@ def profile_edit_view(request):
     today = date.today()
     year_range = list(range(today.year - 100, today.year + 1))[::-1]
     day_range = range(1, 32)
+
+    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    bot_username = _get_bot_username()
+    telegram_bot_link = (
+        f"https://t.me/{bot_username}?start=activate_{acc.activation_token}"
+        if bot_username and acc.activation_token
+        else None
+    )
+    tg_ctx = {
+        "tg_is_verified": acc.telegram_verified,
+        "tg_username": acc.username,
+        "tg_link": telegram_bot_link,
+        "tg_not_configured": not bool(bot_username),
+        "tg_bot_username": bot_username,
+    }
 
     if request.method == "POST":
         try:
@@ -95,6 +126,7 @@ def profile_edit_view(request):
                         "year_range": year_range,
                         "day_range": day_range,
                         "error": _("Invalid date of birth."),
+                        **tg_ctx,
                     },
                     status=400,
                 )
@@ -119,6 +151,7 @@ def profile_edit_view(request):
                             "year_range": year_range,
                             "day_range": day_range,
                             "error": _("This email is already registered."),
+                            **tg_ctx,
                         },
                         status=400,
                     )
@@ -154,6 +187,7 @@ def profile_edit_view(request):
                             "year_range": year_range,
                             "day_range": day_range,
                             "error": _(err),
+                            **tg_ctx,
                         },
                         status=400,
                     )
@@ -174,6 +208,7 @@ def profile_edit_view(request):
                         "year_range": year_range,
                         "day_range": day_range,
                         "error": _("Please fill in first name, last name, email, and date of birth."),
+                        **tg_ctx,
                     },
                     status=400,
                 )
@@ -194,11 +229,13 @@ def profile_edit_view(request):
                         "year_range": year_range,
                         "day_range": day_range,
                         "error": "; ".join(msgs) or _("Validation failed."),
+                        **tg_ctx,
                     },
                     status=400,
                 )
 
             info.save()
+            messages.success(request, _("Profile has been updated."))
             return redirect("my_profile")
 
         except Exception:
@@ -212,6 +249,7 @@ def profile_edit_view(request):
                     "year_range": year_range,
                     "day_range": day_range,
                     "error": _("Error while saving."),
+                    **tg_ctx,
                 },
                 status=500,
             )
@@ -225,5 +263,6 @@ def profile_edit_view(request):
             "months_list": months_list,
             "year_range": year_range,
             "day_range": day_range,
+            **tg_ctx,
         },
     )

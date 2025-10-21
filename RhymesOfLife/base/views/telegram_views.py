@@ -6,17 +6,18 @@ from dataclasses import dataclass
 
 import requests
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.crypto import constant_time_compare
+from django.utils.translation import gettext as _
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.cache import never_cache
-from django.utils.translation import gettext as _
 
 from ..models import AdditionalUserInfo, TelegramAccount
 
@@ -72,6 +73,16 @@ def _get_bot_username() -> str | None:
     return None
 
 
+def _make_bot_link_for(info: AdditionalUserInfo) -> tuple[str | None, str | None]:
+    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    if not acc.activation_token:
+        acc.activation_token = uuid.uuid4()
+        acc.save(update_fields=["activation_token"])
+    bot_username = _get_bot_username()
+    link = f"https://t.me/{bot_username}?start=activate_{acc.activation_token}" if bot_username else None
+    return bot_username, link
+
+
 @dataclass
 class UpdateCtx:
     chat_id: int | None
@@ -121,8 +132,7 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
     user_info = request.user.additional_info
     acc, _ = TelegramAccount.objects.get_or_create(user_info=user_info)
 
-    bot_username = _get_bot_username()
-    telegram_bot_link = f"https://t.me/{bot_username}?start=activate_{acc.activation_token}" if bot_username else None
+    bot_username, telegram_bot_link = _make_bot_link_for(user_info)
     skip_url = reverse("phone_enter")
 
     if request.method == "POST":
@@ -158,6 +168,48 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
     )
 
 
+@login_required
+@require_http_methods(["POST"])
+@csrf_protect
+@never_cache
+def telegram_unlink_view(request: HttpRequest) -> HttpResponse:
+    info = request.user.additional_info
+    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc.telegram_id = None
+    acc.username = None
+    acc.first_name = None
+    acc.last_name = None
+    acc.language_code = None
+    acc.telegram_verified = False
+    acc.activation_token = uuid.uuid4()
+    acc.save(
+        update_fields=[
+            "telegram_id",
+            "username",
+            "first_name",
+            "last_name",
+            "language_code",
+            "telegram_verified",
+            "activation_token",
+        ]
+    )
+    messages.success(request, _("Telegram has been unlinked."))
+    return redirect("profile_edit")
+
+
+@login_required
+@require_http_methods(["POST"])
+@csrf_protect
+@never_cache
+def telegram_regenerate_link_view(request: HttpRequest) -> HttpResponse:
+    info = request.user.additional_info
+    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc.activation_token = uuid.uuid4()
+    acc.save(update_fields=["activation_token"])
+    messages.success(request, _("New activation link generated."))
+    return redirect("profile_edit")
+
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
@@ -173,7 +225,6 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
     if not ctx.chat_id:
         return JsonResponse({"ok": True})
 
-    # /start activate_<uuid>
     if ctx.start_payload and ctx.start_payload.startswith("activate_"):
         token_str = ctx.start_payload.replace("activate_", "").strip()
         try:
@@ -182,13 +233,9 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
             _send_text(ctx.chat_id, _("Invalid activation token."))
             return JsonResponse({"ok": True})
 
-        acc = TelegramAccount.objects.filter(activation_token=token_str).first()
+        acc = TelegramAccount.objects.filter(activation_token=token_str).select_related("user_info").first()
         if not acc:
             _send_text(ctx.chat_id, _("Activation token not found or already used."))
-            return JsonResponse({"ok": True})
-
-        if acc.telegram_verified and acc.telegram_id:
-            _send_text(ctx.chat_id, _("Account already linked."))
             return JsonResponse({"ok": True})
 
         acc.telegram_id = str(ctx.chat_id)
@@ -198,11 +245,17 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         acc.language_code = ctx.lang
         acc.save(update_fields=["telegram_id", "username", "first_name", "last_name", "language_code"])
 
+        if acc.user_info.phone_verified:
+            acc.telegram_verified = True
+            acc.activation_token = None
+            acc.save(update_fields=["telegram_verified", "activation_token"])
+            _send_text(ctx.chat_id, _("Telegram account linked successfully."))
+            return JsonResponse({"ok": True})
+
         cache.set(f"tg_bind:{ctx.chat_id}", acc.user_info_id, 15 * 60)
         _send_contact_request(ctx.chat_id, _("Share your phone number to link your account."))
         return JsonResponse({"ok": True})
 
-    # contact
     if ctx.phone:
         info_id = cache.get(f"tg_bind:{ctx.chat_id}")
         acc = None

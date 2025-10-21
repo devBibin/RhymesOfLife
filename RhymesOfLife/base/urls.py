@@ -3,6 +3,8 @@ from django.urls import path
 from .views.telegram_views import (
     connect_telegram_view,
     telegram_webhook,
+    telegram_unlink_view,
+    telegram_regenerate_link_view,
 )
 
 from .views.auth_views import (
@@ -133,6 +135,8 @@ urlpatterns = [
     path("unfollow/<int:user_id>/", unfollow_view, name="unfollow_user"),
 
     path("connect-telegram/", connect_telegram_view, name="connect_telegram"),
+    path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
+    path("telegram/regenerate/", telegram_regenerate_link_view, name="telegram_regenerate"),
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
 
     path("password/reset/", password_reset_request_view, name="password_reset_request"),
