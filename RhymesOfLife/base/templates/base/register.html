@@ -8,7 +8,27 @@
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
   <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
-    <h2 class="mb-4 text-center">{% trans "Sign up" %}</h2>
+    <h2 class="mb-3 text-center">{% trans "Sign up" %}</h2>
+
+    <div class="mb-4 p-3 rounded-3 text-white"
+         style="background: linear-gradient(135deg, #6f42c1 0%, #0d6efd 60%, #20c997 100%);">
+      <div class="d-flex align-items-start gap-3">
+        <div class="fs-3" aria-hidden="true">✨</div>
+        <div>
+          <h5 class="mb-2 fw-semibold">{% trans "What happens here" %}</h5>
+          <ul class="mb-0 ps-3">
+            <li class="mb-1">{% trans "Share moments and short posts with a friendly community." %}</li>
+            <li class="mb-1">{% trans "Follow people, react to posts, and keep meaningful connections." %}</li>
+            <li class="mb-1">{% trans "Ask for help or offer support when someone needs it." %}</li>
+            <li class="mb-1">{% trans "Track your wellness and celebrate small wins." %}</li>
+            <li class="mb-1">{% trans "Communicate with qualified physicians for guidance and support." %}</li>
+          </ul>
+          <div class="mt-3 small opacity-75">
+            {% trans "Medical guidance on this platform does not replace professional diagnosis or emergency care. Call your local emergency number in urgent situations." %}
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% if error %}
       <div class="alert alert-danger">{{ error }}</div>
@@ -18,35 +38,35 @@
         🎉 {% trans "Registration successful!" %} {% trans "You can" %} <a href="{% url 'login' %}">{% trans "log in" %}</a>.
       </div>
     {% else %}
-    <form method="post" novalidate>
-      {% csrf_token %}
+      <form method="post" novalidate>
+        {% csrf_token %}
 
-      <div class="mb-3">
-        <label for="username" class="form-label">{% trans "Username" %}</label>
-        <input type="text" id="username" name="username" class="form-control" required value="{{ values.username|default:'' }}">
-      </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">{% trans "Username" %}</label>
+          <input type="text" id="username" name="username" class="form-control" required value="{{ values.username|default:'' }}">
+        </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">{% trans "Email" %}</label>
-        <input type="email" id="email" name="email" class="form-control" required value="{{ values.email|default:'' }}">
-      </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">{% trans "Email" %}</label>
+          <input type="email" id="email" name="email" class="form-control" required value="{{ values.email|default:'' }}">
+        </div>
 
-      <div class="mb-3">
-        <label for="password1" class="form-label">{% trans "Password" %}</label>
-        <input type="password" id="password1" name="password1" class="form-control" required>
-      </div>
+        <div class="mb-3">
+          <label for="password1" class="form-label">{% trans "Password" %}</label>
+          <input type="password" id="password1" name="password1" class="form-control" required>
+        </div>
 
-      <div class="mb-3">
-        <label for="password2" class="form-label">{% trans "Confirm password" %}</label>
-        <input type="password" id="password2" name="password2" class="form-control" required>
-      </div>
+        <div class="mb-3">
+          <label for="password2" class="form-label">{% trans "Confirm password" %}</label>
+          <input type="password" id="password2" name="password2" class="form-control" required>
+        </div>
 
-      <button type="submit" class="btn btn-success w-100">{% trans "Sign up" %}</button>
-    </form>
+        <button type="submit" class="btn btn-success w-100">{% trans "Create account" %}</button>
+      </form>
 
-    <p class="mt-3 text-center">
-      {% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Log in" %}</a>
-    </p>
+      <p class="mt-3 text-center">
+        {% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Log in" %}</a>
+      </p>
     {% endif %}
   </div>
 </div>

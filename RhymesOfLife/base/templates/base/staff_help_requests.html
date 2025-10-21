@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+
+<div id="hr-root"
+     class="container-fluid py-4 hr-page"
+     data-url-data="{% url 'staff_help_requests_data' %}"
+     data-url-api="{% url 'staff_help_requests_api' %}">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h5 m-0">{% trans "Help requests" %}</h1>
+    <div class="text-muted small" id="hr-counter"></div>
+  </div>
+
+  <div class="card hr-card">
+    <div class="card-body">
+      <form id="hr-filter" class="row g-2 mb-3">
+        <div class="col-6 col-md-3">
+          <select class="form-select" name="status" id="hr-status">
+            <option value="open">{% trans "Open" %}</option>
+            <option value="processed">{% trans "Processed" %}</option>
+            <option value="all">{% trans "All" %}</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-7">
+          <input class="form-control" type="search" name="q" id="hr-q" placeholder="{% trans 'Search...' %}">
+        </div>
+        <div class="col-12 col-md-2">
+          <button class="btn btn-primary w-100" type="submit">{% trans "Apply" %}</button>
+        </div>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-hover hr-table">
+          <colgroup>
+            <col class="hr-col-id">
+            <col class="hr-col-created">
+            <col class="hr-col-username">
+            <col class="hr-col-telegram">
+            <col class="hr-col-email">
+            <col class="hr-col-status">
+            <col class="hr-col-actions">
+          </colgroup>
+          <thead class="hr-head">
+            <tr>
+              <th class="hr-th">#</th>
+              <th class="hr-th">{% trans "Created" %}</th>
+              <th class="hr-th">{% trans "Username" %}</th>
+              <th class="hr-th">Telegram</th>
+              <th class="hr-th d-none d-lg-table-cell">{% trans "Email" %}</th>
+              <th class="hr-th">{% trans "Status" %}</th>
+              <th class="hr-th"></th>
+            </tr>
+          </thead>
+          <tbody id="hr-list"></tbody>
+        </table>
+      </div>
+
+      <div id="hr-pager" class="mt-3"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="hr-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans "Help request" %} #<span id="hm-id"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <div class="small text-muted">{% trans "Created" %}</div>
+            <div id="hm-created" class="fw-semibold"></div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="small text-muted">{% trans "Status" %}</div>
+            <div id="hm-status"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "Username" %}</div>
+            <div id="hm-username" class="fw-semibold"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">Telegram</div>
+            <div id="hm-telegram"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "Email" %}</div>
+            <div id="hm-email"></div>
+          </div>
+          <div class="col-12">
+            <div class="small text-muted mb-1">Message</div>
+            <pre id="hm-message" class="mb-0" style="white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;max-height:50vh;"></pre>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <div>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+        </div>
+        <div>
+          <button type="button" id="hm-undo" class="btn btn-outline-secondary d-none">{% trans "Mark open" %}</button>
+          <button type="button" id="hm-process" class="btn btn-primary d-none">{% trans "Mark processed" %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/staff_help_requests.js' %}"></script>
+{% endblock %}

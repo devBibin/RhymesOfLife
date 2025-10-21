@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.decorators.cache import never_cache
 
 from ..models import PasswordResetCode
 from ..utils.password_reset import (
@@ -28,7 +30,12 @@ def _client_ip(request: HttpRequest) -> str:
 
 @require_http_methods(["GET", "POST"])
 @csrf_protect
+@never_cache
+@sensitive_post_parameters("identifier", "channel")
 def password_reset_request_view(request: HttpRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         identifier = (request.POST.get("identifier") or "").strip()
         channel = (request.POST.get("channel") or "email").strip()
@@ -84,7 +91,12 @@ def password_reset_request_view(request: HttpRequest) -> HttpResponse:
 
 @require_http_methods(["GET", "POST"])
 @csrf_protect
+@never_cache
+@sensitive_post_parameters("code")
 def password_reset_verify_view(request: HttpRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        return redirect("home")
+
     user_id = request.session.get("pwdreset_user")
     if request.method == "POST":
         code = (request.POST.get("code") or "").strip()
@@ -109,8 +121,13 @@ def password_reset_verify_view(request: HttpRequest) -> HttpResponse:
 
 @require_http_methods(["GET", "POST"])
 @csrf_protect
+@never_cache
+@sensitive_post_parameters("password1", "password2")
 def password_reset_new_view(request: HttpRequest) -> HttpResponse:
     from django.contrib.auth.hashers import make_password
+
+    if request.user.is_authenticated:
+        return redirect("home")
 
     user_id = request.session.get("pwdreset_user")
     verified = request.session.get("pwdreset_verified")

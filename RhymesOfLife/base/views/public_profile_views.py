@@ -2,9 +2,12 @@ from functools import lru_cache
 
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
-from wagtail.models import Page
+from django.views.decorators.http import require_http_methods
+
 from blog.models import BlogIndexPage, BlogPage
 from base.models import Post, PostLike
 from ..models import get_syndrome_choices
@@ -24,6 +27,7 @@ def _to_int(value, default=1):
         return default
 
 
+@require_http_methods(["GET"])
 def public_profile_view(request, username: str):
     user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
     info = getattr(user, "additional_info", None)
@@ -45,15 +49,22 @@ def public_profile_view(request, username: str):
             articles_qs = (
                 BlogPage.objects.live()
                 .descendant_of(root)
-                .filter(is_deleted=False, is_approved=True, author=info)
+                .filter(is_deleted=False, author=info, is_approved=True)
                 .order_by("-date", "-first_published_at")
             )
 
-    posts_qs = (
-        Post.objects.filter(author=info, is_deleted=False, is_hidden=False, is_approved=True)
+    base_posts = (
+        Post.objects
+        .filter(author=info, is_deleted=False, is_hidden=False, is_hidden_by_reports=False)
         .select_related("author__user")
         .order_by("-created_at")
     )
+
+    if request.user.is_authenticated and request.user == user:
+        posts_qs = base_posts
+    else:
+        posts_qs = base_posts.filter(is_approved=True)
+
     posts_total = posts_qs.count()
 
     articles = Paginator(articles_qs, 10).get_page(ap) if can_see_articles else None
@@ -61,7 +72,7 @@ def public_profile_view(request, username: str):
 
     liked_ids = []
     following_user_ids = []
-    if request.user.is_authenticated and hasattr(request.user, "additional_info"):
+    if request.user.is_authenticated and hasattr(request.user, "additional_info") and posts:
         me = request.user.additional_info
         liked_ids = list(
             PostLike.objects.filter(author=me, is_active=True, post__in=posts.object_list)
@@ -71,20 +82,22 @@ def public_profile_view(request, username: str):
             me.following.filter(is_active=True).values_list("following__user_id", flat=True)
         )
 
-    return render(
-        request,
-        "base/public_profile.html",
-        {
-            "profile_user": user,
-            "info": info,
-            "tab": tab,
-            "articles": articles,
-            "posts": posts,
-            "posts_total": posts_total,
-            "liked_ids": liked_ids,
-            "following_user_ids": following_user_ids,
-            "can_see_articles": can_see_articles,
-            "syndrome_choices": syndrome_choices(),
-            "title": _("Profile"),
-        },
-    )
+    ctx = {
+        "profile_user": user,
+        "info": info,
+        "tab": tab,
+        "articles": articles,
+        "posts": posts,
+        "posts_total": posts_total,
+        "liked_ids": liked_ids,
+        "following_user_ids": following_user_ids,
+        "can_see_articles": can_see_articles,
+        "syndrome_choices": syndrome_choices(),
+        "title": _("Profile"),
+    }
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        html = render_to_string("base/profile_content_fragment.html", ctx, request=request)
+        return JsonResponse({"html": html})
+
+    return render(request, "base/public_profile.html", ctx)

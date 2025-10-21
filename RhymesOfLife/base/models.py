@@ -6,7 +6,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
-from django.core.validators import MaxLengthValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MaxLengthValidator
+from django.db.models import Q, UniqueConstraint
 
 import uuid
 
@@ -65,12 +66,9 @@ class Config(models.Model):
 
 
 _DEFAULT_SYNDROME_CHOICES = [
-    ["s1", "Syndrome 1"],
-    ["s2", "Syndrome 2"],
-    ["s3", "Syndrome 3"],
-    ["s4", "Syndrome 4"],
-    ["s5", "Syndrome 5"],
-    ["s6", "Syndrome 6"],
+    ["ndct", _("Undifferentiated connective tissue dysplasia")],
+    ["ehlers_danlos", _("Ehlers–Danlos syndrome")],
+    ["marfan", _("Marfan syndrome")],
 ]
 
 
@@ -150,6 +148,14 @@ class AdditionalUserInfo(models.Model):
     privacy_accepted = models.BooleanField(default=False)
     data_processing_accepted = models.BooleanField(default=False)
     consents_accepted_at = models.DateTimeField(null=True, blank=True)
+    censorship_enabled = models.BooleanField(default=False, db_index=True, verbose_name=_("Pre-moderation enabled"))
+    is_banned = models.BooleanField(default=False, db_index=True, verbose_name=_("Banned"))
+    banned_reason = models.CharField(max_length=255, blank=True, default="", verbose_name=_("Ban reason"))
+    banned_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Banned at"))
+    banned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="banned_users",
+        verbose_name=_("Banned by")
+    )
 
     class Meta:
         indexes = [
@@ -158,6 +164,10 @@ class AdditionalUserInfo(models.Model):
             models.Index(fields=["ready_for_verification"]),
             models.Index(fields=["email_verified"]),
             models.Index(fields=["phone_verified"]),
+            models.Index(fields=["is_banned"]),
+        ]
+        permissions = [
+            ("view_patient_list", _("Can view patient list")),
         ]
 
     def clean(self):
@@ -173,6 +183,21 @@ class AdditionalUserInfo(models.Model):
     @property
     def followers_count(self):
         return self.followers.filter(is_active=True).count()
+
+    def ban(self, by=None, reason=""):
+        from django.utils import timezone
+        self.is_banned = True
+        self.banned_at = timezone.now()
+        self.banned_by = by
+        self.banned_reason = reason or ""
+        self.save(update_fields=["is_banned", "banned_at", "banned_by", "banned_reason"])
+
+    def unban(self):
+        self.is_banned = False
+        self.banned_at = None
+        self.banned_by = None
+        self.banned_reason = ""
+        self.save(update_fields=["is_banned", "banned_at", "banned_by", "banned_reason"])
 
 
 class TelegramAccount(models.Model):
@@ -229,6 +254,10 @@ class MedicalExam(SoftDeleteModel):
         indexes = [
             models.Index(fields=["user_info", "exam_date"]),
         ]
+        permissions = [
+            ("view_patient_exams", _("Can view patient exams")),
+            ("modify_patient_exams", _("Can create and edit patient exams")),
+        ]
 
     def __str__(self):
         return f"Exam on {self.exam_date:%Y-%m-%d}"
@@ -257,15 +286,34 @@ class MedicalDocument(SoftDeleteModel):
 
 
 class Notification(SoftDeleteModel):
+    class Source(models.TextChoices):
+        USER = "user", "User"
+        ADMIN = "admin", "Admin"
+        SYSTEM = "system", "System"
+
+    class Scope(models.TextChoices):
+        PERSONAL = "personal", "Personal"
+        BROADCAST = "broadcast", "Broadcast"
+
     NOTIFICATION_TYPES = (
         ("FOLLOW", "Follow"),
         ("EXAM_COMMENT", "ExamComment"),
         ("RECOMMENDATION", "Recommendation"),
+        ("ADMIN_MESSAGE", "AdminMessage"),
+        ("SYSTEM_MESSAGE", "SystemMessage"),
     )
+
     recipient = models.ForeignKey(AdditionalUserInfo, related_name="notifications", on_delete=models.CASCADE)
-    sender = models.ForeignKey(AdditionalUserInfo, related_name="sent_notifications", on_delete=models.CASCADE)
+    sender = models.ForeignKey(
+        AdditionalUserInfo, related_name="sent_notifications", on_delete=models.SET_NULL, null=True, blank=True
+    )
     notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES, db_index=True)
+    title = models.CharField(max_length=140, blank=True)
     message = models.TextField(blank=True)
+    url = models.URLField(max_length=500, blank=True)
+    payload = models.JSONField(default=dict, blank=True)
+    source = models.CharField(max_length=16, choices=Source.choices, default=Source.USER, db_index=True)
+    scope = models.CharField(max_length=16, choices=Scope.choices, default=Scope.PERSONAL, db_index=True)
     is_read = models.BooleanField(default=False, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
@@ -273,10 +321,17 @@ class Notification(SoftDeleteModel):
         indexes = [
             models.Index(fields=["recipient", "is_read", "-created_at"]),
             models.Index(fields=["sender", "-created_at"]),
+            models.Index(fields=["source", "scope", "-created_at"]),
+            models.Index(fields=["notification_type", "-created_at"]),
+        ]
+        permissions = [
+            ("send_notifications", _("Can send notifications")),
         ]
 
     def __str__(self):
-        return f"{self.notification_type} from {self.sender.user.username} -> {self.recipient.user.username}"
+        s = self.sender.user.username if self.sender_id else "system"
+        r = self.recipient.user.username
+        return f"{self.notification_type} [{self.source}/{self.scope}] {s} -> {r}"
 
 
 class Follower(models.Model):
@@ -307,6 +362,10 @@ class ExamComment(SoftDeleteModel):
         indexes = [
             models.Index(fields=["exam", "created_at"]),
         ]
+        permissions = [
+            ("comment_exams", _("Can comment exams")),
+            ("moderate_exam_comments", _("Can moderate exam comments")),
+        ]
 
     def __str__(self):
         return f"Comment by {self.author.user.username} on {self.exam.exam_date:%Y-%m-%d}"
@@ -323,6 +382,10 @@ class Recommendation(SoftDeleteModel):
         indexes = [
             models.Index(fields=["patient", "-created_at"]),
             models.Index(fields=["author", "-created_at"]),
+        ]
+        permissions = [
+            ("view_recommendations", _("Can view recommendations")),
+            ("write_recommendations", _("Can write recommendations")),
         ]
 
     def __str__(self):
@@ -356,6 +419,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
+    is_hidden_by_reports = models.BooleanField(_("Hidden by reports"), default=False, db_index=True)
+    reports_count = models.PositiveIntegerField(_("Reports count"), default=0)
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = _("Post")
@@ -367,6 +433,19 @@ class Post(models.Model):
     @property
     def visible_comments(self):
         return self.comments.filter(is_deleted=False)
+
+
+class PostReport(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="reports", db_index=True)
+    author = models.ForeignKey(AdditionalUserInfo, on_delete=models.CASCADE, related_name="post_reports", db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        unique_together = ("post", "author")
+        indexes = [models.Index(fields=["post", "author"])]
+
+    def __str__(self):
+        return f"🚩 {self.author.user.username} → {self.post_id}"
 
 
 class PostImage(models.Model):
@@ -409,3 +488,95 @@ class PostComment(models.Model):
 
     def __str__(self):
         return _("🗑 Deleted comment") if self.is_deleted else f"💬 {self.author.user.username}: {self.text[:30]}"
+
+
+class HelpRequest(models.Model):
+    name = models.CharField(_('name'), max_length=200, blank=True)
+    email = models.EmailField(_('email'), blank=True)
+    telegram = models.CharField(_('telegram'), max_length=100, blank=True)
+    message = models.TextField(_('message'))
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
+
+    is_processed = models.BooleanField(_('processed'), default=False, db_index=True)
+    processed_at = models.DateTimeField(_('processed at'), null=True, blank=True)
+    processed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='processed_help_requests'
+    )
+
+    class Meta:
+        verbose_name = _('help request')
+        verbose_name_plural = _('help requests')
+        ordering = ['-created_at']
+        permissions = [
+            ("view_help_requests", _("Can view help requests")),
+            ("process_help_requests", _("Can process help requests")),
+        ]
+
+    def __str__(self):
+        return f"{self.name or self.email or self.pk} - {self.created_at:%Y-%m-%d}"
+
+    def mark_processed(self, user):
+        self.is_processed = True
+        self.processed_at = timezone.now()
+        self.processed_by = user
+        self.save(update_fields=['is_processed', 'processed_at', 'processed_by'])
+
+    def mark_unprocessed(self):
+        self.is_processed = False
+        self.processed_at = None
+        self.processed_by = None
+        self.save(update_fields=['is_processed', 'processed_at', 'processed_by'])
+
+
+class WellnessSettings(models.Model):
+    class ReminderInterval(models.IntegerChoices):
+        NEVER = 0, _("Never")
+        DAILY = 1, _("Every day")
+        EVERY_3_DAYS = 3, _("Every 3 days")
+        EVERY_7_DAYS = 7, _("Every 7 days")
+
+    user_info = models.OneToOneField("AdditionalUserInfo", on_delete=models.CASCADE, related_name="wellness_settings")
+    tg_notifications_enabled = models.BooleanField(default=True, db_index=True)
+    email_notifications_enabled = models.BooleanField(default=True, db_index=True)
+    reminder_hour = models.PositiveSmallIntegerField(default=20, validators=[MinValueValidator(0), MaxValueValidator(23)])
+    reminder_minute = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(59)])
+    reminder_interval = models.PositiveSmallIntegerField(
+        choices=ReminderInterval.choices,
+        default=ReminderInterval.EVERY_3_DAYS,
+        db_index=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["tg_notifications_enabled"]),
+            models.Index(fields=["email_notifications_enabled"]),
+            models.Index(fields=["reminder_interval"]),
+        ]
+
+    def __str__(self):
+        return f"WellnessSettings for {self.user_info.user.username}"
+
+
+
+class WellnessEntry(SoftDeleteModel):
+    user_info = models.ForeignKey("AdditionalUserInfo", on_delete=models.CASCADE, related_name="wellness_entries", db_index=True)
+    date = models.DateField(db_index=True)
+    score = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    note = models.TextField(blank=True, validators=[MaxLengthValidator(1000)])
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-date", "-created_at"]
+        indexes = [
+            models.Index(fields=["user_info", "date"]),
+            models.Index(fields=["user_info", "-created_at"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["user_info", "date"],
+                condition=Q(is_deleted=False),
+                name="uniq_wellness_user_date_alive",
+            )
+        ]

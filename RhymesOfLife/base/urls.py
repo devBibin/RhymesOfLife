@@ -3,6 +3,8 @@ from django.urls import path
 from .views.telegram_views import (
     connect_telegram_view,
     telegram_webhook,
+    telegram_unlink_view,
+    telegram_regenerate_link_view,
 )
 
 from .views.auth_views import (
@@ -53,6 +55,7 @@ from base.views.feed_views import (
     feed, create_post, edit_post, hide_post, unhide_post,
     toggle_like, add_comment, delete_comment,
     approve_post, reject_post, comments_more,
+    report_post,
 )
 
 from .views.language_views import (
@@ -63,6 +66,32 @@ from .views.public_profile_views import (
     public_profile_view
 )
 
+from .views.admin_notifications import (
+    admin_notify_page, admin_notify_api,
+    admin_user_suggest,
+)
+
+from .views.help_request_views import (
+    help_request_view, staff_help_requests_page,
+    staff_help_requests_api, staff_help_requests_data,
+)
+
+from .views.wellness_views import (
+    my_wellness_view,
+    wellness_entries_api,
+    wellness_settings_api,
+)
+from .views.doctors_wellness_views import (
+    patient_wellness_view,
+)
+
+from .views.users_views import (
+    set_user_censorship, toggle_user_ban,
+)
+
+from .views.account_restrictions import (
+    banned_view
+    )
 
 urlpatterns = [
     path("ma/", feed, name="home"),
@@ -70,7 +99,7 @@ urlpatterns = [
     path("ndst/", info_ndst, name="info_ndst"),
     path("sed/", info_sed, name="info_sed"),
     path("marfan/", info_marfan, name="info_marfan"),
-    path("sld/", info_sed, name="info_sld"),
+    path("sld/", info_sld, name="info_sld"),
 
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),
@@ -107,6 +136,8 @@ urlpatterns = [
 
     path("connect-telegram/", connect_telegram_view, name="connect_telegram"),
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
+    path("telegram/regenerate/", telegram_regenerate_link_view, name="telegram_regenerate"),
+    path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
 
     path("password/reset/", password_reset_request_view, name="password_reset_request"),
     path("password/reset/verify/", password_reset_verify_view, name="password_reset_verify"),
@@ -122,6 +153,26 @@ urlpatterns = [
     path("posts/<int:post_id>/comments/<int:comment_id>/delete/", delete_comment, name="post_comment_delete"),
     path("posts/<int:post_id>/approve/", approve_post, name="post_approve"),
     path("posts/<int:post_id>/reject/", reject_post, name="post_reject"),
+    path("posts/<int:post_id>/report/", report_post, name="post_report"),
+
+    path("users/<int:user_id>/censorship/", set_user_censorship, name="set_user_censorship"),
+
+    path("staff/notify/", admin_notify_page, name="admin_notify"),
+    path("staff/notify/api/", admin_notify_api, name="admin_notify_api"),
+    path("staff/notify/user-suggest/", admin_user_suggest, name="admin_user_suggest"),
+
+    path("help/request/", help_request_view, name="help_request"),
+    path("staff/help-requests/", staff_help_requests_page, name="staff_help_requests"),
+    path("staff/help-requests/data/", staff_help_requests_data, name="staff_help_requests_data"),
+    path("staff/help-requests/api/", staff_help_requests_api, name="staff_help_requests_api"),
+
+    path("my-wellness/", my_wellness_view, name="my_wellness"),
+    path("api/wellness/entries/", wellness_entries_api, name="wellness_entries_api"),
+    path("api/wellness/settings/", wellness_settings_api, name="wellness_settings_api"),
+    path("patients/<int:user_id>/wellness/", patient_wellness_view, name="patient_wellness"),
+
+    path("banned/", banned_view, name="banned"),
+    path("staff/users/<int:user_id>/ban/", toggle_user_ban, name="toggle_user_ban"),
 
     path("set-language/", set_language, name="set_language"),
 ]

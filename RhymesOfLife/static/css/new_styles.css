@@ -262,4 +262,38 @@ form .form-label{font-weight:600}
   }
 }
 
+.hr-page{max-width:1600px;margin:0 auto}
+.hr-card{border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.hr-table{table-layout:fixed;width:100%}
+.hr-table th{overflow:hidden}
+.hr-table td{overflow:visible;vertical-align:middle}
+.hr-head{background:linear-gradient(180deg,#fafbff,#f5f7fb);position:sticky;top:0;z-index:1}
+.hr-th{font-weight:600}
+.hr-wrap{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.hr-nowrap{white-space:nowrap}
+.hr-truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.hr-col-id{width:56px}
+.hr-col-created{width:150px}
+.hr-col-username{width:180px}
+.hr-col-telegram{width:180px}
+.hr-col-email{width:260px}
+.hr-col-status{width:120px}
+.hr-col-actions{width:200px}
+.hr-actions{overflow:visible}
+.hr-msg{white-space:pre-line;overflow-wrap:anywhere;word-break:break-word;word-break:break-all;hyphens:auto;max-width:100%}
+.table-responsive{overflow-x:visible}
+@media (max-width:1200px){
+  .hr-col-email{display:none}
+  .hr-col-username{width:160px}
+  .hr-col-telegram{width:160px}
+  .hr-col-actions{width:180px}
+}
+@media (max-width:768px){
+  .hr-page{max-width:100%}
+  .hr-col-created{width:130px}
+  .hr-col-actions{width:160px}
+  .hr-table .btn{padding:.25rem .5rem;font-size:.8125rem}
+  .hr-head{position:static}
+  .hr-nowrap{white-space:normal}
+}
 

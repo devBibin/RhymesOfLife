@@ -1,5 +1,6 @@
 {% load static i18n %}
 {% load form_tags %}
+{% load roles %}
 
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
@@ -26,7 +27,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
       <div class="container">
         <a class="navbar-brand fw-bold"
-          href="{% if request.user.is_authenticated %}{% url 'home' %}{% else %}{% url 'home_public' %}{% endif %}">
+           href="{% if request.user.is_authenticated %}{% if request.user.additional_info.is_banned %}{% url 'banned' %}{% else %}{% url 'home' %}{% endif %}{% else %}{% url 'home_public' %}{% endif %}">
           {% trans "Rhymes of Life" %}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -36,102 +37,165 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav align-items-center gap-2">
-            
+
             {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'my_profile' %}">
-                  <i class="bi bi-person-circle"></i> {% trans "My profile" %}
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'my_documents' %}">
-                  <i class="bi bi-file-earmark-medical"></i> {% trans "My examinations" %}
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'recommendations' %}">
-                  <i class="bi bi-lightbulb"></i> {% trans "Doctor's comments" %}
-                </a>
-              </li>
-              <li class="nav-item">
-                {% blog_index_url as blog_url %}
-                <a class="nav-link" href="{{ blog_url }}">
-                  <i class="bi bi-journal-text"></i> {% trans "Articles" %}
-                </a>
-              </li>
+              {% if request.user.additional_info.is_banned %}
 
-              <!-- Notifications dropdown -->
-              <li class="nav-item dropdown">
-                <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-bell fs-5"></i>
-                  {% if unread_notifications_count %}
-                    <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1">
-                      {{ unread_notifications_count }}
-                    </span>
-                  {% endif %}
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notifDropdown" style="min-width: 300px;">
-                  <li class="dropdown-header">
-                    {% trans "Notifications" %}
-                    {% if unread_notifications_count %}
-                      <span class="badge bg-danger ms-1">{{ unread_notifications_count }}</span>
-                    {% endif %}
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-
-                  {% if latest_notifications %}
-                    {% for n in latest_notifications %}
-                      <li>
-                        <a class="dropdown-item d-flex align-items-start {% if not n.is_read %}bg-light{% endif %}" href="{% url 'notifications' %}#n-{{ n.id }}">
-                          <div class="me-2">
-                            <i class="bi bi-{{ n.notification_type|lower }} fs-5 text-primary"></i>
-                          </div>
-                          <div class="flex-grow-1">
-                            <div class="small text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</div>
-                            {% if n.notification_type == 'FOLLOW' %}
-                              {% blocktrans with username=n.sender.user.username %}
-                                <strong>{{ username }}</strong> followed you.
-                              {% endblocktrans %}
-                            {% else %}
-                              {{ n.message }}
-                            {% endif %}
-                          </div>
-                        </a>
-                      </li>
-                    {% endfor %}
-                    <li><hr class="dropdown-divider"></li>
-                  {% else %}
-                    <li>
-                      <span class="dropdown-item text-muted">{% trans "No new notifications" %}</span>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                  {% endif %}
-
-                  <li>
-                    <a class="dropdown-item text-center small text-primary" href="{% url 'notifications' %}">
-                      {% trans "Show all notifications" %}
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              {% if request.user.is_staff %}
                 <li class="nav-item">
-                  <a class="nav-link text-warning" href="{% url 'patients_list' %}">
-                    <i class="bi bi-people-fill"></i> {% trans "Patients" %}
+                  <a class="nav-link text-danger" href="{% url 'banned' %}">
+                    <i class="bi bi-slash-circle"></i> {% trans "Account banned" %}
                   </a>
                 </li>
-              {% endif %}
 
-              <li class="nav-item">
-                <form method="post" action="{% url 'logout' %}"> {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right me-1"></i> {% trans "Log out" %}
-                  </button>
-                </form>
-              </li>
+                <li class="nav-item">
+                  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                      <i class="bi bi-box-arrow-right me-1"></i> {% trans "Log out" %}
+                    </button>
+                  </form>
+                </li>
+
+              {% else %}
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'my_profile' %}">
+                    <i class="bi bi-person-circle"></i> {% trans "My profile" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'my_documents' %}">
+                    <i class="bi bi-file-earmark-medical"></i> {% trans "My examinations" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'recommendations' %}">
+                    <i class="bi bi-lightbulb"></i> {% trans "Doctor's comments" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  {% blog_index_url as blog_url %}
+                  <a class="nav-link" href="{{ blog_url }}">
+                    <i class="bi bi-journal-text"></i> {% trans "Articles" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'help_request' %}">
+                    <i class="bi bi-life-preserver"></i> {% trans "Help" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'my_wellness' %}">
+                    <i class="bi bi-activity"></i> {% trans "Wellness" %}
+                  </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
+                     data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell fs-5"></i>
+                    {% if unread_notifications_count %}
+                      <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle p-1">
+                        {{ unread_notifications_count }}
+                      </span>
+                    {% endif %}
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notifDropdown" style="min-width: 300px;">
+                    <li class="dropdown-header">
+                      {% trans "Notifications" %}
+                      {% if unread_notifications_count %}
+                        <span class="badge bg-danger ms-1">{{ unread_notifications_count }}</span>
+                      {% endif %}
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+
+                    {% if latest_notifications %}
+                      {% for n in latest_notifications %}
+                        <li>
+                          <a class="dropdown-item d-flex align-items-start {% if not n.is_read %}bg-light{% endif %}" href="{% url 'notifications' %}#n-{{ n.id }}">
+                            <div class="me-2">
+                              {% with icon="bell" %}
+                                {% if n.notification_type == 'FOLLOW' %}{% with icon="person-plus" %}{% endwith %}{% endif %}
+                                {% if n.notification_type == 'EXAM_COMMENT' %}{% with icon="chat-dots" %}{% endwith %}{% endif %}
+                                {% if n.notification_type == 'RECOMMENDATION' %}{% with icon="lightbulb" %}{% endwith %}{% endif %}
+                                {% if n.notification_type == 'ADMIN_MESSAGE' %}{% with icon="megaphone" %}{% endwith %}{% endif %}
+                                {% if n.notification_type == 'SYSTEM_MESSAGE' %}{% with icon="gear" %}{% endwith %}{% endif %}
+                                <i class="bi bi-{{ icon }} fs-5 text-primary"></i>
+                              {% endwith %}
+                            </div>
+                            <div class="flex-grow-1">
+                              <div class="small text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</div>
+                              {% if n.title %}
+                                <div class="fw-semibold text-break">{{ n.title }}</div>
+                              {% endif %}
+                              <div class="text-break">
+                                {% if n.notification_type == 'FOLLOW' %}
+                                  {% blocktrans with username=n.sender.user.username %}
+                                    <strong>{{ username }}</strong> followed you.
+                                  {% endblocktrans %}
+                                {% else %}
+                                  {{ n.message }}
+                                  {% if n.url %}
+                                    <a class="ms-1" href="{{ n.url }}">{% trans "Details" %}</a>
+                                  {% endif %}
+                                {% endif %}
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      {% endfor %}
+                      <li><hr class="dropdown-divider"></li>
+                    {% else %}
+                      <li><span class="dropdown-item text-muted">{% trans "No new notifications" %}</span></li>
+                      <li><hr class="dropdown-divider"></li>
+                    {% endif %}
+
+                    <li>
+                      <a class="dropdown-item text-center small text-primary" href="{% url 'notifications' %}">
+                        {% trans "Show all notifications" %}
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+
+                {% if request.user|hasanyperm:'base.view_patient_list,base.can_notify_users,base.view_help_requests' %}
+                  {% if request.user|hasperm:'base.view_patient_list' %}
+                  <li class="nav-item">
+                    <a class="nav-link text-warning" href="{% url 'patients_list' %}">
+                      <i class="bi bi-people-fill"></i> {% trans "Patients" %}
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if request.user|hasperm:'base.can_notify_users' %}
+                  <li class="nav-item">
+                    <a class="nav-link text-warning" href="{% url 'admin_notify' %}">
+                      <i class="bi bi-megaphone-fill"></i> {% trans "Notify users" %}
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if request.user|hasperm:'base.view_help_requests' %}
+                  <li class="nav-item">
+                    <a class="nav-link text-warning" href="{% url 'staff_help_requests' %}">
+                      <i class="bi bi-life-preserver"></i> {% trans "Help requests" %}
+                    </a>
+                  </li>
+                  {% endif %}
+                {% endif %}
+
+                <li class="nav-item">
+                  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                      <i class="bi bi-box-arrow-right me-1"></i> {% trans "Log out" %}
+                    </button>
+                  </form>
+                </li>
+
+              {% endif %}
 
             {% else %}
 

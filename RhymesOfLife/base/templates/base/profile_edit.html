@@ -107,6 +107,36 @@
           </div>
         </div>
 
+        <div class="col-12">
+          <label class="form-label">{% trans "Telegram" %}</label>
+          <div class="border rounded p-3 d-flex flex-wrap align-items-center gap-2">
+            {% if tg_is_verified %}
+              <span class="badge bg-success">{% trans "Linked" %}</span>
+              {% if tg_username %}<span class="text-muted">@{{ tg_username }}</span>{% endif %}
+              <form action="{% url 'telegram_unlink' %}" method="post" class="ms-auto">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Unlink Telegram" %}</button>
+              </form>
+            {% else %}
+              {% if tg_not_configured %}
+                <span class="text-muted">{% trans "Telegram bot is not configured." %}</span>
+              {% else %}
+                {% if tg_link %}
+                  <a href="{{ tg_link }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                    {% trans "Link Telegram" %}
+                  </a>
+                {% else %}
+                  <span class="text-muted">{% trans "Activation link is not available." %}</span>
+                {% endif %}
+                <form action="{% url 'telegram_regenerate' %}" method="post" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-secondary btn-sm">{% trans "Regenerate link" %}</button>
+                </form>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
         {% if error %}
           <div class="col-12">
             <div class="alert alert-danger mt-2">{{ error }}</div>
@@ -131,6 +161,27 @@ document.addEventListener("DOMContentLoaded",function(){
     var sync=function(){var on=!!(m&&m.checked);c.disabled=!on;if(!on)c.checked=false;};
     if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
   });
+
+  var avatarImg=document.getElementById("avatar-img");
+  var menu=document.getElementById("avatar-menu");
+  var changeBtn=document.getElementById("change-avatar-btn");
+  var delBtn=document.getElementById("delete-avatar-btn");
+  var input=document.getElementById("avatar-input");
+  var delInput=document.getElementById("delete-avatar");
+
+  if(avatarImg && menu){
+    avatarImg.addEventListener("click",function(){menu.classList.toggle("show");});
+    document.addEventListener("click",function(e){if(!menu.contains(e.target) && e.target!==avatarImg){menu.classList.remove("show");}});
+  }
+  if(changeBtn && input){
+    changeBtn.addEventListener("click",function(){delInput.value="";input.click();});
+  }
+  if(delBtn){
+    delBtn.addEventListener("click",function(){delInput.value="1";document.getElementById("profile-form").submit();});
+  }
+  if(input){
+    input.addEventListener("change",function(){if(input.files&&input.files[0]){delInput.value="";document.getElementById("profile-form").submit();}});
+  }
 });
 </script>
 {% endblock %}

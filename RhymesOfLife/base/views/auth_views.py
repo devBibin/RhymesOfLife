@@ -1,3 +1,6 @@
+from typing import Optional
+import random
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -6,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.encoding import force_str
@@ -14,9 +17,11 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _, activate
 from django.views.decorators.http import require_http_methods, require_GET
 from django.contrib.auth.decorators import login_required
-import random
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 
-from ..models import AdditionalUserInfo
+from ..models import AdditionalUserInfo, PasswordResetCode
 from ..utils.logging import get_app_logger, get_security_logger
 from ..utils.phone_calls import (
     initiate_zvonok_verification,
@@ -63,7 +68,13 @@ def _create_user_with_profile(username: str, email: str, raw_password: str) -> U
 
 
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
+@sensitive_post_parameters("username", "email", "password1", "password2")
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+
     context = {"values": {}}
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
@@ -84,7 +95,13 @@ def register_view(request):
 
 
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
+@sensitive_post_parameters("username", "password")
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -103,6 +120,7 @@ def login_view(request):
 
 
 @require_http_methods(["POST"])
+@never_cache
 def logout_view(request):
     uid = getattr(request.user, "id", None)
     logout(request)
@@ -111,12 +129,15 @@ def logout_view(request):
 
 
 @require_http_methods(["GET"])
+@never_cache
 def verify_prompt_view(request):
     return render(request, "base/verify_prompt.html")
 
 
 @login_required
 @require_http_methods(["POST"])
+@csrf_protect
+@never_cache
 def request_verification_view(request):
     info = getattr(request.user, "additional_info", None)
     if info is None:
@@ -128,6 +149,7 @@ def request_verification_view(request):
 
 
 @require_http_methods(["GET"])
+@never_cache
 def verify_email_view(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -153,6 +175,9 @@ def verify_email_view(request, uidb64, token):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
+@sensitive_post_parameters("phone")
 def phone_enter_view(request):
     info = request.user.additional_info
     if info.phone_verified:
@@ -181,6 +206,7 @@ def phone_enter_view(request):
 
 @login_required
 @require_http_methods(["GET"])
+@never_cache
 def phone_wait_view(request):
     info = request.user.additional_info
     call_number = request.session.get("call_number") or "-"
@@ -189,6 +215,7 @@ def phone_wait_view(request):
 
 @login_required
 @require_GET
+@never_cache
 def phone_status_api(request):
     info, _ = AdditionalUserInfo.objects.get_or_create(user=request.user)
 
@@ -220,6 +247,8 @@ def phone_status_api(request):
 
 @login_required
 @require_http_methods(["POST"])
+@csrf_protect
+@never_cache
 def phone_change_view(request):
     info = request.user.additional_info
     info.phone = None
@@ -231,6 +260,8 @@ def phone_change_view(request):
 
 @login_required
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
 def consents_view(request):
     info = request.user.additional_info
     if request.method == "POST":
@@ -249,6 +280,8 @@ def consents_view(request):
 
 
 @require_http_methods(["GET", "POST"])
+@csrf_protect
+@never_cache
 def home_public_view(request):
     is_authed = request.user.is_authenticated
     user = request.user if is_authed else None
@@ -297,7 +330,7 @@ def home_public_view(request):
                 messages.error(request, error)
                 context["reg_error"] = error
                 log.warning("Home signup validation failed: username=%s email=%s reason=%s", username, email, error)
-                return render(request, "base/home_public.html", context)
+                return render(request, "base/info/main.html", context)
             _create_user_with_profile(username, email, password1)
             messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
             return redirect("verify_prompt")
@@ -317,26 +350,30 @@ def home_public_view(request):
             messages.error(request, error)
             context["login_error"] = error
             seclog.warning("Login failed via home: username=%s", request.POST.get("username"))
-            return render(request, "base/home_public.html", context)
+            return render(request, "base/info/main.html", context)
 
-    return render(request, "base/home_public.html", context)
+    return render(request, "base/info/main.html", context)
 
 
 @require_http_methods(["GET"])
+@never_cache
 def info_ndst(request):
     return render(request, "base/info/ndst.html")
 
 
 @require_http_methods(["GET"])
+@never_cache
 def info_sed(request):
     return render(request, "base/info/sed.html")
 
 
 @require_http_methods(["GET"])
+@never_cache
 def info_marfan(request):
     return render(request, "base/info/marfan.html")
 
 
 @require_http_methods(["GET"])
+@never_cache
 def info_sld(request):
     return render(request, "base/info/sld.html")

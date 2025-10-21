@@ -1,0 +1,52 @@
+{% load i18n %}
+{% for r in page_obj.object_list %}
+<tr class="hr-row"
+    data-id="{{ r.id }}"
+    data-created="{{ r.created_at|date:'Y-m-d H:i' }}"
+    data-username="{{ r.name|default_if_none:''|escape }}"
+    data-telegram="{{ r.telegram|default_if_none:''|escape }}"
+    data-email="{{ r.email|default_if_none:''|escape }}"
+    data-status="{% if r.is_processed %}processed{% else %}open{% endif %}"
+    data-message="{{ r.message|escape }}">
+  <td class="hr-nowrap text-muted">{{ r.id }}</td>
+  <td class="hr-nowrap">{{ r.created_at|date:"Y-m-d H:i" }}</td>
+  <td class="hr-truncate" title="{{ r.name|default:'—' }}">{{ r.name|default:"—" }}</td>
+  <td class="hr-truncate">
+    {% if r.telegram %}
+      {% with handle=r.telegram %}
+        {% if not handle|slice:":1" == "@" %}{% firstof "@"|add:handle as handle %}{% endif %}
+        <a href="https://t.me/{{ handle|cut:"@" }}" target="_blank" rel="noopener" class="text-decoration-none" title="{{ handle }}">{{ handle }}</a>
+      {% endwith %}
+    {% else %}
+      —
+    {% endif %}
+  </td>
+  <td class="hr-truncate d-none d-lg-table-cell">
+    {% if r.email %}
+      <a href="mailto:{{ r.email }}" class="text-decoration-none" title="{{ r.email }}">{{ r.email }}</a>
+    {% else %}
+      —
+    {% endif %}
+  </td>
+  <td class="hr-nowrap">
+    {% if r.is_processed %}
+      <span class="badge rounded-pill bg-success">{% trans "Processed" %}</span>
+    {% else %}
+      <span class="badge rounded-pill bg-secondary">{% trans "Open" %}</span>
+    {% endif %}
+  </td>
+  <td class="text-end hr-nowrap hr-actions">
+    {% if r.is_processed %}
+      <button class="btn btn-sm btn-outline-secondary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
+        {% trans "Undo" %}
+      </button>
+    {% else %}
+      <button class="btn btn-sm btn-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
+        {% trans "Mark processed" %}
+      </button>
+    {% endif %}
+  </td>
+</tr>
+{% empty %}
+<tr><td colspan="7" class="text-center text-muted py-4">{% trans "Nothing found." %}</td></tr>
+{% endfor %}
