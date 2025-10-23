@@ -19,11 +19,11 @@
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
   {% block extra_css %}{% endblock %}
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
   <div class="wrapper d-flex flex-column min-vh-100">
 
-    <!-- HEADER -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
       <div class="container">
         <a class="navbar-brand fw-bold"
@@ -65,14 +65,8 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'my_documents' %}">
-                    <i class="bi bi-file-earmark-medical"></i> {% trans "My examinations" %}
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'recommendations' %}">
-                    <i class="bi bi-lightbulb"></i> {% trans "Doctor's comments" %}
+                  <a class="nav-link" href="{% url 'my_health' %}">
+                    <i class="bi bi-heart-pulse"></i> {% trans "My health" %}
                   </a>
                 </li>
 
@@ -89,12 +83,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'my_wellness' %}">
-                    <i class="bi bi-activity"></i> {% trans "Wellness" %}
-                  </a>
-                </li>
-
+                <!-- NOTIFICATIONS DROPDOWN -->
                 <li class="nav-item dropdown">
                   <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
                      data-bs-toggle="dropdown" aria-expanded="false">
@@ -105,50 +94,74 @@
                       </span>
                     {% endif %}
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notifDropdown" style="min-width: 300px;">
-                    <li class="dropdown-header">
-                      {% trans "Notifications" %}
+
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notifDropdown" style="min-width: 340px;">
+                    <li class="dropdown-header d-flex align-items-center justify-content-between">
+                      <span>{% trans "Notifications" %}</span>
                       {% if unread_notifications_count %}
-                        <span class="badge bg-danger ms-1">{{ unread_notifications_count }}</span>
+                        <span class="badge bg-danger">{{ unread_notifications_count }}</span>
                       {% endif %}
                     </li>
                     <li><hr class="dropdown-divider"></li>
 
                     {% if latest_notifications %}
-                      {% for n in latest_notifications %}
-                        <li>
-                          <a class="dropdown-item d-flex align-items-start {% if not n.is_read %}bg-light{% endif %}" href="{% url 'notifications' %}#n-{{ n.id }}">
-                            <div class="me-2">
-                              {% with icon="bell" %}
-                                {% if n.notification_type == 'FOLLOW' %}{% with icon="person-plus" %}{% endwith %}{% endif %}
-                                {% if n.notification_type == 'EXAM_COMMENT' %}{% with icon="chat-dots" %}{% endwith %}{% endif %}
-                                {% if n.notification_type == 'RECOMMENDATION' %}{% with icon="lightbulb" %}{% endwith %}{% endif %}
-                                {% if n.notification_type == 'ADMIN_MESSAGE' %}{% with icon="megaphone" %}{% endwith %}{% endif %}
-                                {% if n.notification_type == 'SYSTEM_MESSAGE' %}{% with icon="gear" %}{% endwith %}{% endif %}
-                                <i class="bi bi-{{ icon }} fs-5 text-primary"></i>
-                              {% endwith %}
-                            </div>
-                            <div class="flex-grow-1">
-                              <div class="small text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</div>
-                              {% if n.title %}
-                                <div class="fw-semibold text-break">{{ n.title }}</div>
-                              {% endif %}
-                              <div class="text-break">
-                                {% if n.notification_type == 'FOLLOW' %}
-                                  {% blocktrans with username=n.sender.user.username %}
-                                    <strong>{{ username }}</strong> followed you.
-                                  {% endblocktrans %}
-                                {% else %}
-                                  {{ n.message }}
-                                  {% if n.url %}
-                                    <a class="ms-1" href="{{ n.url }}">{% trans "Details" %}</a>
+                      <li>
+                        <div style="max-height: 360px; overflow:auto;">
+                          {% for n in latest_notifications %}
+                            <div class="px-3 py-2 {% if not n.is_read %}bg-light{% endif %} position-relative rounded-3">
+                              <div class="d-flex">
+                                <div class="me-2 pt-1">
+                                  {% with icon="bell" %}
+                                    {% if n.notification_type == 'FOLLOW' %}{% with icon="person-plus" %}{% endwith %}{% endif %}
+                                    {% if n.notification_type == 'EXAM_COMMENT' %}{% with icon="chat-dots" %}{% endwith %}{% endif %}
+                                    {% if n.notification_type == 'RECOMMENDATION' %}{% with icon="lightbulb" %}{% endwith %}{% endif %}
+                                    {% if n.notification_type == 'ADMIN_MESSAGE' %}{% with icon="megaphone" %}{% endwith %}{% endif %}
+                                    {% if n.notification_type == 'SYSTEM_MESSAGE' %}{% with icon="gear" %}{% endwith %}{% endif %}
+                                    <i class="bi bi-{{ icon }} fs-5 text-primary"></i>
+                                  {% endwith %}
+                                </div>
+                                <div class="flex-grow-1">
+                                  <div class="small text-muted">
+                                    <a href="{% url 'notifications' %}#n-{{ n.id }}" class="text-decoration-none text-muted">
+                                      {{ n.created_at|date:"d.m.Y H:i" }}
+                                    </a>
+                                  </div>
+                                  {% if n.title %}
+                                    <div class="fw-semibold text-break">
+                                      <a href="{% url 'notifications' %}#n-{{ n.id }}" class="stretched-link text-reset text-decoration-none">
+                                        {{ n.title }}
+                                      </a>
+                                    </div>
                                   {% endif %}
-                                {% endif %}
+                                  <div class="text-break">
+                                    {% if n.notification_type == 'FOLLOW' %}
+                                      {% blocktrans with username=n.sender.user.username %}
+                                        <strong>{{ username }}</strong> followed you.
+                                      {% endblocktrans %}
+                                    {% else %}
+                                      {{ n.message }}
+                                    {% endif %}
+                                  </div>
+
+                                  {% if n.url %}
+                                  <div class="mt-2">
+                                    <a class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm d-inline-flex align-items-center gap-1 position-relative z-1"
+                                       href="{{ n.url }}" target="_blank" rel="noopener">
+                                      <i class="bi bi-box-arrow-up-right"></i>
+                                      {% trans "Details" %}
+                                    </a>
+                                  </div>
+                                  {% endif %}
+                                </div>
                               </div>
+                              {% if not n.url %}
+                                <a href="{% url 'notifications' %}#n-{{ n.id }}" class="stretched-link"></a>
+                              {% endif %}
+                              {% if not forloop.last %}<hr class="my-2">{% endif %}
                             </div>
-                          </a>
-                        </li>
-                      {% endfor %}
+                          {% endfor %}
+                        </div>
+                      </li>
                       <li><hr class="dropdown-divider"></li>
                     {% else %}
                       <li><span class="dropdown-item text-muted">{% trans "No new notifications" %}</span></li>
@@ -162,6 +175,7 @@
                     </li>
                   </ul>
                 </li>
+                <!-- /NOTIFICATIONS DROPDOWN -->
 
                 {% if request.user|hasanyperm:'base.view_patient_list,base.can_notify_users,base.view_help_requests' %}
                   {% if request.user|hasperm:'base.view_patient_list' %}
@@ -227,12 +241,10 @@
       </div>
     </nav>
 
-    <!-- MAIN -->
     <main class="container my-4 flex-grow-1" role="main">
       {% block content %}{% endblock %}
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer bg-dark text-white py-3 mt-4">
       <div class="container text-center">
         <p class="mb-0">&copy; {% now "Y" %} “Rhymes of Life”. {% trans "All rights reserved." %}</p>
@@ -240,15 +252,15 @@
     </footer>
   </div>
 
-  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="{% url 'javascript-catalog' %}"></script>
+
   <script src="{% static 'js/articles_index.js' %}"></script>
   <script src="{% static 'js/avatar.js' %}"></script>
-  <script src="{% static 'js/exam.js' %}"></script>
   <script src="{% static 'js/phone_wait.js' %}"></script>
   <script src="{% static 'js/clickable_cards.js' %}"></script>
+
   {% block extra_js %}{% endblock %}
 </body>
 </html>

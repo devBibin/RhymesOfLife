@@ -26,6 +26,14 @@
       <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
       <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
 
+      {# ---- ВНЕШНИЕ ФОРМЫ ДЛЯ TG-ДЕЙСТВИЙ (НЕ ВНУТРИ profile-form!) ---- #}
+      <form id="tg-unlink-form" action="{% url 'telegram_unlink' %}" method="post" class="d-none">
+        {% csrf_token %}
+      </form>
+      <form id="tg-regenerate-form" action="{% url 'telegram_regenerate' %}" method="post" class="d-none">
+        {% csrf_token %}
+      </form>
+
       <form id="profile-form" action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data" class="row g-3">
         {% csrf_token %}
 
@@ -75,7 +83,7 @@
 
         <div class="col-12">
           <label class="form-label">{% trans "About me" %}</label>
-          <textarea name="about_me" class="form-control" rows="4" maxlength="1000" placeholder="{% trans 'A few words about yourself' %}">{{ info.about_me }}</textarea>
+          <textarea name="about_me" class="form-control" rows="4" maxlength="250" placeholder="{% trans 'A few words about yourself' %}">{{ info.about_me }}</textarea>
           <div class="form-text">{% trans "Up to 250 characters." %}</div>
         </div>
 
@@ -113,10 +121,10 @@
             {% if tg_is_verified %}
               <span class="badge bg-success">{% trans "Linked" %}</span>
               {% if tg_username %}<span class="text-muted">@{{ tg_username }}</span>{% endif %}
-              <form action="{% url 'telegram_unlink' %}" method="post" class="ms-auto">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger btn-sm">{% trans "Unlink Telegram" %}</button>
-              </form>
+              {# Кнопка сабмитит ВНЕШНЮЮ форму tg-unlink-form #}
+              <button type="submit" form="tg-unlink-form" class="btn btn-outline-danger btn-sm ms-auto">
+                {% trans "Unlink Telegram" %}
+              </button>
             {% else %}
               {% if tg_not_configured %}
                 <span class="text-muted">{% trans "Telegram bot is not configured." %}</span>
@@ -128,10 +136,10 @@
                 {% else %}
                   <span class="text-muted">{% trans "Activation link is not available." %}</span>
                 {% endif %}
-                <form action="{% url 'telegram_regenerate' %}" method="post" class="d-inline">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-secondary btn-sm">{% trans "Regenerate link" %}</button>
-                </form>
+                {# Кнопка сабмитит ВНЕШНЮЮ форму tg-regenerate-form #}
+                <button type="submit" form="tg-regenerate-form" class="btn btn-outline-secondary btn-sm">
+                  {% trans "Generate new link" %}
+                </button>
               {% endif %}
             {% endif %}
           </div>
@@ -155,32 +163,41 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener("DOMContentLoaded",function(){
-  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
-    var m=document.querySelector(c.getAttribute("data-main"));
-    var sync=function(){var on=!!(m&&m.checked);c.disabled=!on;if(!on)c.checked=false;};
-    if(m){m.addEventListener("change",sync);sync();}else{c.disabled=true;c.checked=false;}
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function (c) {
+    var m = document.querySelector(c.getAttribute("data-main"));
+    var sync = function () {
+      var on = !!(m && m.checked);
+      c.disabled = !on;
+      if (!on) c.checked = false;
+    };
+    if (m) { m.addEventListener("change", sync); sync(); }
+    else { c.disabled = true; c.checked = false; }
   });
 
-  var avatarImg=document.getElementById("avatar-img");
-  var menu=document.getElementById("avatar-menu");
-  var changeBtn=document.getElementById("change-avatar-btn");
-  var delBtn=document.getElementById("delete-avatar-btn");
-  var input=document.getElementById("avatar-input");
-  var delInput=document.getElementById("delete-avatar");
+  var avatarImg = document.getElementById("avatar-img");
+  var menu = document.getElementById("avatar-menu");
+  var changeBtn = document.getElementById("change-avatar-btn");
+  var delBtn = document.getElementById("delete-avatar-btn");
+  var input = document.getElementById("avatar-input");
+  var delInput = document.getElementById("delete-avatar");
 
-  if(avatarImg && menu){
-    avatarImg.addEventListener("click",function(){menu.classList.toggle("show");});
-    document.addEventListener("click",function(e){if(!menu.contains(e.target) && e.target!==avatarImg){menu.classList.remove("show");}});
+  if (avatarImg && menu) {
+    avatarImg.addEventListener("click", function () { menu.classList.toggle("show"); });
+    document.addEventListener("click", function (e) {
+      if (!menu.contains(e.target) && e.target !== avatarImg) { menu.classList.remove("show"); }
+    });
   }
-  if(changeBtn && input){
-    changeBtn.addEventListener("click",function(){delInput.value="";input.click();});
+  if (changeBtn && input) {
+    changeBtn.addEventListener("click", function () { delInput.value = ""; input.click(); });
   }
-  if(delBtn){
-    delBtn.addEventListener("click",function(){delInput.value="1";document.getElementById("profile-form").submit();});
+  if (delBtn) {
+    delBtn.addEventListener("click", function () { delInput.value = "1"; document.getElementById("profile-form").submit(); });
   }
-  if(input){
-    input.addEventListener("change",function(){if(input.files&&input.files[0]){delInput.value="";document.getElementById("profile-form").submit();}});
+  if (input) {
+    input.addEventListener("change", function () {
+      if (input.files && input.files[0]) { delInput.value = ""; document.getElementById("profile-form").submit(); }
+    });
   }
 });
 </script>

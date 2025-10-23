@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 17:01+0000\n"
+"POT-Creation-Date: 2025-10-23 18:24+0000\n"
 "PO-Revision-Date: 2025-10-01 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -19,7 +19,6 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: base/admin.py:34
-#| msgid "Soft-deleted"
 msgid "Soft delete selected"
 msgstr "Помечено как удалённое"
 
@@ -47,7 +46,6 @@ msgid "%(n)d objects permanently deleted."
 msgstr "%(n)d объектов полностью удалено."
 
 #: base/admin.py:63
-#| msgid "Delete"
 msgid "Deleted"
 msgstr "Удалить"
 
@@ -100,7 +98,6 @@ msgid "%(n)d requests reverted to unprocessed."
 msgstr "%(n)d запросов возвращено в статус необработанных."
 
 #: base/admin.py:310
-#| msgid "Approved at"
 msgid "Approve selected"
 msgstr "Одобрено"
 
@@ -136,7 +133,6 @@ msgid "Complete onboarding."
 msgstr "Завершите онбординг."
 
 #: base/models.py:69
-#| msgid "Genetic connective tissue syndromes"
 msgid "Undifferentiated connective tissue dysplasia"
 msgstr "Недифференцированная дисплазия соединительной ткани"
 
@@ -166,7 +162,6 @@ msgid "Ban reason"
 msgstr "Причина блокировки"
 
 #: base/models.py:154
-#| msgid "Created at"
 msgid "Banned at"
 msgstr "Заблокирован"
 
@@ -195,27 +190,22 @@ msgid "Either a file or an external link is required."
 msgstr "Необходимо загрузить файл или указать внешнюю ссылку."
 
 #: base/models.py:328
-#| msgid "No new notifications"
 msgid "Can send notifications"
 msgstr "Может отправлять уведомления"
 
 #: base/models.py:366
-#| msgid "Comments"
 msgid "Can comment exams"
 msgstr "Может комментировать обследования"
 
 #: base/models.py:367
-#| msgid "to leave a comment"
 msgid "Can moderate exam comments"
 msgstr "Может модерировать комментарии к обследованиям"
 
 #: base/models.py:387
-#| msgid "Sent recommendations"
 msgid "Can view recommendations"
 msgstr "Может просматривать рекомендации"
 
 #: base/models.py:388
-#| msgid "Sent recommendations"
 msgid "Can write recommendations"
 msgstr "Может писать рекомендации"
 
@@ -266,12 +256,10 @@ msgid "Updated at"
 msgstr "Изменено"
 
 #: base/models.py:422 base/templates/base/post_cards.html:55
-#| msgid "Hidden by author"
 msgid "Hidden by reports"
 msgstr "Скрыто по жалобам"
 
 #: base/models.py:423
-#| msgid "Comments count"
 msgid "Reports count"
 msgstr "Количество жалоб"
 
@@ -279,7 +267,7 @@ msgstr "Количество жалоб"
 msgid "Post"
 msgstr "Пост"
 
-#: base/models.py:428 base/templates/base/feed.html:11
+#: base/models.py:428 base/templates/base/feed.html:52
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr "Посты"
@@ -321,17 +309,14 @@ msgid "🗑 Deleted comment"
 msgstr "🗑 Удалённый комментарий"
 
 #: base/models.py:494
-#| msgid "Username"
 msgid "name"
 msgstr "имя"
 
 #: base/models.py:495
-#| msgid "Email"
 msgid "email"
 msgstr "эл. почта"
 
 #: base/models.py:496
-#| msgid "Telegram"
 msgid "telegram"
 msgstr "telegram"
 
@@ -340,7 +325,6 @@ msgid "message"
 msgstr "сообщение"
 
 #: base/models.py:498
-#| msgid "Created at"
 msgid "created at"
 msgstr "создано"
 
@@ -349,7 +333,6 @@ msgid "processed"
 msgstr "обработано"
 
 #: base/models.py:501
-#| msgid "Approved at"
 msgid "processed at"
 msgstr "обработано"
 
@@ -369,19 +352,19 @@ msgstr "Может просматривать запросы помощи"
 msgid "Can process help requests"
 msgstr "Может обрабатывать запросы помощи"
 
-#: base/models.py:533 base/templates/base/my_wellness.html:59
+#: base/models.py:533 base/templates/base/partials/health_wellness.html:54
 msgid "Never"
 msgstr "Никогда"
 
-#: base/models.py:534 base/templates/base/my_wellness.html:60
+#: base/models.py:534 base/templates/base/partials/health_wellness.html:55
 msgid "Every day"
 msgstr "Каждый день"
 
-#: base/models.py:535 base/templates/base/my_wellness.html:61
+#: base/models.py:535 base/templates/base/partials/health_wellness.html:56
 msgid "Every 3 days"
 msgstr "Каждые 3 дня"
 
-#: base/models.py:536 base/templates/base/my_wellness.html:62
+#: base/models.py:536 base/templates/base/partials/health_wellness.html:57
 msgid "Every 7 days"
 msgstr "Каждые 7 дней"
 
@@ -402,7 +385,7 @@ msgid "User ID"
 msgstr "ID пользователя"
 
 #: base/signals.py:34 base/templates/base/home.html:96
-#: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:42
+#: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:50
 #: base/templates/base/register.html:50
 #: base/templates/base/reset_request.html:39
 #: base/templates/base/staff_help_requests.html:52
@@ -440,7 +423,6 @@ msgstr "Пользователь"
 
 #: base/templates/base/admin_notify.html:4
 #: base/templates/base/admin_notify.html:11
-#| msgid "No notifications"
 msgid "Send notifications"
 msgstr "Отправить уведомления"
 
@@ -461,7 +443,6 @@ msgid "Recipient"
 msgstr "Получатель"
 
 #: base/templates/base/admin_notify.html:25
-#| msgid "Enter your username or email."
 msgid "Enter username"
 msgstr "Введите имя пользователя"
 
@@ -470,7 +451,6 @@ msgid "Start typing a username and pick from suggestions."
 msgstr "Начните вводить имя пользователя и выберите из предложенных вариантов."
 
 #: base/templates/base/admin_notify.html:30
-#| msgid "Reason (optional)"
 msgid "Recipient ID (optional)"
 msgstr "ID получателя (необязательно)"
 
@@ -509,23 +489,32 @@ msgid "Message"
 msgstr "Сообщение"
 
 #: base/templates/base/admin_notify.html:52
-#| msgid "Enter code"
 msgid "Enter message"
 msgstr "Введите сообщение"
 
 #: base/templates/base/admin_notify.html:56
-#| msgid "Links (optional)"
 msgid "Link (optional)"
 msgstr "Ссылка (необязательно)"
 
 #: base/templates/base/admin_notify.html:61
+#| msgid "Reason (optional)"
+msgid "Button text (optional)"
+msgstr "Причина (необязательно)"
+
+#: base/templates/base/admin_notify.html:62
+#: base/templates/base/notifications.html:31 base/utils/notify.py:26
+#: templates/base.html:151
+msgid "Details"
+msgstr "Подробности"
+
+#: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:16
 #: base/templates/base/post_cards.html:153
 #: blog/templates/blog/blog_page.html:175
 msgid "Send"
 msgstr "Отправить"
 
-#: base/templates/base/admin_notify.html:62
+#: base/templates/base/admin_notify.html:67
 #: base/templates/base/post_edit.html:63 blog/templates/blog/blog_page.html:222
 msgid "Cancel"
 msgstr "Отмена"
@@ -551,12 +540,12 @@ msgid "Since"
 msgstr "С"
 
 #: base/templates/base/banned.html:20 templates/base.html:54
-#: templates/base.html:193
+#: templates/base.html:207
 msgid "Log out"
 msgstr "Выйти"
 
 #: base/templates/base/comment_items.html:4
-#: base/templates/base/includes/profile_header.html:6
+#: base/templates/base/includes/profile_header.html:35
 #: blog/templates/blog/blog_page.html:188
 #: blog/templates/blog/includes/article_cards.html:47
 #: blog/templates/blog/includes/article_cards.html:114
@@ -585,7 +574,7 @@ msgid "Email verified."
 msgstr "Email подтверждён."
 
 #: base/templates/base/connect_telegram.html:19
-#: base/templates/base/profile_edit.html:122
+#: base/templates/base/profile_edit.html:130
 msgid "Telegram bot is not configured."
 msgstr "Телеграм-бот не настроен."
 
@@ -690,7 +679,8 @@ msgstr "Продолжить"
 #: base/templates/base/consents.html:97 base/templates/base/consents.html:108
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
-#: base/templates/base/home.html:27 base/templates/base/my_wellness.html:85
+#: base/templates/base/home.html:27
+#: base/templates/base/partials/health_wellness.html:74
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1369,23 +1359,24 @@ msgstr "Получить код звонком"
 msgid "Feed"
 msgstr "Лента"
 
-#: base/templates/base/feed.html:12 base/templates/base/post_create.html:3
+#: base/templates/base/feed.html:54 base/templates/base/feed.html:94
+#: base/templates/base/post_create.html:3
 msgid "New post"
 msgstr "Новая запись"
 
-#: base/templates/base/feed.html:21
+#: base/templates/base/feed.html:62
 msgid "My posts"
 msgstr "Мои публикации"
 
-#: base/templates/base/feed.html:27
+#: base/templates/base/feed.html:67
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: base/templates/base/feed.html:33
+#: base/templates/base/feed.html:72
 msgid "Latest"
 msgstr "Последние"
 
-#: base/templates/base/feed.html:40
+#: base/templates/base/feed.html:78
 msgid "Pending approval"
 msgstr "Ожидают одобрения"
 
@@ -1412,18 +1403,16 @@ msgid "Your account username will be attached to the request."
 msgstr "Имя пользователя вашего аккаунта будет прикреплено к запросу."
 
 #: base/templates/base/help_request.html:37 base/templates/base/profile.html:40
-#: base/templates/base/profile_edit.html:111
+#: base/templates/base/profile_edit.html:119
 #: base/templates/base/reset_request.html:40
 msgid "Telegram"
 msgstr "Telegram"
 
 #: base/templates/base/help_request.html:39
-#| msgid "Telegram is not linked to this account."
 msgid "Telegram is connected to your account."
 msgstr "Telegram подключён к вашему аккаунту."
 
 #: base/templates/base/help_request.html:43
-#| msgid "Reason (optional)"
 msgid "Telegram (optional)"
 msgstr "Telegram (необязательно)"
 
@@ -1432,7 +1421,6 @@ msgid "Provide your Telegram handle so we can contact you faster."
 msgstr "Укажите ваш Telegram, чтобы мы могли связаться с вами быстрее."
 
 #: base/templates/base/help_request.html:57
-#| msgid "Links (optional)"
 msgid "Email (optional)"
 msgstr "Email (необязательно)"
 
@@ -1510,7 +1498,7 @@ msgstr "Зарегистрироваться"
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
 #: base/templates/base/login.html:4 base/templates/base/login.html:10
 #: base/templates/base/login.html:36 base/templates/base/register.html:68
-#: blog/templates/blog/blog_page.html:179 templates/base.html:204
+#: blog/templates/blog/blog_page.html:179 templates/base.html:218
 msgid "Log in"
 msgstr "Войти"
 
@@ -1537,12 +1525,12 @@ msgstr "Забыли пароль?"
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
-#: base/templates/base/includes/profile_header.html:10
-#: base/templates/base/includes/profile_header.html:19
+#: base/templates/base/includes/profile_header.html:40
+#: base/templates/base/includes/profile_header.html:51
 msgid "Edit profile"
 msgstr "Редактировать профиль"
 
-#: base/templates/base/includes/profile_header.html:37
+#: base/templates/base/includes/profile_header.html:70
 #, python-format
 msgid "%(n)s post"
 msgid_plural "%(n)s posts"
@@ -1551,7 +1539,7 @@ msgstr[1] "%(n)s поста"
 msgstr[2] "%(n)s постов"
 msgstr[3] "%(n)s поста"
 
-#: base/templates/base/includes/profile_header.html:41
+#: base/templates/base/includes/profile_header.html:74
 #, fuzzy, python-format
 #| msgid "Unfollow"
 msgid "%(n)s follower"
@@ -1561,13 +1549,12 @@ msgstr[1] "%(n)s подписчика"
 msgstr[2] "%(n)s подписчиков"
 msgstr[3] "%(n)s подписчика"
 
-#: base/templates/base/includes/profile_header.html:49
+#: base/templates/base/includes/profile_header.html:82
 #: base/templates/base/profile.html:32
 msgid "No bio yet."
 msgstr "Пока нет информации о себе."
 
 #: base/templates/base/includes/staff_help_requests_pager.html:3
-#| msgid "Examination"
 msgid "Pagination"
 msgstr "Пагинация"
 
@@ -1595,153 +1582,98 @@ msgstr "Отметить обработанным"
 msgid "Nothing found."
 msgstr "Ничего не найдено."
 
-#: base/templates/base/my_documents.html:21
-#: base/templates/base/recommendations.html:19 templates/base.html:69
-msgid "My examinations"
-msgstr "Мои обследования"
-
-#: base/templates/base/my_documents.html:22
-#: base/templates/base/recommendations.html:4
-#: base/templates/base/recommendations.html:18 templates/base.html:75
-msgid "Doctor's comments"
-msgstr "Комментарии врача"
-
-#: base/templates/base/my_documents.html:27
-msgid "Add examination"
-msgstr "Добавить обследование"
-
-#: base/templates/base/my_documents.html:33
-msgid "Examination date"
-msgstr "Дата обследования"
-
-#: base/templates/base/my_documents.html:37
-msgid "Description"
-msgstr "Описание"
-
-#: base/templates/base/my_documents.html:38
-msgid "Short description (optional)"
-msgstr "Краткое описание (необязательно)"
-
-#: base/templates/base/my_documents.html:42
-msgid "Files"
-msgstr "Файлы"
-
-#: base/templates/base/my_documents.html:44
-msgid "Drag files here or click"
-msgstr "Перетащите файлы сюда или кликните"
-
-#: base/templates/base/my_documents.html:50
-msgid "Links (optional)"
-msgstr "Ссылки (необязательно)"
-
-#: base/templates/base/my_documents.html:51
-msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
-msgstr "Вставьте общую ссылку (Google/Dropbox/Yandex и др.)"
-
-#: base/templates/base/my_documents.html:53
-msgid "Add another link"
-msgstr "Добавить ещё ссылку"
-
-#: base/templates/base/my_documents.html:54
-msgid ""
-"You can attach links instead of files or together with them. HTTP/HTTPS only."
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:23
+#: templates/base.html:69
+msgid "My health"
 msgstr ""
-"Вы можете прикрепить ссылки вместо файлов или вместе с ними. Только HTTP/"
-"HTTPS."
 
-#: base/templates/base/my_documents.html:59
-#: base/templates/base/my_wellness.html:25
-#: base/templates/base/my_wellness.html:86
-#: base/templates/base/profile_edit.html:147
-msgid "Save"
-msgstr "Сохранить"
-
-#: base/templates/base/my_documents.html:91
-#: base/templates/base/patient_exams.html:66
-msgid "No documents"
-msgstr "Нет документов"
-
-#: base/templates/base/my_documents.html:96
-msgid "No examinations yet."
-msgstr "Обследований пока нет."
-
-#: base/templates/base/my_wellness.html:8
-msgid "My wellness"
-msgstr "Моё самочувствие"
-
-#: base/templates/base/my_wellness.html:9
-#: base/templates/base/my_wellness.html:49
-#: base/templates/base/notifications.html:4
-#: base/templates/base/notifications.html:9 templates/base.html:110
-msgid "Notifications"
-msgstr "Уведомления"
-
-#: base/templates/base/my_wellness.html:17
-msgid "Score (1-10)"
-msgstr "Оценка (1-10)"
-
-#: base/templates/base/my_wellness.html:21
-#| msgid "Comments"
-msgid "Comment"
-msgstr "Комментарий"
-
-#: base/templates/base/my_wellness.html:22
-msgid "How do you feel today?"
-msgstr "Как вы себя чувствуете сегодня?"
-
-#: base/templates/base/my_wellness.html:33
-msgid "Trend"
-msgstr "Тренд"
-
-#: base/templates/base/my_wellness.html:40
-#: base/templates/base/patient_wellness.html:15
-msgid "Entries"
-msgstr "Записи"
-
-#: base/templates/base/my_wellness.html:42
-#: base/templates/base/patient_wellness.html:26
-#| msgid "No articles yet."
-msgid "No entries yet."
-msgstr "Записей пока нет."
-
-#: base/templates/base/my_wellness.html:53
-msgid ""
-"Choose how often to receive a reminder if you haven't added a wellness entry "
-"for the selected period. One reminder per day will be sent at the time below."
+#: base/templates/base/my_health.html:24
+msgid "All your health data in one place"
 msgstr ""
-"Выберите, как часто получать напоминание, если вы не добавили запись о "
-"самочувствии за выбранный период. Одно напоминание в день будет отправляться "
-"в указанное ниже время."
 
-#: base/templates/base/my_wellness.html:57
-msgid "Reminder frequency"
-msgstr "Частота напоминаний"
-
-#: base/templates/base/my_wellness.html:65
-msgid "Set to Never to fully disable reminders."
-msgstr "Установите «Никогда», чтобы полностью отключить напоминания."
-
-#: base/templates/base/my_wellness.html:71
-msgid "Hour"
-msgstr "Час"
-
-#: base/templates/base/my_wellness.html:75
-msgid "Minute"
-msgstr "Минута"
-
-#: base/templates/base/my_wellness.html:80
-msgid "Your local time when the daily reminder may be sent."
-msgstr "Ваше местное время, когда может быть отправлено ежедневное напоминание."
-
-#: base/templates/base/my_wellness.html:121
-#: base/templates/base/patient_wellness.html:40 templates/base.html:94
+#: base/templates/base/my_health.html:30 base/templates/base/my_health.html:80
+#: base/templates/base/patient_wellness.html:40
+#: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr "Самочувствие"
 
-#: base/templates/base/my_wellness.html:139
+#: base/templates/base/my_health.html:35
+#| msgid "Examination"
+msgid "Examinations"
+msgstr "Обследования"
+
+#: base/templates/base/my_health.html:40
+#: base/templates/base/partials/health_recommendations.html:3
+msgid "Doctor's comments"
+msgstr "Комментарии врача"
+
+#: base/templates/base/my_health.html:79
+#| msgid "Failed to upload documents. Please try again."
+msgid "Failed to load. Please try again."
+msgstr "Не удалось загрузить документы. Попробуйте ещё раз."
+
+#: base/templates/base/my_health.html:81
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr "Оценка"
+
+#: base/templates/base/my_health.html:82
+#| msgid "Regenerate link"
+msgid "Paste link"
+msgstr "Перегенерировать ссылку"
+
+#: base/templates/base/my_health.html:83
+#| msgid "Remove block"
+msgid "Remove link"
+msgstr "Удалить блок"
+
+#: base/templates/base/my_health.html:84
+#| msgid "Remove image"
+msgid "Remove file"
+msgstr "Удалить изображение"
+
+#: base/templates/base/my_health.html:85
+msgid "Please specify the exam date."
+msgstr ""
+
+#: base/templates/base/my_health.html:86 base/views/wellness_views.py:85
+msgid "Failed to save."
+msgstr "Не удалось сохранить."
+
+#: base/templates/base/my_health.html:87
+msgid "Network error."
+msgstr ""
+
+#: base/templates/base/my_health.html:88
+msgid "Unable to load data."
+msgstr ""
+
+#: base/templates/base/my_health.html:89
+#| msgid "Delete the article?"
+msgid "Delete this exam?"
+msgstr "Удалить статью?"
+
+#: base/templates/base/my_health.html:90
+#| msgid "Validation failed."
+msgid "Deletion failed."
+msgstr "Ошибка проверки данных."
+
+#: base/templates/base/my_health.html:91
+#| msgid "Delete the article?"
+msgid "Delete this file?"
+msgstr "Удалить статью?"
+
+#: base/templates/base/my_health.html:92
+#, python-format
+msgid "Unsupported file type: %%(name)s"
+msgstr ""
+
+#: base/templates/base/notifications.html:4
+#: base/templates/base/notifications.html:9
+#: base/templates/base/partials/health_wellness.html:6
+#: base/templates/base/partials/health_wellness.html:46 templates/base.html:100
+msgid "Notifications"
+msgstr "Уведомления"
 
 #: base/templates/base/notifications.html:5
 msgid "Your notifications list"
@@ -1769,9 +1701,163 @@ msgstr ""
 "            <strong>%(username)s</strong> отправил(а) запрос в друзья.\n"
 "          "
 
-#: base/templates/base/notifications.html:28
+#: base/templates/base/notifications.html:36
 msgid "No notifications"
 msgstr "Уведомлений нет"
+
+#: base/templates/base/partials/health_documents.html:10
+msgid "My examinations"
+msgstr "Мои обследования"
+
+#: base/templates/base/partials/health_documents.html:15
+msgid "Add examination"
+msgstr "Добавить обследование"
+
+#: base/templates/base/partials/health_documents.html:21
+msgid "Examination date"
+msgstr "Дата обследования"
+
+#: base/templates/base/partials/health_documents.html:25
+msgid "Description"
+msgstr "Описание"
+
+#: base/templates/base/partials/health_documents.html:26
+msgid "Short description (optional)"
+msgstr "Краткое описание (необязательно)"
+
+#: base/templates/base/partials/health_documents.html:29
+msgid "Files"
+msgstr "Файлы"
+
+#: base/templates/base/partials/health_documents.html:31
+msgid "Drag files here or click"
+msgstr "Перетащите файлы сюда или кликните"
+
+#: base/templates/base/partials/health_documents.html:36
+msgid "Links (optional)"
+msgstr "Ссылки (необязательно)"
+
+#: base/templates/base/partials/health_documents.html:37
+msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
+msgstr "Вставьте общую ссылку (Google/Dropbox/Yandex и др.)"
+
+#: base/templates/base/partials/health_documents.html:39
+msgid "Add another link"
+msgstr "Добавить ещё ссылку"
+
+#: base/templates/base/partials/health_documents.html:40
+msgid ""
+"You can attach links instead of files or together with them. HTTP/HTTPS only."
+msgstr ""
+"Вы можете прикрепить ссылки вместо файлов или вместе с ними. Только HTTP/"
+"HTTPS."
+
+#: base/templates/base/partials/health_documents.html:44
+#: base/templates/base/partials/health_wellness.html:22
+#: base/templates/base/partials/health_wellness.html:75
+#: base/templates/base/profile_edit.html:155
+msgid "Save"
+msgstr "Сохранить"
+
+#: base/templates/base/partials/health_documents.html:74
+#: base/templates/base/patient_exams.html:66
+msgid "No documents"
+msgstr "Нет документов"
+
+#: base/templates/base/partials/health_documents.html:79
+msgid "No examinations yet."
+msgstr "Обследований пока нет."
+
+#: base/templates/base/partials/health_recommendations.html:16
+#: base/templates/base/patient_exams.html:31
+msgid "Doctor"
+msgstr "Врач"
+
+#: base/templates/base/partials/health_recommendations.html:30
+#: base/templates/base/partials/health_recommendations.html:32
+#: base/templates/base/patients_list.html:99
+#: base/templates/base/patients_list.html:100
+#: base/templates/base/patients_list.html:105
+#: base/templates/base/post_edit.html:10
+msgid "Back"
+msgstr "Назад"
+
+#: base/templates/base/partials/health_recommendations.html:42
+#: base/templates/base/partials/health_recommendations.html:44
+#: base/templates/base/patients_list.html:119
+#: base/templates/base/patients_list.html:120
+#: base/templates/base/patients_list.html:125
+#: base/templates/base/post_list_fragment.html:14
+#: base/templates/base/profile_content_fragment.html:72
+#: base/templates/base/profile_content_fragment.html:74
+#: base/templates/base/profile_content_fragment.html:97
+#: base/templates/base/profile_content_fragment.html:99
+msgid "Next"
+msgstr "Вперёд"
+
+#: base/templates/base/partials/health_recommendations.html:50
+msgid "No recommendations yet."
+msgstr "Пока нет рекомендаций."
+
+#: base/templates/base/partials/health_wellness.html:5
+msgid "My wellness"
+msgstr "Моё самочувствие"
+
+#: base/templates/base/partials/health_wellness.html:14
+msgid "Score (1-10)"
+msgstr "Оценка (1-10)"
+
+#: base/templates/base/partials/health_wellness.html:18
+msgid "Comment"
+msgstr "Комментарий"
+
+#: base/templates/base/partials/health_wellness.html:19
+msgid "How do you feel today?"
+msgstr "Как вы себя чувствуете сегодня?"
+
+#: base/templates/base/partials/health_wellness.html:30
+msgid "Trend"
+msgstr "Тренд"
+
+#: base/templates/base/partials/health_wellness.html:37
+#: base/templates/base/patient_wellness.html:15
+msgid "Entries"
+msgstr "Записи"
+
+#: base/templates/base/partials/health_wellness.html:39
+#: base/templates/base/patient_wellness.html:26
+msgid "No entries yet."
+msgstr "Записей пока нет."
+
+#: base/templates/base/partials/health_wellness.html:49
+msgid ""
+"Choose how often to receive a reminder if you haven't added a wellness entry "
+"for the selected period. One reminder per day will be sent at the time below."
+msgstr ""
+"Выберите, как часто получать напоминание, если вы не добавили запись о "
+"самочувствии за выбранный период. Одно напоминание в день будет отправляться "
+"в указанное ниже время."
+
+#: base/templates/base/partials/health_wellness.html:52
+msgid "Reminder frequency"
+msgstr "Частота напоминаний"
+
+#: base/templates/base/partials/health_wellness.html:59
+msgid "Set to Never to fully disable reminders."
+msgstr "Установите «Никогда», чтобы полностью отключить напоминания."
+
+#: base/templates/base/partials/health_wellness.html:63
+msgid "Hour"
+msgstr "Час"
+
+#: base/templates/base/partials/health_wellness.html:67
+msgid "Minute"
+msgstr "Минута"
+
+#: base/templates/base/partials/health_wellness.html:71
+msgid "Your local time when the daily reminder may be sent."
+msgstr ""
+"Ваше местное время, когда может быть отправлено ежедневное напоминание."
 
 #: base/templates/base/patient_exams.html:6
 msgid "Patient examinations"
@@ -1789,11 +1875,6 @@ msgstr "Введите рекомендацию..."
 msgid "Sent recommendations"
 msgstr "Отправленные рекомендации"
 
-#: base/templates/base/patient_exams.html:31
-#: base/templates/base/recommendations.html:32
-msgid "Doctor"
-msgstr "Врач"
-
 #: base/templates/base/patient_exams.html:61
 msgid "No file attached"
 msgstr "Файл не прикреплён"
@@ -1803,60 +1884,44 @@ msgid "No exams available."
 msgstr "Нет доступных обследований."
 
 #: base/templates/base/patient_wellness.html:7
-#| msgid "Patients"
 msgid "Patient wellness"
 msgstr "Самочувствие пациента"
 
-#: base/templates/base/patients_list.html:7
+#: base/templates/base/patients_list.html:43
 msgid "Search patients"
 msgstr "Поиск пациентов"
 
-#: base/templates/base/patients_list.html:10
+#: base/templates/base/patients_list.html:46
 msgid "Enter first or last name..."
 msgstr "Введите имя или фамилию..."
 
-#: base/templates/base/patients_list.html:11
+#: base/templates/base/patients_list.html:48
 #: blog/templates/blog/blog_index_page.html:30
 msgid "Search"
 msgstr "Поиск"
 
-#: base/templates/base/patients_list.html:30
+#: base/templates/base/patients_list.html:71
 msgid "No genetically confirmed syndromes"
 msgstr "Нет генетически подтверждённых синдромов"
 
-#: base/templates/base/patients_list.html:34
+#: base/templates/base/patients_list.html:79
 msgid "View examinations"
 msgstr "Смотреть обследования"
 
-#: base/templates/base/patients_list.html:35
+#: base/templates/base/patients_list.html:81
+#| msgid "Exam ID"
+msgid "Exams"
+msgstr "ID обследования"
+
+#: base/templates/base/patients_list.html:85
 msgid "View wellness"
 msgstr "Смотреть самочувствие"
 
-#: base/templates/base/patients_list.html:45
-#: base/templates/base/patients_list.html:48
-#: base/templates/base/post_edit.html:10
-#: base/templates/base/recommendations.html:50
-#: base/templates/base/recommendations.html:53
-msgid "Back"
-msgstr "Назад"
-
-#: base/templates/base/patients_list.html:63
-#: base/templates/base/patients_list.html:66
-#: base/templates/base/post_list_fragment.html:14
-#: base/templates/base/profile_content_fragment.html:72
-#: base/templates/base/profile_content_fragment.html:74
-#: base/templates/base/profile_content_fragment.html:97
-#: base/templates/base/profile_content_fragment.html:99
-#: base/templates/base/recommendations.html:66
-#: base/templates/base/recommendations.html:69
-msgid "Next"
-msgstr "Вперёд"
-
-#: base/templates/base/patients_list.html:73
+#: base/templates/base/patients_list.html:133
 msgid "No patients found."
 msgstr "Пациенты не найдены."
 
-#: base/templates/base/patients_list.html:75
+#: base/templates/base/patients_list.html:135
 msgid "Enter a query to search for patients."
 msgstr "Введите запрос для поиска пациентов."
 
@@ -2006,25 +2071,24 @@ msgstr "Сохранить изменения"
 msgid "Previous"
 msgstr "Предыдущая"
 
-#: base/templates/base/profile.html:28 base/templates/base/profile_edit.html:77
+#: base/templates/base/profile.html:28 base/templates/base/profile_edit.html:85
 msgid "About me"
 msgstr "Обо мне"
 
-#: base/templates/base/profile.html:37 base/templates/base/profile_edit.html:47
+#: base/templates/base/profile.html:37 base/templates/base/profile_edit.html:55
 msgid "Date of birth"
 msgstr "Дата рождения"
 
 #: base/templates/base/profile.html:42
-#: base/templates/base/profile_edit.html:114
+#: base/templates/base/profile_edit.html:122
 msgid "Linked"
 msgstr "Привязан"
 
 #: base/templates/base/profile.html:45
-#| msgid "Post like"
 msgid "Not linked"
 msgstr "Не привязан"
 
-#: base/templates/base/profile.html:50 base/templates/base/profile_edit.html:83
+#: base/templates/base/profile.html:50 base/templates/base/profile_edit.html:91
 msgid "Syndromes"
 msgstr "Синдромы"
 
@@ -2043,12 +2107,10 @@ msgid "Unban user"
 msgstr "Разблокировать пользователя"
 
 #: base/templates/base/profile_content_fragment.html:25
-#| msgid "Reason (optional)"
 msgid "Enter ban reason (optional):"
 msgstr "Введите причину блокировки (необязательно):"
 
 #: base/templates/base/profile_content_fragment.html:26
-#| msgid "Failed to update the exam."
 msgid "Failed to change status."
 msgstr "Не удалось изменить статус."
 
@@ -2063,7 +2125,7 @@ msgid "User has been unbanned."
 msgstr "Пользователь разблокирован."
 
 #: base/templates/base/profile_content_fragment.html:41
-#: blog/templates/blog/blog_index_page.html:7 templates/base.html:82
+#: blog/templates/blog/blog_index_page.html:7 templates/base.html:76
 msgid "Articles"
 msgstr "Статьи"
 
@@ -2082,60 +2144,54 @@ msgstr "Пока нет публикаций."
 msgid "Upload new"
 msgstr "Загрузить новую"
 
-#: base/templates/base/profile_edit.html:33
+#: base/templates/base/profile_edit.html:41
 msgid "First name"
 msgstr "Имя"
 
-#: base/templates/base/profile_edit.html:37
+#: base/templates/base/profile_edit.html:45
 msgid "Last name"
 msgstr "Фамилия"
 
-#: base/templates/base/profile_edit.html:51
+#: base/templates/base/profile_edit.html:59
 msgid "Day"
 msgstr "День"
 
-#: base/templates/base/profile_edit.html:59
+#: base/templates/base/profile_edit.html:67
 msgid "Month"
 msgstr "Месяц"
 
-#: base/templates/base/profile_edit.html:67
+#: base/templates/base/profile_edit.html:75
 msgid "Year"
 msgstr "Год"
 
-#: base/templates/base/profile_edit.html:78
+#: base/templates/base/profile_edit.html:86
 msgid "A few words about yourself"
 msgstr "Пара слов о себе"
 
-#: base/templates/base/profile_edit.html:79
-#| msgid "Up to 1000 characters."
+#: base/templates/base/profile_edit.html:87
 msgid "Up to 250 characters."
 msgstr "До 250 символов."
 
-#: base/templates/base/profile_edit.html:102
+#: base/templates/base/profile_edit.html:110
 msgid "Genetically confirmed"
 msgstr "Генетически подтверждено"
 
-#: base/templates/base/profile_edit.html:118
-#| msgid "Connect Telegram"
+#: base/templates/base/profile_edit.html:126
 msgid "Unlink Telegram"
 msgstr "Отвязать Telegram"
 
-#: base/templates/base/profile_edit.html:126
-#| msgid "Telegram"
+#: base/templates/base/profile_edit.html:134
 msgid "Link Telegram"
 msgstr "Привязать Telegram"
 
-#: base/templates/base/profile_edit.html:129
+#: base/templates/base/profile_edit.html:137
 msgid "Activation link is not available."
 msgstr "Ссылка активации недоступна."
 
-#: base/templates/base/profile_edit.html:133
-msgid "Regenerate link"
+#: base/templates/base/profile_edit.html:141
+#| msgid "Regenerate link"
+msgid "Generate new link"
 msgstr "Перегенерировать ссылку"
-
-#: base/templates/base/recommendations.html:75
-msgid "No recommendations yet."
-msgstr "Пока нет рекомендаций."
 
 #: base/templates/base/register.html:18
 msgid "What happens here"
@@ -2147,7 +2203,8 @@ msgstr "Делитесь моментами и короткими постами
 
 #: base/templates/base/register.html:21
 msgid "Follow people, react to posts, and keep meaningful connections."
-msgstr "Подписывайтесь на людей, реагируйте на посты и поддерживайте значимые связи."
+msgstr ""
+"Подписывайтесь на людей, реагируйте на посты и поддерживайте значимые связи."
 
 #: base/templates/base/register.html:22
 msgid "Ask for help or offer support when someone needs it."
@@ -2159,7 +2216,9 @@ msgstr "Отслеживайте своё самочувствие и отмеч
 
 #: base/templates/base/register.html:24
 msgid "Communicate with qualified physicians for guidance and support."
-msgstr "Общайтесь с квалифицированными врачами для получения рекомендаций и поддержки."
+msgstr ""
+"Общайтесь с квалифицированными врачами для получения рекомендаций и "
+"поддержки."
 
 #: base/templates/base/register.html:27
 msgid ""
@@ -2183,7 +2242,6 @@ msgid "log in"
 msgstr "войти"
 
 #: base/templates/base/register.html:64
-#| msgid "Created at"
 msgid "Create account"
 msgstr "Создать аккаунт"
 
@@ -2256,7 +2314,7 @@ msgstr "Проверить"
 msgid "Resend code"
 msgstr "Отправить код ещё раз"
 
-#: base/templates/base/staff_help_requests.html:13 templates/base.html:184
+#: base/templates/base/staff_help_requests.html:13 templates/base.html:198
 msgid "Help requests"
 msgstr "Запросы помощи"
 
@@ -2265,7 +2323,6 @@ msgid "All"
 msgstr "Все"
 
 #: base/templates/base/staff_help_requests.html:28
-#| msgid "Search"
 msgid "Search..."
 msgstr "Поиск..."
 
@@ -2275,7 +2332,6 @@ msgstr "Применить"
 
 #: base/templates/base/staff_help_requests.html:49
 #: base/templates/base/staff_help_requests.html:76
-#| msgid "Created at"
 msgid "Created"
 msgstr "Создан"
 
@@ -2347,8 +2403,7 @@ msgstr "Если вы не запрашивали это письмо, вы мо
 msgid "You don't have permission to view this page."
 msgstr "У вас нет прав для просмотра этой страницы."
 
-#: base/utils/notify.py:82
-#| msgid "Notifications"
+#: base/utils/notify.py:94
 msgid "Notification"
 msgstr "Уведомление"
 
@@ -2364,31 +2419,27 @@ msgstr ""
 "Ваш код для сброса пароля — %(code)s. Срок его действия истекает через "
 "%(minutes)s минут."
 
-#: base/views/admin_notifications.py:29
-#| msgid "Invalid code."
+#: base/views/admin_notifications.py:30
 msgid "Invalid JSON"
 msgstr "Неверный JSON"
 
-#: base/views/admin_notifications.py:40
-#| msgid "Invalid code."
+#: base/views/admin_notifications.py:42
 msgid "Invalid scope"
 msgstr "Неверная область действия"
 
-#: base/views/admin_notifications.py:42
-#| msgid "Invalid code."
+#: base/views/admin_notifications.py:44
 msgid "Invalid type"
 msgstr "Неверный тип"
 
-#: base/views/admin_notifications.py:44
-#| msgid "Exam is required."
+#: base/views/admin_notifications.py:46
 msgid "Message is required"
 msgstr "Сообщение обязательно"
 
-#: base/views/admin_notifications.py:51
+#: base/views/admin_notifications.py:53
 msgid "Recipient is required for personal scope"
 msgstr "Получатель обязателен для персональной рассылки"
 
-#: base/views/admin_notifications.py:60
+#: base/views/admin_notifications.py:62
 msgid "Recipient not found"
 msgstr "Получатель не найден"
 
@@ -2489,7 +2540,6 @@ msgid "You are already signed in."
 msgstr "Вы уже вошли в систему."
 
 #: base/views/doctors_views.py:77
-#| msgid "You don't have permission to view this page."
 msgid "You don't have permission to perform this action."
 msgstr "У вас нет прав для выполнения этого действия."
 
@@ -2544,40 +2594,35 @@ msgid "You cannot report your own post."
 msgstr "Вы не можете пожаловаться на свой собственный пост."
 
 #: base/views/help_request_views.py:60
-#| msgid "Exam is required."
 msgid "This field is required."
 msgstr "Это поле обязательно."
 
 #: base/views/help_request_views.py:66
-#| msgid "email address;"
 msgid "Enter a valid email address."
 msgstr "Введите действительный адрес электронной почты."
 
 #: base/views/help_request_views.py:71
 msgid "Enter a valid Telegram username (e.g. @john_doe)."
-msgstr "Введите действительное имя пользователя Telegram (например, @john_doe)."
+msgstr ""
+"Введите действительное имя пользователя Telegram (например, @john_doe)."
 
 #: base/views/help_request_views.py:82
 msgid "Your request has been sent. We will contact you soon."
 msgstr "Ваш запрос отправлен. Мы скоро свяжемся с вами."
 
 #: base/views/help_request_views.py:146
-#| msgid "Invalid code."
 msgid "Invalid request."
 msgstr "Неверный запрос."
 
 #: base/views/help_request_views.py:151
-#| msgid "No patients found."
 msgid "Item not found."
 msgstr "Элемент не найден."
 
 #: base/views/help_request_views.py:164
-#| msgid "Invalid code."
 msgid "Invalid action."
 msgstr "Неверное действие."
 
 #: base/views/language_views.py:35
-#| msgid "Invalid link(s)"
 msgid "Invalid language"
 msgstr "Неверный язык"
 
@@ -2594,7 +2639,6 @@ msgid "Validation failed."
 msgstr "Ошибка проверки данных."
 
 #: base/views/profile_views.py:238
-#| msgid "Profile updated"
 msgid "Profile has been updated."
 msgstr "Профиль обновлён"
 
@@ -2623,57 +2667,52 @@ msgstr "Нельзя отписаться от самого себя."
 msgid "Share phone"
 msgstr "Поделиться телефоном"
 
-#: base/views/telegram_views.py:196
-#| msgid "Telegram bot is not configured."
+#: base/views/telegram_views.py:202
 msgid "Telegram has been unlinked."
 msgstr "Telegram отвязан."
 
-#: base/views/telegram_views.py:209
+#: base/views/telegram_views.py:215
 msgid "New activation link generated."
 msgstr "Новая ссылка активации сгенерирована."
 
-#: base/views/telegram_views.py:233
-#| msgid "Invalid code."
+#: base/views/telegram_views.py:239
 msgid "Invalid activation token."
 msgstr "Неверный токен активации."
 
-#: base/views/telegram_views.py:238
+#: base/views/telegram_views.py:244
 msgid "Activation token not found or already used."
 msgstr "Токен активации не найден или уже использован."
 
-#: base/views/telegram_views.py:252
-#| msgid "Telegram is not linked to this account."
+#: base/views/telegram_views.py:258
 msgid "Telegram account linked successfully."
 msgstr "Аккаунт Telegram успешно привязан."
 
-#: base/views/telegram_views.py:256
+#: base/views/telegram_views.py:262
 msgid "Share your phone number to link your account."
 msgstr "Поделитесь номером телефона, чтобы привязать аккаунт."
 
-#: base/views/telegram_views.py:268
+#: base/views/telegram_views.py:274
 msgid "No active link session. Open the link from the site again."
 msgstr "Нет активной сессии привязки. Снова откройте ссылку с сайта."
 
-#: base/views/telegram_views.py:284
+#: base/views/telegram_views.py:290
 msgid "Phone linked. You can return to the site."
 msgstr "Телефон привязан. Вы можете вернуться на сайт."
 
-#: base/views/telegram_views.py:287
+#: base/views/telegram_views.py:293
 msgid "Tap the button and share your phone to finish linking."
-msgstr "Нажмите кнопку и поделитесь номером телефона, чтобы завершить привязку."
+msgstr ""
+"Нажмите кнопку и поделитесь номером телефона, чтобы завершить привязку."
 
 #: base/views/users_views.py:28
-#| msgid "No patients found."
 msgid "Profile not found."
 msgstr "Профиль не найден."
 
 #: base/views/users_views.py:41
-#| msgid "Cannot unfollow yourself."
 msgid "You cannot ban yourself."
 msgstr "Вы не можете заблокировать себя."
 
 #: base/views/wellness_views.py:58
-#| msgid "Invalid code."
 msgid "Invalid score."
 msgstr "Неверная оценка."
 
@@ -2682,26 +2721,18 @@ msgid "Score must be between 1 and 10."
 msgstr "Оценка должна быть от 1 до 10."
 
 #: base/views/wellness_views.py:67
-#| msgid "Invalid date format"
 msgid "Invalid date format."
 msgstr "Неверный формат даты."
-
-#: base/views/wellness_views.py:85
-#| msgid "Failed to initiate call."
-msgid "Failed to save."
-msgstr "Не удалось сохранить."
 
 #: base/views/wellness_views.py:94
 msgid "Missing id."
 msgstr "Отсутствует id."
 
 #: base/views/wellness_views.py:98
-#| msgid "Nothing found."
 msgid "Not found."
 msgstr "Не найдено."
 
 #: base/views/wellness_views.py:145
-#| msgid "Failed to update the exam."
 msgid "Failed to save settings."
 msgstr "Не удалось сохранить настройки."
 
@@ -2783,7 +2814,6 @@ msgid "Newest"
 msgstr "Новые"
 
 #: blog/templates/blog/blog_index_page.html:45
-#| msgid "Popular"
 msgid "Most popular"
 msgstr "Популярные"
 
@@ -2962,7 +2992,7 @@ msgstr "Переключить навигацию"
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: templates/base.html:88
+#: templates/base.html:82
 msgid "Help"
 msgstr "Помощь"
 
@@ -2975,40 +3005,36 @@ msgstr "Помощь"
 #| "                              "
 msgid ""
 "\n"
-"                                    <strong>%(username)s</strong> followed "
-"you.\n"
-"                                  "
+"                                        <strong>%(username)s</strong> "
+"followed you.\n"
+"                                      "
 msgstr ""
 "\n"
 "                                    <strong>%(username)s</strong> "
 "подписался(ась) на вас.\n"
 "                                  "
 
-#: templates/base.html:144
-msgid "Details"
-msgstr "Подробности"
-
-#: templates/base.html:154
+#: templates/base.html:167
 msgid "No new notifications"
 msgstr "Новых уведомлений нет"
 
-#: templates/base.html:160
+#: templates/base.html:173
 msgid "Show all notifications"
 msgstr "Показать все уведомления"
 
-#: templates/base.html:170
+#: templates/base.html:184
 msgid "Patients"
 msgstr "Пациенты"
 
-#: templates/base.html:177
+#: templates/base.html:191
 msgid "Notify users"
 msgstr "Уведомить пользователей"
 
-#: templates/base.html:217 templates/base.html:220
+#: templates/base.html:231 templates/base.html:234
 msgid "Switch language"
 msgstr "Сменить язык"
 
-#: templates/base.html:238
+#: templates/base.html:250
 msgid "All rights reserved."
 msgstr "Все права защищены."
 
@@ -3079,9 +3105,6 @@ msgstr "Все права защищены."
 
 #~ msgid "For examination"
 #~ msgstr "Для обследования"
-
-#~ msgid "Examination"
-#~ msgstr "Обследование"
 
 #~ msgid "Exam is required."
 #~ msgstr "Необходимо выбрать обследование."

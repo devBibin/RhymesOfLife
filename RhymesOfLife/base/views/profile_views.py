@@ -91,7 +91,7 @@ def profile_edit_view(request):
     year_range = list(range(today.year - 100, today.year + 1))[::-1]
     day_range = range(1, 32)
 
-    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc, created = TelegramAccount.objects.get_or_create(user_info=info)
     bot_username = _get_bot_username()
     telegram_bot_link = (
         f"https://t.me/{bot_username}?start=activate_{acc.activation_token}"
@@ -217,7 +217,7 @@ def profile_edit_view(request):
                 info.full_clean()
             except ValidationError as e:
                 msgs = []
-                for _, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
+                for field, errs in getattr(e, "message_dict", {"__all__": e.messages}).items():
                     msgs.extend(errs if isinstance(errs, (list, tuple)) else [errs])
                 return render(
                     request,

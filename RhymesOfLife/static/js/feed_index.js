@@ -20,13 +20,16 @@ function ajaxLoad(params) {
 }
 
 function attachTabs() {
-  document.querySelectorAll('.nav.nav-tabs [data-filter]').forEach((a) => {
+  document.querySelectorAll('.nav [data-filter]').forEach((a) => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
       const f = a.getAttribute('data-filter');
       document.getElementById('current-filter').value = f;
-      document.querySelectorAll('.nav.nav-tabs .nav-link').forEach((l) => l.classList.remove('active'));
+
+      const nav = a.closest('.nav');
+      if (nav) nav.querySelectorAll('.nav-link').forEach((l) => l.classList.remove('active'));
       a.classList.add('active');
+
       ajaxLoad({ filter: f, page: 1 });
     });
   });
@@ -43,6 +46,7 @@ function attachPagination() {
     });
   });
 }
+
 
 function getCSRF(scopeEl) {
   const local = scopeEl && scopeEl.querySelector ? scopeEl.querySelector('[name=csrfmiddlewaretoken]') : null;

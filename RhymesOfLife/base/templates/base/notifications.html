@@ -9,7 +9,7 @@
   <h1 class="mb-4">{% trans "Notifications" %}</h1>
   <ul class="list-group">
     {% for n in notifications %}
-      <li class="list-group-item{% if not n.is_read %} list-group-item-info{% endif %}">
+      <li id="n-{{ n.id }}" class="list-group-item{% if not n.is_read %} list-group-item-info{% endif %}">
         <small class="text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</small><br>
         {% if n.notification_type == 'FOLLOW' %}
           {% blocktrans with username=n.sender.user.username %}
@@ -20,8 +20,16 @@
             <strong>{{ username }}</strong> sent you a friend request.
           {% endblocktrans %}
         {% endif %}
+        {% if n.title %}
+          <div class="fw-semibold text-break">{{ n.title }}</div>
+        {% endif %}
         {% if n.message %}
-          <div>{{ n.message }}</div>
+          <div class="text-break">{{ n.message }}</div>
+        {% endif %}
+        {% if n.url %}
+          <div class="mt-2">
+            <a href="{{ n.url }}" class="btn btn-sm btn-primary">{% trans "Details" %}</a>
+          </div>
         {% endif %}
       </li>
     {% empty %}

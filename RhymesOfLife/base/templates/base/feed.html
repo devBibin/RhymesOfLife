@@ -4,45 +4,84 @@
 {% block title %}{% trans "Feed" %} — {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<style>
+  .feed-container{max-width:820px;margin:0 auto}
+  .feed-topbar{
+    position:sticky;top:0;z-index:1010;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(8px);
+    padding:.75rem 0;margin-bottom:1rem;border-bottom:1px solid rgba(0,0,0,.05)
+  }
+  .btn-modern{
+    display:inline-flex;align-items:center;gap:.45rem;
+    border:1px solid rgba(var(--bs-primary-rgb),.35);
+    background:linear-gradient(180deg,#fff,rgba(255,255,255,.96));
+    color:var(--bs-primary);border-radius:999px;
+    padding:.5rem 1rem;font-weight:600;
+    box-shadow:0 1px 2px rgba(16,24,40,.06);
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease
+  }
+  .btn-modern:hover{background:linear-gradient(180deg,#fff,rgba(255,255,255,.9));box-shadow:0 6px 16px rgba(16,24,40,.12);transform:translateY(-1px);text-decoration:none;color:var(--bs-primary);border-color:rgba(var(--bs-primary-rgb),.5)}
+  .btn-modern:active{transform:translateY(0);box-shadow:0 2px 8px rgba(16,24,40,.12)}
+  .btn-modern .bi{font-size:1rem}
+  .nav-modern .nav-link{border:0;border-radius:999px;padding:.5rem .9rem;font-weight:500;color:var(--bs-body-color);opacity:.8}
+  .nav-modern .nav-link:hover{opacity:1;background:rgba(0,0,0,.04)}
+  .nav-modern .nav-link.active{opacity:1;background:rgba(var(--bs-primary-rgb),.12);color:var(--bs-primary);box-shadow:inset 0 0 0 1px rgba(var(--bs-primary-rgb),.25)}
+  .fab-new{position:fixed;right:16px;bottom:16px;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--bs-primary),var(--bs-indigo));color:#fff;box-shadow:0 12px 30px rgba(16,24,40,.25);z-index:1050}
+  .fab-new:hover{color:#fff;transform:translateY(-1px)}
+  @media (min-width: 768px){ .fab-new{display:none} }
+
+  .feed-topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;            /* was 1020 — lower it */
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+  padding: .75rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,.05);
+}
+</style>
+
+<div class="container py-3">
   {% include "base/includes/profile_header.html" with profile_user=profile_user info=info posts_count=posts_total followers_count=info.followers_count request=request only %}
 
-  <div class="d-flex justify-content-between align-items-center mb-3 feed-container">
-    <h1 class="mb-0">{% trans "Posts" %}</h1>
-    <a href="{% url 'post_create' %}" class="btn btn-primary">✍️ {% trans "New post" %}</a>
-  </div>
-
   <div class="feed-container">
-    <nav class="mb-3">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a href="#" data-filter="mine"
-             class="nav-link {% if current_filter == 'mine' %}active{% endif %}">
-            {% trans "My posts" %}
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" data-filter="subscriptions"
-             class="nav-link {% if current_filter == 'subscriptions' %}active{% endif %}">
-            {% trans "Subscriptions" %}
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" data-filter="latest"
-             class="nav-link {% if current_filter == 'latest' %}active{% endif %}">
-            {% trans "Latest" %}
-          </a>
-        </li>
-        {% if request.user.is_staff %}
-        <li class="nav-item">
-          <a href="#" data-filter="pending"
-             class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
-            ⏳ {% trans "Pending approval" %}
-          </a>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
+
+    <div class="feed-topbar">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h4 mb-0">{% trans "Posts" %}</h1>
+        <a href="{% url 'post_create' %}" class="btn-modern d-none d-md-inline-flex">
+          <i class="bi bi-pencil-square"></i> {% trans "New post" %}
+        </a>
+      </div>
+
+      <nav class="mt-3">
+        <ul class="nav nav-pills nav-modern gap-2 flex-wrap">
+          <li class="nav-item">
+            <a href="#" data-filter="mine" class="nav-link {% if current_filter == 'mine' %}active{% endif %}">
+              <i class="bi bi-person-lines-fill me-1"></i> {% trans "My posts" %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" data-filter="subscriptions" class="nav-link {% if current_filter == 'subscriptions' %}active{% endif %}">
+              <i class="bi bi-people me-1"></i> {% trans "Subscriptions" %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" data-filter="latest" class="nav-link {% if current_filter == 'latest' %}active{% endif %}">
+              <i class="bi bi-stars me-1"></i> {% trans "Latest" %}
+            </a>
+          </li>
+          {% if request.user.is_staff %}
+          <li class="nav-item">
+            <a href="#" data-filter="pending" class="nav-link {% if current_filter == 'pending' %}active{% endif %}">
+              <i class="bi bi-hourglass-split me-1"></i> {% trans "Pending approval" %}
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
 
     <input type="hidden" id="current-filter" value="{{ current_filter }}">
 
@@ -51,6 +90,11 @@
     </div>
   </div>
 </div>
+
+<a href="{% url 'post_create' %}" class="fab-new d-md-none" aria-label="{% trans 'New post' %}">
+  <i class="bi bi-pencil-square"></i>
+</a>
+
 {% csrf_token %}
 <script src="{% static 'js/feed_index.js' %}"></script>
 <script src="{% static 'js/posts.js' %}"></script>

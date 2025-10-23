@@ -93,6 +93,13 @@ from .views.account_restrictions import (
     banned_view
     )
 
+from .views.health_views import (
+    my_health_view,
+    health_documents_partial,
+    health_recommendations_partial,
+    health_wellness_partial,
+)
+
 urlpatterns = [
     path("ma/", feed, name="home"),
     path("", home_public_view, name="home_public"),
@@ -138,6 +145,7 @@ urlpatterns = [
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
     path("telegram/regenerate/", telegram_regenerate_link_view, name="telegram_regenerate"),
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
+    path("telegram/unlink/", telegram_unlink_view, name="telegram_unlink"),
 
     path("password/reset/", password_reset_request_view, name="password_reset_request"),
     path("password/reset/verify/", password_reset_verify_view, name="password_reset_verify"),
@@ -173,6 +181,12 @@ urlpatterns = [
 
     path("banned/", banned_view, name="banned"),
     path("staff/users/<int:user_id>/ban/", toggle_user_ban, name="toggle_user_ban"),
+
+    path("my-health/", my_health_view, name="my_health"),
+    path("my-health/", my_health_view, name="my_health"),
+    path("my-health/partials/documents/", health_documents_partial, name="health_documents_partial"),
+    path("my-health/partials/recommendations/", health_recommendations_partial, name="health_recommendations_partial"),
+    path("my-health/partials/wellness/", health_wellness_partial, name="health_wellness_partial"),
 
     path("set-language/", set_language, name="set_language"),
 ]

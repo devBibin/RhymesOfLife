@@ -75,3 +75,8 @@ def call_method(bound_method, arg):
         return False
     except Exception:
         return False
+
+
+@register.filter
+def get_item(d, key):
+    return d.get(key, [])
