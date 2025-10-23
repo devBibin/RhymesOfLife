@@ -3,26 +3,67 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
-<div class="container py-4">
-  <h2 class="mb-4">👨‍⚕️ {% trans "Search patients" %}</h2>
 
-  <form method="get" class="mb-4 d-flex gap-2">
-    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="{% trans 'Enter first or last name...' %}">
-    <button type="submit" class="btn btn-primary">🔍 {% trans "Search" %}</button>
-  </form>
+<style>
+  .search-bar-sticky{position:sticky;top:0;z-index:1030;background:rgba(255,255,255,.8);backdrop-filter:blur(8px)}
+  .patient-item{gap:1rem}
+  .patient-item .meta{min-width:0}
+  .actions{display:flex;gap:.5rem;flex-shrink:0}
+  .btn-ghost{
+    --bs-btn-color:var(--bs-primary);
+    --bs-btn-border-color:rgba(0,0,0,0);
+    --bs-btn-hover-bg:rgba(var(--bs-primary-rgb),.08);
+    --bs-btn-active-bg:rgba(var(--bs-primary-rgb),.16);
+    --bs-btn-hover-border-color:rgba(0,0,0,0);
+    border-radius:9999px;
+    box-shadow:0 1px 2px rgba(16,24,40,.04);
+  }
+  .btn-ghost-success{
+    --bs-btn-color:var(--bs-success);
+    --bs-btn-hover-bg:rgba(var(--bs-success-rgb),.08);
+    --bs-btn-active-bg:rgba(var(--bs-success-rgb),.16);
+  }
+  .btn-ghost .label{display:none}
+  @media (min-width: 992px){ .btn-ghost .label{display:inline;margin-left:.35rem} }
+
+  .pagination-docked{
+    position:fixed;left:50%;bottom:16px;transform:translateX(-50%);
+    background:rgba(255,255,255,.85);backdrop-filter:blur(10px);
+    box-shadow:0 8px 24px rgba(16,24,40,.18);
+    border-radius:9999px;padding:.25rem;
+    z-index:1040
+  }
+  .pagination-docked .page-link{border:0;border-radius:9999px}
+  .badge-soft{background:rgba(var(--bs-success-rgb),.12);color:var(--bs-success)}
+</style>
+
+<div class="container py-4">
+
+  <div class="search-bar-sticky py-3 mb-3">
+    <h2 class="mb-3">👨‍⚕️ {% trans "Search patients" %}</h2>
+    <form method="get" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ query }}" class="form-control"
+             placeholder="{% trans 'Enter first or last name...' %}">
+      <button type="submit" class="btn btn-primary rounded-pill px-3">
+        <i class="bi bi-search"></i> <span class="ms-1">{% trans "Search" %}</span>
+      </button>
+    </form>
+  </div>
 
   {% if patients %}
-    <ul class="list-group mb-3">
+    <ul class="list-group mb-5">
       {% for info in patients %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <div>{{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})</div>
+        <li class="list-group-item d-flex align-items-center patient-item">
+          <div class="meta">
+            <div class="fw-medium text-truncate">
+              {{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})
+            </div>
             <div class="mt-1">
               {% if info.confirmed_syndromes %}
                 {% for code in info.confirmed_syndromes %}
                   {% for c,l in syndrome_choices %}
                     {% if c == code %}
-                      <span class="badge rounded-pill text-bg-success me-1">{{ l }}</span>
+                      <span class="badge badge-soft rounded-pill me-1">{{ l }}</span>
                     {% endif %}
                   {% endfor %}
                 {% endfor %}
@@ -31,39 +72,58 @@
               {% endif %}
             </div>
           </div>
-          <a href="{% url 'patient_exams' info.user.id %}" class="btn btn-sm btn-outline-primary me-2">📄 {% trans "View examinations" %}</a>
-          <a href="{% url 'patient_wellness' info.user.id %}" class="btn btn-sm btn-outline-success">🩺 {% trans "View wellness" %}</a>
+
+          <div class="ms-auto actions">
+            <a href="{% url 'patient_exams' info.user.id %}"
+               class="btn btn-ghost btn-sm px-3"
+               data-bs-toggle="tooltip" data-bs-title="{% trans 'View examinations' %}">
+              <i class="bi bi-file-earmark-text"></i>
+              <span class="label">{% trans "Exams" %}</span>
+            </a>
+            <a href="{% url 'patient_wellness' info.user.id %}"
+               class="btn btn-ghost btn-ghost-success btn-sm px-3"
+               data-bs-toggle="tooltip" data-bs-title="{% trans 'View wellness' %}">
+              <i class="bi bi-heart-pulse"></i>
+              <span class="label">{% trans "Wellness" %}</span>
+            </a>
+          </div>
         </li>
       {% endfor %}
     </ul>
 
     {% if page_obj.has_other_pages %}
-      <nav>
-        <ul class="pagination justify-content-center">
+      <nav class="pagination-docked">
+        <ul class="pagination m-0">
           {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">← {% trans "Back" %}</a>
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Back' %}">
+                <span aria-hidden="true">←</span> <span class="d-none d-sm-inline">{% trans "Back" %}</span>
+              </a>
             </li>
           {% else %}
-            <li class="page-item disabled"><span class="page-link">← {% trans "Back" %}</span></li>
+            <li class="page-item disabled">
+              <span class="page-link">← <span class="d-none d-sm-inline">{% trans "Back" %}</span></span>
+            </li>
           {% endif %}
 
           {% for i in page_obj.paginator.page_range %}
             {% if page_obj.number == i %}
               <li class="page-item active"><span class="page-link">{{ i }}</span></li>
             {% else %}
-              <li class="page-item">
-                <a class="page-link" href="?q={{ query }}&page={{ i }}">{{ i }}</a>
-              </li>
+              <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ i }}">{{ i }}</a></li>
             {% endif %}
           {% endfor %}
 
           {% if page_obj.has_next %}
             <li class="page-item">
-              <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">{% trans "Next" %} →</a>
+              <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">
+                <span class="d-none d-sm-inline">{% trans "Next" %}</span> <span aria-hidden="true">→</span>
+              </a>
             </li>
           {% else %}
-            <li class="page-item disabled"><span class="page-link">{% trans "Next" %} →</span></li>
+            <li class="page-item disabled">
+              <span class="page-link"><span class="d-none d-sm-inline">{% trans "Next" %}</span> →</span>
+            </li>
           {% endif %}
         </ul>
       </nav>
@@ -75,4 +135,11 @@
     <div class="alert alert-info">{% trans "Enter a query to search for patients." %}</div>
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    var tooltipTriggerList=[].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function(el){return new bootstrap.Tooltip(el)})
+  })
+</script>
 {% endblock %}

@@ -1,0 +1,79 @@
+{% load static i18n %}
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="mb-0">🩺 {% trans "My wellness" %}</h2>
+  <button id="btn-settings" class="btn btn-outline-secondary btn-sm">{% trans "Notifications" %}</button>
+</div>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <form id="entry-form" class="row g-3" novalidate>
+      {% csrf_token %}
+      <div class="col-12 col-md-3">
+        <label for="score" class="form-label">{% trans "Score (1-10)" %}</label>
+        <input type="number" name="score" id="score" min="1" max="10" class="form-control" required>
+      </div>
+      <div class="col-12 col-md-9">
+        <label for="note" class="form-label">{% trans "Comment" %}</label>
+        <input type="text" name="note" id="note" class="form-control" placeholder="{% trans 'How do you feel today?' %}">
+      </div>
+      <div class="col-12 text-end">
+        <button type="button" id="btn-save" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h5 class="mb-3">{% trans "Trend" %}</h5>
+    <canvas id="chart" height="120"></canvas>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="mb-3">{% trans "Entries" %}</h5>
+    <ul id="entries-list" class="list-group"></ul>
+    <div id="no-entries" class="alert alert-info mb-0 d-none">{% trans "No entries yet." %}</div>
+  </div>
+</div>
+
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">{% trans "Notifications" %}</h5></div>
+      <div class="modal-body">
+        <p class="text-muted small mb-3">
+          {% trans "Choose how often to receive a reminder if you haven't added a wellness entry for the selected period. One reminder per day will be sent at the time below." %}
+        </p>
+        <div class="mb-3">
+          <label for="rem-interval" class="form-label">{% trans "Reminder frequency" %}</label>
+          <select id="rem-interval" class="form-select">
+            <option value="0">{% trans "Never" %}</option>
+            <option value="1">{% trans "Every day" %}</option>
+            <option value="3">{% trans "Every 3 days" %}</option>
+            <option value="7">{% trans "Every 7 days" %}</option>
+          </select>
+          <div class="form-text">{% trans "Set to Never to fully disable reminders." %}</div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col">
+            <label for="rem-hour" class="form-label">{% trans "Hour" %}</label>
+            <input type="number" id="rem-hour" class="form-control" min="0" max="23">
+          </div>
+          <div class="col">
+            <label for="rem-min" class="form-label">{% trans "Minute" %}</label>
+            <input type="number" id="rem-min" class="form-control" min="0" max="59">
+          </div>
+        </div>
+        <div class="form-text">{% trans "Your local time when the daily reminder may be sent." %}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+        <button id="btn-save-settings" class="btn btn-primary">{% trans "Save" %}</button>
+      </div>
+    </div>
+  </div>
+</div>

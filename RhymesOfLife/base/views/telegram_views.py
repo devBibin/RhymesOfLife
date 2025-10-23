@@ -74,7 +74,7 @@ def _get_bot_username() -> str | None:
 
 
 def _make_bot_link_for(info: AdditionalUserInfo) -> tuple[str | None, str | None]:
-    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc, created = TelegramAccount.objects.get_or_create(user_info=info)
     if not acc.activation_token:
         acc.activation_token = uuid.uuid4()
         acc.save(update_fields=["activation_token"])
@@ -130,7 +130,7 @@ def _norm_phone(phone: str) -> str:
 @never_cache
 def connect_telegram_view(request: HttpRequest) -> HttpResponse:
     user_info = request.user.additional_info
-    acc, _ = TelegramAccount.objects.get_or_create(user_info=user_info)
+    acc, created = TelegramAccount.objects.get_or_create(user_info=user_info)
 
     bot_username, telegram_bot_link = _make_bot_link_for(user_info)
     skip_url = reverse("phone_enter")
@@ -174,7 +174,10 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
 @never_cache
 def telegram_unlink_view(request: HttpRequest) -> HttpResponse:
     info = request.user.additional_info
-    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc, created = TelegramAccount.objects.get_or_create(user_info=info)
+
+    old_chat_id = acc.telegram_id
+
     acc.telegram_id = None
     acc.username = None
     acc.first_name = None
@@ -182,17 +185,20 @@ def telegram_unlink_view(request: HttpRequest) -> HttpResponse:
     acc.language_code = None
     acc.telegram_verified = False
     acc.activation_token = uuid.uuid4()
-    acc.save(
-        update_fields=[
-            "telegram_id",
-            "username",
-            "first_name",
-            "last_name",
-            "language_code",
-            "telegram_verified",
-            "activation_token",
-        ]
-    )
+    acc.save(update_fields=[
+        "telegram_id",
+        "username",
+        "first_name",
+        "last_name",
+        "language_code",
+        "telegram_verified",
+        "activation_token",
+        "updated_at",
+    ])
+
+    if old_chat_id:
+        cache.delete(f"tg_bind:{old_chat_id}")
+
     messages.success(request, _("Telegram has been unlinked."))
     return redirect("profile_edit")
 
@@ -203,7 +209,7 @@ def telegram_unlink_view(request: HttpRequest) -> HttpResponse:
 @never_cache
 def telegram_regenerate_link_view(request: HttpRequest) -> HttpResponse:
     info = request.user.additional_info
-    acc, _ = TelegramAccount.objects.get_or_create(user_info=info)
+    acc, created = TelegramAccount.objects.get_or_create(user_info=info)
     acc.activation_token = uuid.uuid4()
     acc.save(update_fields=["activation_token"])
     messages.success(request, _("New activation link generated."))

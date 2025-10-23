@@ -19,6 +19,12 @@ function getCookie(name){
   const sendBtn = $('send');
   const result = $('result');
 
+  const typeEl = $('type');
+  const titleEl = $('title');
+  const messageEl = $('message');
+  const urlEl = $('url');
+  const buttonTextEl = $('button_text'); // new
+
   function toggleRecipient(){
     recipientWrap.style.display = scopeEl.value === 'personal' ? '' : 'none';
   }
@@ -28,10 +34,11 @@ function getCookie(name){
     if(q.has('scope')) scopeEl.value = q.get('scope');
     if(q.has('recipient')) idManualEl.value = q.get('recipient');
     if(q.has('username')) unameEl.value = q.get('username');
-    if(q.has('type')) $('type').value = q.get('type');
-    if(q.has('title')) $('title').value = q.get('title');
-    if(q.has('message')) $('message').value = q.get('message');
-    if(q.has('url')) $('url').value = q.get('url');
+    if(q.has('type')) typeEl.value = q.get('type');
+    if(q.has('title')) titleEl.value = q.get('title');
+    if(q.has('message')) messageEl.value = q.get('message');
+    if(q.has('url')) urlEl.value = q.get('url');
+    if(q.has('button_text') && buttonTextEl) buttonTextEl.value = q.get('button_text');
   }
 
   let suggestAbort;
@@ -61,36 +68,46 @@ function getCookie(name){
 
   async function send(){
     result.textContent = '';
+    sendBtn.disabled = true;
+
     const body = {
       scope: scopeEl.value,
       recipient_id: idManualEl.value ? Number(idManualEl.value) : (idAutoEl.value ? Number(idAutoEl.value) : null),
       recipient_username: unameEl.value.trim() || null,
-      notification_type: $('type').value,
-      title: $('title').value,
-      message: $('message').value,
-      url: $('url').value
+      notification_type: typeEl.value,
+      title: titleEl.value,
+      message: messageEl.value,
+      url: urlEl.value,
+      button_text: buttonTextEl ? buttonTextEl.value : ''
     };
-    const r = await fetch(API_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json','X-CSRFToken': getCookie('csrftoken')},
-      body: JSON.stringify(body)
-    });
-    if(!r.ok){
-      const t = await r.text();
-      result.innerHTML = '<div class="alert alert-danger" role="alert">'+ t +'</div>';
-      return;
+
+    try{
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json','X-CSRFToken': getCookie('csrftoken')},
+        body: JSON.stringify(body)
+      });
+      if(!r.ok){
+        const t = await r.text();
+        result.innerHTML = '<div class="alert alert-danger" role="alert">'+ t +'</div>';
+        return;
+      }
+      const j = await r.json();
+      let text = '';
+      if(j.id) text = (typeof gettext==='function'? gettext('Notification sent. ID: ') : 'Notification sent. ID: ') + j.id;
+      else if(j.sent != null) {
+        const p1 = (typeof gettext==='function'? gettext('Broadcast sent to ') : 'Broadcast sent to ');
+        const p2 = (typeof gettext==='function'? gettext(' users') : ' users');
+        text = p1 + j.sent + p2;
+      } else {
+        text = (typeof gettext==='function'? gettext('Done') : 'Done');
+      }
+      result.innerHTML = '<div class="alert alert-success" role="alert">'+ text +'</div>';
+    } catch(e){
+      result.innerHTML = '<div class="alert alert-danger" role="alert">'+ (typeof gettext==='function'? gettext('Network error') : 'Network error') +'</div>';
+    } finally{
+      sendBtn.disabled = false;
     }
-    const j = await r.json();
-    let text = '';
-    if(j.id) text = (typeof gettext==='function'? gettext('Notification sent. ID: ') : 'Notification sent. ID: ') + j.id;
-    else if(j.sent != null) {
-      const p1 = (typeof gettext==='function'? gettext('Broadcast sent to ') : 'Broadcast sent to ');
-      const p2 = (typeof gettext==='function'? gettext(' users') : ' users');
-      text = p1 + j.sent + p2;
-    } else {
-      text = (typeof gettext==='function'? gettext('Done') : 'Done');
-    }
-    result.innerHTML = '<div class="alert alert-success" role="alert">'+ text +'</div>';
   }
 
   function onUnameInput(){

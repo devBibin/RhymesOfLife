@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "My health" %} — {{ block.super }}{% endblock %}
+
+{% block content %}
+<style>
+  @media (max-width: 576px) {
+    #drop-zone { padding: 1.5rem 1rem; }
+    .file-card { flex-direction: column; align-items: flex-start; }
+    .file-card span { margin-bottom: .5rem; }
+  }
+  .link-item { display:flex; gap:.5rem; align-items:center; margin-top:.5rem; }
+  .link-item input[type=url]{ flex:1; }
+  #drop-zone { transition:.15s; cursor:pointer; }
+  #drop-zone.dragover, #drop-zone.border-primary { background: rgba(13,110,253,.06); }
+  .nav-pills .nav-link { border-radius: 999px; }
+  .tab-content { backdrop-filter: saturate(1.2) blur(2px); }
+</style>
+
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h1 class="h4 mb-0">{% trans "My health" %}</h1>
+    <div class="text-muted small">{% trans "All your health data in one place" %}</div>
+  </div>
+
+  <ul class="nav nav-pills gap-2 mb-3" id="healthTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab-wellness" data-bs-toggle="tab" data-bs-target="#pane-wellness" type="button" role="tab" aria-controls="pane-wellness" aria-selected="true">
+        🩺 {% trans "Wellness" %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-exams" data-bs-toggle="tab" data-bs-target="#pane-exams" type="button" role="tab" aria-controls="pane-exams" aria-selected="false">
+        🧾 {% trans "Examinations" %}
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-comments" data-bs-toggle="tab" data-bs-target="#pane-comments" type="button" role="tab" aria-controls="pane-comments" aria-selected="false">
+        💡 {% trans "Doctor's comments" %}
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content rounded-4 border p-3 shadow-sm bg-white">
+    <div id="pane-wellness" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tab-wellness">
+      <div class="text-center py-5" data-loader>
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div id="pane-exams" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-exams">
+      <div class="text-center py-5" data-loader>
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div id="pane-comments" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-comments">
+      <div class="text-center py-5" data-loader>
+        <div class="spinner-border" role="status" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+
+<script>
+  window.MY_HEALTH_CFG = {
+    endpoints: {
+      exams: "{% url 'health_documents_partial' %}",
+      recs: "{% url 'health_recommendations_partial' %}",
+      wellness: "{% url 'health_wellness_partial' %}",
+      apiEntries: "{% url 'wellness_entries_api' %}",
+      apiSettings: "{% url 'wellness_settings_api' %}",
+      examsCreate: "{% url 'my_documents' %}",
+      examApiPattern: "{% url 'exam_detail_api' 0 %}",
+      docDeletePattern: "{% url 'delete_document_api' 0 %}",
+    },
+    i18n: {
+      failedLoad: "{% trans 'Failed to load. Please try again.' %}",
+      wellnessLabel: "{% trans 'Wellness' %}",
+      score: "{% trans 'Score' %}",
+      pasteLink: "{% trans 'Paste link' %}",
+      removeLink: "{% trans 'Remove link' %}",
+      removeFile: "{% trans 'Remove file' %}",
+      pleaseDate: "{% trans 'Please specify the exam date.' %}",
+      failedSave: "{% trans 'Failed to save.' %}",
+      networkError: "{% trans 'Network error.' %}",
+      unableLoad: "{% trans 'Unable to load data.' %}",
+      deleteExamQ: "{% trans 'Delete this exam?' %}",
+      deletionFailed: "{% trans 'Deletion failed.' %}",
+      deleteFileQ: "{% trans 'Delete this file?' %}",
+      unsupportedTypeTpl: "{% blocktrans %}Unsupported file type: %(name)s{% endblocktrans %}",
+    }
+  };
+</script>
+
+<script src="{% static 'js/my_health.js' %}"></script>
+{% endblock %}

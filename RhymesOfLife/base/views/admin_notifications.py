@@ -8,6 +8,7 @@ from django.db.models import Q
 from ..models import AdditionalUserInfo, Notification
 from ..utils.logging import get_app_logger
 from ..utils.decorators import permission_or_staff_required
+from ..utils.notify import send_notification_multichannel
 
 log = get_app_logger(__name__)
 
@@ -33,6 +34,7 @@ def admin_notify_api(request):
     title = (data.get("title") or "").strip()
     message = (data.get("message") or "").strip()
     url = (data.get("url") or "").strip()
+    button_text = (data.get("button_text") or "").strip()
     recipient_id = data.get("recipient_id")
     recipient_username = (data.get("recipient_username") or "").strip()
 
@@ -59,36 +61,41 @@ def admin_notify_api(request):
         except AdditionalUserInfo.DoesNotExist:
             return HttpResponseBadRequest(_("Recipient not found"))
 
-        n = Notification.objects.create(
+        res = send_notification_multichannel(
             recipient=recipient,
             sender=sender_info,
             notification_type=ntype,
             title=title,
             message=message,
             url=url,
-            payload={},
+            button_text=button_text,
             source=source,
             scope=Notification.Scope.PERSONAL,
+            via_site=True,
+            via_telegram=True,
+            via_email=True,
         )
-        return JsonResponse({"status": "ok", "id": n.id})
+        return JsonResponse({"status": "ok", "id": res.get("notification_id")})
 
-    recipients = AdditionalUserInfo.objects.select_related("user")
-    items = [
-        Notification(
+    sent = 0
+    recipients = AdditionalUserInfo.objects.select_related("user").all()
+    for r in recipients:
+        send_notification_multichannel(
             recipient=r,
             sender=sender_info,
             notification_type=ntype,
             title=title,
             message=message,
             url=url,
-            payload={},
+            button_text=button_text,
             source=source,
             scope=Notification.Scope.BROADCAST,
+            via_site=True,
+            via_telegram=True,
+            via_email=True,
         )
-        for r in recipients
-    ]
-    Notification.objects.bulk_create(items, batch_size=1000)
-    return JsonResponse({"status": "ok", "sent": len(items)})
+        sent += 1
+    return JsonResponse({"status": "ok", "sent": sent})
 
 
 @login_required

@@ -57,6 +57,11 @@
           <input id="url" type="url" class="form-control" placeholder="https://">
         </div>
 
+        <div class="mb-3">
+          <label class="form-label" for="button_text">{% trans "Button text (optional)" %}</label>
+          <input id="button_text" type="text" class="form-control" placeholder="{% trans 'Details' %}">
+        </div>
+
         <div class="d-flex gap-2">
           <button id="send" class="btn btn-primary">{% trans "Send" %}</button>
           <a class="btn btn-outline-secondary" href="{% url 'home' %}">{% trans "Cancel" %}</a>
