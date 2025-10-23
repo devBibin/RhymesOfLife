@@ -1585,11 +1585,11 @@ msgstr "Ничего не найдено."
 #: base/templates/base/my_health.html:4 base/templates/base/my_health.html:23
 #: templates/base.html:69
 msgid "My health"
-msgstr ""
+msgstr "Мое здоровье"
 
 #: base/templates/base/my_health.html:24
 msgid "All your health data in one place"
-msgstr ""
+msgstr "Все о вашем здоровье в одном месте"
 
 #: base/templates/base/my_health.html:30 base/templates/base/my_health.html:80
 #: base/templates/base/patient_wellness.html:40
@@ -1634,7 +1634,7 @@ msgstr "Удалить изображение"
 
 #: base/templates/base/my_health.html:85
 msgid "Please specify the exam date."
-msgstr ""
+msgstr "Пожалуйста, укажите дату экзамена."
 
 #: base/templates/base/my_health.html:86 base/views/wellness_views.py:85
 msgid "Failed to save."
@@ -1642,11 +1642,11 @@ msgstr "Не удалось сохранить."
 
 #: base/templates/base/my_health.html:87
 msgid "Network error."
-msgstr ""
+msgstr "Ошибка сети."
 
 #: base/templates/base/my_health.html:88
 msgid "Unable to load data."
-msgstr ""
+msgstr "Не удается загрузить данные."
 
 #: base/templates/base/my_health.html:89
 #| msgid "Delete the article?"
@@ -1666,7 +1666,7 @@ msgstr "Удалить статью?"
 #: base/templates/base/my_health.html:92
 #, python-format
 msgid "Unsupported file type: %%(name)s"
-msgstr ""
+msgstr "Неподдерживаемый тип файла: %%(name)s"
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
