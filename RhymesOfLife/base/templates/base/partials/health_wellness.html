@@ -1,6 +1,18 @@
 {% load static i18n %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
+<style>
+  .entry-note{white-space:pre-wrap}
+  .select-wrap{position:relative}
+  .select-modern{appearance:none}
+  .select-modern.form-select{padding-right:3rem;border-radius:999px}
+  .select-arrow{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.55}
+  .form-label{font-weight:600}
+  @media (max-width:576px){
+    .select-modern.form-select{font-size:1.05rem}
+  }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h2 class="mb-0">🩺 {% trans "My wellness" %}</h2>
   <button id="btn-settings" class="btn btn-outline-secondary btn-sm">{% trans "Notifications" %}</button>
@@ -10,14 +22,35 @@
   <div class="card-body">
     <form id="entry-form" class="row g-3" novalidate>
       {% csrf_token %}
-      <div class="col-12 col-md-3">
+
+      <div class="col-12 col-md-5">
         <label for="score" class="form-label">{% trans "Score (1-10)" %}</label>
-        <input type="number" name="score" id="score" min="1" max="10" class="form-control" required>
+        <div class="select-wrap">
+          <select id="score" name="score" class="form-select form-select-lg select-modern" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          <span class="select-arrow" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5H7z"></path>
+            </svg>
+          </span>
+        </div>
       </div>
-      <div class="col-12 col-md-9">
+
+      <div class="col-12 col-md-7">
         <label for="note" class="form-label">{% trans "Comment" %}</label>
-        <input type="text" name="note" id="note" class="form-control" placeholder="{% trans 'How do you feel today?' %}">
+        <textarea id="note" name="note" class="form-control autosize" rows="5" placeholder="{% trans 'How do you feel today?' %}"></textarea>
       </div>
+
       <div class="col-12 text-end">
         <button type="button" id="btn-save" class="btn btn-primary">{% trans "Save" %}</button>
       </div>
@@ -77,3 +110,12 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded",function(){
+    document.querySelectorAll("textarea.autosize").forEach(function(ta){
+      const resize=()=>{ta.style.height="auto";ta.style.height=ta.scrollHeight+"px"};
+      ta.addEventListener("input",resize);resize();
+    });
+  });
+</script>

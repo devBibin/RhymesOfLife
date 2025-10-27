@@ -70,13 +70,15 @@
     empty.classList.add("d-none");
     items.slice().reverse().forEach(e => {
       const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
+      li.className = "list-group-item d-flex justify-content-between align-items-start";
       const left = document.createElement("div");
       left.innerHTML = `<strong>${e.date}</strong> · ${i18n.score || "Score"}: ${e.score}`;
       const right = document.createElement("div");
-      right.className = "text-muted";
+      right.className = "text-muted entry-note";
       right.textContent = e.note || "";
-      li.appendChild(left); li.appendChild(right); list.appendChild(li);
+      li.appendChild(left);
+      li.appendChild(right);
+      list.appendChild(li);
     });
   }
 
