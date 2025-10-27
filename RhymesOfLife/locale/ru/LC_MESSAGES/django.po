@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 18:24+0000\n"
+"POT-Creation-Date: 2025-10-27 23:24+0000\n"
 "PO-Revision-Date: 2025-10-01 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -267,7 +267,7 @@ msgstr "Количество жалоб"
 msgid "Post"
 msgstr "Пост"
 
-#: base/models.py:428 base/templates/base/feed.html:52
+#: base/models.py:428 base/templates/base/feed.html:68
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr "Посты"
@@ -352,19 +352,19 @@ msgstr "Может просматривать запросы помощи"
 msgid "Can process help requests"
 msgstr "Может обрабатывать запросы помощи"
 
-#: base/models.py:533 base/templates/base/partials/health_wellness.html:54
+#: base/models.py:533 base/templates/base/partials/health_wellness.html:87
 msgid "Never"
 msgstr "Никогда"
 
-#: base/models.py:534 base/templates/base/partials/health_wellness.html:55
+#: base/models.py:534 base/templates/base/partials/health_wellness.html:88
 msgid "Every day"
 msgstr "Каждый день"
 
-#: base/models.py:535 base/templates/base/partials/health_wellness.html:56
+#: base/models.py:535 base/templates/base/partials/health_wellness.html:89
 msgid "Every 3 days"
 msgstr "Каждые 3 дня"
 
-#: base/models.py:536 base/templates/base/partials/health_wellness.html:57
+#: base/models.py:536 base/templates/base/partials/health_wellness.html:90
 msgid "Every 7 days"
 msgstr "Каждые 7 дней"
 
@@ -497,7 +497,6 @@ msgid "Link (optional)"
 msgstr "Ссылка (необязательно)"
 
 #: base/templates/base/admin_notify.html:61
-#| msgid "Reason (optional)"
 msgid "Button text (optional)"
 msgstr "Причина (необязательно)"
 
@@ -680,7 +679,7 @@ msgstr "Продолжить"
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:74
+#: base/templates/base/partials/health_wellness.html:107
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1359,24 +1358,24 @@ msgstr "Получить код звонком"
 msgid "Feed"
 msgstr "Лента"
 
-#: base/templates/base/feed.html:54 base/templates/base/feed.html:94
+#: base/templates/base/feed.html:70 base/templates/base/feed.html:110
 #: base/templates/base/post_create.html:3
 msgid "New post"
 msgstr "Новая запись"
 
-#: base/templates/base/feed.html:62
+#: base/templates/base/feed.html:77 base/templates/base/feed.html:78
 msgid "My posts"
 msgstr "Мои публикации"
 
-#: base/templates/base/feed.html:67
+#: base/templates/base/feed.html:82 base/templates/base/feed.html:83
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: base/templates/base/feed.html:72
+#: base/templates/base/feed.html:87 base/templates/base/feed.html:88
 msgid "Latest"
 msgstr "Последние"
 
-#: base/templates/base/feed.html:78
+#: base/templates/base/feed.html:93 base/templates/base/feed.html:94
 msgid "Pending approval"
 msgstr "Ожидают одобрения"
 
@@ -1582,96 +1581,87 @@ msgstr "Отметить обработанным"
 msgid "Nothing found."
 msgstr "Ничего не найдено."
 
-#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:23
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
 #: templates/base.html:69
 msgid "My health"
 msgstr "Мое здоровье"
 
-#: base/templates/base/my_health.html:24
-msgid "All your health data in one place"
-msgstr "Все о вашем здоровье в одном месте"
-
-#: base/templates/base/my_health.html:30 base/templates/base/my_health.html:80
+#: base/templates/base/my_health.html:65 base/templates/base/my_health.html:66
+#: base/templates/base/my_health.html:67 base/templates/base/my_health.html:137
 #: base/templates/base/patient_wellness.html:40
 #: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr "Самочувствие"
 
-#: base/templates/base/my_health.html:35
-#| msgid "Examination"
+#: base/templates/base/my_health.html:80 base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:82
 msgid "Examinations"
 msgstr "Обследования"
 
-#: base/templates/base/my_health.html:40
+#: base/templates/base/my_health.html:95 base/templates/base/my_health.html:96
+#: base/templates/base/my_health.html:97
 #: base/templates/base/partials/health_recommendations.html:3
 msgid "Doctor's comments"
 msgstr "Комментарии врача"
 
-#: base/templates/base/my_health.html:79
-#| msgid "Failed to upload documents. Please try again."
+#: base/templates/base/my_health.html:136
 msgid "Failed to load. Please try again."
 msgstr "Не удалось загрузить документы. Попробуйте ещё раз."
 
-#: base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:138
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr "Оценка"
 
-#: base/templates/base/my_health.html:82
-#| msgid "Regenerate link"
+#: base/templates/base/my_health.html:139
 msgid "Paste link"
 msgstr "Перегенерировать ссылку"
 
-#: base/templates/base/my_health.html:83
-#| msgid "Remove block"
+#: base/templates/base/my_health.html:140
 msgid "Remove link"
 msgstr "Удалить блок"
 
-#: base/templates/base/my_health.html:84
-#| msgid "Remove image"
+#: base/templates/base/my_health.html:141
 msgid "Remove file"
 msgstr "Удалить изображение"
 
-#: base/templates/base/my_health.html:85
+#: base/templates/base/my_health.html:142
 msgid "Please specify the exam date."
 msgstr "Пожалуйста, укажите дату экзамена."
 
-#: base/templates/base/my_health.html:86 base/views/wellness_views.py:85
+#: base/templates/base/my_health.html:143 base/views/wellness_views.py:85
 msgid "Failed to save."
 msgstr "Не удалось сохранить."
 
-#: base/templates/base/my_health.html:87
+#: base/templates/base/my_health.html:144
 msgid "Network error."
 msgstr "Ошибка сети."
 
-#: base/templates/base/my_health.html:88
+#: base/templates/base/my_health.html:145
 msgid "Unable to load data."
 msgstr "Не удается загрузить данные."
 
-#: base/templates/base/my_health.html:89
-#| msgid "Delete the article?"
+#: base/templates/base/my_health.html:146
 msgid "Delete this exam?"
 msgstr "Удалить статью?"
 
-#: base/templates/base/my_health.html:90
-#| msgid "Validation failed."
+#: base/templates/base/my_health.html:147
 msgid "Deletion failed."
 msgstr "Ошибка проверки данных."
 
-#: base/templates/base/my_health.html:91
-#| msgid "Delete the article?"
+#: base/templates/base/my_health.html:148
 msgid "Delete this file?"
 msgstr "Удалить статью?"
 
-#: base/templates/base/my_health.html:92
+#: base/templates/base/my_health.html:149
 #, python-format
 msgid "Unsupported file type: %%(name)s"
 msgstr "Неподдерживаемый тип файла: %%(name)s"
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:6
-#: base/templates/base/partials/health_wellness.html:46 templates/base.html:100
+#: base/templates/base/partials/health_wellness.html:18
+#: base/templates/base/partials/health_wellness.html:79 templates/base.html:100
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -1753,8 +1743,8 @@ msgstr ""
 "HTTPS."
 
 #: base/templates/base/partials/health_documents.html:44
-#: base/templates/base/partials/health_wellness.html:22
-#: base/templates/base/partials/health_wellness.html:75
+#: base/templates/base/partials/health_wellness.html:55
+#: base/templates/base/partials/health_wellness.html:108
 #: base/templates/base/profile_edit.html:155
 msgid "Save"
 msgstr "Сохранить"
@@ -1799,37 +1789,37 @@ msgstr "Вперёд"
 msgid "No recommendations yet."
 msgstr "Пока нет рекомендаций."
 
-#: base/templates/base/partials/health_wellness.html:5
+#: base/templates/base/partials/health_wellness.html:17
 msgid "My wellness"
 msgstr "Моё самочувствие"
 
-#: base/templates/base/partials/health_wellness.html:14
+#: base/templates/base/partials/health_wellness.html:27
 msgid "Score (1-10)"
 msgstr "Оценка (1-10)"
 
-#: base/templates/base/partials/health_wellness.html:18
+#: base/templates/base/partials/health_wellness.html:50
 msgid "Comment"
 msgstr "Комментарий"
 
-#: base/templates/base/partials/health_wellness.html:19
+#: base/templates/base/partials/health_wellness.html:51
 msgid "How do you feel today?"
 msgstr "Как вы себя чувствуете сегодня?"
 
-#: base/templates/base/partials/health_wellness.html:30
+#: base/templates/base/partials/health_wellness.html:63
 msgid "Trend"
 msgstr "Тренд"
 
-#: base/templates/base/partials/health_wellness.html:37
+#: base/templates/base/partials/health_wellness.html:70
 #: base/templates/base/patient_wellness.html:15
 msgid "Entries"
 msgstr "Записи"
 
-#: base/templates/base/partials/health_wellness.html:39
+#: base/templates/base/partials/health_wellness.html:72
 #: base/templates/base/patient_wellness.html:26
 msgid "No entries yet."
 msgstr "Записей пока нет."
 
-#: base/templates/base/partials/health_wellness.html:49
+#: base/templates/base/partials/health_wellness.html:82
 msgid ""
 "Choose how often to receive a reminder if you haven't added a wellness entry "
 "for the selected period. One reminder per day will be sent at the time below."
@@ -1838,23 +1828,23 @@ msgstr ""
 "самочувствии за выбранный период. Одно напоминание в день будет отправляться "
 "в указанное ниже время."
 
-#: base/templates/base/partials/health_wellness.html:52
+#: base/templates/base/partials/health_wellness.html:85
 msgid "Reminder frequency"
 msgstr "Частота напоминаний"
 
-#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:92
 msgid "Set to Never to fully disable reminders."
 msgstr "Установите «Никогда», чтобы полностью отключить напоминания."
 
-#: base/templates/base/partials/health_wellness.html:63
+#: base/templates/base/partials/health_wellness.html:96
 msgid "Hour"
 msgstr "Час"
 
-#: base/templates/base/partials/health_wellness.html:67
+#: base/templates/base/partials/health_wellness.html:100
 msgid "Minute"
 msgstr "Минута"
 
-#: base/templates/base/partials/health_wellness.html:71
+#: base/templates/base/partials/health_wellness.html:104
 msgid "Your local time when the daily reminder may be sent."
 msgstr ""
 "Ваше местное время, когда может быть отправлено ежедневное напоминание."
@@ -1909,7 +1899,6 @@ msgid "View examinations"
 msgstr "Смотреть обследования"
 
 #: base/templates/base/patients_list.html:81
-#| msgid "Exam ID"
 msgid "Exams"
 msgstr "ID обследования"
 
@@ -2189,7 +2178,6 @@ msgid "Activation link is not available."
 msgstr "Ссылка активации недоступна."
 
 #: base/templates/base/profile_edit.html:141
-#| msgid "Regenerate link"
 msgid "Generate new link"
 msgstr "Перегенерировать ссылку"
 
@@ -2402,6 +2390,20 @@ msgstr "Если вы не запрашивали это письмо, вы мо
 #: base/utils/decorators.py:31
 msgid "You don't have permission to view this page."
 msgstr "У вас нет прав для просмотра этой страницы."
+
+#: base/utils/i18n_messages.py:3
+#, fuzzy
+#| msgid "Wellness"
+msgid "Wellness reminder"
+msgstr "Напоминание о самочувствии"
+
+#: base/i18n_messages.py:6
+msgid ""
+"You haven't checked in for a while. Please rate your wellness (1–10) and "
+"leave a short note."
+msgstr ""
+"Вы давно не отмечали самочувствие. Пожалуйста, оцените его по шкале 1–10 и "
+"оставьте короткую заметку."
 
 #: base/utils/notify.py:94
 msgid "Notification"
@@ -3037,6 +3039,9 @@ msgstr "Сменить язык"
 #: templates/base.html:250
 msgid "All rights reserved."
 msgstr "Все права защищены."
+
+#~ msgid "All your health data in one place"
+#~ msgstr "Все о вашем здоровье в одном месте"
 
 #~ msgid "Search posts"
 #~ msgstr "Поиск записей"

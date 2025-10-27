@@ -8,15 +8,16 @@ from orm_connector import settings  # noqa: F401
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import override
-from django.db.models import Max, Q
+from django.db.models import Max
 from django.db.models.functions import TruncDate
 
 from RhymesOfLifeShadows.create_log import create_log
 from base.models import AdditionalUserInfo, Notification
 from base.utils.notify import send_notification_multichannel
+from base.utils.i18n_messages import WELLNESS_REMINDER_TITLE, WELLNESS_REMINDER_MSG
 
 try:
-    import redis  # type: ignore
+    import redis
 except Exception:
     redis = None
 
@@ -51,11 +52,16 @@ def already_sent(redis_cli, user_id: int, today: date) -> bool:
 
 
 def already_sent_db(info: AdditionalUserInfo, today: date) -> bool:
-    return Notification.objects.filter(
-        recipient=info,
-        notification_type="SYSTEM_MESSAGE",
-        payload__kind="wellness_reminder",
-    ).annotate(d=TruncDate("created_at")).filter(d=today).exists()
+    return (
+        Notification.objects.filter(
+            recipient=info,
+            notification_type="SYSTEM_MESSAGE",
+            payload__kind="wellness_reminder",
+        )
+        .annotate(d=TruncDate("created_at"))
+        .filter(d=today)
+        .exists()
+    )
 
 
 def mark_sent_db(info: AdditionalUserInfo, title: str, message: str) -> None:
@@ -77,9 +83,14 @@ def due_now(now_local, hh: int, mm: int) -> bool:
     return now_local >= due_dt
 
 
-def build_message(info: AdditionalUserInfo) -> str:
-    with override(info.language or "en"):
-        return _("You haven't checked in for a while. Please rate your wellness (1–10) and leave a short note.")
+def build_title(info):
+    with override(getattr(info, "language", None) or "en"):
+        return str(WELLNESS_REMINDER_TITLE)
+
+
+def build_message(info):
+    with override(getattr(info, "language", None) or "en"):
+        return str(WELLNESS_REMINDER_MSG)
 
 
 def loop_once() -> int:
@@ -88,8 +99,7 @@ def loop_once() -> int:
     today = now_local.date()
 
     qs = (
-        AdditionalUserInfo.objects
-        .select_related("user", "telegram_account", "wellness_settings")
+        AdditionalUserInfo.objects.select_related("user", "telegram_account", "wellness_settings")
         .annotate(last_entry=Max("wellness_entries__date"))
         .filter(
             wellness_settings__isnull=False,
@@ -119,9 +129,11 @@ def loop_once() -> int:
         if already_sent_db(info, today):
             continue
 
-        with override(info.language or "en"):
-            title = _("Wellness reminder")
-            msg = build_message(info)
+        title = build_title(info)
+        msg = build_message(info)
+
+        via_telegram = bool(getattr(s, "tg_notifications_enabled", True))
+        via_email = bool(getattr(s, "email_notifications_enabled", True))
 
         res = send_notification_multichannel(
             recipient=info,
@@ -134,18 +146,26 @@ def loop_once() -> int:
             source=Notification.Source.SYSTEM,
             scope=Notification.Scope.PERSONAL,
             via_site=True,
-            via_telegram=True,
-            via_email=False,
-            email_subject=None,
-            email_body=None,
+            via_telegram=via_telegram,
+            via_email=via_email,
+            email_subject=title if via_email else None,
+            email_body=msg if via_email else None,
         )
 
-        if res.get("telegram_sent") or res.get("notification_id"):
+        success = any(
+            [
+                bool(res.get("telegram_sent")),
+                bool(res.get("email_sent")),
+                bool(res.get("notification_id")),
+            ]
+        )
+
+        if success:
             sent += 1
             log.info(f"sent to user_info={info.pk}")
         else:
             mark_sent_db(info, str(title), str(msg))
-            log.warning(f"telegram failed; marked in DB user_info={info.pk}")
+            log.warning(f"delivery failed; marked in DB user_info={info.pk}")
 
     return sent
 
