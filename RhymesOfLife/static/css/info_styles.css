@@ -196,6 +196,8 @@ img {
 }
 
 
+
+
 /* =========================================================
    BUTTONS
    ========================================================= */
@@ -845,6 +847,12 @@ img {
   margin: 0 auto;
 }
 
+
+
+
+
+
+
 /* =========================================================
    HOME (INDEX) — MOBILE
    ========================================================= */
@@ -869,55 +877,58 @@ img {
 }
 
 /* ===== HERO (COVER) ===== */
-.cover {
-  height: 100vh;
+.cover,
+.cover-mobile {
+  min-height: 100vh;
+  height: auto;
   background-color: var(--block1-color);
   padding-top: 30px;
   padding-bottom: 0;
   background-image: none;
 }
 
-.cover__content {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-}
+.cover-desktop__content {
+    display: none;
+  }
 
-.cover__header {
+.cover-mobile__header {
   display: flex;
   flex-direction: column;
   font-size: 4vh;
   text-align: center;
 }
 
-.cover__astra-project {
+.cover-mobile__astra-project {
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
-.cover__astra-project h4 {
+.cover-mobile__astra-project h4 {
   font-size: 2.4vh;
 }
 
-.cover__title {
+.cover-mobile__title {
   display: none;
 }
 
-.cover__subtitle {
+.cover-mobile__subtitle {
   text-align: center;
 }
 
-.cover__subtitle h3 {
+.cover-mobile__subtitle h3 {
   font-size: 4.6vh;
+  padding-bottom: 30px;
 }
 
-.cover__image-wrapper {
-  display: flex;
-  justify-content: center;
+.cover-mobile__image-wrapper {
+display: flex
+;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
 }
 
-.cover__img {
+.cover-mobile__img {
   width: 70%;
   height: auto;
 }
@@ -1154,30 +1165,32 @@ img {
     z-index: 0;
   } */
 
-  .cover__content {
+   .cover-mobile {
+    display: none;
+  }
+
+  .cover-desktop__content {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     column-gap: var(--gutter);
     align-items: center;
-    position: relative;
-    z-index: 1;
   }
 
-  .cover__header {
+  .cover-desktop__header {
     grid-column: 6 / span 5;
     font-size: 5vh;
   }
 
-  .cover__astra-project {
+  .cover-desktop__astra-project {
     text-align: left;
     padding-bottom: 10px;
   }
 
-  .cover__astra-project h4 {
+  .cover-desktop__astra-project h4 {
     font-size: 2.2vh;
   }
 
-  .cover__title {
+  .cover-desktop__title {
     display: block;
     text-align: left;
     font-size: 2vh;
@@ -1185,18 +1198,24 @@ img {
     padding-bottom: 30px;
   }
 
-  .cover__subtitle {
+  .cover-desktop__subtitle {
     text-align: left;
   }
 
-  .cover__subtitle h3 {
+  .cover-desktop__subtitle h3 {
     font-size: 4.2vh;
   }
 
-  .cover__image-wrapper {
+  .cover-desktop__image-wrapper {
     grid-column: 1 / span 5;
     justify-content: center;
     align-items: flex-end;
+  }
+
+  .cover-desktop__img {
+       max-width: 70%;
+    height: auto;
+    display: block;
   }
 
   /* ===== COMMON GRID FOR SECTIONS ===== */
