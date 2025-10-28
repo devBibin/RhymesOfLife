@@ -7,17 +7,19 @@
 <section class="cover" aria-labelledby="cover-title">
     <div class="container">
         <div class="cover__content">
+            <div class="cover__image-wrapper">
+                <img src="/static/images/cover__img.png" alt="Дисплазия соединительной ткани" class="cover__img" />
+            </div>
             <div class="cover__header">
-                <div class="cover__subtitle">
-                    <h3>Проект Благотворительного фонда «Астра»</h3>
+                <div class="cover__astra-project">
+                    <h4>Проект Благотворительного фонда «Астра»</h4>
                 </div>
                 <div class="cover__title">
-                    <h1 id="cover-title">Поддержка людей с дисплазиями соединительной ткани</h1>
+                    <h1 id="cover-title">РИТМЫ ЖИЗНЕЙ</h1>
                 </div>
-            </div>
-            <div class="cover__image-wrapper">
-                <img src="static\images\cover__img.png" alt="Дисплазия соединительной ткани"
-                    class="cover__img" />
+                <div class="cover__subtitle">
+                    <h3 id="cover-subtitle">Поддержка людей <br>с дисплазиями соединительной ткани</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -32,13 +34,13 @@
                     <img src="https://placehold.co/37x39" alt="" class="info__icon-img" />
                 </div>
                 <div class="info__header-titile">
-                    <h2 id="info-title">О проекте «Ритмы жизней»</h2>
+                    <h2 id="info-title">О проекте</h2>
                 </div>
             </header>
 
             <div class="info__text">
                 <p>
-                    Наш организм буквально соткан из соединительной ткани. Она формирует оболочки внутренних
+                    Наш организм соткан из соединительной ткани. Она формирует оболочки внутренних
                     органов и образует кожу, кости, зубы, сухожилия, хрящи и связки. Также соединительная ткань
                     играет важную роль в кровеносной, иммунной и лимфатической системах. От неё зависит очень
                     многое!
@@ -53,11 +55,18 @@
                     Мы создали проект «Ритмы жизней», чтобы рассказать о ДСТ и дать опору тем, кто в ней
                     нуждается. Если вам необходима помощь фонда, оставьте заявку на сайте БФ «Астра».
                 </p>
+                <!-- Кнопки действий -->
+                <div class="help__actions" role="group" aria-label="Действия">
+                    <a class="btn btn--primary" href="/community">
+                        Вступить в сообщество
+                    </a>
+                    <a class="btn btn--secondary" href="https://bfastra.ru/ritmy_zhiznei">
+                        Получить помощь
+                    </a>
+                </div>
             </div>
 
-            <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei">
-                <h3>Оставить заявку &gt;</h3>
-            </a>
+
         </div>
     </div>
 </section>
@@ -68,7 +77,7 @@
         <div class="class__content">
             <header class="class__header">
                 <div class="class__icon" aria-hidden="true">
-                    <img src="https://placehold.co/37x39" alt="" class="class__icon-img" />
+                    <img src="/static/images/folder-p__icon-img.png" alt="" class="title-icon" />
                 </div>
                 <div class="class__header-title">
                     <h2 id="class-title">Классификация</h2>
@@ -82,20 +91,20 @@
                 <div class="class__text">
                     <p>
                         Проявляются характерной клинической картиной, наследуются по определенному типу. Обычно
-                        за их развитие отвечает определённый, но не всегда известный генный дефект.
+                        за их развитие отвечает конкретный, но не всегда известный генный дефект.
                     </p>
                 </div>
                 <ul class="class__list">
                     <li class="class__list-item"><a href="/ehlers-danlos" class="class__term">Синдром
                             Элерса-Данло (13 типов)</a></li>
                     <li class="class__list-item"><a href="/marfan" class="class__term">Синдром Марфана</a></li>
-                    <li class="class__list-item"><a href="/loeys-dietz" class="class__term">Синдром
+                    <!-- <li class="class__list-item"><a href="/loeys-dietz" class="class__term">Синдром
                             Лойса-Дитца</a></li>
                     <li class="class__list-item"><a href="/shprintzen-goldberg" class="class__term">Синдром
                             Шпринтцена-Гольдберга</a></li>
                     <li class="class__list-item"><a href="/stickler" class="class__term">Синдром Стиклера</a>
                     </li>
-                    <li class="class__list-item"><a href="/beals" class="class__term">Синдром Билса</a></li>
+                    <li class="class__list-item"><a href="/beals" class="class__term">Синдром Билса</a></li> -->
                 </ul>
             </div>
 
@@ -123,7 +132,7 @@
         <div class="diagnostic__content">
             <header class="diagnostic__header">
                 <div class="diagnostic__icon" aria-hidden="true">
-                    <img src="https://placehold.co/37x39" alt="" class="diagnostic__icon-img" />
+                    <img src="/static/images/search-b__icon-img.png" alt="" class="title-icon" />
                 </div>
                 <div class="diagnostic__header-title">
                     <h2 id="diagnostic-title">Как заподозрить у себя или у своего близкого</h2>
@@ -132,14 +141,15 @@
 
             <div class="diagnostic__list_block">
                 <ul class="diagnostic__list">
-                    <li class="diagnostic__list-item">гипермобильность суставов [проверьте себя]</li>
+                    <li class="diagnostic__list-item">гипермобильность суставов <a class="dst-check"
+                            href="/ndst">(проверьте себя)</a></li>
                     <li class="diagnostic__list-item">частые вывихи и растяжения</li>
                     <li class="diagnostic__list-item">частая/длительная боль в костно-мышечных структурах</li>
                     <li class="diagnostic__list-item">сколиоз</li>
                     <li class="diagnostic__list-item">плоскостопие</li>
                     <li class="diagnostic__list-item">длительное заживление ран, образование грубых рубцов</li>
-                    <li class="diagnostic__list-item">склонность к образованию гематом и кровотечений</li>
-                    <li class="diagnostic__list-item">снижение зрения</li>
+                    <li class="diagnostic__list-item">склонность к кровотечениям и образованию гематом</li>
+                    <li class="diagnostic__list-item">ухудшение зрения</li>
                     <li class="diagnostic__list-item">проблемы с зубами</li>
                     <li class="diagnostic__list-item">и другие</li>
                 </ul>
@@ -154,16 +164,16 @@
         <div class="attention__content">
             <header class="attention__header">
                 <div class="attention__icon" aria-hidden="true">
-                    <img src="https://placehold.co/85x89" alt="" class="attention__icon-img" />
+                    <img src="/static/images/cross-m__icon-img.png" alt="" class="title-icon-lg">
                 </div>
             </header>
             <div class="attention__text">
                 <p id="attention-title">
-                    Если у вас есть признаки дисплазии или наследственная предрасположенность, необходима оценка
-                    врача (в первую очередь — генетика). Наличие даже нескольких симптомов не всегда говорит о
-                    заболевании.
-                    <br><br>
-                    Диагноз позволит разработать индивидуальный план наблюдения и лечения.
+                    <b>Если у вас есть признаки дисплазии или наследственная предрасположенность, необходима оценка
+                        врача (в первую очередь — генетика). Наличие даже нескольких симптомов не всегда говорит о
+                        заболевании.
+                        <br><br>
+                        Диагноз позволит разработать индивидуальный план наблюдения и лечения.</b>
                 </p>
             </div>
         </div>
@@ -175,18 +185,17 @@
     <div class="container">
         <div class="help__content">
             <div class="help__text-content">
-                <header class="help__header">
+                <div class="help__header">
                     <div class="help__icon" aria-hidden="true">
-                        <img src="https://placehold.co/37x39" alt="" class="help__icon-img" />
+                        <img src="/static/images/heart-p__icon-img.png" alt="" class="title-icon" />
                     </div>
                     <div class="help__header-title">
                         <h2 id="help-title">Чем мы можем помочь</h2>
                     </div>
-                </header>
-
+                </div>
                 <div class="help__text">
                     <ul class="help__list">
-                        <li class="help__list-item">Консультации специалистов</li>
+                        <li class="help__list-item">Организовать консультацию у специалистов</li>
                         <li class="help__list-item">Диагностические программы</li>
                         <li class="help__list-item">Индивидуальные планы лечения</li>
                         <li class="help__list-item">Поддержка сообщества</li>
@@ -194,16 +203,23 @@
                         <li class="help__list-item">Психологическая помощь</li>
                         <li class="help__list-item">Юридическая поддержка</li>
                     </ul>
-                    <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei">
-                        <h3>Оставить заявку &gt;</h3>
-                    </a>
+
+                    <!-- Кнопки действий -->
+                    <div class="help__actions" role="group" aria-label="Действия">
+                        <a class="btn btn--primary" href="/community">
+                            Вступить в сообщество
+                        </a>
+                        <a class="btn btn--secondary" href="https://bfastra.ru/ritmy_zhiznei">
+                            Получить помощь
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <div class="help__image-wrapper">
-                <img src="static\images\help__img.png" alt="Иллюстрация помощи" class="help__image" />
+                <img src="/static/images/help__img.png" alt="Иллюстрация помощи" class="help__image">
             </div>
         </div>
     </div>
-</section>>
+</section>
 {% endblock %}
