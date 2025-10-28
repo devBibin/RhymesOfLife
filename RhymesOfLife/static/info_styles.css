@@ -16,29 +16,32 @@ body {
 }
 
 :root {
-  /* ---------- Colors ---------- */
+  /* Colors */
   --black-color: #232323;
   --white-color: #FAFAFA;
-  --block1-color: #C7E0DF;
-  /* hero background */
+  --block1-color: #B7D0CC;
+  /* hero bg */
   --block2-color: #EFECEB;
-  /* classification background */
+  /* classification bg */
   --block3-color: #1F5654;
-  /* attention background */
-  --block4-color: #ebe5de;
-  --block5-color: #91664b;
+  /* attention bg */
+  --block4-color: #EADBCA;
+  --block5-color: #CFB4A1;
   --block6-color: #E2F6F3;
-  --block7-color: #e6e6e6;
 
-  /* ---------- Fonts ---------- */
+  /* Fonts */
   --font-styled: 'Sofia Sans', sans-serif;
   --font-basic: 'Roboto', sans-serif;
 
-  /* ---------- Layout ---------- */
+  /* Layout */
   --container-max: 1200px;
   --container-pad: 16px;
   --gutter: 24px;
+
   --section-header-icon-w: 60px;
+
+  /* --hero-text-shift: 18vh;
+    --hero-offset: 18vh; */
 }
 
 body {
@@ -46,12 +49,10 @@ body {
   flex-direction: column;
   font-family: var(--font-basic);
   color: var(--black-color);
-  font-weight: 400;
+  font-weight: 500;
 }
 
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
+/* Typography */
 h1,
 h2,
 h3,
@@ -63,35 +64,35 @@ p {
 
 h1 {
   font-family: var(--font-styled);
-  font-size: 7.2vh;
+  font-size: 6.8vh;
   line-height: 110%;
   font-weight: 700;
 }
 
 h2 {
   font-family: var(--font-styled);
-  font-size: 3.6vh;
+  font-size: 3.4vh;
   line-height: 110%;
   font-weight: 700;
 }
 
 h3 {
   font-family: var(--font-styled);
-  font-size: 3vh;
+  font-size: 3.2vh;
   line-height: 120%;
   font-weight: 700;
 }
 
 h4 {
   font-family: var(--font-styled);
-  font-size: 2.6vh;
+  font-size: 2.8vh;
   line-height: 120%;
   font-weight: 700;
 }
 
 h5 {
   font-family: var(--font-basic);
-  font-size: 1.8vh;
+  font-size: 2.4vh;
   line-height: 130%;
 }
 
@@ -104,76 +105,19 @@ p {
 
 a {
   text-decoration: none;
-  font-size: 2.2vh;
   color: var(--black-color);
 }
 
-/* -----------------------------------------
-   Lists (UL / OL)
------------------------------------------ */
 li {
   line-height: 150%;
   font-size: 2.2vh;
-  font-weight: 400;
-  padding-bottom: 0;
 }
 
-li:last-child {
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
-
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-}
-
-/* Ordered lists */
-ol {
-  list-style: decimal;
-  list-style-position: inside;
-}
-
-ol>li {
-  padding-left: 0;
-}
-
-ol>li::marker {
-  font-weight: 800;
-  color: var(--black-color);
-}
-
-/* Unordered lists */
-ul {
-  list-style: none;
-}
-
-ul>li {
-  position: relative;
-  padding-left: 20px;
-  /* space for bullet */
-}
-
-ul>li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 22px;
-  line-height: 1;
-  color: var(--bullet-color, var(--black-color));
-}
-
-/* -----------------------------------------
-   Images
------------------------------------------ */
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
-
 
 /* =========================================================
    LAYOUT HELPERS
@@ -199,74 +143,18 @@ img {
   box-sizing: border-box;
 }
 
-
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-.help__actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-top: 50px;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 20px 10px;
-  border-radius: 10px;
-  font-family: var(--font-styled);
-  font-weight: 700;
-  font-size: 2.4vh;
-  line-height: 120%;
-  text-decoration: none;
-  border: 2px solid transparent;
-  transition: transform .25s ease;
-  will-change: transform;
-}
-
-.btn:active {
-  transform: scale(0.97);
-}
-
-/* Primary button */
-.btn--primary {
+.button_black {
+  padding: 10px 20px;
   background: var(--black-color);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-styled);
   color: var(--white-color);
-  border-color: var(--black-color);
-}
-
-/* Secondary button */
-.btn--secondary {
-  background: var(--white-color);
-  color: var(--black-color);
-  border-color: var(--black-color);
-}
-
-/* Hover effect — scale only */
-.btn:hover {
-  transform: scale(1.02);
-}
-
-@media (min-width: 769px) {
-  .help__actions {
-    display: flex;
-    gap: 10px;
-  }
-}
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-.logo {
+  font-size: 18px;
+  line-height: 120%;
   font-weight: 700;
-}
-
-   .logo__highlight {
-  color: var(--block3-color);
+  transition: background .3s ease;
 }
 
 /* =========================================================
@@ -284,11 +172,9 @@ img {
   object-fit: contain;
 }
 
-
 /* =========================================================
-   HEADER
+   HEADER (как у тебя, без изменений логики)
    ========================================================= */
-/* === Desktop menu === */
 .header {
   background: var(--white-color);
   position: sticky;
@@ -303,17 +189,23 @@ img {
   align-items: center;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .header__logo {
   color: var(--black-color);
   font-family: var(--font-styled);
-  font-size: 2.4vh;
+  font-size: 22px;
   font-weight: 700;
   text-decoration: none;
-  padding: 10px 0;
-  transition: color 0.3s ease;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  transition: color .3s ease;
+}
+
+.header__logo:hover {
+  color: var(--block3-color);
 }
 
 .header__nav-menu-btn {
@@ -327,14 +219,13 @@ img {
   z-index: 1100;
 }
 
-/* Burger icon */
 .menu-icon {
   display: block;
   width: 25px;
   height: 3px;
   background: var(--black-color);
   position: relative;
-  transition: background 0.3s ease;
+  transition: background .3s ease;
 }
 
 .menu-icon::before,
@@ -345,7 +236,7 @@ img {
   height: 3px;
   background: var(--black-color);
   left: 0;
-  transition: transform 0.3s ease;
+  transition: transform .3s ease;
 }
 
 .menu-icon::before {
@@ -356,7 +247,6 @@ img {
   top: 8px;
 }
 
-/* Nav list */
 .header__nav-list {
   display: flex;
   list-style: none;
@@ -366,23 +256,10 @@ img {
   align-items: center;
 }
 
-.header__nav-list-item::before {
-  content: none !important;
-}
-
 .text--bold {
   font-weight: 700;
 }
 
-.header__nav-list,
-.header__nav-list ul,
-.dropdown-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Nav links */
 .header__nav-list-item,
 .header__nav-list-item-link {
   color: var(--black-color);
@@ -390,8 +267,8 @@ img {
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
-padding: 5px 15px;
-  transition: color 0.3s ease;
+  padding: 10px 5px;
+  transition: color .3s ease;
   position: relative;
 }
 
@@ -399,7 +276,6 @@ padding: 5px 15px;
   color: var(--block3-color);
 }
 
-/* Hover underline animation */
 .header__nav-list-item-link::after {
   content: '';
   position: absolute;
@@ -408,7 +284,7 @@ padding: 5px 15px;
   width: 0;
   height: 2px;
   background-color: var(--block3-color);
-  transition: width 0.3s ease;
+  transition: width .3s ease;
 }
 
 .header__nav-list-item-link:hover::after {
@@ -441,11 +317,8 @@ padding: 5px 15px;
   transform: translateY(0);
 }
 
-/* Dropdown items */
 .dropdown-item {
   display: block;
-  width: 100%;
-  box-sizing: border-box;
   padding: 12px 20px;
   background: var(--white-color);
   color: var(--black-color);
@@ -461,25 +334,25 @@ padding: 5px 15px;
   color: var(--white-color);
 }
 
-/* Call-to-action button in header */
+/* CTA */
 .header__nav-list-item.help-astra {
   display: inline-flex;
   justify-content: center;
   align-items: center;
   background-color: #EDCDD0;
-  padding: 7px 20px 7px 15px;
+  padding: 10px 20px 10px 15px;
   height: 100%;
   font-family: var(--font-basic);
   color: var(--black-color);
   font-size: 16px;
   line-height: 120%;
   font-weight: 700;
-  border: solid 2px #c28a90;
-  border-radius: 10px;
+  border: none;
   cursor: pointer;
   overflow: hidden;
   z-index: 1;
-  transition: background 0.3s ease;
+  border-radius: 4px;
+  transition: background .3s ease;
   gap: 10px;
 }
 
@@ -496,96 +369,33 @@ padding: 5px 15px;
 .header__help-astra-icon-img {
   width: 25px;
   height: 25px;
-  transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: transform .4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   transform-origin: center;
 }
 
 .header__nav-list-item.help-astra:hover .header__help-astra-icon-img {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .info__astra-help {
   color: var(--black-color);
   text-decoration: none;
   font-weight: 700;
-  transition: color 0.3s ease;
+  transition: color .3s ease;
   white-space: nowrap;
 }
 
 .header__nav-list-item.help-astra:hover .info__astra-help {
-  color: var(--black-color);
+  color: var(--block3-color);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.header__nav-list,
-.header__nav-list ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.header__nav-list>li,
-.header__nav-list li {
-  position: relative;
-}
-
-.header__nav-list>li::before,
-.header__nav-list li::before,
-.dropdown-menu>li::before {
-  content: none !important;
-}
-
-.header__nav-list a {
-  display: inline-flex;
-  text-decoration: none;
-  font-size: 2vh;
-}
-
-/* -------- Reset for dropdown menu -------- */
-.dropdown-menu {
-  list-style: none;
-  margin: 0;
-  padding: 10px 0;
-}
-
-.dropdown-menu>li {
-  padding-left: 0 !important;
-  position: static;
-}
-
-.dropdown-menu>li::before {
-  content: none !important;
-}
-
-/* =========================================================
-   DESKTOP NAV (>=769px)
-   ========================================================= */
+/* Desktop nav */
 @media (min-width: 769px) {
 
   .header__nav-menu-btn,
   .close-menu,
   .menu-title {
     display: none !important;
-  }
-
-  .header__logo {
-    font-size: 2.4vh;
-    font-weight: 800;
-    transition: color 0.3s ease;
   }
 
   .dropdown-toggle {
@@ -595,7 +405,6 @@ padding: 5px 15px;
     font: inherit;
     color: inherit;
     cursor: pointer;
-    font-size: 2vh;
   }
 
   .dropdown-toggle::after {
@@ -603,21 +412,10 @@ padding: 5px 15px;
   }
 }
 
-
-/* ===================================================
-   MOBILE NAV (<=768px)
-   =================================================== */
+/* Mobile nav */
 @media (max-width: 768px) {
-
   .header__nav-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    position: relative;
-    z-index: 1100;
+    display: block;
   }
 
   .menu-icon {
@@ -648,10 +446,6 @@ padding: 5px 15px;
     top: 8px;
   }
 
-  .header__nav-menu-btn {
-    display: block;
-  }
-
   .header__nav-list {
     display: none;
     flex-direction: column;
@@ -667,17 +461,6 @@ padding: 5px 15px;
     gap: 0;
   }
 
-  .header__nav-list a {
-    display: inline-flex;
-    text-decoration: none;
-    font-size: 3vh;
-    text-align: left;
-  }
-
-  .header__nav-list-item::before {
-    content: none !important;
-  }
-
   .header__nav.active .header__nav-list {
     display: flex;
   }
@@ -689,7 +472,7 @@ padding: 5px 15px;
   .menu-title {
     display: block;
     font-family: var(--font-styled);
-    font-size: 5vh;
+    font-size: 30px;
     font-weight: 700;
     text-align: center;
     padding: 10px 0;
@@ -702,14 +485,12 @@ padding: 5px 15px;
     padding: 10px 0;
     border-bottom: 1px solid #9a9a9a;
     width: 100%;
-    text-align: center;
-    font-size: 2vh;
   }
 
   .header__nav-list-item-link {
     display: block;
     font-family: var(--font-styled);
-    font-size: 3vh;
+    font-size: 22px;
     font-weight: 700;
     text-align: center;
   }
@@ -718,13 +499,12 @@ padding: 5px 15px;
     display: none;
   }
 
-  /* Accordion toggle for "Classification" */
   .dropdown-toggle {
     display: flex;
     align-items: center;
     width: 100%;
     padding: 10px 0;
-    font-size: 3vh;
+    font-size: 22px;
     line-height: 1.3;
     background: none;
     border: none;
@@ -772,7 +552,6 @@ padding: 5px 15px;
     border-bottom: 1px solid #e8e8e8;
   }
 
-  /* Smaller CTA button on mobile */
   .header__nav-list-item.help-astra {
     padding: 8px 12px;
     gap: 6px;
@@ -789,21 +568,11 @@ padding: 5px 15px;
   }
 
   .header__nav-list-item.help-astra .info__astra-help {
-    font-size: 3vh;
+    font-size: 22px;
     white-space: normal;
     text-align: center;
   }
 
-  .header__nav-list .help-astra::before,
-  .header__nav-list-item.help-astra::before {
-    content: none !important;
-  }
-
-  .header__nav-list .info__astra-help::before {
-    content: none !important;
-  }
-
-  /* Burger animation */
   .header__nav.active .menu-icon {
     background: transparent;
   }
@@ -816,31 +585,13 @@ padding: 5px 15px;
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  /* Lock scroll when menu is opened */
   body.menu-open {
     overflow: hidden;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* =========================================================
-   FOOTER
+   FOOTER (как у тебя)
    ========================================================= */
 .footer {
   background: var(--black-color);
@@ -851,109 +602,57 @@ padding: 5px 15px;
   font-family: var(--font-styled);
   font-weight: 700;
   width: 90%;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 20px;
+  padding-bottom: 30px;
   text-align: center;
   margin: 0 auto;
 }
 
-
-
-
-
-
-
 /* =========================================================
-   HOME (INDEX) — MOBILE
+   HOME (INDEX) — MOBILE FIRST (СТОЛБИК)
    ========================================================= */
+/* --- Общие отступы секций --- */
 .info,
 .class,
 .diagnostic,
 .attention,
 .help {
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
-.info__content,
-.class__content,
-.diagnostic__content,
-.attention__content,
-.help__content {
-  display: grid;
-  grid-template-columns: 1fr;
-  column-gap: var(--gutter);
-  row-gap: 24px;
-}
-
-/* ===== HERO (COVER) ===== */
-.cover,
-.cover-mobile {
-  min-height: 100vh;
-  height: auto;
+/* ---------- Cover (hero) ---------- */
+.cover {
   background-color: var(--block1-color);
   padding-top: 30px;
   padding-bottom: 0;
-  background-image: none;
 }
 
-.cover-desktop__content {
-  display: none;
-}
-
-.cover-mobile__header {
+.cover__content {
   display: flex;
   flex-direction: column;
-  font-size: 4vh;
-  text-align: center;
+  width: 100%;
 }
 
-.cover-mobile__astra-project {
-  text-align: center;
-  padding-bottom: 20px;
-}
-
-.cover-mobile__astra-project h4 {
-  font-size: 2.4vh;
-}
-
-.cover-mobile__title {
-  display: none;
-}
-
-.cover-mobile__subtitle {
-  text-align: center;
-}
-
-.cover-mobile__subtitle h3 {
-  font-size: 4.6vh;
+.cover__header {
+  display: flex;
+  flex-direction: column;
   padding-bottom: 30px;
 }
 
-.cover-mobile__image-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column
+.cover__subtitle {
+  padding-bottom: 20px;
 }
 
-.cover-mobile__img {
-  width: 70%;
+.cover__image-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.cover__img {
+  width: 100%;
   height: auto;
 }
-
-.info__header,
-.class__header,
-.diagnostic__header,
-.attention__header,
-.help__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-
 
 .info__icon,
 .class__icon,
@@ -962,48 +661,75 @@ padding: 5px 15px;
   margin-bottom: 10px;
 }
 
-/* ===== INFO ===== */
+/* ---------- Info ---------- */
 .info {
   background-color: var(--white-color);
+}
+
+.info__content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.info__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .info__text {
   display: flex;
   flex-direction: column;
   text-align: left;
+  padding-bottom: 30px;
 }
 
 .info__astra-help {
   display: grid;
   grid-column: 3 / span 8;
-  font-size: 16px;
-  font-weight: 600;
 }
 
-/* ===== CLASSIFICATION ===== */
+/* ---------- Classification ---------- */
 .class {
-  background-color: var(--block4-color);
+  background-color: var(--block2-color);
+}
+
+.class__content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.class__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .class__term {
   color: var(--black-color);
   font-family: var(--font-basic);
-  font-size: 2.2vh;
+  font-size: 16px;
   line-height: 150%;
   font-weight: 700;
 }
 
 .class__text,
 .class__ndst-text {
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 
 .class__dst {
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 }
 
 .class__header-subtitle {
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 
 .class__list {
@@ -1016,11 +742,8 @@ padding: 5px 15px;
 .class__list-item {
   position: relative;
   padding-left: 20px;
+  padding-bottom: 10px;
   font-weight: 500;
-}
-
-.class__list-item:last-child {
-  padding-bottom: 0;
 }
 
 .class__list-item::before {
@@ -1031,9 +754,21 @@ padding: 5px 15px;
   font-size: 25px;
 }
 
-/* ===== DIAGNOSTIC ====== */
+/* ---------- Diagnostic ---------- */
 .diagnostic {
   background-color: var(--white-color);
+}
+
+.diagnostic__content {
+  width: 100%;
+}
+
+.diagnostic__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .diagnostic__list {
@@ -1045,12 +780,8 @@ padding: 5px 15px;
 .diagnostic__list-item {
   position: relative;
   padding-left: 20px;
-  font-weight: 400;
   padding-bottom: 10px;
-}
-
-.diagnostic__list-item:last-child {
-  padding-bottom: 0px;
+  font-weight: 400;
 }
 
 .diagnostic__list-item::before {
@@ -1061,9 +792,23 @@ padding: 5px 15px;
   font-size: 25px;
 }
 
-/* ===== ATTENTION ===== */
+/* ---------- Attention ---------- */
 .attention {
   background-color: var(--block3-color);
+}
+
+.attention__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.attention__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .attention__text p {
@@ -1071,50 +816,45 @@ padding: 5px 15px;
   text-align: center;
 }
 
-/* ===== HELP ===== */
+/* ---------- Help ---------- */
 .help {
   background-color: var(--white-color);
   padding-bottom: 0;
 }
 
 .help__content {
-  display: grid;
-  grid-template-columns: 1fr;
-  column-gap: 24px;
-  row-gap: 24px;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.help__header {
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 10px;
-  place-items: center;
-  text-align: center;
-}
-
-.help__icon {
-  display: grid;
-  place-items: center;
+.help__text {
+  padding-bottom: 10px;
 }
 
 .help__text-content {
-  display: grid;
   width: 100%;
-  row-gap: 24px;
+  padding-bottom: 20px;
+}
+
+.help__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .help__list {
   list-style: none;
-  padding: 0;
+  padding: 0 0 30px 0;
   margin: 0;
-  display: grid;
-  grid-template-columns: 1fr;
 }
 
 .help__list-item {
   position: relative;
   padding-left: 20px;
+  padding-bottom: 10px;
 }
 
 .help__list-item::before {
@@ -1126,141 +866,65 @@ padding: 5px 15px;
 }
 
 .help__image-wrapper {
-  display: grid;
-  place-items: center;
+  display: flex;
   overflow: hidden;
+  justify-content: center;
 }
 
 .help__image {
   width: 100%;
+  max-width: 50%;
   height: auto;
-  max-width: 60%;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* =========================================================
-   DESKTOP (>= 769px)
+   DESKTOP (>= 769px): 12 колонок и раскладка секций
    ========================================================= */
 @media (min-width: 769px) {
 
-  /* ===== COVER ===== */
-  .cover {
-    height: auto;
-    padding: 0;
-    position: relative;
-    width: 100%;
-    background-image: url('/static/images/cover__bg.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
-
-  /* Optional background blur effect 
-  .cover::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: inherit;
-    filter: blur(10px);
-    opacity: 0.8;
-    z-index: 0;
-  } */
-
-  .cover-mobile {
-    display: none;
-  }
-
-  .cover-desktop__content {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    column-gap: 0;
-    align-items: end;
-    justify-content: center;
-  }
-
-  .cover-desktop-title {
-font-weight: 800;
-  }
-
-  .cover-desktop__text {
-    grid-column: 5 / span 6;
-    padding: 50px 0;
-  }
-
-  .cover-desktop__header {
-    grid-column: 5 / span 6;
-    font-size: 5vh;
-  }
-
-  .cover-desktop__astra-project {
-    text-align: left;
-    padding-bottom: 10px;
-  }
-
-  .cover-desktop__astra-project h4 {
-    font-size: 2.2vh;
-  }
-
-  .cover-desktop__title {
-    display: block;
-    text-align: left;
-    font-size: 2vh;
-    font-weight: 800;
-    padding-bottom: 30px;
-  }
-
-  .cover-desktop__subtitle {
-    text-align: left;
-  }
-
-  .cover-desktop__subtitle h3 {
-    font-size: 4.2vh;
-  }
-
-  .cover-desktop__image-wrapper {
-    grid-column: 1 / span 4;
-  }
-
-  .cover-desktop__img {
-    max-width: 70%;
-    height: auto;
-    display: block;
-  }
-
-  /* ===== COMMON GRID FOR SECTIONS ===== */
-  .info__content,
-  .class__content,
-  .diagnostic__content,
-  .attention__content,
-  .help__content {
+  /* ===== HERO ===== */
+  .cover__content {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     column-gap: var(--gutter);
-    row-gap: 24px;
+    align-items: center;
   }
 
+  .cover__header {
+    grid-column: 6 / span 5;
+    padding-bottom: 50px;
+  }
+
+  .cover__image-wrapper {
+    grid-column: 1 / span 5;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  /* ===== ОБЩАЯ СЕТКА ДЛЯ СЕКЦИЙ ===== */
+  .info__content,
+  .class__content,
+  .diagnostic__content,
+  .attention__content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+  }
+
+  /* ===== ВЫРАВНИВАНИЕ ЗАГОЛОВКОВ С ИКОНКАМИ (кроме attention) ===== */
   .info__header,
   .class__header,
   .diagnostic__header,
   .help__header {
     grid-column: 3 / span 8;
+    /* общий левый рейл */
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 0;
     text-align: left;
+    margin-bottom: 30px;
     flex-direction: row;
-    row-gap: 24px;
   }
 
   .info__icon,
@@ -1287,6 +951,7 @@ font-weight: 800;
     object-fit: contain;
   }
 
+  /* attention — оставляем центрированным */
   .attention__header {
     grid-column: 1 / -1;
     display: flex;
@@ -1303,63 +968,76 @@ font-weight: 800;
   /* ===== INFO ===== */
   .info__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
   }
 
   /* ===== CLASSIFICATION ===== */
   .class__dst {
     grid-column: 3 / span 8;
+    /* левая колонка текста */
   }
 
   .class__ndst {
     grid-column: 3 / span 8;
+    /* правая колонка текста */
   }
 
   /* ===== DIAGNOSTIC ===== */
   .diagnostic__header {
     grid-column: 3 / span 8;
+    /* заголовок слева */
+  }
+
+  .diagnostic__list {
+    grid-column: 5 / span 6;
+    /* список справа от заголовка */
   }
 
   .diagnostic__list_block {
     grid-column: 3 / span 9;
   }
 
+
   /* ===== HELP ===== */
   .help__content {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-columns: repeat(12, 1fr);
     column-gap: var(--gutter);
-    align-items: stretch;
+    align-items: end;
   }
 
   .help__text-content {
-    grid-column: 3 / 8;
-    display: grid;
-    row-gap: 24px;
-    margin-bottom: 50px;
-  }
-
-  .help__header {
-    grid-column: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0;
-    text-align: left;
-    flex-direction: row;
-    row-gap: 24px;
+    grid-column: 3 / span 4;
+    padding-bottom: 50px;
   }
 
   .help__image-wrapper {
-    grid-column: 8 / 13;
-    align-self: end;
-    justify-self: start;
+    grid-column: 7 / span 11;
+    justify-content: center;
+    align-items: flex-end;
   }
 
-  .help__image {
-    max-width: 65%;
-    height: auto;
-    display: block;
+  /* ===== ВЕРТИКАЛЬНЫЕ ОТСТУПЫ ===== */
+  .info {
+    padding-top: 50px;
+    padding-bottom: 80px;
+  }
+
+  .class {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .diagnostic {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .attention {
+    padding-top: 50px;
+  }
+
+  .help {
+    padding-top: 50px;
   }
 }
 
@@ -1386,29 +1064,32 @@ font-weight: 800;
 
 
 
+
 /* =========================================================
-   NDST PAGE — CLEAN REWRITE (mobile-first)
+   NDST PAGE — ЧИСТЫЙ РЕРАЙТ (mobile-first)
    ========================================================= */
 
-/* Tokens */
+/* Токены страницы */
 :root {
   --grid-gap: 24px;
   --rail-l: 3;
-  /* left rail of content on desktop: starts at col 3 */
+  /* левая рейка контента на десктопе: с 3-й колонки */
   --rail-span: 8;
-  /* content width on desktop */
+  /* ширина контентной области на десктопе */
   --icon-rail: 70px;
-  /* "frame" for header icons */
+  /* «рамка» под иконку в заголовках */
   --ndst-hero-offset: 0vh;
-  /* shift hero block down on desktop if needed */
+  /* если нужно опустить hero на десктопе */
 }
 
 /* =========================================================
-   COVER
+   COVER (твоя логика, мобилка сверху)
    ========================================================= */
 .ndst-cover {
-  background-color: var(--block1-color);
-  background-image: none;
+  background-color: var(--block4-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
 .ndst-cover-mobile {
@@ -1420,26 +1101,39 @@ font-weight: 800;
 }
 
 .ndst-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 400px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ndst-cover-mobile__image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(234, 219, 202, 0) 0%,
+      rgba(234, 219, 202, .5) 50%,
+      rgba(234, 219, 202, 1) 85%);
+  z-index: 1;
 }
 
 .ndst-cover-mobile__image {
-  width: 40%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 20px 0 20px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
 }
 
 .ndst-cover-mobile__title {
   position: relative;
   z-index: 2;
-  padding: 0 16px 30px 16px;
   width: 100%;
-  text-align: center;
+  padding-bottom: 30px;
+  text-align: left;
 }
 
 .ndst-cover-mobile__title h1 {
@@ -1456,7 +1150,7 @@ font-weight: 800;
 }
 
 /* =========================================================
-   BASE GRID FOR SECTIONS (mobile-first: 1 column)
+   БАЗОВАЯ СЕТКА СЕКЦИЙ (mobile-first: одна колонка)
    ========================================================= */
 .hypermob,
 .beiton,
@@ -1476,7 +1170,7 @@ font-weight: 800;
 }
 
 /* =========================================================
-   SHARED HEADERS WITH ICONS
+   ЕДИНЫЕ ЗАГОЛОВКИ С ИКОНКАМИ
    ========================================================= */
 .hypermob__header,
 .beiton__header,
@@ -1485,9 +1179,10 @@ font-weight: 800;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* centered on mobile */
+  /* мобила — по центру */
   text-align: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .hypermob__icon,
@@ -1512,6 +1207,7 @@ font-weight: 800;
 /* =========================================================
    HYPERMOB (mobile)
    ========================================================= */
+
 .hypermob {
   background: var(--white-color);
 }
@@ -1525,11 +1221,8 @@ font-weight: 800;
 .hypermob__list-item {
   position: relative;
   padding-left: 20px;
-  font-weight: 400;
-}
-
-.hypermob__list-item:last-child {
-  padding-bottom: 0;
+  padding-bottom: 10px;
+  font-weight: 500;
 }
 
 .hypermob__list-item::before {
@@ -1543,20 +1236,23 @@ font-weight: 800;
 /* =========================================================
    BEITON (mobile)
    ========================================================= */
+
+/* заголовок и вводный текст */
 .beiton {
   background: var(--block2-color);
 }
 
+/* заголовок списка теста */
 .beiton__test-title {
   text-align: center;
-  margin: 0 0 15px;
+  margin: 6px 0 16px;
 }
 
-/* Cards */
+/* карточки — отдельная сетка, без фиксированных auto-rows */
 .beiton__test-list {
   display: grid;
   grid-template-columns: 1fr;
-  /* 1 per row on mobile */
+  /* мобила: 1 в ряд */
   gap: 16px;
 }
 
@@ -1595,22 +1291,22 @@ font-weight: 800;
 .beiton__test-image {
   max-width: 100%;
   max-height: 260px;
-  /* prevents stretching */
+  /* защита от «вытягиваний» */
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: center;
 }
 
-/* Result */
+/* результат */
 .beiton-result__header {
-  text-align: center;
-  margin: 0 0 15px;
+  margin-top: 6px;
 }
 
 /* =========================================================
    GENTEST (mobile)
    ========================================================= */
+
 .gentest {
   background: var(--white-color);
 }
@@ -1628,11 +1324,8 @@ font-weight: 800;
 .gentest__list-item {
   position: relative;
   padding-left: 20px;
+  padding-bottom: 10px;
   font-weight: 400;
-}
-
-.gentest__list-item:last-child {
-  padding-bottom: 0;
 }
 
 .gentest__list-item::before {
@@ -1646,7 +1339,8 @@ font-weight: 800;
 /* =========================================================
    NDST DIAGNOSTIC (mobile)
    ========================================================= */
-/* If the block is used, follows the same structure as others */
+/* (если блок используется, структура та же, что и у других) */
+
 
 /* =========================================================
    DESKTOP (>= 768px)
@@ -1664,53 +1358,42 @@ font-weight: 800;
 
   .ndst-cover {
     padding-top: var(--ndst-hero-offset);
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    height: auto;
-    width: 100%;
-    background-image: url('/static/images/cover__bg.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
   }
 
   .ndst-cover-desktop__content {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    column-gap: var(--gutter);
+    column-gap: var(--grid-gap);
     align-items: center;
+    /* одна горизонталь */
     margin: 0 auto;
-    position: relative;
-    padding-left: var(--container-pad);
-    padding-right: var(--container-pad);
   }
 
   .ndst-cover-desktop__text {
     grid-column: 3 / span 6;
-    padding: 50px 0 50px 20px;
+    /* 3–9 */
     max-width: 780px;
-    box-sizing: border-box;
   }
 
   .ndst-cover-desktop__title h1 {
     padding-bottom: 24px;
-    font-size: 3.7vh;
+    font-size: 3.8vh;
   }
 
   .ndst-cover-desktop__image-wrapper {
-    grid-column: 9 / span 12;
-    align-self: self-end;
+    grid-column: 9 / span 3;
+    /* 10–12 */
+    max-width: 350px;
   }
 
   .ndst-cover-desktop__image {
-    max-width: 70%;
-    height: auto;
-    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
   }
 
-  /* ----- SHARED 12-COLUMN GRID FOR SECTIONS ----- */
+  /* ----- ОБЩАЯ 12-КОЛОНОЧНАЯ СЕТКА ДЛЯ СЕКЦИЙ ----- */
   .hypermob__content,
   .gentest__content,
   .beiton__content,
@@ -1720,7 +1403,7 @@ font-weight: 800;
     row-gap: 24px;
   }
 
-  /* ----- SHARED HEADERS WITH ICONS (desktop) ----- */
+  /* ----- ЕДИНЫЕ ЗАГОЛОВКИ С ИКОНКАМИ (desktop) ----- */
   .hypermob__header,
   .beiton__header,
   .gentest__header,
@@ -1731,6 +1414,7 @@ font-weight: 800;
     justify-content: flex-start;
     gap: 0;
     text-align: left;
+    margin-bottom: 30px;
     flex-direction: row;
   }
 
@@ -1761,10 +1445,11 @@ font-weight: 800;
   /* ----- HYPERMOB (desktop) ----- */
   .hypermob__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
+    /* 3–10 */
   }
 
-  /* ----- BEITON (desktop): three independent areas ----- */
+  /* ----- BEITON (desktop): три независимых области ----- */
+  /* Описание слева (3–5), карточки по центру (6–9), результат справа (10–12) */
   .beiton__test {
     grid-column: 3 / span 8;
     align-items: center;
@@ -1774,7 +1459,6 @@ font-weight: 800;
 
   .beiton__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
   }
 
   .beiton__test-title {
@@ -1793,16 +1477,12 @@ font-weight: 800;
     margin-bottom: 0;
   }
 
-  .beiton-result__header {
-    text-align: left;
-    margin: 0 0 15px;
-  }
-
+  .beiton-result__header,
   .beiton-result__text {
-    padding-bottom: 20px;
+    grid-column: 10 / span 3;
   }
 
-  /* cards inside central column: 2 per row on ≥768px */
+  /* сетка карточек внутри центральной колонки: 2 в ряд на ≥768px */
   .beiton__test-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(260px, 1fr));
@@ -1812,14 +1492,13 @@ font-weight: 800;
   /* ----- GENTEST (desktop) ----- */
   .gentest__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
   }
 
   .gentest__list {
     grid-column: 3 / span 8;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--grid-gap);
-    row-gap: 20px;
+    row-gap: 5px;
   }
 
   /* ----- NDST DIAGNOSTIC (desktop) ----- */
@@ -1828,19 +1507,12 @@ font-weight: 800;
   }
 }
 
-/* ≥1200px — Beighton cards: 2 per row in central column */
+/* ≥1200px — карточки Бейтона: 3 в ряд в центральной колонке */
 @media (min-width: 1200px) {
   .beiton__test-list {
     grid-template-columns: repeat(2, 1fr);
-    padding-bottom: 16px;
   }
 }
-
-
-
-
-
-
 
 
 
@@ -1864,10 +1536,13 @@ font-weight: 800;
    ========================================================= */
 
 .sed-cover {
-  background-color: var(--block4-color);
-  background-image: none;
+  background-color: var(--block1-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
+/* Mobile version shown by default */
 .sed-cover-mobile {
   display: block;
 }
@@ -1881,18 +1556,34 @@ font-weight: 800;
 }
 
 .sed-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 400px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
   flex-direction: column;
 }
 
+.sed-cover-mobile__image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(183, 208, 204, 0.5) 30%,
+      rgba(183, 208, 204, 1) 80%);
+  z-index: 1;
+}
+
 .sed-cover-mobile__image {
-  width: 40%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 20px 0 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right bottom;
+  flex-shrink: 0;
+  padding-left: 20px;
+  padding-top: 0;
 }
 
 .sed-cover-mobile__title {
@@ -1900,22 +1591,16 @@ font-weight: 800;
   z-index: 2;
   padding: 0 16px 30px 16px;
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .sed-cover-mobile__subtitle {
-  padding: 0 0 50px;
+  padding: 0 16px 50px 16px;
 }
 
-.sed-cover-mobile__subtitle p {
-  font-size: 2.8vh;
-}
-
-/* =========================================================
-   ACCORDION (mobile-first)
-   ========================================================= */
+/* === Accordion Section === */
 .sed-types {
-  background-color: var(--white-color);
+  background-color: var(--block2-color);
   padding-top: 50px;
   padding-bottom: 50px;
 }
@@ -1929,22 +1614,26 @@ font-weight: 800;
   justify-content: space-between;
   text-align: left;
   width: 100%;
-  background: transparent;
+  background: var(--block2-color);
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 30px 20px;
+  padding: 20px;
   color: var(--black-color);
   transition: background .3s ease, color .3s ease;
 }
 
 .accordion-header.sed h2 {
-  font-size: 3vh;
+  font-size: 2.6vh;
   padding-right: 10px;
 }
 
 .accordion-header.sed[aria-expanded="true"] {
-  background: transparent;
+  background: var(--block5-color);
+}
+
+.accordion-header.sed:hover {
+  background: var(--block5-color);
 }
 
 .accordion-icon.sed {
@@ -1975,27 +1664,32 @@ font-weight: 800;
 }
 
 .accordion-item.sed {
-  padding: 0 20px 30px;
+  padding: 20px 20px;
   margin: 0;
 }
 
 .accordion-item.sed:first-child {
-  padding: 0 20px 30px;
-  margin: 0;
-}
-
-.accordion-item.sed:last-child {
-  padding: 0 20px 30px;
+  padding: 20px 20px 0;
   margin: 0;
 }
 
 .accordion-item-header.sed h3 {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 2.6vh;
 }
 
 .accordion-item-info.sed li {
   font-weight: 400;
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+.accordion-item-info.sed li::before {
+  content: "•";
+  margin-right: 8px;
+  color: var(--block5-color);
+  font-size: 22px;
+  line-height: 1;
 }
 
 .accordion-divider {
@@ -2014,9 +1708,7 @@ font-weight: 800;
 
 @media (min-width: 768px) {
 
-  .sed-types {
-    padding-top: 30px;
-  }
+  /* Cover - оставляем как есть */
   .sed-cover-mobile {
     display: none;
   }
@@ -2027,54 +1719,49 @@ font-weight: 800;
 
   .sed-cover {
     padding-top: var(--sed-hero-offset);
-    position: relative;
-    overflow: hidden;
-    height: auto;
-    width: 100%;
-    background-image: url('/static/images/cover__bg-02.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
   }
 
   .sed-cover-desktop__content {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0px, 1fr));
+    grid-template-columns: repeat(12, 1fr);
     column-gap: var(--gutter);
     align-items: center;
+    margin: 0 auto;
+    position: relative;
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
   }
 
   .sed-cover-desktop__image-wrapper {
-    grid-column: 8 / 12;
-    align-self: end;
-    justify-self: start;
+    grid-column: 9 / span 5;
+    align-self: center;
   }
 
   .sed-cover-desktop__image {
-    width: auto;
-    height: 300px;
+    width: 100%;
+    height: auto;
     object-fit: contain;
     object-position: left center;
   }
 
   .sed-cover-desktop__text {
-    grid-column: 3 / 8;
-    display: grid;
-    padding: 50px 0 50px 0;
+    grid-column: 3 / span 6;
+    padding: 0;
+    max-width: 780px;
+    box-sizing: border-box;
   }
 
   .sed-cover-desktop__title h1 {
     padding-bottom: 24px;
-    font-size: 3.8vh;
+    font-size: 3.6vh;
   }
 
   .sed-cover-desktop__subtitle p {
-    font-size: 2.6vh;
+    font-size: 16px;
     line-height: 150%;
   }
 
-  /* Accordion grid wrapper */
+  /* Accordion Section - ПРАВИЛЬНЫЙ ПОДХОД */
   .sed-types .container {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -2085,10 +1772,19 @@ font-weight: 800;
 
   .sed-types__content {
     grid-column: 3 / span 8;
+    /* Занимает колонки 3-8 */
     width: 100%;
+  }
+
+  /* Убираем все лишние гриды внутри */
+  .sed-types__content {
     display: block;
+    /* Убираем grid */
   }
 }
+
+
+
 
 
 
@@ -2115,17 +1811,315 @@ font-weight: 800;
 
 
 /* =========================================================
-   MARFAN PAGE (MOBILE)
+   MARFAN PAGE (mobile)
    ========================================================= */
 
-/* Page tokens */
-:root {
-  --marfan-hero-offset: 0vh;
+.marfan-cover {
+  background-color: var(--block2-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
-.marfan-cover {
+/* Mobile version shown by default */
+.marfan-cover-mobile {
+  display: block;
+}
+
+.marfan-cover-desktop {
+  display: none;
+}
+
+.container.marfan {
+  padding: 0;
+}
+
+.marfan-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.marfan-cover-mobile__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--block2-color) 30%, var(--block2-color) 85%);
+  z-index: 1;
+}
+
+.marfan-cover-mobile__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Масштабирование и обрезка */
+  object-position: right bottom;
+  /* Фокус на правом нижнем углу */
+  flex-shrink: 0;
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.marfan-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.marfan-cover-mobile__subtitle {
+  padding: 0 16px 50px 16px;
+}
+
+.marfan-signs__header,
+.marfan-diagnostic__header,
+.marfan-treatment__header,
+.marfan-prognosis__header,
+.marfan-attention__header {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+.marfan-attention__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.marfan-signs__item-header {
+  padding-bottom: 10px;
+}
+
+.marfan-signs__icon,
+.marfan-diagnostic__icon,
+.marfan-treatment__icon,
+.marfan-prognosis__icon {
+  padding-bottom: 10px;
+  padding-right: 0;
+}
+
+.marfan-signs,
+.marfan-diagnostic,
+.marfan-treatment,
+.marfan-prognosis,
+.marfan-attention {
+  padding: 50px 0;
+}
+
+/* Симптомы синдрома Марфана */
+.marfan-signs {
+  background-color: var(--white-color);
+}
+
+.marfan-signs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
+.marfan-signs__list-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  bottom: auto;
+  color: var(--block5-color);
+  font-size: 25px;
+}
+
+.marfan-signs__text {
+  padding-bottom: 40px;
+}
+
+/* Диагностика Марфана */
+.marfan-diagnostic {
   background-color: var(--block1-color);
-  background-image: none;
+}
+
+.marfan-diagnostic__text {
+  padding-bottom: 50px;
+}
+
+.marfan-diagnostic__instrument {
+  padding-bottom: 20px;
+}
+
+.marfan-diagnostic__list {
+  padding: 0 20px;
+  margin: 0;
+}
+
+.marfan-diagnostic__list-item {
+  position: relative;
+  padding-left: 10px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
+.marfan-diagnostic__list-item::before {
+  position: absolute;
+  left: 0;
+  bottom: auto;
+}
+
+/* Как лечить синдром Марфана */
+.marfan-treatment {
+  background-color: var(--white-color);
+}
+
+/* Прогноз */
+.marfan-prognosis {
+  background-color: var(--block2-color);
+}
+
+/* Важно */
+.marfan-attention {
+  background-color: var(--block3-color);
+}
+
+.marfan-attention__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marfan-attention__header {
+  color: var(--white-color);
+}
+
+.marfan-attention__icon {
+  padding-bottom: 40px;
+}
+
+.marfan-attention__text p {
+  color: var(--white-color);
+  text-align: center;
+}
+
+
+/* MARFAN desktop (>768px) */
+@media (min-width: 768px) {
+
+  .marfan-signs__content,
+  .marfan-diagnostic__content,
+  .marfan-treatment__content,
+  .marfan-prognosis__content,
+  .marfan-attention__content {
+    width: 60%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .marfan-signs__header,
+  .marfan-diagnostic__header,
+  .marfan-treatment__header,
+  .marfan-prognosis__header {
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+  }
+
+  .marfan-signs__icon,
+  .marfan-diagnostic__icon,
+  .marfan-treatment__icon,
+  .marfan-prognosis__icon {
+    margin-right: 15px;
+    padding-bottom: 0;
+  }
+
+  .marfan-cover-mobile {
+    display: none;
+  }
+
+  .marfan-cover-desktop {
+    display: block;
+  }
+
+  .marfan-cover-desktop__content {
+    display: flex;
+    flex-direction: row;
+    max-width: 90%;
+    margin: 0 auto;
+    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .marfan-cover-desktop__text {
+    flex: 0 0 51%;
+    padding: 50px 70px 50px 0;
+    box-sizing: border-box;
+  }
+
+  .marfan-cover-desktop__title h1 {
+    padding-bottom: 30px;
+  }
+
+  .marfan-cover-desktop__image-wrapper {
+    flex: 0 0 35%;
+    max-width: 350px;
+    height: 100%;
+  }
+
+  .marfan-cover-desktop__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right center;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   MARFAN PAGE — ЧИСТЫЙ РЕРАЙТ (mobile-first)
+   ========================================================= */
+
+/* Токены страницы */
+:root {
+  --grid-gap: 24px;
+  --rail-l: 3;
+  /* левая рейка контента на десктопе: с 3-й колонки */
+  --rail-span: 8;
+  /* ширина контентной области на десктопе */
+  --icon-rail: 70px;
+  /* «рамка» под иконку в заголовках */
+  --marfan-hero-offset: 0vh;
+  /* если нужно опустить hero на десктопе */
+}
+
+/* =========================================================
+   COVER (твоя логика, мобилка сверху)
+   ========================================================= */
+.marfan-cover {
+  background-color: var(--block4-color);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
 }
 
 .marfan-cover-mobile {
@@ -2137,30 +2131,43 @@ font-weight: 800;
 }
 
 .marfan-cover-mobile__image-wrapper {
+  position: relative;
+  min-height: 400px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
+  align-items: flex-end;
+}
+
+.marfan-cover-mobile__image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(234, 219, 202, 0) 0%,
+      rgba(234, 219, 202, .5) 50%,
+      rgba(234, 219, 202, 1) 85%);
+  z-index: 1;
 }
 
 .marfan-cover-mobile__image {
-  width: 40%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 20px 0 20px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
 }
 
 .marfan-cover-mobile__title {
   position: relative;
   z-index: 2;
-  padding: 0 16px 30px 16px;
   width: 100%;
-  text-align: center;
+  padding-bottom: 30px;
+  text-align: left;
 }
 
 .marfan-cover-mobile__title h1 {
-  font-size: 4vh;
+  font-size: 3.5vh;
   color: var(--black-color);
 }
 
@@ -2172,36 +2179,40 @@ font-weight: 800;
   text-align: left;
 }
 
-/* Sections */
+/* =========================================================
+   БАЗОВАЯ СЕТКА СЕКЦИЙ (mobile-first: одна колонка)
+   ========================================================= */
 .marfan-signs,
 .marfan-diagnostic,
 .marfan-treatment,
-.marfan-prognosis,
-.marfan-attention {
+.marfan-prognosis {
   padding: 50px 0;
 }
 
 .marfan-signs__content,
-.marfan-diagnostic__content,
+.marfan-diagnostic,
 .marfan-treatment__content,
-.marfan-prognosis__content,
-.marfan-attention__content {
+.marfan-prognosis__content {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   column-gap: var(--grid-gap);
   row-gap: 24px;
 }
 
-/* Unified headers */
+/* =========================================================
+   ЕДИНЫЕ ЗАГОЛОВКИ С ИКОНКАМИ
+   ========================================================= */
 .marfan-signs__header,
-.marfan-diagnostic__header,
+.marfan-diagnostic,
 .marfan-treatment__header,
 .marfan-prognosis__header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* мобила — по центру */
   text-align: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .marfan-signs__icon,
@@ -2223,46 +2234,62 @@ font-weight: 800;
   object-fit: contain;
 }
 
-/* ===== SIGNS ===== */
+/* =========================================================
+   MARFAN SIGNS (mobile)
+   ========================================================= */
+
 .marfan-signs {
   background: var(--white-color);
 }
 
-.marfan-signs__item-header {
-  padding: 0 0 20px;
-  text-align: center;
+.marfan-signs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.marfan-signs__text {
-  padding-bottom: 20px;
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  font-weight: 500;
 }
 
-.marfan-signs__text:last-child {
-  padding-bottom: 0;
+.marfan-signs__list-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--block5-color);
+  font-size: 25px;
 }
 
-/* ===== DIAGNOSTIC ===== */
+/* =========================================================
+   MARFAN DIAGNOSTIC  (mobile)
+   ========================================================= */
+
+/* заголовок и вводный текст */
 .marfan-diagnostic {
   background: var(--block2-color);
-  padding-top: 50px;
-  padding-bottom: 50px;
 }
 
+/* заголовок списка теста */
 .marfan-diagnostic__test-title {
   text-align: center;
   margin: 6px 0 16px;
 }
 
+/* карточки — отдельная сетка, без фиксированных auto-rows */
 .marfan-diagnostic__test-list {
   display: grid;
   grid-template-columns: 1fr;
+  /* мобила: 1 в ряд */
   gap: 16px;
 }
 
 .marfan-diagnostic__test-item {
   display: flex;
   flex-direction: column;
-  background: var(--black-color);
+  background: var(--white-color);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -2294,21 +2321,22 @@ font-weight: 800;
 .marfan-diagnostic__test-image {
   max-width: 100%;
   max-height: 260px;
+  /* защита от «вытягиваний» */
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: center;
 }
 
+/* результат */
 .marfan-diagnostic__header {
   margin-top: 6px;
 }
 
-.marfan-diagnostic__text {
-  padding-bottom: 20px;
-}
+/* =========================================================
+   MARFAN TREATMENT (mobile)
+   ========================================================= */
 
-/* ===== TREATMENT ===== */
 .marfan-treatment {
   background: var(--white-color);
 }
@@ -2326,6 +2354,7 @@ font-weight: 800;
 .marfan-treatment__list-item {
   position: relative;
   padding-left: 20px;
+  padding-bottom: 10px;
   font-weight: 400;
 }
 
@@ -2337,62 +2366,13 @@ font-weight: 800;
   font-size: 25px;
 }
 
-/* ===== PROGNOSIS ===== */
-.marfan-prognosis {
-  background: var(--block1-color);
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.marfan-prognosis__text {
-  grid-column: 3 / span 8;
-  padding-bottom: 20px;
-}
-
-/* ===== ATTENTION ===== */
-.marfan-attention {
-  background-color: var(--block1-color);
-}
-
-.marfan-attention__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.marfan-attention__header {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.marfan-attention__header-titile {
-  grid-column: 3 / span 8;
-  text-align: center;
-}
-
-.marfan-attention__header-titile h2 {
-  color: var(--black-color);
-}
-
-.marfan-attention__text {
-  grid-column: 3 / span 8;
-  text-align: center;
-}
-
-.marfan-attention__text p {
-  color: var(--black-color);
-  text-align: center;
-}
 
 /* =========================================================
-   MARFAN PAGE (DESKTOP >= 768px)
+   DESKTOP (>= 768px)
    ========================================================= */
 @media (min-width: 768px) {
 
-  /* ===== COVER (HERO) ===== */
+  /* ----- HERO (desktop) ----- */
   .marfan-cover-mobile {
     display: none;
   }
@@ -2402,30 +2382,22 @@ font-weight: 800;
   }
 
   .marfan-cover {
-    padding-top: var(--marfan-hero-offset);
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    height: auto;
-    width: 100%;
-    background-image: url('/static/images/cover__bg.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    padding-top: var(--ndst-hero-offset);
   }
 
   .marfan-cover-desktop__content {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    align-items: end;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--grid-gap);
+    align-items: center;
+    /* одна горизонталь */
+    margin: 0 auto;
   }
 
   .marfan-cover-desktop__text {
-    grid-column: 3 / 8;
-    display: grid;
-    padding: 50px 0 50px 20px;
+    grid-column: 3 / span 6;
+    /* 3–9 */
+    max-width: 780px;
   }
 
   .marfan-cover-desktop__title h1 {
@@ -2434,28 +2406,29 @@ font-weight: 800;
   }
 
   .marfan-cover-desktop__image-wrapper {
-    grid-column: 8 / 12;
-    align-self: end;
-    justify-self: start;
+    grid-column: 9 / span 3;
+    /* 10–12 */
+    max-width: 350px;
   }
 
   .marfan-cover-desktop__image {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
   }
 
+  /* ----- ОБЩАЯ 12-КОЛОНОЧНАЯ СЕТКА ДЛЯ СЕКЦИЙ ----- */
   .marfan-signs__content,
   .marfan-diagnostic__content,
-  .marfan-treatment__content,
-  .marfan-prognosis__content,
-  .marfan-attention__content {
-    display: grid;
+  .marfan-treatment__content
+  .marfan-prognosis__content {
     grid-template-columns: repeat(12, 1fr);
-    column-gap: var(--gutter);
+    column-gap: var(--grid-gap);
     row-gap: 24px;
   }
 
+  /* ----- ЕДИНЫЕ ЗАГОЛОВКИ С ИКОНКАМИ (desktop) ----- */
   .marfan-signs__header,
   .marfan-diagnostic__header,
   .marfan-treatment__header,
@@ -2466,8 +2439,8 @@ font-weight: 800;
     justify-content: flex-start;
     gap: 0;
     text-align: left;
+    margin-bottom: 30px;
     flex-direction: row;
-    padding-bottom: 10px;
   }
 
   .marfan-signs__icon,
@@ -2494,20 +2467,14 @@ font-weight: 800;
     object-fit: contain;
   }
 
-  /* ===== SIGNS ===== */
+  /* ----- marfan-signs (desktop) ----- */
   .marfan-signs__text {
     grid-column: 3 / span 8;
+    /* 3–10 */
   }
 
-  .marfan-signs__comment {
-    grid-column: 3 / span 8;
-  }
-
-  .marfan-signs__item-header {
-    text-align: left;
-  }
-
-  /* ===== DIAGNOSTIC ===== */
+  /* ----- MARFAN DIAGNOSTIC (desktop): три независимых области ----- */
+  /* Описание слева (3–5), карточки по центру (6–9), результат справа (10–12) */
   .marfan-diagnostic__test {
     grid-column: 3 / span 8;
     align-items: center;
@@ -2517,21 +2484,6 @@ font-weight: 800;
 
   .marfan-diagnostic__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
-  }
-
-  .marfan-diagnostic__instrument {
-    grid-column: 3 / span 8;
-  }
-
-  .marfan-diagnostic__list {
-    display: grid;
-    padding: 0;
-    margin: 0;
-    grid-column: 3 / span 8;
-    grid-template-columns: 1fr;
-    column-gap: var(--grid-gap);
-    row-gap: 20px;
   }
 
   .marfan-diagnostic__test-title {
@@ -2543,13 +2495,26 @@ font-weight: 800;
     grid-column: 6 / span 4;
   }
 
+  .marfan-diagnostic__content {
+    grid-column: 3 / span 8;
+    align-items: center;
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .marfan-diagnostic__header,
+  .marfan-diagnostic__text {
+    grid-column: 10 / span 3;
+  }
+
+  /* сетка карточек внутри центральной колонки: 2 в ряд на ≥768px */
   .marfan-diagnostic__test-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(260px, 1fr));
     gap: 16px;
   }
 
-  /* ===== TREATMENT ===== */
+  /* ----- MARFAN TREATMENT (desktop) ----- */
   .marfan-treatment__text {
     grid-column: 3 / span 8;
   }
@@ -2559,5 +2524,10 @@ font-weight: 800;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--grid-gap);
     row-gap: 5px;
+  }
+
+  /* ----- MARFAN ROGNOSIS (desktop) ----- */
+  .marfan-prognosis__header {
+    grid-column: 3 / span 8;
   }
 }

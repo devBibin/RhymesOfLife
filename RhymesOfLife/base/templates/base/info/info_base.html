@@ -28,7 +28,7 @@
     <!-- Top site navigation with mobile hamburger -->
     <header class="header" role="banner">
         <div class="header__container">
-            <a class="header__logo" href="/">Ритмы Жизней</a>
+            <a class="header__logo" href="/">РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span></a>
 
             <nav class="header__nav" role="navigation" aria-label="Primary">
                 <!-- Hamburger button -->
@@ -39,17 +39,17 @@
 
                 <!-- Main menu -->
                 <ul id="main-menu" class="header__nav-list" role="menubar">
-                    <li class="menu-title" role="none">Ритмы Жизней</li>
-
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">О проекте</a>
+                    <li class="menu-title" role="none">
+                        <a class="header__logo-mob-menu" href="/">
+                            РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span>
+                        </a>
                     </li>
 
                     <!-- Dropdown -->
                     <li class="header__nav-list-item dropdown" role="none">
                         <button class="text--bold header__nav-list-item-link dropdown-toggle" type="button"
                             aria-haspopup="true" aria-expanded="false" aria-controls="sections-menu">
-                            Классификация ДСТ
+                            Классификация и диагностика ДСТ
                         </button>
                         <ul id="sections-menu" class="dropdown-menu" role="menu" aria-label="Submenu: классификация">
                             <li role="none">
@@ -71,11 +71,8 @@
                     </li>
 
                     <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Диагностика</a>
-                    </li>
-
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="#" role="menuitem">Вступить в
+                        <a class="text--bold header__nav-list-item-link" href="{% url 'register' %}"
+                            role="menuitem">Вступить в
                             сообщество</a>
                     </li>
 
@@ -85,7 +82,7 @@
                             <img src="{% static 'images/header__help-astra-icon-img.png' %}" alt=""
                                 class="header__help-astra-icon-img" />
                         </div>
-                        <a class="info__astra-help" href="{% url 'register' %}" role="menuitem">Получить
+                        <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei" role="menuitem">Получить
                             помощь</a>
                     </li>
                 </ul>

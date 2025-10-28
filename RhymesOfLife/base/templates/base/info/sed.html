@@ -2,14 +2,14 @@
 
 {% block title %}Синдром Элерса-Данло{% endblock %}
 
-{% block content %} 
+{% block content %}
 <!-- ========== Cover ========== -->
 <section class="sed-cover">
-    <div class="container sed">
+    <div class="container">
         <!-- ========== Mobile ========== -->
         <div class="sed-cover-mobile">
             <div class="sed-cover-mobile__image-wrapper">
-                <img src="\static\images\sed__img.png" alt="Иллюстрация дисплазии соединительной ткани"
+                <img src="/static/images/sed__img-mob.png" alt="Иллюстрация дисплазии соединительной ткани"
                     class="sed-cover-mobile__image">
                 <div class="sed-cover-mobile__title">
                     <h1>Синдром Элерса-Данло</h1>
@@ -18,7 +18,7 @@
             <div class="sed-cover-mobile__subtitle">
                 <p>
                     На сегодня синдром Элерса-Данло (СЭД) подразделяют на 13 типов. Их объединяют общие черты
-                    (гипермобильность суставов, хрупкость тканей), однако каждое из 13-ти заболеваний имеет свои
+                    (гипермобильность суставов, хрупкость тканей), однако каждый из 13 типов имеет свои
                     характерные клинические особенности.
                 </p>
             </div>
@@ -34,13 +34,13 @@
                     <div class="sed-cover-desktop__subtitle">
                         <p>
                             На сегодня синдром Элерса-Данло (СЭД) подразделяют на 13 типов. Их объединяют общие
-                            черты (гипермобильность суставов, хрупкость тканей), однако каждое из 13-ти
-                            заболеваний имеет свои характерные клинические особенности.
+                            черты (гипермобильность суставов, хрупкость тканей), однако каждый из 13 типов имеет свои
+                            характерные клинические особенности.
                         </p>
                     </div>
                 </div>
                 <div class="sed-cover-desktop__image-wrapper">
-                    <img src="\static\images\sed__img.png" alt="Иллюстрация дисплазии соединительной ткани"
+                    <img src="/static/images/sed__img.png" alt="Иллюстрация дисплазии соединительной ткани"
                         class="sed-cover-desktop__image">
                 </div>
             </div>
@@ -53,7 +53,7 @@
     <div class="container">
         <div class="sed-types__content">
 
-            <!-- ========== Hypermob SED ========== -->
+            <!-- Гипермобильный СЭД -->
             <div class="accordion-items sed">
                 <button class="accordion-header sed" aria-expanded="false">
                     <h2>Гипермобильный СЭД (гСЭД)</h2>
@@ -81,19 +81,21 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Генерализованная гипермобильность суставов</li>
-                            <li>Нестабильность суставов</li>
-                            <li>Хроническая боль</li>
+                            <ul>
+                                <li>Генерализованная гипермобильность суставов</li>
+                                <li>Нестабильность суставов</li>
+                                <li>Хроническая боль</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -126,18 +128,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Хрупкость кожи с атрофическими рубцами</li>
-                            <li>Гиперрастяжимая кожа с бархатистой текстурой</li>
+                            <ul>
+                                <li>Хрупкость кожи с атрофическими рубцами</li>
+                                <li>Гиперрастяжимая кожа с бархатистой текстурой</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -170,19 +174,21 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Хрупкость артерий с аневризмами/разрывами</li>
-                            <li>Хрупкость органов с их спонтанными разрывами</li>
-                            <li>Обширные синяки без травм</li>
+                            <ul>
+                                <li>Хрупкость артерий с аневризмами/разрывами</li>
+                                <li>Хрупкость органов с их спонтанными разрывами</li>
+                                <li>Обширные синяки без травм</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -215,18 +221,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Тяжёлый периодонтит с ранней потерей зубов</li>
-                            <li>Бляшки на передней поверхности голеней</li>
+                            <ul>
+                                <li>Тяжёлый периодонтит с ранней потерей зубов</li>
+                                <li>Бляшки на передней поверхности голеней</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -259,18 +267,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Врожденная мышечная гипотония</li>
-                            <li>Ранний кифосколиоз</li>
+                            <ul>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Ранний кифосколиоз</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -303,20 +313,22 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Низкий рост</li>
-                            <li>Врожденная мышечная гипотония</li>
-                            <li>Переразгибание конечностей</li>
-                            <li>Черепно-лицевые особенности</li>
+                            <ul>
+                                <li>Низкий рост</li>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Переразгибание конечностей</li>
+                                <li>Черепно-лицевые особенности</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -349,18 +361,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Тяжёлые патологии роговицы глаза</li>
-                            <li>Потеря слуха</li>
+                            <ul>
+                                <li>Тяжёлые патологии роговицы глаза</li>
+                                <li>Потеря слуха</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -393,18 +407,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Тяжёлая гипермобильность суставов</li>
-                            <li>Врожденный двусторонний вывих бедра</li>
+                            <ul>
+                                <li>Тяжёлая гипермобильность суставов</li>
+                                <li>Врожденный двусторонний вывих бедра</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -437,18 +453,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Врожденные множественные контрактуры</li>
-                            <li>Черепно-лицевые особенности</li>
+                            <ul>
+                                <li>Врожденные множественные контрактуры</li>
+                                <li>Черепно-лицевые особенности</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -481,18 +499,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Гиперрастяжимая бархатистая кожа без рубцов</li>
-                            <li>Деформация стоп</li>
+                            <ul>
+                                <li>Гиперрастяжимая бархатистая кожа без рубцов</li>
+                                <li>Деформация стоп</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -525,19 +545,21 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Чрезвычайная хрупкость кожи</li>
-                            <li>Обширные гематомы</li>
-                            <li>Короткие конечности</li>
+                            <ul>
+                                <li>Чрезвычайная хрупкость кожи</li>
+                                <li>Обширные гематомы</li>
+                                <li>Короткие конечности</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -570,18 +592,20 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Врожденная мышечная гипотония</li>
-                            <li>Проксимальные контрактуры</li>
+                            <ul>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Проксимальные контрактуры</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
@@ -614,20 +638,23 @@
                             <h3>Отличительные особенности</h3>
                         </div>
                         <div class="accordion-item-info sed">
-                            <li>Тяжёлая недостаточность сердечных клапанов</li>
+                            <ul>
+                                <li>Тяжёлая недостаточность сердечных клапанов</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="accordion-item sed">
+                    <!-- <div class="accordion-item sed">
                         <div class="accordion-item-header sed">
                             <h3>Критерии диагностики</h3>
                         </div>
                         <div class="accordion-item-info sed">
                             <p>[ссылка]</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <hr class="accordion-divider">
+
         </div>
     </div>
 </section>
