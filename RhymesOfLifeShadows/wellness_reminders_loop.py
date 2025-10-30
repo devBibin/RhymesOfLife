@@ -5,8 +5,8 @@ from datetime import date, timedelta
 
 from orm_connector import settings  # noqa: F401
 
+from django.db import transaction, connection
 from django.utils import timezone
-from django.utils.translation import gettext as _
 from django.utils.translation import override
 from django.db.models import Max
 from django.db.models.functions import TruncDate
@@ -64,8 +64,8 @@ def already_sent_db(info: AdditionalUserInfo, today: date) -> bool:
     )
 
 
-def mark_sent_db(info: AdditionalUserInfo, title: str, message: str) -> None:
-    Notification.objects.create(
+def mark_sent_db(info: AdditionalUserInfo, title: str, message: str) -> Notification:
+    return Notification.objects.create(
         recipient=info,
         sender=None,
         notification_type="SYSTEM_MESSAGE",
@@ -91,6 +91,14 @@ def build_title(info):
 def build_message(info):
     with override(getattr(info, "language", None) or "en"):
         return str(WELLNESS_REMINDER_MSG)
+
+
+def pg_try_advisory_lock(user_id: int, day: date) -> bool:
+    lock_key2 = int(day.strftime("%Y%m%d"))
+    with connection.cursor() as c:
+        c.execute("SELECT pg_try_advisory_xact_lock(%s, %s)", [user_id, lock_key2])
+        row = c.fetchone()
+    return bool(row and row[0])
 
 
 def loop_once() -> int:
@@ -121,51 +129,49 @@ def loop_once() -> int:
         threshold = today - timedelta(days=interval_days)
         if info.last_entry and info.last_entry > threshold:
             continue
-
         if not due_now(now_local, s.reminder_hour, s.reminder_minute):
             continue
+
         if rds and already_sent(rds, info.pk, today):
-            continue
-        if already_sent_db(info, today):
             continue
 
         title = build_title(info)
         msg = build_message(info)
 
-        via_telegram = bool(getattr(s, "tg_notifications_enabled", True))
-        via_email = bool(getattr(s, "email_notifications_enabled", True))
+        with transaction.atomic():
+            if not pg_try_advisory_lock(info.pk, today):
+                continue
+            if already_sent_db(info, today):
+                continue
 
-        res = send_notification_multichannel(
-            recipient=info,
-            sender=None,
-            notification_type="SYSTEM_MESSAGE",
-            title=title,
-            message=msg,
-            url="",
-            payload={"kind": "wellness_reminder"},
-            source=Notification.Source.SYSTEM,
-            scope=Notification.Scope.PERSONAL,
-            via_site=True,
-            via_telegram=via_telegram,
-            via_email=via_email,
-            email_subject=title if via_email else None,
-            email_body=msg if via_email else None,
-        )
+            marker = mark_sent_db(info, str(title), str(msg))
 
-        success = any(
-            [
-                bool(res.get("telegram_sent")),
-                bool(res.get("email_sent")),
-                bool(res.get("notification_id")),
-            ]
-        )
+            via_telegram = bool(getattr(s, "tg_notifications_enabled", True))
+            via_email = bool(getattr(s, "email_notifications_enabled", True))
 
+            res = send_notification_multichannel(
+                recipient=info,
+                sender=None,
+                notification_type="SYSTEM_MESSAGE",
+                title=title,
+                message=msg,
+                url="",
+                payload={"kind": "wellness_reminder"},
+                source=Notification.Source.SYSTEM,
+                scope=Notification.Scope.PERSONAL,
+                via_site=False,
+                via_telegram=via_telegram,
+                via_email=via_email,
+                email_subject=title if via_email else None,
+                email_body=msg if via_email else None,
+            )
+
+        success = any([bool(res.get("telegram_sent")), bool(res.get("email_sent")), True])
         if success:
             sent += 1
             log.info(f"sent to user_info={info.pk}")
         else:
-            mark_sent_db(info, str(title), str(msg))
-            log.warning(f"delivery failed; marked in DB user_info={info.pk}")
+            log.warning(f"delivery failed user_info={info.pk}")
 
     return sent
 

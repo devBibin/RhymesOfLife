@@ -37,6 +37,7 @@ def _prefill_contact(user):
     return data
 
 
+@login_required
 @require_http_methods(["GET", "POST"])
 def help_request_view(request):
     pre = _prefill_contact(request.user)

@@ -5,12 +5,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Rhymes of Life{% endblock %}</title>
+    <meta name="description" content="Сообщество поддержки людей с дисплазией соединительной ткани">
+    <title>{% block title %}Ритмы Жизней{% endblock %}</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 
-    <!-- Google Fonts (loaded once in <head>) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,69 +26,73 @@
 
 <body>
     <!-- ================= HEADER ================= -->
-    <!-- Top site navigation with mobile hamburger -->
-    <header class="header" role="banner">
-        <div class="header__container">
-            <a class="header__logo" href="/">РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span></a>
+    <header class="header">
+        <div class="container header__container">
+            <!----- LOGO ----->
+            <a href="/" class="logo" aria-label="На главную страницу">
+                РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span>
+            </a>
 
-            <nav class="header__nav" role="navigation" aria-label="Primary">
-                <!-- Hamburger button -->
-                <button type="button" class="header__nav-menu-btn" aria-label="Открыть меню" aria-controls="main-menu"
-                    aria-expanded="false">
-                    <span class="menu-icon" aria-hidden="true"></span>
-                </button>
+            <!----- BURGER ----->
+<button class="burger-btn" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+    <span class="burger-line"></span>
+    <span class="burger-line"></span>
+</button>
 
-                <!-- Main menu -->
-                <ul id="main-menu" class="header__nav-list" role="menubar">
-                    <li class="menu-title" role="none">
-                        <a class="header__logo-mob-menu" href="/">
-                            РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span>
-                        </a>
-                    </li>
-
-                    <!-- Dropdown -->
-                    <li class="header__nav-list-item dropdown" role="none">
-                        <button class="text--bold header__nav-list-item-link dropdown-toggle" type="button"
-                            aria-haspopup="true" aria-expanded="false" aria-controls="sections-menu">
+            <!----- NAV ----->
+            <nav class="nav" aria-label="Основная навигация">
+                <ul class="nav__list">
+                    <li class="nav__item dropdown">
+                        <button class="nav__link dropdown__toggle" 
+                                aria-expanded="false" 
+                                aria-controls="desktop-dropdown-menu"
+                                aria-haspopup="true">
                             Классификация и диагностика ДСТ
                         </button>
-                        <ul id="sections-menu" class="dropdown-menu" role="menu" aria-label="Submenu: классификация">
-                            <li role="none">
-                                <a href="{% url 'info_ndst' %}" class="dropdown-item" role="menuitem">
-                                    Недифференцированная дисплазия соединительной ткани
-                                </a>
-                            </li>
-                            <li role="none">
-                                <a href="{% url 'info_sed' %}" class="dropdown-item" role="menuitem">
-                                    Синдром Элерса-Данло
-                                </a>
-                            </li>
-                            <li role="none">
-                                <a href="{% url 'info_marfan' %}" class="dropdown-item" role="menuitem">
-                                    Синдром Марфана
-                                </a>
-                            </li>
+                        <ul class="dropdown__menu" id="desktop-dropdown-menu" role="menu">
+                            <li role="none"><a href="/ndst" class="dropdown__item" role="menuitem">Недифференцированная ДСТ</a></li>
+                            <li role="none"><a href="/marfan" class="dropdown__item" role="menuitem">Синдром Марфана</a></li>
+                            <li role="none"><a href="/sed" class="dropdown__item" role="menuitem">Синдром Элерса-Данло</a></li>
                         </ul>
                     </li>
-
-                    <li class="header__nav-list-item" role="none">
-                        <a class="text--bold header__nav-list-item-link" href="{% url 'register' %}"
-                            role="menuitem">Вступить в
-                            сообщество</a>
+                    <li class="nav__item">
+                        <a href="/register" class="nav__link">Вступить в сообщество</a>
                     </li>
-
-                    <!-- Help Astra -->
-                    <li class="header__nav-list-item help-astra" role="none">
-                        <div class="header__help-astra-icon" aria-hidden="true">
-                            <img src="{% static 'images/header__help-astra-icon-img.png' %}" alt=""
-                                class="header__help-astra-icon-img" />
-                        </div>
-                        <a class="info__astra-help" href="https://bfastra.ru/ritmy_zhiznei" role="menuitem">Получить
-                            помощь</a>
+                    <li class="nav__item">
+                        <a href="https://bfastra.ru/ritmy_zhiznei" class="btn-help">
+                            Получить помощь
+                        </a>
                     </li>
                 </ul>
             </nav>
         </div>
+
+        <!----- MOBILE MENU ----->
+        <nav class="mobile-menu" id="mobile-menu" aria-label="Мобильная навигация" aria-hidden="true">
+            <div class="mobile-menu__header">
+            <a href="/" class="logo" aria-label="На главную страницу">
+                РИТМЫ <span class="logo__highlight">ЖИЗНЕЙ</span>
+            </a>
+            </div>
+            <ul class="mobile-menu__list">
+                <li class="dropdown">
+                    <button class="dropdown__toggle" 
+                            aria-expanded="false" 
+                            aria-controls="mobile-dropdown-menu"
+                            aria-haspopup="true">
+                        Классификация и диагностика ДСТ
+                    </button>
+                    <ul class="dropdown__menu" id="mobile-dropdown-menu" role="menu">
+                        <li role="none"><a href="/ndst" class="dropdown__item" role="menuitem">Недифференцированная ДСТ</a></li>
+                        <li role="none"><a href="/marfan" class="dropdown__item" role="menuitem">Синдром Марфана</a></li>
+                        <li role="none"><a href="/sed" class="dropdown__item" role="menuitem">Синдром Элерса-Данло</a></li>
+                    </ul>
+                </li>
+                <li><a href="/register" class="btn-outline">Вступить в сообщество</a></li>
+                <li><a href="https://bfastra.ru/ritmy_zhiznei" class="btn-help__burger">
+                        Получить помощь</a></li>
+            </ul>
+        </nav>
     </header>
 
     <!-- ================= Main ================= -->
@@ -97,7 +102,7 @@
 
     <!-- ================= Footer ================= -->
     <footer class="footer" role="contentinfo">
-        <p class="text footer__text">&copy; 2025 «Ритмы жизней»</p>
+        <p class="text footer__text">&copy; 2025 РИТМЫ ЖИЗНЕЙ</p>
     </footer>
 
     <!-- ================= Scripts ================= -->

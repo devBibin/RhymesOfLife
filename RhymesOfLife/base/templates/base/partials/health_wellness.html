@@ -2,7 +2,10 @@
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
 <style>
-  .entry-note{white-space:pre-wrap}
+  .entry-note{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+  .list-group-item.entry-row{display:flex;gap:.75rem;align-items:flex-start}
+  .entry-left{min-width:180px;flex:0 0 auto}
+  .entry-right{min-width:0;flex:1 1 auto}
   .select-wrap{position:relative}
   .select-modern{appearance:none}
   .select-modern.form-select{padding-right:3rem;border-radius:999px}
@@ -10,6 +13,7 @@
   .form-label{font-weight:600}
   @media (max-width:576px){
     .select-modern.form-select{font-size:1.05rem}
+    .entry-left{min-width:120px}
   }
 </style>
 

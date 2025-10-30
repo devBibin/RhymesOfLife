@@ -47,17 +47,72 @@
       .then(r => r.json());
   }
 
+  function wrapNote(text, maxLen = 60) {
+    if (!text) return [];
+    const words = String(text).split(/\s+/);
+    const lines = [];
+    let line = "";
+    for (const w of words) {
+      if ((line + " " + w).trim().length <= maxLen) {
+        line = (line ? line + " " : "") + w;
+      } else {
+        if (line) lines.push(line);
+        if (w.length > maxLen) {
+          for (let i = 0; i < w.length; i += maxLen) lines.push(w.slice(i, i + maxLen));
+          line = "";
+        } else {
+          line = w;
+        }
+      }
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
   function renderChart(items) {
     const canvas = document.getElementById("chart");
     if (!canvas) return;
+
+    const dataPoints = items.map(i => ({ x: i.date, y: i.score, note: i.note || "" }));
     const labels = items.map(i => i.date);
-    const values = items.map(i => i.score);
+
     const ctx = canvas.getContext("2d");
     if (chart) chart.destroy();
+
     chart = new Chart(ctx, {
       type: "line",
-      data: { labels, datasets: [{ label: i18n.wellnessLabel || "Wellness", data: values, tension: 0.25, fill: false }] },
-      options: { scales: { y: { min: 1, max: 10, ticks: { stepSize: 1 } } } }
+      data: {
+        labels,
+        datasets: [{
+          label: i18n.wellnessLabel || "Wellness",
+          data: dataPoints,
+          tension: 0.25,
+          fill: false,
+          parsing: { xAxisKey: "x", yAxisKey: "y" },
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        interaction: { mode: "nearest", intersect: false },
+        scales: { y: { min: 1, max: 12, ticks: { stepSize: 1 } } },
+        plugins: {
+          tooltip: {
+            displayColors: false,
+            callbacks: {
+              title: (ctx) => ctx[0]?.label || "",
+              label: (ctx) => `${i18n.score || "Score"}: ${ctx.raw?.y ?? ctx.parsed.y}`,
+              afterBody: (ctx) => {
+                const note = ctx[0]?.raw?.note?.trim();
+                if (!note) return [];
+                const header = `${i18n.note || "Note"}:`;
+                const lines = wrapNote(note, 60);
+                return [header, ...lines];
+              }
+            }
+          }
+        }
+      }
     });
   }
 
@@ -70,11 +125,12 @@
     empty.classList.add("d-none");
     items.slice().reverse().forEach(e => {
       const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between align-items-start";
+      li.className = "list-group-item entry-row";
       const left = document.createElement("div");
+      left.className = "entry-left";
       left.innerHTML = `<strong>${e.date}</strong> · ${i18n.score || "Score"}: ${e.score}`;
       const right = document.createElement("div");
-      right.className = "text-muted entry-note";
+      right.className = "entry-right text-muted entry-note text-break flex-grow-1 ms-3";
       right.textContent = e.note || "";
       li.appendChild(left);
       li.appendChild(right);

@@ -1,108 +1,175 @@
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("JavaScript is loaded and working!");
+// info_scripts.js
 
-  // ===== Пример тестового клика (не трогаем) =====
-  let heading = document.getElementById("welcome-heading");
-  if (heading) {
-    heading.addEventListener("click", function () {
-      heading.style.color = "red";
-    });
-  }
+document.addEventListener('DOMContentLoaded', function() {
+    // Элементы
+    const burgerBtn = document.querySelector('.burger-btn');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const closeBtn = document.querySelector('.mobile-menu__close');
 
-  // ======== Хедер ========
-  const menuBtn = document.querySelector('.header__nav-menu-btn');
-  const nav = document.querySelector('.header__nav');
-  const closeBtn = document.querySelector('.close-menu');
-  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    // Состояние
+    let isMobileMenuOpen = false;
 
-  // --- Открытие/закрытие бургера ---
-  if (menuBtn && nav) {
-    menuBtn.addEventListener('click', () => {
-      const expanded = nav.classList.toggle('active');
-      document.body.classList.toggle('menu-open', expanded);
-      menuBtn.setAttribute('aria-expanded', expanded);
-    });
-  }
+    // ================= МОБИЛЬНОЕ МЕНЮ =================
+    function toggleMobileMenu() {
+        isMobileMenuOpen = !isMobileMenuOpen;
+        
+        mobileMenu.classList.toggle('mobile-menu--active', isMobileMenuOpen);
+        mobileMenu.setAttribute('aria-hidden', !isMobileMenuOpen);
+        burgerBtn.setAttribute('aria-expanded', isMobileMenuOpen);
+        document.body.classList.toggle('no-scroll', isMobileMenuOpen);
 
-  // --- Кнопка "×" (если будет добавлена) ---
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      nav.classList.remove('active');
-      document.body.classList.remove('menu-open');
-      menuBtn && menuBtn.setAttribute('aria-expanded', 'false');
-    });
-  }
+if (isMobileMenuOpen) {
+    closeBtn?.focus();            // <-- вот эта проверка обязательна
+} else {
+    burgerBtn?.focus();
+    closeAllMobileDropdowns();
+}
+    }
 
-  // --- Подменю "Классификация ДСТ" (мобильная версия) ---
-  dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', e => {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-
-        const dropdown = toggle.closest('.dropdown');
-        const menu = dropdown.querySelector('.dropdown-menu');
-        const isActive = dropdown.classList.contains('active');
-
-        // Закрываем другие подменю
-        document.querySelectorAll('.dropdown').forEach(d => {
-          d.classList.remove('active');
-          const m = d.querySelector('.dropdown-menu');
-          if (m) m.style.maxHeight = 0;
+    // ================= ВЫПАДАЮЩИЕ МЕНЮ =================
+    function initDropdowns() {
+        // Desktop dropdowns
+        const desktopDropdownToggles = document.querySelectorAll('.nav .dropdown__toggle');
+        desktopDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => handleDropdownClick(e, toggle));
         });
 
-        // Переключаем текущее
-        if (!isActive) {
-          dropdown.classList.add('active');
-          menu.style.maxHeight = menu.scrollHeight + 'px';
+        // Mobile dropdowns
+        const mobileDropdownToggles = document.querySelectorAll('.mobile-menu .dropdown__toggle');
+        mobileDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => handleDropdownClick(e, toggle));
+        });
+    }
+
+    function handleDropdownClick(e, toggle) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        const dropdownId = toggle.getAttribute('aria-controls');
+        const dropdownMenu = document.getElementById(dropdownId);
+        
+        if (!dropdownMenu) {
+            console.error('Dropdown menu not found:', dropdownId);
+            return;
         }
-      }
+
+        // Закрываем другие dropdown того же типа
+        const isMobile = toggle.closest('.mobile-menu');
+        if (isMobile) {
+            closeAllMobileDropdowns(toggle);
+        } else {
+            closeAllDesktopDropdowns(toggle);
+        }
+
+        // Переключаем текущий
+        toggle.setAttribute('aria-expanded', !isExpanded);
+        dropdownMenu.classList.toggle('dropdown__menu--active', !isExpanded);
+    }
+
+    function closeAllDesktopDropdowns(excludeToggle = null) {
+        const desktopToggles = document.querySelectorAll('.nav .dropdown__toggle');
+        desktopToggles.forEach(toggle => {
+            if (toggle !== excludeToggle) {
+                toggle.setAttribute('aria-expanded', 'false');
+                const menu = document.getElementById(toggle.getAttribute('aria-controls'));
+                if (menu) menu.classList.remove('dropdown__menu--active');
+            }
+        });
+    }
+
+    function closeAllMobileDropdowns(excludeToggle = null) {
+        const mobileToggles = document.querySelectorAll('.mobile-menu .dropdown__toggle');
+        const mobileMenus = document.querySelectorAll('.mobile-menu .dropdown__menu');
+        
+        mobileToggles.forEach(toggle => {
+            if (toggle !== excludeToggle) {
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+        
+        mobileMenus.forEach(menu => {
+            menu.classList.remove('dropdown__menu--active');
+        });
+    }
+
+    // ================= ОБРАБОТЧИКИ СОБЫТИЙ =================
+    burgerBtn.addEventListener('click', toggleMobileMenu);
+    closeBtn?.addEventListener('click', toggleMobileMenu);
+
+    // Инициализация dropdown при загрузке
+    initDropdowns();
+
+    // Закрытие dropdown при клике вне элемента
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown')) {
+            closeAllDesktopDropdowns();
+        }
+        
+        // Закрытие мобильного меню
+        if (isMobileMenuOpen && 
+            !e.target.closest('.mobile-menu') && 
+            !e.target.closest('.burger-btn')) {
+            toggleMobileMenu();
+        }
     });
-  });
 
-  // --- Закрытие меню при клике по пункту ---
-document.querySelectorAll('.header__nav-list-item-link, .dropdown-item').forEach(item => {
-  item.addEventListener('click', e => {
-    // Если кликнули по кнопке, которая раскрывает подменю — не закрываем меню
-    if (e.target.closest('.dropdown-toggle')) return;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (isMobileMenuOpen) {
+                toggleMobileMenu();
+            } else {
+                closeAllDesktopDropdowns();
+            }
+        }
+    });
 
-    nav.classList.remove('active');
-    document.body.classList.remove('menu-open');
-  });
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && isMobileMenuOpen) {
+            toggleMobileMenu();
+        }
+    });
+
+    // Закрытие мобильного меню при клике на ссылку (кроме dropdown toggle)
+    mobileMenu.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown__toggle')) {
+            toggleMobileMenu();
+        }
+    });
+
+    // Инициализация ARIA
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    burgerBtn.setAttribute('aria-expanded', 'false');
+    
+    // Инициализация всех dropdown
+    const allDropdownToggles = document.querySelectorAll('.dropdown__toggle');
+    allDropdownToggles.forEach(toggle => {
+        toggle.setAttribute('aria-expanded', 'false');
+    });
 });
 
-  // --- Сброс при ресайзе ---
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      document.querySelectorAll('.dropdown-menu').forEach(m => (m.style.maxHeight = ''));
-      nav.classList.remove('active');
-      document.body.classList.remove('menu-open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
 
-  // ======== Аккордеон .sed ========
-  const headers = document.querySelectorAll('.accordion-header.sed');
 
-  headers.forEach(header => {
+
+
+
+  // ===== Аккордеон .sed (как было) =====
+  const sedHeaders = document.querySelectorAll('.accordion-header.sed');
+  sedHeaders.forEach(header => {
     const panel = header.nextElementSibling;
     if (!panel) return;
 
-    // Начальное состояние
-    if (header.getAttribute('aria-expanded') === 'true') {
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-    } else {
-      panel.style.maxHeight = '0';
-    }
+    panel.style.maxHeight =
+      header.getAttribute('aria-expanded') === 'true' ? panel.scrollHeight + 'px' : '0';
 
     header.addEventListener('click', () => {
       const isOpen = header.getAttribute('aria-expanded') === 'true';
 
-      // Закрываем все
-      headers.forEach(h => {
+      sedHeaders.forEach(h => {
         if (h === header) return;
         h.setAttribute('aria-expanded', 'false');
         const p = h.nextElementSibling;
-        p.style.maxHeight = '0';
+        if (p) p.style.maxHeight = '0';
       });
 
       if (!isOpen) {
@@ -114,13 +181,3 @@ document.querySelectorAll('.header__nav-list-item-link, .dropdown-item').forEach
       }
     });
   });
-});
-
-
-
-
-
-
-
-
-
