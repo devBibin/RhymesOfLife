@@ -1,6 +1,4 @@
-/* =========================================================
-   RESET & BASE VARIABLES
-   ========================================================= */
+/* ---------------------------------------------- RESET & BASE VARIABLES ---------------------------------------------- */
 *,
 *::before,
 *::after {
@@ -16,29 +14,40 @@ body {
 }
 
 :root {
-  /* ---------- Colors ---------- */
+  /* ----- COLORS ----- */
   --black-color: #232323;
   --white-color: #FAFAFA;
-  --block1-color: #C7E0DF;
+  --block1-color: #B3DDE7;
   /* hero background */
   --block2-color: #EFECEB;
   /* classification background */
-  --block3-color: #1F5654;
+  --block3-color: #006977;
   /* attention background */
-  --block4-color: #ebe5de;
+  --block4-color: #f1f0ef;
   --block5-color: #91664b;
-  --block6-color: #E2F6F3;
+  --block6-color: #f0e8e1;
   --block7-color: #e6e6e6;
 
-  /* ---------- Fonts ---------- */
+  /* ----- FONTS ----- */
   --font-styled: 'Sofia Sans', sans-serif;
   --font-basic: 'Roboto', sans-serif;
 
-  /* ---------- Layout ---------- */
+  /* ----- LAYOUT ----- */
   --container-max: 1200px;
   --container-pad: 16px;
   --gutter: 24px;
   --section-header-icon-w: 60px;
+
+  /* ----- DERIVED VARIABLES ----- */
+  --primary-color: var(--black-color);
+  --accent-color: #008596;
+  --text-color: var(--black-color);
+  --bg-color: var(--white-color);
+  --bg-light: var(--block2-color);
+  --border-color: var(--block7-color);
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
 }
 
 body {
@@ -49,9 +58,8 @@ body {
   font-weight: 400;
 }
 
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
+
+/* ----- TYPOGRAPHY ----- */
 h1,
 h2,
 h3,
@@ -89,6 +97,12 @@ h4 {
   font-weight: 700;
 }
 
+@media (max-width: 768px) {
+  h4 {
+    font-size: 2.6vh;
+  }
+}
+
 h5 {
   font-family: var(--font-basic);
   font-size: 1.8vh;
@@ -97,25 +111,41 @@ h5 {
 
 p {
   font-family: var(--font-basic);
-  font-size: 2.2vh;
+  font-size: 2.4vh;
   line-height: 150%;
   font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  p {
+    font-size: 2.6vh;
+  }
 }
 
 a {
   text-decoration: none;
-  font-size: 2.2vh;
+  font-size: 2.4vh;
   color: var(--black-color);
 }
 
-/* -----------------------------------------
-   Lists (UL / OL)
------------------------------------------ */
+@media (max-width: 768px) {
+  a {
+    font-size: 2.6vh;
+  }
+}
+
+/* ----- LISTS (UL / OL) ----- */
 li {
   line-height: 150%;
-  font-size: 2.2vh;
+  font-size: 2.4vh;
   font-weight: 400;
   padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  li {
+    font-size: 2.6vh;
+  }
 }
 
 li:last-child {
@@ -129,7 +159,6 @@ ol {
   padding: 0;
 }
 
-/* Ordered lists */
 ol {
   list-style: decimal;
   list-style-position: inside;
@@ -144,7 +173,6 @@ ol>li::marker {
   color: var(--black-color);
 }
 
-/* Unordered lists */
 ul {
   list-style: none;
 }
@@ -152,7 +180,6 @@ ul {
 ul>li {
   position: relative;
   padding-left: 20px;
-  /* space for bullet */
 }
 
 ul>li::before {
@@ -160,14 +187,13 @@ ul>li::before {
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 22px;
+  font-size: 25px;
   line-height: 1;
   color: var(--bullet-color, var(--black-color));
 }
 
-/* -----------------------------------------
-   Images
------------------------------------------ */
+
+/* ----- IMAGES ----- */
 img {
   max-width: 100%;
   height: auto;
@@ -175,9 +201,7 @@ img {
 }
 
 
-/* =========================================================
-   LAYOUT HELPERS
-   ========================================================= */
+/* ----- LAYOUT HELPERS ----- */
 .header {
   flex: 0 0 auto;
 }
@@ -200,16 +224,19 @@ img {
 }
 
 
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* ----- BUTTONS ----- */
 .help__actions {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   gap: 12px;
   margin-top: 50px;
+  flex-direction: column;
+}
+
+.info-help__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 50px;
+  flex-direction: row;
 }
 
 .btn {
@@ -220,7 +247,7 @@ img {
   border-radius: 10px;
   font-family: var(--font-styled);
   font-weight: 700;
-  font-size: 2.4vh;
+  font-size: 2.6vh;
   line-height: 120%;
   text-decoration: none;
   border: 2px solid transparent;
@@ -228,50 +255,86 @@ img {
   will-change: transform;
 }
 
-.btn:active {
-  transform: scale(0.97);
+@media (max-width: 769px) {
+  .info-help__actions {
+    display: none;
+  }
+
+  .btn {
+    display: flex;
+    font-size: 3vh;
+    text-align: center;
+  }
 }
 
-/* Primary button */
+.btn-help__burger {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+  font-family: var(--font-basic);
+}
+
+.btn-help__burger a {
+  font-size: 3vh;
+}
+
+/* .btn:active {
+  transform: scale(0.97);
+} */
+
 .btn--primary {
   background: var(--black-color);
   color: var(--white-color);
   border-color: var(--black-color);
 }
 
-/* Secondary button */
 .btn--secondary {
   background: var(--white-color);
   color: var(--black-color);
   border-color: var(--black-color);
 }
 
-/* Hover effect — scale only */
-.btn:hover {
+/* .btn:hover {
   transform: scale(1.02);
-}
+} */
 
 @media (min-width: 769px) {
   .help__actions {
     display: flex;
+    flex-direction: row;
     gap: 10px;
+    width: fit-content;
   }
 }
 
-/* =========================================================
-   LOGO
-   ========================================================= */
-.logo {
-  font-weight: 700;
+
+
+
+
+/* -------------------------------------------------------- LOGO -------------------------------------------------------- */
+.logo a {
+  font-size: 3vh;
+  font-weight: 800;
 }
 
-   .logo__highlight {
+.header__logo {
+  font-weight: 700;
+  font-size: 3vh;
+}
+
+.logo__highlight {
   color: var(--block3-color);
 }
 
-/* =========================================================
-   ICONS
-   ========================================================= */
+
+
+
+
+/* -------------------------------------------------------- ICONS -------------------------------------------------------- */
 .title-icon {
   width: 50px;
   height: 50px;
@@ -285,540 +348,385 @@ img {
 }
 
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-/* === Desktop menu === */
+
+
+
+/* ------------------------------------------------------- HEADER ------------------------------------------------------- */
+.header ul>li::before,
+.header .nav__list>li::before,
+.header .dropdown__menu>li::before,
+.header .mobile-menu__list>li::before {
+  content: none !important;
+}
+
+.header ul,
+.header li {
+  list-style: none !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+/* ================= HEADER & MOBILE MENU STYLES ================= */
+
+/* Header */
 .header {
-  background: var(--white-color);
+  background: var(--bg-color);
+  box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid var(--black-color);
 }
 
 .header__container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  max-width: 1440px;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 16px;
 }
 
-.header__logo {
-  color: var(--black-color);
+/* Logo */
+.logo {
   font-family: var(--font-styled);
-  font-size: 2.4vh;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   text-decoration: none;
-  padding: 10px 0;
-  transition: color 0.3s ease;
+  color: var(--primary-color);
 }
 
-.header__nav-menu-btn {
+.logo__highlight {
+  color: var(--accent-color);
+}
+
+/* Burger Button - ДВЕ ГОРИЗОНТАЛЬНЫЕ ПОЛОСКИ */
+.burger-btn {
   display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 20px;
   background: none;
   border: none;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  padding: 0;
   position: relative;
-  z-index: 1100;
+  z-index: 1002;
+  /* Поверх всего */
 }
 
-/* Burger icon */
-.menu-icon {
+.burger-line {
   display: block;
-  width: 25px;
-  height: 3px;
-  background: var(--black-color);
-  position: relative;
-  transition: background 0.3s ease;
-}
-
-.menu-icon::before,
-.menu-icon::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 3px;
-  background: var(--black-color);
-  left: 0;
-  transition: transform 0.3s ease;
-}
-
-.menu-icon::before {
-  top: -8px;
-}
-
-.menu-icon::after {
-  top: 8px;
-}
-
-/* Nav list */
-.header__nav-list {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 15px;
-  align-items: center;
-}
-
-.header__nav-list-item::before {
-  content: none !important;
-}
-
-.text--bold {
-  font-weight: 700;
-}
-
-.header__nav-list,
-.header__nav-list ul,
-.dropdown-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Nav links */
-.header__nav-list-item,
-.header__nav-list-item-link {
-  color: var(--black-color);
-  font-family: var(--font-basic);
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-padding: 5px 15px;
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.header__nav-list-item-link:hover {
-  color: var(--block3-color);
-}
-
-/* Hover underline animation */
-.header__nav-list-item-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
   height: 2px;
-  background-color: var(--block3-color);
-  transition: width 0.3s ease;
-}
-
-.header__nav-list-item-link:hover::after {
   width: 100%;
+  background-color: var(--black-color);
+  border-radius: 1px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  position: absolute;
+  left: 0;
 }
 
-/* Dropdown (desktop) */
-.dropdown-menu {
+/* Первая полоска - сверху */
+.burger-line:nth-child(1) {
+  top: 0;
+  transform: translateY(0) rotate(0);
+}
+
+/* Вторая полоска - снизу */
+.burger-line:nth-child(2) {
+  bottom: 0;
+  transform: translateY(0) rotate(0);
+}
+
+/* Состояние открытого меню - крестик */
+.burger-btn[aria-expanded="true"] .burger-line:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.burger-btn[aria-expanded="true"] .burger-line:nth-child(2) {
+  bottom: 50%;
+  transform: translateY(50%) rotate(-45deg);
+}
+
+/* Desktop Navigation */
+.nav__list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: var(--gutter);
+}
+
+.nav__link {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-basic);
+}
+
+.nav__link:hover,
+.nav__link:focus {
+  color: var(--accent-color);
+  outline: none;
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+}
+
+.dropdown__menu {
   position: absolute;
   top: 100%;
   left: 0;
-  background: var(--white-color);
-  min-width: 300px;
-  max-width: 350px;
-  margin: 0;
-  padding: 10px 0;
+  background: var(--bg-color);
+  min-width: 250px;
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all .3s ease;
-  z-index: 1000;
-  border: 1px solid var(--black-color);
-  list-style: none;
+  transform: translateY(-10px);
+  transition: var(--transition);
+  z-index: 1001;
 }
 
-.dropdown:hover .dropdown-menu,
-.dropdown:focus-within .dropdown-menu {
+.dropdown__menu--active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-/* Dropdown items */
-.dropdown-item {
+.dropdown__item {
   display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 20px;
-  background: var(--white-color);
-  color: var(--black-color);
-  font-family: var(--font-basic);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.4;
-  transition: background .2s ease, color .2s ease;
-}
-
-.dropdown-item:hover {
-  background: var(--block3-color);
-  color: var(--white-color);
-}
-
-/* Call-to-action button in header */
-.header__nav-list-item.help-astra {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #EDCDD0;
-  padding: 7px 20px 7px 15px;
-  height: 100%;
-  font-family: var(--font-basic);
-  color: var(--black-color);
-  font-size: 16px;
-  line-height: 120%;
-  font-weight: 700;
-  border: solid 2px #c28a90;
-  border-radius: 10px;
-  cursor: pointer;
-  overflow: hidden;
-  z-index: 1;
-  transition: background 0.3s ease;
-  gap: 10px;
-}
-
-.header__nav-list-item.help-astra:hover {
-  background-color: #f8e6e8;
-}
-
-.header__help-astra-icon {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.header__help-astra-icon-img {
-  width: 25px;
-  height: 25px;
-  transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  transform-origin: center;
-}
-
-.header__nav-list-item.help-astra:hover .header__help-astra-icon-img {
-  transform: scale(1.1);
-}
-
-.info__astra-help {
-  color: var(--black-color);
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
   text-decoration: none;
-  font-weight: 700;
-  transition: color 0.3s ease;
-  white-space: nowrap;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--border-color);
+  font-family: var(--font-basic);
+  font-size: 1rem;
 }
 
-.header__nav-list-item.help-astra:hover .info__astra-help {
-  color: var(--black-color);
+.dropdown__item:last-child {
+  border-bottom: none;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.header__nav-list,
-.header__nav-list ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.dropdown__item:hover,
+.dropdown__item:focus {
+  background-color: var(--bg-light);
+  outline: none;
 }
 
-.header__nav-list>li,
-.header__nav-list li {
+/* Buttons */
+.btn-help {
+  background-color: var(--accent-color);
+  color: var(--white-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+  font-family: var(--font-basic);
+  font-size: 1rem;
+}
+
+.btn-help:hover,
+.btn-help:focus {
+  background-color: color-mix(in srgb, var(--accent-color) 80%, black);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  border: 2px solid var(--primary-color);
+  color: var(--white-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+  font-family: var(--font-basic);
+  background: var(--black-color);
+}
+
+/* .btn-outline:hover,
+.btn-outline:focus {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  outline: none;
+} */
+
+/* ================= MOBILE MENU STYLES - ВЫЕЗЖАЕТ СПРАВА И ЗАНИМАЕТ ВЕСЬ ЭКРАН ================= */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  /* Вся ширина экрана */
+  height: 100vh;
+  background: var(--white-color);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  /* Ниже кнопки бургера */
+  overflow-y: auto;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu--active {
+  transform: translateX(0);
+}
+
+/* Остальные стили остаются без изменений */
+.mobile-menu__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.mobile-menu__close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: transform 0.3s ease;
+  z-index: 1003;
+  /* Поверх меню */
   position: relative;
 }
 
-.header__nav-list>li::before,
-.header__nav-list li::before,
-.dropdown-menu>li::before {
-  content: none !important;
+.mobile-menu__close:hover {
+  transform: scale(1.1);
 }
 
-.header__nav-list a {
-  display: inline-flex;
-  text-decoration: none;
-  font-size: 2vh;
+.mobile-menu__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }
 
-/* -------- Reset for dropdown menu -------- */
-.dropdown-menu {
-  list-style: none;
-  margin: 0;
-  padding: 10px 0;
+.mobile-menu__list>li {
+    margin-bottom: 2rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
 }
 
-.dropdown-menu>li {
-  padding-left: 0 !important;
+/* Mobile Dropdown */
+.mobile-menu .dropdown__toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-basic);
+  background: var(--white-color);
+  font-weight: 600;
+  border: none;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  font-size: 3vh;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu .dropdown__toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.mobile-menu .dropdown__menu {
   position: static;
+  box-shadow: none;
+  background: var(--block1-color);
+  border-radius: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1vh;
 }
 
-.dropdown-menu>li::before {
-  content: none !important;
+.mobile-menu .dropdown__menu--active {
+  max-height: 500px;
 }
 
-/* =========================================================
-   DESKTOP NAV (>=769px)
-   ========================================================= */
-@media (min-width: 769px) {
-
-  .header__nav-menu-btn,
-  .close-menu,
-  .menu-title {
-    display: none !important;
-  }
-
-  .header__logo {
-    font-size: 2.4vh;
-    font-weight: 800;
-    transition: color 0.3s ease;
-  }
-
-  .dropdown-toggle {
-    background: none;
-    border: none;
-    padding: 10px 5px;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    font-size: 2vh;
-  }
-
-  .dropdown-toggle::after {
-    display: none;
-  }
+.mobile-menu .dropdown__item {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--black-color);
+  text-align: center;
+  display: block;
+  color: var(--text-color);
+  text-decoration: none;
+  font-family: var(--font-basic);
+  transition: background-color 0.3s ease;
+  background: var(--white-color);
+  font-size: 2.6vh;
+  width: 100%;
 }
 
+.mobile-menu .dropdown__item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
-/* ===================================================
-   MOBILE NAV (<=768px)
-   =================================================== */
+/* Body no-scroll */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
 @media (max-width: 768px) {
-
-  .header__nav-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    position: relative;
-    z-index: 1100;
-  }
-
-  .menu-icon {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: var(--black-color);
-    position: relative;
-    transition: background .3s ease;
-  }
-
-  .menu-icon::before,
-  .menu-icon::after {
-    content: '';
-    position: absolute;
-    width: 25px;
-    height: 3px;
-    background: var(--black-color);
-    left: 0;
-    transition: transform .3s ease;
-  }
-
-  .menu-icon::before {
-    top: -8px;
-  }
-
-  .menu-icon::after {
-    top: 8px;
-  }
-
-  .header__nav-menu-btn {
-    display: block;
-  }
-
-  .header__nav-list {
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: var(--white-color);
-    padding: 70px 20px 30px;
-    z-index: 1000;
-    overflow-y: auto;
-    gap: 0;
-  }
-
-  .header__nav-list a {
-    display: inline-flex;
-    text-decoration: none;
-    font-size: 3vh;
-    text-align: left;
-  }
-
-  .header__nav-list-item::before {
-    content: none !important;
-  }
-
-  .header__nav.active .header__nav-list {
+  .burger-btn {
     display: flex;
   }
 
-  .header__nav-list-item-link:hover {
-    color: var(--black-color);
-  }
-
-  .menu-title {
-    display: block;
-    font-family: var(--font-styled);
-    font-size: 5vh;
-    font-weight: 700;
-    text-align: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #9a9a9a;
-    width: 100%;
-  }
-
-  .header__nav-list-item {
-    display: block;
-    padding: 10px 0;
-    border-bottom: 1px solid #9a9a9a;
-    width: 100%;
-    text-align: center;
-    font-size: 2vh;
-  }
-
-  .header__nav-list-item-link {
-    display: block;
-    font-family: var(--font-styled);
-    font-size: 3vh;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .header__nav-list-item-link::after {
+  .nav {
     display: none;
   }
 
-  /* Accordion toggle for "Classification" */
-  .dropdown-toggle {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 0;
-    font-size: 3vh;
-    line-height: 1.3;
-    background: none;
-    border: none;
-    text-align: center;
-    justify-content: center;
+  .header__container {
+    padding: 1rem var(--container-pad);
   }
 
-  .dropdown-toggle::after {
-    content: '▼';
-    font-size: 18px;
-    margin-left: 8px;
-    transition: transform .3s;
+  .mobile-menu__header {
+    padding: 1rem 1rem 3rem;
   }
+}
 
-  .dropdown.active .dropdown-toggle::after {
-    transform: rotate(180deg);
+@media (min-width: 769px) {
+  .mobile-menu {
+    display: none;
   }
+}
 
-  .dropdown-menu {
-    position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    width: 100%;
-    min-width: auto;
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: block;
-    background: #f9f9f9;
-    border-radius: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height .3s ease;
+/* ================= ACCESSIBILITY ================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+}
 
-  .dropdown.active .dropdown-menu {
-    max-height: 500px;
-    overflow-y: auto;
-  }
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
 
-  .dropdown-item {
-    padding: 14px 15px 14px 30px;
-    font-size: 16px;
-    border-bottom: 1px solid #e8e8e8;
-  }
-
-  /* Smaller CTA button on mobile */
-  .header__nav-list-item.help-astra {
-    padding: 8px 12px;
-    gap: 6px;
-    max-width: 100%;
-    height: 60px;
-    margin: 16px auto 0;
-    font-size: 22px;
-    line-height: 1.2;
-  }
-
-  .header__help-astra-icon-img {
-    width: 20px;
-    height: 20px;
-  }
-
-  .header__nav-list-item.help-astra .info__astra-help {
-    font-size: 3vh;
-    white-space: normal;
-    text-align: center;
-  }
-
-  .header__nav-list .help-astra::before,
-  .header__nav-list-item.help-astra::before {
-    content: none !important;
-  }
-
-  .header__nav-list .info__astra-help::before {
-    content: none !important;
-  }
-
-  /* Burger animation */
-  .header__nav.active .menu-icon {
-    background: transparent;
-  }
-
-  .header__nav.active .menu-icon::before {
-    transform: rotate(45deg) translate(6px, 6px);
-  }
-
-  .header__nav.active .menu-icon::after {
-    transform: rotate(-45deg) translate(5px, -5px);
-  }
-
-  /* Lock scroll when menu is opened */
-  body.menu-open {
-    overflow: hidden;
+/* High contrast support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: var(--black-color);
   }
 }
 
@@ -826,22 +734,7 @@ padding: 5px 15px;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* -------------------------------------------------------- FOOTER -------------------------------------------------------- */
 .footer {
   background: var(--black-color);
 }
@@ -849,6 +742,7 @@ padding: 5px 15px;
 .footer__text {
   color: var(--white-color);
   font-family: var(--font-styled);
+  font-size: 1.8vh;
   font-weight: 700;
   width: 90%;
   padding-top: 10px;
@@ -857,15 +751,18 @@ padding: 5px 15px;
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .footer__text p {
+    font-size: 2vh;
+  }
+}
 
 
 
 
 
 
-/* =========================================================
-   HOME (INDEX) — MOBILE
-   ========================================================= */
+/* ---------------------------------------------------- HOME (INDEX) ----------------------------------------------------*/
 .info,
 .class,
 .diagnostic,
@@ -886,19 +783,46 @@ padding: 5px 15px;
   row-gap: 24px;
 }
 
-/* ===== HERO (COVER) ===== */
-.cover,
-.cover-mobile {
-  min-height: 100vh;
+/* ---------------------------------------------------- HERO (COVER) ---------------------------------------------------- */
+.cover {
   height: auto;
   background-color: var(--block1-color);
-  padding-top: 30px;
   padding-bottom: 0;
-  background-image: none;
 }
 
 .cover-desktop__content {
   display: none;
+}
+
+.cover-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  min-height: 92vh;
+  margin-bottom: 20px;
+  background-image: url(/static/images/cover__img-mob.png);
+  background-size: 80%;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  padding: 50px 0 100px 0;
+}
+
+
+.cover-mobile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--block1-color);
+  opacity: 70%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cover>* {
+  position: relative;
+  z-index: 1;
 }
 
 .cover-mobile__header {
@@ -906,6 +830,7 @@ padding: 5px 15px;
   flex-direction: column;
   font-size: 4vh;
   text-align: center;
+  z-index: 1;
 }
 
 .cover-mobile__astra-project {
@@ -926,8 +851,7 @@ padding: 5px 15px;
 }
 
 .cover-mobile__subtitle h3 {
-  font-size: 4.6vh;
-  padding-bottom: 30px;
+  font-size: 3.6vh;
 }
 
 .cover-mobile__image-wrapper {
@@ -953,16 +877,19 @@ padding: 5px 15px;
   text-align: center;
 }
 
-
-
 .info__icon,
 .class__icon,
 .diagnostic__icon,
-.help__icon {
+.help__icon,
+.attention__icon {
   margin-bottom: 10px;
 }
 
-/* ===== INFO ===== */
+
+
+
+
+/* ------------------------------------------------------- INFO ------------------------------------------------------- */
 .info {
   background-color: var(--white-color);
 }
@@ -973,14 +900,11 @@ padding: 5px 15px;
   text-align: left;
 }
 
-.info__astra-help {
-  display: grid;
-  grid-column: 3 / span 8;
-  font-size: 16px;
-  font-weight: 600;
-}
 
-/* ===== CLASSIFICATION ===== */
+
+
+
+/* -------------------------------------------------- CLASSIFICATION -------------------------------------------------- */
 .class {
   background-color: var(--block4-color);
 }
@@ -988,7 +912,7 @@ padding: 5px 15px;
 .class__term {
   color: var(--black-color);
   font-family: var(--font-basic);
-  font-size: 2.2vh;
+  /* font-size: 2.2vh; */
   line-height: 150%;
   font-weight: 700;
 }
@@ -1031,7 +955,11 @@ padding: 5px 15px;
   font-size: 25px;
 }
 
-/* ===== DIAGNOSTIC ====== */
+
+
+
+
+/* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
 .diagnostic {
   background-color: var(--white-color);
 }
@@ -1061,7 +989,11 @@ padding: 5px 15px;
   font-size: 25px;
 }
 
-/* ===== ATTENTION ===== */
+
+
+
+
+/* ----------------------------------------------------- ATTENTION ----------------------------------------------------- */
 .attention {
   background-color: var(--block3-color);
 }
@@ -1071,7 +1003,11 @@ padding: 5px 15px;
   text-align: center;
 }
 
-/* ===== HELP ===== */
+
+
+
+
+/* ------------------------------------------------------- HELP ------------------------------------------------------- */
 .help {
   background-color: var(--white-color);
   padding-bottom: 0;
@@ -1141,15 +1077,7 @@ padding: 5px 15px;
 
 
 
-
-
-
-
-
-
-/* =========================================================
-   DESKTOP (>= 769px)
-   ========================================================= */
+/* ----------------------------------------------- MAIN DESKTOP (>= 769px) ----------------------------------------------- */
 @media (min-width: 769px) {
 
   /* ===== COVER ===== */
@@ -1188,8 +1116,10 @@ padding: 5px 15px;
     justify-content: center;
   }
 
-  .cover-desktop-title {
-font-weight: 800;
+  .cover-desktop-title h1 {
+    font-weight: 900;
+    font-size: 7.6vh;
+    padding-bottom: 20px;
   }
 
   .cover-desktop__text {
@@ -1237,7 +1167,7 @@ font-weight: 800;
     display: block;
   }
 
-  /* ===== COMMON GRID FOR SECTIONS ===== */
+  /* ----- COMMON GRID FOR SECTIONS ----- */
   .info__content,
   .class__content,
   .diagnostic__content,
@@ -1300,13 +1230,13 @@ font-weight: 800;
     text-align: center;
   }
 
-  /* ===== INFO ===== */
+  /* ----- INFO ----- */
   .info__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
 
-  /* ===== CLASSIFICATION ===== */
+  /* ----- CLASSIFICATION ----- */
   .class__dst {
     grid-column: 3 / span 8;
   }
@@ -1315,7 +1245,7 @@ font-weight: 800;
     grid-column: 3 / span 8;
   }
 
-  /* ===== DIAGNOSTIC ===== */
+  /* ----- DIAGNOSTIC ----- */
   .diagnostic__header {
     grid-column: 3 / span 8;
   }
@@ -1324,16 +1254,17 @@ font-weight: 800;
     grid-column: 3 / span 9;
   }
 
-  /* ===== HELP ===== */
+  /* ----- HELP ----- */
   .help__content {
+    grid-column: 3 / 9;
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    align-items: stretch;
+    row-gap: 24px;
+    margin-bottom: 50px;
+    justify-content: start;
   }
 
   .help__text-content {
-    grid-column: 3 / 8;
+    grid-column: 3 / 9;
     display: grid;
     row-gap: 24px;
     margin-bottom: 50px;
@@ -1351,13 +1282,13 @@ font-weight: 800;
   }
 
   .help__image-wrapper {
-    grid-column: 8 / 13;
+    grid-column: 9 / 13;
     align-self: end;
     justify-self: start;
   }
 
   .help__image {
-    max-width: 65%;
+    max-width: 85%;
     height: auto;
     display: block;
   }
@@ -1367,28 +1298,7 @@ font-weight: 800;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================================
-   NDST PAGE — CLEAN REWRITE (mobile-first)
-   ========================================================= */
+/* ---------------------------------------------------- NDST PAGE ----------------------------------------------------  */
 
 /* Tokens */
 :root {
@@ -1403,12 +1313,17 @@ font-weight: 800;
   /* shift hero block down on desktop if needed */
 }
 
-/* =========================================================
-   COVER
-   ========================================================= */
+
+
+
+
+/* ------------------------------------------------------- COVER ------------------------------------------------------- */
 .ndst-cover {
   background-color: var(--block1-color);
   background-image: none;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
 }
 
 .ndst-cover-mobile {
@@ -1427,11 +1342,11 @@ font-weight: 800;
 }
 
 .ndst-cover-mobile__image {
-  width: 40%;
+  width: 150px;
   height: auto;
   display: block;
   object-fit: contain;
-  padding: 20px 0 20px;
+  padding: 30px 0;
 }
 
 .ndst-cover-mobile__title {
@@ -1443,7 +1358,7 @@ font-weight: 800;
 }
 
 .ndst-cover-mobile__title h1 {
-  font-size: 3.5vh;
+  font-size: 3.4vh;
   color: var(--black-color);
 }
 
@@ -1453,11 +1368,14 @@ font-weight: 800;
 
 .ndst-cover-mobile__subtitle p {
   text-align: left;
+  font-size: 3vh;
 }
 
-/* =========================================================
-   BASE GRID FOR SECTIONS (mobile-first: 1 column)
-   ========================================================= */
+
+
+
+
+/* ----------------------------------------------- BASE GRID FOR SECTIONS ----------------------------------------------- */
 .hypermob,
 .beiton,
 .gentest,
@@ -1475,9 +1393,11 @@ font-weight: 800;
   row-gap: 24px;
 }
 
-/* =========================================================
-   SHARED HEADERS WITH ICONS
-   ========================================================= */
+
+
+
+
+/* ----------------------------------------------SHARED HEADERS WITH ICONS ---------------------------------------------- */
 .hypermob__header,
 .beiton__header,
 .gentest__header,
@@ -1485,7 +1405,6 @@ font-weight: 800;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* centered on mobile */
   text-align: center;
   gap: 10px;
 }
@@ -1509,9 +1428,11 @@ font-weight: 800;
   object-fit: contain;
 }
 
-/* =========================================================
-   HYPERMOB (mobile)
-   ========================================================= */
+
+
+
+
+/* ------------------------------------------------------ HYPERMOB ------------------------------------------------------ */
 .hypermob {
   background: var(--white-color);
 }
@@ -1540,9 +1461,11 @@ font-weight: 800;
   font-size: 25px;
 }
 
-/* =========================================================
-   BEITON (mobile)
-   ========================================================= */
+
+
+
+
+/* -------------------------------------------------------- BEITON -------------------------------------------------------- */
 .beiton {
   background: var(--block2-color);
 }
@@ -1552,11 +1475,9 @@ font-weight: 800;
   margin: 0 0 15px;
 }
 
-/* Cards */
 .beiton__test-list {
   display: grid;
   grid-template-columns: 1fr;
-  /* 1 per row on mobile */
   gap: 16px;
 }
 
@@ -1595,22 +1516,22 @@ font-weight: 800;
 .beiton__test-image {
   max-width: 100%;
   max-height: 260px;
-  /* prevents stretching */
   width: auto;
   height: auto;
   object-fit: contain;
   object-position: center;
 }
 
-/* Result */
 .beiton-result__header {
   text-align: center;
   margin: 0 0 15px;
 }
 
-/* =========================================================
-   GENTEST (mobile)
-   ========================================================= */
+
+
+
+
+/* ------------------------------------------------------- GENTEST ------------------------------------------------------- */
 .gentest {
   background: var(--white-color);
 }
@@ -1643,17 +1564,14 @@ font-weight: 800;
   font-size: 25px;
 }
 
-/* =========================================================
-   NDST DIAGNOSTIC (mobile)
-   ========================================================= */
-/* If the block is used, follows the same structure as others */
 
-/* =========================================================
-   DESKTOP (>= 768px)
-   ========================================================= */
+
+
+
+/* ---------------------------------------------- NDST DESKTOP (>= 768px) ---------------------------------------------- */
 @media (min-width: 768px) {
 
-  /* ----- HERO (desktop) ----- */
+  /* ----- HERO ----- */
   .ndst-cover-mobile {
     display: none;
   }
@@ -1710,7 +1628,6 @@ font-weight: 800;
     display: block;
   }
 
-  /* ----- SHARED 12-COLUMN GRID FOR SECTIONS ----- */
   .hypermob__content,
   .gentest__content,
   .beiton__content,
@@ -1720,7 +1637,6 @@ font-weight: 800;
     row-gap: 24px;
   }
 
-  /* ----- SHARED HEADERS WITH ICONS (desktop) ----- */
   .hypermob__header,
   .beiton__header,
   .gentest__header,
@@ -1758,13 +1674,21 @@ font-weight: 800;
     object-fit: contain;
   }
 
-  /* ----- HYPERMOB (desktop) ----- */
+
+
+
+
+  /* -------------------------------------------------- HYPERMOB DESKTOP -------------------------------------------------- */
   .hypermob__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
 
-  /* ----- BEITON (desktop): three independent areas ----- */
+
+
+
+
+  /* --------------------------------------------------- BEITON DESKTOP --------------------------------------------------- */
   .beiton__test {
     grid-column: 3 / span 8;
     align-items: center;
@@ -1802,14 +1726,17 @@ font-weight: 800;
     padding-bottom: 20px;
   }
 
-  /* cards inside central column: 2 per row on ≥768px */
   .beiton__test-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(260px, 1fr));
     gap: 16px;
   }
 
-  /* ----- GENTEST (desktop) ----- */
+
+
+
+
+  /* -------------------------------------------------- GENTEST DESKTOP -------------------------------------------------- */
   .gentest__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
@@ -1822,13 +1749,17 @@ font-weight: 800;
     row-gap: 20px;
   }
 
-  /* ----- NDST DIAGNOSTIC (desktop) ----- */
+
+
+
+
+  /* ---------------------------------------------- --DIAGNOSTIC DESKTOP ------------------------------------------------ */
   .ndst-diagnostic__header {
     grid-column: 3 / span 8;
   }
 }
 
-/* ≥1200px — Beighton cards: 2 per row in central column */
+/* ----- ≥1200px ----- */
 @media (min-width: 1200px) {
   .beiton__test-list {
     grid-template-columns: repeat(2, 1fr);
@@ -1840,32 +1771,13 @@ font-weight: 800;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================================
-   SED PAGE (mobile-first)
-   ========================================================= */
-
+/* ------------------------------------------------------ SED PAGE ------------------------------------------------------ */
 .sed-cover {
-  background-color: var(--block4-color);
+  background-color: var(--block6-color);
   background-image: none;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
 }
 
 .sed-cover-mobile {
@@ -1888,11 +1800,11 @@ font-weight: 800;
 }
 
 .sed-cover-mobile__image {
-  width: 40%;
+  width: 150px;
   height: auto;
   display: block;
   object-fit: contain;
-  padding: 20px 0 20px;
+  padding: 30px 0 30px;
 }
 
 .sed-cover-mobile__title {
@@ -1903,20 +1815,14 @@ font-weight: 800;
   text-align: center;
 }
 
-.sed-cover-mobile__subtitle {
-  padding: 0 0 50px;
-}
-
 .sed-cover-mobile__subtitle p {
   font-size: 2.8vh;
 }
 
-/* =========================================================
-   ACCORDION (mobile-first)
-   ========================================================= */
+/* ----- ACCORDION ----- */
 .sed-types {
   background-color: var(--white-color);
-  padding-top: 50px;
+  padding-top: 0px;
   padding-bottom: 50px;
 }
 
@@ -1949,12 +1855,12 @@ font-weight: 800;
 
 .accordion-icon.sed {
   width: 16px;
-  height: 16px;
+  height: 20px;
   border-right: 2px solid var(--black-color);
   border-bottom: 2px solid var(--black-color);
   transform: rotate(45deg);
   transition: transform .3s ease;
-  padding-right: 10px;
+  padding-right: 20px;
 }
 
 .accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
@@ -2004,10 +1910,11 @@ font-weight: 800;
   margin: 0;
 }
 
-/* =========================================================
-   DESKTOP (>= 768px)
-   ========================================================= */
 
+
+
+
+/* ----------------------------------------------- SED DESKTOP (>= 768px) ----------------------------------------------- */
 :root {
   --sed-hero-offset: 0vh;
 }
@@ -2017,6 +1924,7 @@ font-weight: 800;
   .sed-types {
     padding-top: 30px;
   }
+
   .sed-cover-mobile {
     display: none;
   }
@@ -2074,7 +1982,6 @@ font-weight: 800;
     line-height: 150%;
   }
 
-  /* Accordion grid wrapper */
   .sed-types .container {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -2094,31 +2001,7 @@ font-weight: 800;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================================
-   MARFAN PAGE (MOBILE)
-   ========================================================= */
-
-/* Page tokens */
+/* ----------------------------------------------------- MARFAN PAGE ----------------------------------------------------- */
 :root {
   --marfan-hero-offset: 0vh;
 }
@@ -2126,6 +2009,9 @@ font-weight: 800;
 .marfan-cover {
   background-color: var(--block1-color);
   background-image: none;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
 }
 
 .marfan-cover-mobile {
@@ -2144,11 +2030,11 @@ font-weight: 800;
 }
 
 .marfan-cover-mobile__image {
-  width: 40%;
+  width: 150px;
   height: auto;
   display: block;
   object-fit: contain;
-  padding: 20px 0 20px;
+  padding: 30px 0 30px;
 }
 
 .marfan-cover-mobile__title {
@@ -2172,7 +2058,6 @@ font-weight: 800;
   text-align: left;
 }
 
-/* Sections */
 .marfan-signs,
 .marfan-diagnostic,
 .marfan-treatment,
@@ -2192,7 +2077,6 @@ font-weight: 800;
   row-gap: 24px;
 }
 
-/* Unified headers */
 .marfan-signs__header,
 .marfan-diagnostic__header,
 .marfan-treatment__header,
@@ -2223,7 +2107,11 @@ font-weight: 800;
   object-fit: contain;
 }
 
-/* ===== SIGNS ===== */
+
+
+
+
+/* -------------------------------------------------------- SIGNS -------------------------------------------------------- */
 .marfan-signs {
   background: var(--white-color);
 }
@@ -2241,7 +2129,11 @@ font-weight: 800;
   padding-bottom: 0;
 }
 
-/* ===== DIAGNOSTIC ===== */
+
+
+
+
+/* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
 .marfan-diagnostic {
   background: var(--block2-color);
   padding-top: 50px;
@@ -2308,7 +2200,15 @@ font-weight: 800;
   padding-bottom: 20px;
 }
 
-/* ===== TREATMENT ===== */
+.marfan-diagnostic__list-item {
+  padding-bottom: 20px;
+}
+
+
+
+
+
+/* ------------------------------------------------------ TREATMENT ------------------------------------------------------ */
 .marfan-treatment {
   background: var(--white-color);
 }
@@ -2337,7 +2237,8 @@ font-weight: 800;
   font-size: 25px;
 }
 
-/* ===== PROGNOSIS ===== */
+
+/* ----- PROGNOSIS ----- */
 .marfan-prognosis {
   background: var(--block1-color);
   padding-top: 50px;
@@ -2349,7 +2250,8 @@ font-weight: 800;
   padding-bottom: 20px;
 }
 
-/* ===== ATTENTION ===== */
+
+/* ----- ATTENTION ----- */
 .marfan-attention {
   background-color: var(--block1-color);
 }
@@ -2387,9 +2289,11 @@ font-weight: 800;
   text-align: center;
 }
 
-/* =========================================================
-   MARFAN PAGE (DESKTOP >= 768px)
-   ========================================================= */
+
+
+
+
+/* ------------------------------------------- MARFAN PAGE DESKTOP (>= 768px) ------------------------------------------- */
 @media (min-width: 768px) {
 
   /* ===== COVER (HERO) ===== */
@@ -2494,7 +2398,11 @@ font-weight: 800;
     object-fit: contain;
   }
 
-  /* ===== SIGNS ===== */
+
+
+
+
+  /* ------------------------------------------------------ SIGNS ------------------------------------------------------ */
   .marfan-signs__text {
     grid-column: 3 / span 8;
   }
@@ -2507,7 +2415,11 @@ font-weight: 800;
     text-align: left;
   }
 
-  /* ===== DIAGNOSTIC ===== */
+
+
+
+
+  /* ---------------------------------------------------- DIAGNOSTIC ---------------------------------------------------- */
   .marfan-diagnostic__test {
     grid-column: 3 / span 8;
     align-items: center;
@@ -2519,6 +2431,11 @@ font-weight: 800;
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
+
+  .marfan-diagnostic__list-item {
+    padding-bottom: 0;
+  }
+
 
   .marfan-diagnostic__instrument {
     grid-column: 3 / span 8;
@@ -2549,7 +2466,11 @@ font-weight: 800;
     gap: 16px;
   }
 
-  /* ===== TREATMENT ===== */
+
+
+
+
+  /* ---------------------------------------------------- TREATMENT ---------------------------------------------------- */
   .marfan-treatment__text {
     grid-column: 3 / span 8;
   }
