@@ -617,10 +617,10 @@ img {
 }
 
 .mobile-menu__list>li {
-    margin-bottom: 2rem;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
+  margin-bottom: 2rem;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
 }
 
 /* Mobile Dropdown */
@@ -875,6 +875,7 @@ a:focus-visible {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: 0 16px 30px 16px;
 }
 
 .info__icon,
@@ -898,6 +899,7 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   text-align: left;
+  padding-bottom: 50px;
 }
 
 
@@ -922,8 +924,13 @@ a:focus-visible {
   padding-bottom: 10px;
 }
 
+.class__text-info {
+  /* grid-column: 3 / span 8; */
+  padding-bottom: 50px;
+}
+
 .class__dst {
-  padding-bottom: 10px;
+  padding-bottom: 50px;
 }
 
 .class__header-subtitle {
@@ -1065,6 +1072,7 @@ a:focus-visible {
   display: grid;
   place-items: center;
   overflow: hidden;
+  padding-top: 40px;
 }
 
 .help__image {
@@ -1182,6 +1190,7 @@ a:focus-visible {
   .info__header,
   .class__header,
   .diagnostic__header,
+  .attention__header,
   .help__header {
     grid-column: 3 / span 8;
     display: flex;
@@ -1191,7 +1200,34 @@ a:focus-visible {
     text-align: left;
     flex-direction: row;
     row-gap: 24px;
+    padding: 0;
   }
+
+  .info__header-subtitle,
+  .info__list,
+  .info__text:last-child,
+  .info-help__actions {
+    grid-column: 3 / span 8;
+  }
+
+
+  .class__text,
+  .class__text-info,
+  .class__dst,
+  .class__ndst {
+    grid-column: 3 / span 8;
+    padding-bottom: 20px;
+  }
+
+
+
+
+
+
+
+
+
+
 
   .info__icon,
   .class__icon,
@@ -1236,9 +1272,15 @@ a:focus-visible {
     padding-bottom: 20px;
   }
 
+    .info__text-astra {
+    grid-column: 3 / span 8;
+    padding-bottom: 0;
+  }
+
   /* ----- CLASSIFICATION ----- */
   .class__dst {
     grid-column: 3 / span 8;
+    padding-bottom: 20px;
   }
 
   .class__ndst {
@@ -1259,7 +1301,6 @@ a:focus-visible {
     grid-column: 3 / 9;
     display: grid;
     row-gap: 24px;
-    margin-bottom: 50px;
     justify-content: start;
   }
 
@@ -1285,6 +1326,7 @@ a:focus-visible {
     grid-column: 9 / 13;
     align-self: end;
     justify-self: start;
+    padding-top: 0;
   }
 
   .help__image {
@@ -1407,6 +1449,7 @@ a:focus-visible {
   align-items: center;
   text-align: center;
   gap: 10px;
+  padding-bottom: 20px;
 }
 
 .hypermob__icon,
@@ -1472,13 +1515,18 @@ a:focus-visible {
 
 .beiton__test-title {
   text-align: center;
-  margin: 0 0 15px;
+  padding-bottom: 20px;
+}
+
+.beiton__text {
+  padding-bottom: 50px;
 }
 
 .beiton__test-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
+  padding-bottom: 50px;
 }
 
 .beiton__test-item {
@@ -1524,7 +1572,7 @@ a:focus-visible {
 
 .beiton-result__header {
   text-align: center;
-  margin: 0 0 15px;
+  margin: 0 0 30px;
 }
 
 
@@ -1648,6 +1696,7 @@ a:focus-visible {
     gap: 0;
     text-align: left;
     flex-direction: row;
+    padding-bottom: 0;
   }
 
   .hypermob__icon,
@@ -1704,10 +1753,15 @@ a:focus-visible {
   .beiton__test-title {
     grid-column: 6 / span 4;
     text-align: left;
+    padding-bottom: 30px;
   }
 
   .beiton__test-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    gap: 16px;
     grid-column: 6 / span 4;
+    padding-bottom: 20px;
   }
 
   .beiton-result__content {
@@ -1724,12 +1778,6 @@ a:focus-visible {
 
   .beiton-result__text {
     padding-bottom: 20px;
-  }
-
-  .beiton__test-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
-    gap: 16px;
   }
 
 
@@ -1757,596 +1805,304 @@ a:focus-visible {
   .ndst-diagnostic__header {
     grid-column: 3 / span 8;
   }
-}
-
-/* ----- ≥1200px ----- */
-@media (min-width: 1200px) {
-  .beiton__test-list {
-    grid-template-columns: repeat(2, 1fr);
-    padding-bottom: 16px;
-  }
-}
 
 
 
 
 
-/* ------------------------------------------------------ SED PAGE ------------------------------------------------------ */
-.sed-cover {
-  background-color: var(--block6-color);
-  background-image: none;
-  height: 100vh;
-  display: flex;
-  align-items: flex-start;
-}
-
-.sed-cover-mobile {
-  display: block;
-}
-
-.sed-cover-desktop {
-  display: none;
-}
-
-.container.sed {
-  padding: 0;
-}
-
-.sed-cover-mobile__image-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.sed-cover-mobile__image {
-  width: 150px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 30px 0 30px;
-}
-
-.sed-cover-mobile__title {
-  position: relative;
-  z-index: 2;
-  padding: 0 16px 30px 16px;
-  width: 100%;
-  text-align: center;
-}
-
-.sed-cover-mobile__subtitle p {
-  font-size: 2.8vh;
-}
-
-/* ----- ACCORDION ----- */
-.sed-types {
-  background-color: var(--white-color);
-  padding-top: 0px;
-  padding-bottom: 50px;
-}
-
-.accordion-items.sed {
-  margin-bottom: 0;
-}
-
-.accordion-header.sed {
-  display: flex;
-  justify-content: space-between;
-  text-align: left;
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 30px 20px;
-  color: var(--black-color);
-  transition: background .3s ease, color .3s ease;
-}
-
-.accordion-header.sed h2 {
-  font-size: 3vh;
-  padding-right: 10px;
-}
-
-.accordion-header.sed[aria-expanded="true"] {
-  background: transparent;
-}
-
-.accordion-icon.sed {
-  width: 16px;
-  height: 20px;
-  border-right: 2px solid var(--black-color);
-  border-bottom: 2px solid var(--black-color);
-  transform: rotate(45deg);
-  transition: transform .3s ease;
-  padding-right: 20px;
-}
-
-.accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
-  transform: rotate(-135deg);
-}
-
-.accordion-body.sed {
-  max-height: 0;
-  overflow: hidden;
-  background: var(--white-color);
-  color: var(--black-color);
-  transition: max-height .4s ease;
-  padding: 0;
-}
-
-.accordion-header.sed[aria-expanded="true"]+.accordion-body.sed {
-  max-height: 2000px;
-}
-
-.accordion-item.sed {
-  padding: 0 20px 30px;
-  margin: 0;
-}
-
-.accordion-item.sed:first-child {
-  padding: 0 20px 30px;
-  margin: 0;
-}
-
-.accordion-item.sed:last-child {
-  padding: 0 20px 30px;
-  margin: 0;
-}
-
-.accordion-item-header.sed h3 {
-  margin-bottom: 10px;
-  font-size: 2.6vh;
-}
-
-.accordion-item-info.sed li {
-  font-weight: 400;
-}
-
-.accordion-divider {
-  border: none;
-  border-top: 1px solid var(--block5-color);
-  margin: 0;
-}
-
-
-
-
-
-/* ----------------------------------------------- SED DESKTOP (>= 768px) ----------------------------------------------- */
-:root {
-  --sed-hero-offset: 0vh;
-}
-
-@media (min-width: 768px) {
-
-  .sed-types {
-    padding-top: 30px;
+  /* ------------------------------------------------------ SED PAGE ------------------------------------------------------ */
+  .sed-cover {
+    background-color: var(--block6-color);
+    background-image: none;
+    height: 100vh;
+    display: flex;
+    align-items: flex-start;
   }
 
   .sed-cover-mobile {
-    display: none;
+    display: block;
   }
 
   .sed-cover-desktop {
-    display: block;
-  }
-
-  .sed-cover {
-    padding-top: var(--sed-hero-offset);
-    position: relative;
-    overflow: hidden;
-    height: auto;
-    width: 100%;
-    background-image: url('/static/images/cover__bg-02.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
-
-  .sed-cover-desktop__content {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0px, 1fr));
-    column-gap: var(--gutter);
-    align-items: center;
-  }
-
-  .sed-cover-desktop__image-wrapper {
-    grid-column: 8 / 12;
-    align-self: end;
-    justify-self: start;
-  }
-
-  .sed-cover-desktop__image {
-    width: auto;
-    height: 300px;
-    object-fit: contain;
-    object-position: left center;
-  }
-
-  .sed-cover-desktop__text {
-    grid-column: 3 / 8;
-    display: grid;
-    padding: 50px 0 50px 0;
-  }
-
-  .sed-cover-desktop__title h1 {
-    padding-bottom: 24px;
-    font-size: 3.8vh;
-  }
-
-  .sed-cover-desktop__subtitle p {
-    font-size: 2.6vh;
-    line-height: 150%;
-  }
-
-  .sed-types .container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    column-gap: var(--gutter);
-    padding-left: var(--container-pad);
-    padding-right: var(--container-pad);
-  }
-
-  .sed-types__content {
-    grid-column: 3 / span 8;
-    width: 100%;
-    display: block;
-  }
-}
-
-
-
-
-
-/* ----------------------------------------------------- MARFAN PAGE ----------------------------------------------------- */
-:root {
-  --marfan-hero-offset: 0vh;
-}
-
-.marfan-cover {
-  background-color: var(--block1-color);
-  background-image: none;
-  height: 100vh;
-  display: flex;
-  align-items: flex-start;
-}
-
-.marfan-cover-mobile {
-  display: block;
-}
-
-.marfan-cover-desktop {
-  display: none;
-}
-
-.marfan-cover-mobile__image-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.marfan-cover-mobile__image {
-  width: 150px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 30px 0 30px;
-}
-
-.marfan-cover-mobile__title {
-  position: relative;
-  z-index: 2;
-  padding: 0 16px 30px 16px;
-  width: 100%;
-  text-align: center;
-}
-
-.marfan-cover-mobile__title h1 {
-  font-size: 4vh;
-  color: var(--black-color);
-}
-
-.marfan-cover-mobile__subtitle {
-  padding-bottom: 50px;
-}
-
-.marfan-cover-mobile__subtitle p {
-  text-align: left;
-}
-
-.marfan-signs,
-.marfan-diagnostic,
-.marfan-treatment,
-.marfan-prognosis,
-.marfan-attention {
-  padding: 50px 0;
-}
-
-.marfan-signs__content,
-.marfan-diagnostic__content,
-.marfan-treatment__content,
-.marfan-prognosis__content,
-.marfan-attention__content {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  column-gap: var(--grid-gap);
-  row-gap: 24px;
-}
-
-.marfan-signs__header,
-.marfan-diagnostic__header,
-.marfan-treatment__header,
-.marfan-prognosis__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-}
-
-.marfan-signs__icon,
-.marfan-diagnostic__icon,
-.marfan-treatment__icon,
-.marfan-prognosis__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.marfan-signs__icon img,
-.marfan-diagnostic__icon img,
-.marfan-treatment__icon img,
-.marfan-prognosis__icon img {
-  width: 45px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
-
-
-
-
-/* -------------------------------------------------------- SIGNS -------------------------------------------------------- */
-.marfan-signs {
-  background: var(--white-color);
-}
-
-.marfan-signs__item-header {
-  padding: 0 0 20px;
-  text-align: center;
-}
-
-.marfan-signs__text {
-  padding-bottom: 20px;
-}
-
-.marfan-signs__text:last-child {
-  padding-bottom: 0;
-}
-
-
-
-
-
-/* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
-.marfan-diagnostic {
-  background: var(--block2-color);
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.marfan-diagnostic__test-title {
-  text-align: center;
-  margin: 6px 0 16px;
-}
-
-.marfan-diagnostic__test-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-.marfan-diagnostic__test-item {
-  display: flex;
-  flex-direction: column;
-  background: var(--black-color);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.marfan-diagnostic__test-item-header {
-  background: var(--block3-color);
-  padding: 14px 18px;
-}
-
-.marfan-diagnostic__test-item-header h4 {
-  color: var(--white-color);
-  margin: 0;
-}
-
-.marfan-diagnostic__test-item-text {
-  padding: 16px 18px 0;
-  line-height: 1.45;
-}
-
-.marfan-diagnostic__test-image-wrapper {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  overflow: hidden;
-}
-
-.marfan-diagnostic__test-image {
-  max-width: 100%;
-  max-height: 260px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-}
-
-.marfan-diagnostic__header {
-  margin-top: 6px;
-}
-
-.marfan-diagnostic__text {
-  padding-bottom: 20px;
-}
-
-.marfan-diagnostic__list-item {
-  padding-bottom: 20px;
-}
-
-
-
-
-
-/* ------------------------------------------------------ TREATMENT ------------------------------------------------------ */
-.marfan-treatment {
-  background: var(--white-color);
-}
-
-.marfan-treatment__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 10px;
-  column-gap: var(--grid-gap);
-}
-
-.marfan-treatment__list-item {
-  position: relative;
-  padding-left: 20px;
-  font-weight: 400;
-}
-
-.marfan-treatment__list-item::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: var(--black-color);
-  font-size: 25px;
-}
-
-
-/* ----- PROGNOSIS ----- */
-.marfan-prognosis {
-  background: var(--block1-color);
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.marfan-prognosis__text {
-  grid-column: 3 / span 8;
-  padding-bottom: 20px;
-}
-
-
-/* ----- ATTENTION ----- */
-.marfan-attention {
-  background-color: var(--block1-color);
-}
-
-.marfan-attention__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.marfan-attention__header {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.marfan-attention__header-titile {
-  grid-column: 3 / span 8;
-  text-align: center;
-}
-
-.marfan-attention__header-titile h2 {
-  color: var(--black-color);
-}
-
-.marfan-attention__text {
-  grid-column: 3 / span 8;
-  text-align: center;
-}
-
-.marfan-attention__text p {
-  color: var(--black-color);
-  text-align: center;
-}
-
-
-
-
-
-/* ------------------------------------------- MARFAN PAGE DESKTOP (>= 768px) ------------------------------------------- */
-@media (min-width: 768px) {
-
-  /* ===== COVER (HERO) ===== */
-  .marfan-cover-mobile {
     display: none;
   }
 
-  .marfan-cover-desktop {
+  .container.sed {
+    padding: 0;
+  }
+
+  .sed-cover-mobile__image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .sed-cover-mobile__image {
+    width: 150px;
+    height: auto;
     display: block;
+    object-fit: contain;
+    padding: 30px 0 30px;
+  }
+
+  .sed-cover-mobile__title {
+    position: relative;
+    z-index: 2;
+    padding: 0 16px 30px 16px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .sed-cover-mobile__subtitle p {
+    font-size: 2.8vh;
+  }
+
+  /* ----- ACCORDION ----- */
+  .sed-types {
+    background-color: var(--white-color);
+    padding-top: 0px;
+    padding-bottom: 50px;
+  }
+
+  .accordion-items.sed {
+    margin-bottom: 0;
+  }
+
+  .accordion-header.sed {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 30px 20px;
+    color: var(--black-color);
+    transition: background .3s ease, color .3s ease;
+  }
+
+  .accordion-header.sed h2 {
+    font-size: 3vh;
+    padding-right: 10px;
+  }
+
+  .accordion-header.sed[aria-expanded="true"] {
+    background: transparent;
+  }
+
+  .accordion-icon.sed {
+    width: 16px;
+    height: 20px;
+    border-right: 2px solid var(--black-color);
+    border-bottom: 2px solid var(--black-color);
+    transform: rotate(45deg);
+    transition: transform .3s ease;
+    padding-right: 20px;
+  }
+
+  .accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
+    transform: rotate(-135deg);
+  }
+
+  .accordion-body.sed {
+    max-height: 0;
+    overflow: hidden;
+    background: var(--white-color);
+    color: var(--black-color);
+    transition: max-height .4s ease;
+    padding: 0;
+  }
+
+  .accordion-header.sed[aria-expanded="true"]+.accordion-body.sed {
+    max-height: 2000px;
+  }
+
+  .accordion-item.sed {
+    padding: 0 20px 30px;
+    margin: 0;
+  }
+
+  .accordion-item.sed:first-child {
+    padding: 0 20px 30px;
+    margin: 0;
+  }
+
+  .accordion-item.sed:last-child {
+    padding: 0 20px 30px;
+    margin: 0;
+  }
+
+  .accordion-item-header.sed h3 {
+    margin-bottom: 10px;
+    font-size: 2.6vh;
+  }
+
+  .accordion-item-info.sed li {
+    font-weight: 400;
+  }
+
+  .accordion-divider {
+    border: none;
+    border-top: 1px solid var(--block5-color);
+    margin: 0;
+  }
+
+
+
+
+
+  /* ----------------------------------------------- SED DESKTOP (>= 768px) ----------------------------------------------- */
+  :root {
+    --sed-hero-offset: 0vh;
+  }
+
+  @media (min-width: 768px) {
+
+    .sed-types {
+      padding-top: 30px;
+    }
+
+    .sed-cover-mobile {
+      display: none;
+    }
+
+    .sed-cover-desktop {
+      display: block;
+    }
+
+    .sed-cover {
+      padding-top: var(--sed-hero-offset);
+      position: relative;
+      overflow: hidden;
+      height: auto;
+      width: 100%;
+      background-image: url('/static/images/cover__bg-02.svg');
+      background-size: contain;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .sed-cover-desktop__content {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0px, 1fr));
+      column-gap: var(--gutter);
+      align-items: center;
+    }
+
+    .sed-cover-desktop__image-wrapper {
+      grid-column: 8 / 12;
+      align-self: end;
+      justify-self: start;
+    }
+
+    .sed-cover-desktop__image {
+      width: auto;
+      height: 300px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .sed-cover-desktop__text {
+      grid-column: 3 / 8;
+      display: grid;
+      padding: 50px 0 50px 0;
+    }
+
+    .sed-cover-desktop__title h1 {
+      padding-bottom: 24px;
+      font-size: 3.8vh;
+    }
+
+    .sed-cover-desktop__subtitle p {
+      font-size: 2.6vh;
+      line-height: 150%;
+    }
+
+    .sed-types .container {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--gutter);
+      padding-left: var(--container-pad);
+      padding-right: var(--container-pad);
+    }
+
+    .sed-types__content {
+      grid-column: 3 / span 8;
+      width: 100%;
+      display: block;
+    }
+  }
+
+
+
+
+
+  /* ----------------------------------------------------- MARFAN PAGE ----------------------------------------------------- */
+  :root {
+    --marfan-hero-offset: 0vh;
   }
 
   .marfan-cover {
-    padding-top: var(--marfan-hero-offset);
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    height: auto;
-    width: 100%;
-    background-image: url('/static/images/cover__bg.svg');
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: var(--block1-color);
+    background-image: none;
+    height: 100vh;
+    display: flex;
+    align-items: flex-start;
   }
 
-  .marfan-cover-desktop__content {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    align-items: end;
+  .marfan-cover-mobile {
+    display: block;
   }
 
-  .marfan-cover-desktop__text {
-    grid-column: 3 / 8;
-    display: grid;
-    padding: 50px 0 50px 20px;
+  .marfan-cover-desktop {
+    display: none;
   }
 
-  .marfan-cover-desktop__title h1 {
-    padding-bottom: 24px;
-    font-size: 3.8vh;
+  .marfan-cover-mobile__image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
 
-  .marfan-cover-desktop__image-wrapper {
-    grid-column: 8 / 12;
-    align-self: end;
-    justify-self: start;
-  }
-
-  .marfan-cover-desktop__image {
-    max-width: 100%;
+  .marfan-cover-mobile__image {
+    width: 150px;
     height: auto;
     display: block;
+    object-fit: contain;
+    padding: 30px 0 30px;
+  }
+
+  .marfan-cover-mobile__title {
+    position: relative;
+    z-index: 2;
+    padding: 0 16px 30px 16px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .marfan-cover-mobile__title h1 {
+    font-size: 4vh;
+    color: var(--black-color);
+  }
+
+  .marfan-cover-mobile__subtitle {
+    padding-bottom: 50px;
+  }
+
+  .marfan-cover-mobile__subtitle p {
+    text-align: left;
+  }
+
+  .marfan-signs,
+  .marfan-diagnostic,
+  .marfan-treatment,
+  .marfan-prognosis,
+  .marfan-attention {
+    padding: 50px 0;
   }
 
   .marfan-signs__content,
@@ -2355,37 +2111,31 @@ a:focus-visible {
   .marfan-prognosis__content,
   .marfan-attention__content {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    column-gap: var(--gutter);
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: var(--grid-gap);
     row-gap: 24px;
   }
 
   .marfan-signs__header,
   .marfan-diagnostic__header,
+  .marfan-attention__header,
   .marfan-treatment__header,
   .marfan-prognosis__header {
-    grid-column: 3 / span 8;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    gap: 0;
-    text-align: left;
-    flex-direction: row;
-    padding-bottom: 10px;
+    text-align: center;
+    gap: 10px;
+    padding-bottom: 20px;
   }
 
   .marfan-signs__icon,
   .marfan-diagnostic__icon,
   .marfan-treatment__icon,
   .marfan-prognosis__icon {
-    flex: 0 0 var(--section-header-icon-w);
-    width: var(--section-header-icon-w);
-    min-width: var(--section-header-icon-w);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 0;
-    margin-bottom: 0;
+    justify-content: center;
   }
 
   .marfan-signs__icon img,
@@ -2402,83 +2152,384 @@ a:focus-visible {
 
 
 
-  /* ------------------------------------------------------ SIGNS ------------------------------------------------------ */
-  .marfan-signs__text {
-    grid-column: 3 / span 8;
-  }
-
-  .marfan-signs__comment {
-    grid-column: 3 / span 8;
+  /* -------------------------------------------------------- SIGNS -------------------------------------------------------- */
+  .marfan-signs {
+    background: var(--white-color);
   }
 
   .marfan-signs__item-header {
-    text-align: left;
+    padding: 0 0 20px;
+    text-align: center;
   }
 
-
-
-
-
-  /* ---------------------------------------------------- DIAGNOSTIC ---------------------------------------------------- */
-  .marfan-diagnostic__test {
-    grid-column: 3 / span 8;
-    align-items: center;
-    text-align: left;
-    margin-bottom: 0;
-  }
-
-  .marfan-diagnostic__text {
-    grid-column: 3 / span 8;
+  .marfan-signs__text {
     padding-bottom: 20px;
   }
 
-  .marfan-diagnostic__list-item {
+  .marfan-signs__text:last-child {
     padding-bottom: 0;
   }
 
 
-  .marfan-diagnostic__instrument {
-    grid-column: 3 / span 8;
-  }
 
-  .marfan-diagnostic__list {
-    display: grid;
-    padding: 0;
-    margin: 0;
-    grid-column: 3 / span 8;
-    grid-template-columns: 1fr;
-    column-gap: var(--grid-gap);
-    row-gap: 20px;
+
+
+  /* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
+  .marfan-diagnostic {
+    background: var(--block2-color);
+    padding-top: 50px;
+    padding-bottom: 50px;
   }
 
   .marfan-diagnostic__test-title {
-    grid-column: 6 / span 4;
-    text-align: left;
-  }
-
-  .marfan-diagnostic__test-list {
-    grid-column: 6 / span 4;
+    text-align: center;
+    margin: 6px 0 16px;
   }
 
   .marfan-diagnostic__test-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    grid-template-columns: 1fr;
     gap: 16px;
   }
 
+  .marfan-diagnostic__test-item {
+    display: flex;
+    flex-direction: column;
+    background: var(--black-color);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .marfan-diagnostic__test-item-header {
+    background: var(--block3-color);
+    padding: 14px 18px;
+  }
+
+  .marfan-diagnostic__test-item-header h4 {
+    color: var(--white-color);
+    margin: 0;
+  }
+
+  .marfan-diagnostic__test-item-text {
+    padding: 16px 18px 0;
+    line-height: 1.45;
+  }
+
+  .marfan-diagnostic__test-image-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .marfan-diagnostic__test-image {
+    max-width: 100%;
+    max-height: 260px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .marfan-diagnostic__header {
+    margin-top: 6px;
+  }
+
+  .marfan-diagnostic__text {
+    padding-bottom: 20px;
+  }
+
+  .marfan-diagnostic__list-item {
+    padding-bottom: 20px;
+  }
 
 
 
 
-  /* ---------------------------------------------------- TREATMENT ---------------------------------------------------- */
-  .marfan-treatment__text {
-    grid-column: 3 / span 8;
+
+  /* ------------------------------------------------------ TREATMENT ------------------------------------------------------ */
+  .marfan-treatment {
+    background: var(--white-color);
   }
 
   .marfan-treatment__list {
-    grid-column: 3 / span 8;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 10px;
     column-gap: var(--grid-gap);
-    row-gap: 5px;
+  }
+
+  .marfan-treatment__list-item {
+    position: relative;
+    padding-left: 20px;
+    font-weight: 400;
+  }
+
+  .marfan-treatment__list-item::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--black-color);
+    font-size: 25px;
+  }
+
+
+  /* ----- PROGNOSIS ----- */
+  .marfan-prognosis {
+    background: var(--block1-color);
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .marfan-prognosis__text {
+    grid-column: 3 / span 8;
+    padding-bottom: 20px;
+  }
+
+
+  /* ----- ATTENTION ----- */
+  .marfan-attention {
+    background-color: var(--block1-color);
+  }
+
+  .marfan-attention__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .marfan-attention__header {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .marfan-attention__header-titile {
+    grid-column: 3 / span 8;
+    text-align: center;
+  }
+
+  .marfan-attention__header-titile h2 {
+    color: var(--black-color);
+  }
+
+  .marfan-attention__text {
+    grid-column: 3 / span 8;
+    text-align: center;
+  }
+
+  .marfan-attention__text p {
+    color: var(--black-color);
+    text-align: center;
+  }
+
+
+
+
+
+  /* ------------------------------------------- MARFAN PAGE DESKTOP (>= 768px) ------------------------------------------- */
+  @media (min-width: 768px) {
+
+    .marfan-signs__header,
+    .marfan-diagnostic__header,
+    .marfan-attention__header,
+    .marfan-treatment__header,
+    .marfan-prognosis__header {
+      padding-bottom: 0;
+    }
+
+
+    /* ===== COVER (HERO) ===== */
+    .marfan-cover-mobile {
+      display: none;
+    }
+
+    .marfan-cover-desktop {
+      display: block;
+    }
+
+    .marfan-cover {
+      padding-top: var(--marfan-hero-offset);
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+      height: auto;
+      width: 100%;
+      background-image: url('/static/images/cover__bg.svg');
+      background-size: contain;
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .marfan-cover-desktop__content {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gutter);
+      align-items: end;
+    }
+
+    .marfan-cover-desktop__text {
+      grid-column: 3 / 8;
+      display: grid;
+      padding: 50px 0 50px 20px;
+    }
+
+    .marfan-cover-desktop__title h1 {
+      padding-bottom: 24px;
+      font-size: 3.8vh;
+    }
+
+    .marfan-cover-desktop__image-wrapper {
+      grid-column: 8 / 12;
+      align-self: end;
+      justify-self: start;
+    }
+
+    .marfan-cover-desktop__image {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .marfan-signs__content,
+    .marfan-diagnostic__content,
+    .marfan-treatment__content,
+    .marfan-prognosis__content,
+    .marfan-attention__content {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--gutter);
+      row-gap: 24px;
+    }
+
+    .marfan-signs__header,
+    .marfan-diagnostic__header,
+    .marfan-treatment__header,
+    .marfan-prognosis__header {
+      grid-column: 3 / span 8;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      text-align: left;
+      flex-direction: row;
+      padding-bottom: 10px;
+    }
+
+    .marfan-signs__icon,
+    .marfan-diagnostic__icon,
+    .marfan-treatment__icon,
+    .marfan-prognosis__icon {
+      flex: 0 0 var(--section-header-icon-w);
+      width: var(--section-header-icon-w);
+      min-width: var(--section-header-icon-w);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+      margin-bottom: 0;
+    }
+
+    .marfan-signs__icon img,
+    .marfan-diagnostic__icon img,
+    .marfan-treatment__icon img,
+    .marfan-prognosis__icon img {
+      width: 45px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+
+
+
+
+    /* ------------------------------------------------------ SIGNS ------------------------------------------------------ */
+    .marfan-signs__text {
+      grid-column: 3 / span 8;
+    }
+
+    .marfan-signs__comment {
+      grid-column: 3 / span 8;
+    }
+
+    .marfan-signs__item-header {
+      text-align: left;
+    }
+
+
+
+
+
+    /* ---------------------------------------------------- DIAGNOSTIC ---------------------------------------------------- */
+    .marfan-diagnostic__test {
+      grid-column: 3 / span 8;
+      align-items: center;
+      text-align: left;
+      margin-bottom: 0;
+    }
+
+    .marfan-diagnostic__text {
+      grid-column: 3 / span 8;
+      padding-bottom: 20px;
+    }
+
+    .marfan-diagnostic__list-item {
+      padding-bottom: 0;
+    }
+
+
+    .marfan-diagnostic__instrument {
+      grid-column: 3 / span 8;
+    }
+
+    .marfan-diagnostic__list {
+      display: grid;
+      padding: 0;
+      margin: 0;
+      grid-column: 3 / span 8;
+      grid-template-columns: 1fr;
+      column-gap: var(--grid-gap);
+      row-gap: 20px;
+    }
+
+    .marfan-diagnostic__test-title {
+      grid-column: 6 / span 4;
+      text-align: left;
+    }
+
+    .marfan-diagnostic__test-list {
+      grid-column: 6 / span 4;
+    }
+
+    .marfan-diagnostic__test-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+
+
+
+
+    /* ---------------------------------------------------- TREATMENT ---------------------------------------------------- */
+    .marfan-treatment__text {
+      grid-column: 3 / span 8;
+    }
+
+    .marfan-treatment__list {
+      grid-column: 3 / span 8;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      row-gap: 5px;
+    }
   }
 }
