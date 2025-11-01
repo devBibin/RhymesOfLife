@@ -761,8 +761,8 @@ a:focus-visible {
 
 
 
+/* ==================================================== MAIN PAGE STYLES ==================================================== */
 
-/* ---------------------------------------------------- HOME (INDEX) ----------------------------------------------------*/
 .info,
 .class,
 .diagnostic,
@@ -808,7 +808,6 @@ a:focus-visible {
   background-attachment: scroll;
   padding: 50px 0 100px 0;
 }
-
 
 .cover-mobile::before {
   content: "";
@@ -886,10 +885,6 @@ a:focus-visible {
   margin-bottom: 10px;
 }
 
-
-
-
-
 /* ------------------------------------------------------- INFO ------------------------------------------------------- */
 .info {
   background-color: var(--white-color);
@@ -899,12 +894,8 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   text-align: left;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
-
-
-
-
 
 /* -------------------------------------------------- CLASSIFICATION -------------------------------------------------- */
 .class {
@@ -914,7 +905,6 @@ a:focus-visible {
 .class__term {
   color: var(--black-color);
   font-family: var(--font-basic);
-  /* font-size: 2.2vh; */
   line-height: 150%;
   font-weight: 700;
 }
@@ -925,7 +915,6 @@ a:focus-visible {
 }
 
 .class__text-info {
-  /* grid-column: 3 / span 8; */
   padding-bottom: 50px;
 }
 
@@ -962,10 +951,6 @@ a:focus-visible {
   font-size: 25px;
 }
 
-
-
-
-
 /* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
 .diagnostic {
   background-color: var(--white-color);
@@ -996,10 +981,6 @@ a:focus-visible {
   font-size: 25px;
 }
 
-
-
-
-
 /* ----------------------------------------------------- ATTENTION ----------------------------------------------------- */
 .attention {
   background-color: var(--block3-color);
@@ -1009,10 +990,6 @@ a:focus-visible {
   color: var(--white-color);
   text-align: center;
 }
-
-
-
-
 
 /* ------------------------------------------------------- HELP ------------------------------------------------------- */
 .help {
@@ -1081,14 +1058,659 @@ a:focus-visible {
   max-width: 60%;
 }
 
+/* ==================================================== MARFAN PAGE STYLES ==================================================== */
 
+.marfan-cover {
+  background-color: var(--block1-color);
+  /* height: 100vh; */
+  display: flex;
+  align-items: flex-start;
+}
 
+.marfan-cover-mobile {
+  display: block;
+}
 
+.marfan-cover-desktop {
+  display: none;
+}
 
-/* ----------------------------------------------- MAIN DESKTOP (>= 769px) ----------------------------------------------- */
+.marfan-cover-mobile__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.marfan-cover-mobile__image {
+  width: 150px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  padding: 30px 0 30px;
+}
+
+.marfan-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.marfan-cover-mobile__title h1 {
+  font-size: 4vh;
+  color: var(--black-color);
+}
+
+.marfan-cover-mobile__subtitle {
+  padding-bottom: 50px;
+}
+
+.marfan-cover-mobile__subtitle p {
+  text-align: left;
+}
+
+.marfan-signs,
+.marfan-diagnostic,
+.marfan-treatment,
+.marfan-attention {
+  padding: 50px 0;
+}
+
+.marfan-signs__content,
+.marfan-diagnostic__content,
+.marfan-treatment__content,
+.marfan-attention__content {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: var(--gutter);
+  row-gap: 24px;
+}
+
+.marfan-signs__header,
+.marfan-diagnostic__header,
+.marfan-attention__header,
+.marfan-treatment__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.marfan-signs__icon,
+.marfan-diagnostic__icon,
+.marfan-treatment__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marfan-signs__icon img,
+.marfan-diagnostic__icon img,
+.marfan-treatment__icon img {
+  width: 45px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* -------------------------------------------------------- SIGNS -------------------------------------------------------- */
+.marfan-signs {
+  background: var(--white-color);
+}
+
+.marfan-signs__item-header {
+  padding: 0 0 20px;
+  text-align: center;
+}
+
+.marfan-signs__text {
+  padding-bottom: 20px;
+}
+
+.marfan-signs__text:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
+.marfan-signs__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--black-color);
+  font-size: 25px;
+}
+
+.marfan-signs__comment {
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
+.marfan-diagnostic {
+  background: var(--block2-color);
+}
+
+.marfan-diagnostic__text {
+  padding-bottom: 20px;
+}
+
+.marfan-diagnostic__instrument {
+  margin: 20px 0;
+}
+
+.marfan-diagnostic__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-diagnostic__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+  padding-bottom: 15px;
+}
+
+.marfan-diagnostic__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-diagnostic__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--block3-color);
+  font-size: 25px;
+}
+
+/* ------------------------------------------------------ TREATMENT ------------------------------------------------------ */
+.marfan-treatment {
+  background: var(--white-color);
+}
+
+/* ------------------------------------------------------ ATTENTION ------------------------------------------------------ */
+.marfan-attention {
+  background-color: var(--block1-color);
+}
+
+.marfan-attention__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marfan-attention__header {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.marfan-attention__icon {
+margin-bottom: 10px;
+}
+
+.marfan-attention__text {
+grid-column: 3 / span 8;
+        text-align: center;
+}
+
+.marfan-attention__text p {
+  color: var(--black-color);
+  text-align: center;
+}
+
+/* ==================================================== SED PAGE STYLES ==================================================== */
+
+.sed-cover {
+  background-color: var(--block6-color);
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+}
+
+.sed-cover-mobile {
+  display: block;
+}
+
+.sed-cover-desktop {
+  display: none;
+}
+
+.sed-cover-mobile__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.sed-cover-mobile__image {
+  width: 150px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  padding: 30px 0 30px;
+}
+
+.sed-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.sed-cover-mobile__subtitle p {
+  font-size: 2.8vh;
+}
+
+/* ----- ACCORDION ----- */
+.sed-types {
+  background-color: var(--white-color);
+  padding-top: 0px;
+  padding-bottom: 50px;
+}
+
+.accordion-items.sed {
+  margin-bottom: 0;
+}
+
+.accordion-header.sed {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 30px 20px;
+  color: var(--black-color);
+  transition: background .3s ease, color .3s ease;
+}
+
+.accordion-header.sed h2 {
+  font-size: 3vh;
+  padding-right: 10px;
+}
+
+.accordion-header.sed[aria-expanded="true"] {
+  background: transparent;
+}
+
+.accordion-icon.sed {
+  width: 16px;
+  height: 20px;
+  border-right: 2px solid var(--black-color);
+  border-bottom: 2px solid var(--black-color);
+  transform: rotate(45deg);
+  transition: transform .3s ease;
+  padding-right: 20px;
+}
+
+.accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
+  transform: rotate(-135deg);
+}
+
+.accordion-body.sed {
+  max-height: 0;
+  overflow: hidden;
+  background: var(--white-color);
+  color: var(--black-color);
+  transition: max-height .4s ease;
+  padding: 0;
+}
+
+.accordion-header.sed[aria-expanded="true"]+.accordion-body.sed {
+  max-height: 2000px;
+}
+
+.accordion-item.sed {
+  padding: 0 20px 30px;
+  margin: 0;
+}
+
+.accordion-item.sed:first-child {
+  padding: 0 20px 30px;
+  margin: 0;
+}
+
+.accordion-item.sed:last-child {
+  padding: 0 20px 30px;
+  margin: 0;
+}
+
+.accordion-item-header.sed h3 {
+  margin-bottom: 10px;
+  font-size: 2.6vh;
+}
+
+.accordion-item-info.sed li {
+  font-weight: 400;
+}
+
+.accordion-divider {
+  border: none;
+  border-top: 1px solid var(--block5-color);
+  margin: 0;
+}
+
+/* ==================================================== NDST PAGE STYLES ==================================================== */
+
+.ndst-cover {
+  background-color: var(--block1-color);
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+}
+
+.ndst-cover-mobile {
+  display: block;
+}
+
+.ndst-cover-desktop {
+  display: none;
+}
+
+.ndst-cover-mobile__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.ndst-cover-mobile__image {
+  width: 150px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  padding: 30px 0;
+}
+
+.ndst-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  padding: 0 16px 30px 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.ndst-cover-mobile__title h1 {
+  font-size: 3.4vh;
+  color: var(--black-color);
+}
+
+.ndst-cover-mobile__subtitle {
+  padding-bottom: 50px;
+}
+
+.ndst-cover-mobile__subtitle p {
+  text-align: left;
+  font-size: 3vh;
+}
+
+.hypermob,
+.beiton,
+.gentest,
+.ndst-diagnostic {
+  padding: 50px 0;
+}
+
+.hypermob__content,
+.beiton__content,
+.gentest__content,
+.ndst-diagnostic__content {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: var(--gutter);
+  row-gap: 24px;
+}
+
+.hypermob__header,
+.beiton__header,
+.gentest__header,
+.ndst-diagnostic__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.hypermob__icon,
+.beiton__icon,
+.gentest__icon,
+.ndst-diagnostic__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hypermob__icon img,
+.beiton__icon img,
+.gentest__icon img,
+.ndst-diagnostic__icon img {
+  width: 45px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------ HYPERMOB ------------------------------------------------------ */
+.hypermob {
+  background: var(--white-color);
+}
+
+.hypermob__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hypermob__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+}
+
+.hypermob__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.hypermob__list-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--block5-color);
+  font-size: 25px;
+}
+
+/* -------------------------------------------------------- BEITON -------------------------------------------------------- */
+.beiton {
+  background: var(--block2-color);
+}
+
+.beiton__test-title {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.beiton__text {
+  padding-bottom: 50px;
+}
+
+.beiton__test-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+.beiton__test-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--white-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.beiton__test-item-header {
+  background: var(--block3-color);
+  padding: 14px 18px;
+}
+
+.beiton__test-item-header h4 {
+  color: var(--white-color);
+  margin: 0;
+}
+
+.beiton__test-item-text {
+  padding: 16px 18px 0;
+  line-height: 1.45;
+}
+
+.beiton__test-image-wrapper {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.beiton__test-image {
+  max-width: 100%;
+  max-height: 260px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+.beiton-result__header {
+  text-align: center;
+  margin: 0 0 30px;
+}
+
+/* ------------------------------------------------------- GENTEST ------------------------------------------------------- */
+.gentest {
+  background: var(--white-color);
+}
+
+.gentest__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 10px;
+  column-gap: var(--gutter);
+}
+
+.gentest__list-item {
+  position: relative;
+  padding-left: 20px;
+  font-weight: 400;
+}
+
+.gentest__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.gentest__list-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--black-color);
+  font-size: 25px;
+}
+
+/* ==================================================== DESKTOP STYLES ==================================================== */
+
 @media (min-width: 769px) {
+  /* Responsive Typography */
+  @media (max-width: 768px) {
+    h4 {
+      font-size: 2.6vh;
+    }
 
-  /* ===== COVER ===== */
+    p {
+      font-size: 2.6vh;
+    }
+
+    a {
+      font-size: 2.6vh;
+    }
+
+    li {
+      font-size: 2.6vh;
+    }
+  }
+
+  /* Header Mobile Styles */
+  @media (max-width: 768px) {
+    .burger-btn {
+      display: flex;
+    }
+
+    .nav {
+      display: none;
+    }
+
+    .header__container {
+      padding: 1rem var(--container-pad);
+    }
+
+    .mobile-menu__header {
+      padding: 1rem 1rem 3rem;
+    }
+
+    .info-help__actions {
+      display: none;
+    }
+
+    .btn {
+      display: flex;
+      font-size: 3vh;
+      text-align: center;
+    }
+
+    .btn-help__burger a {
+      font-size: 3vh;
+    }
+  }
+
+  /* Buttons Desktop */
+  .help__actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: fit-content;
+  }
+
+  /* Main Page Desktop */
   .cover {
     height: auto;
     padding: 0;
@@ -1100,17 +1722,6 @@ a:focus-visible {
     background-repeat: no-repeat;
     background-attachment: fixed;
   }
-
-  /* Optional background blur effect 
-  .cover::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: inherit;
-    filter: blur(10px);
-    opacity: 0.8;
-    z-index: 0;
-  } */
 
   .cover-mobile {
     display: none;
@@ -1175,7 +1786,7 @@ a:focus-visible {
     display: block;
   }
 
-  /* ----- COMMON GRID FOR SECTIONS ----- */
+  /* Common Grid for Sections */
   .info__content,
   .class__content,
   .diagnostic__content,
@@ -1210,7 +1821,6 @@ a:focus-visible {
     grid-column: 3 / span 8;
   }
 
-
   .class__text,
   .class__text-info,
   .class__dst,
@@ -1218,16 +1828,6 @@ a:focus-visible {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
-
-
-
-
-
-
-
-
-
-
 
   .info__icon,
   .class__icon,
@@ -1266,18 +1866,16 @@ a:focus-visible {
     text-align: center;
   }
 
-  /* ----- INFO ----- */
   .info__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
 
-    .info__text-astra {
+  .info__text-astra {
     grid-column: 3 / span 8;
     padding-bottom: 0;
   }
 
-  /* ----- CLASSIFICATION ----- */
   .class__dst {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
@@ -1287,7 +1885,6 @@ a:focus-visible {
     grid-column: 3 / span 8;
   }
 
-  /* ----- DIAGNOSTIC ----- */
   .diagnostic__header {
     grid-column: 3 / span 8;
   }
@@ -1296,7 +1893,6 @@ a:focus-visible {
     grid-column: 3 / span 9;
   }
 
-  /* ----- HELP ----- */
   .help__content {
     grid-column: 3 / 9;
     display: grid;
@@ -1334,292 +1930,13 @@ a:focus-visible {
     height: auto;
     display: block;
   }
-}
 
+  /* Mobile Menu Desktop */
+  .mobile-menu {
+    display: none;
+  }
 
-
-
-
-/* ---------------------------------------------------- NDST PAGE ----------------------------------------------------  */
-
-/* Tokens */
-:root {
-  --grid-gap: 24px;
-  --rail-l: 3;
-  /* left rail of content on desktop: starts at col 3 */
-  --rail-span: 8;
-  /* content width on desktop */
-  --icon-rail: 70px;
-  /* "frame" for header icons */
-  --ndst-hero-offset: 0vh;
-  /* shift hero block down on desktop if needed */
-}
-
-
-
-
-
-/* ------------------------------------------------------- COVER ------------------------------------------------------- */
-.ndst-cover {
-  background-color: var(--block1-color);
-  background-image: none;
-  height: 100vh;
-  display: flex;
-  align-items: flex-start;
-}
-
-.ndst-cover-mobile {
-  display: block;
-}
-
-.ndst-cover-desktop {
-  display: none;
-}
-
-.ndst-cover-mobile__image-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.ndst-cover-mobile__image {
-  width: 150px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  padding: 30px 0;
-}
-
-.ndst-cover-mobile__title {
-  position: relative;
-  z-index: 2;
-  padding: 0 16px 30px 16px;
-  width: 100%;
-  text-align: center;
-}
-
-.ndst-cover-mobile__title h1 {
-  font-size: 3.4vh;
-  color: var(--black-color);
-}
-
-.ndst-cover-mobile__subtitle {
-  padding-bottom: 50px;
-}
-
-.ndst-cover-mobile__subtitle p {
-  text-align: left;
-  font-size: 3vh;
-}
-
-
-
-
-
-/* ----------------------------------------------- BASE GRID FOR SECTIONS ----------------------------------------------- */
-.hypermob,
-.beiton,
-.gentest,
-.ndst-diagnostic {
-  padding: 50px 0;
-}
-
-.hypermob__content,
-.beiton__content,
-.gentest__content,
-.ndst-diagnostic__content {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  column-gap: var(--grid-gap);
-  row-gap: 24px;
-}
-
-
-
-
-
-/* ----------------------------------------------SHARED HEADERS WITH ICONS ---------------------------------------------- */
-.hypermob__header,
-.beiton__header,
-.gentest__header,
-.ndst-diagnostic__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 10px;
-  padding-bottom: 20px;
-}
-
-.hypermob__icon,
-.beiton__icon,
-.gentest__icon,
-.ndst-diagnostic__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hypermob__icon img,
-.beiton__icon img,
-.gentest__icon img,
-.ndst-diagnostic__icon img {
-  width: 45px;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
-
-
-
-
-/* ------------------------------------------------------ HYPERMOB ------------------------------------------------------ */
-.hypermob {
-  background: var(--white-color);
-}
-
-.hypermob__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.hypermob__list-item {
-  position: relative;
-  padding-left: 20px;
-  font-weight: 400;
-}
-
-.hypermob__list-item:last-child {
-  padding-bottom: 0;
-}
-
-.hypermob__list-item::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: var(--block5-color);
-  font-size: 25px;
-}
-
-
-
-
-
-/* -------------------------------------------------------- BEITON -------------------------------------------------------- */
-.beiton {
-  background: var(--block2-color);
-}
-
-.beiton__test-title {
-  text-align: center;
-  padding-bottom: 20px;
-}
-
-.beiton__text {
-  padding-bottom: 50px;
-}
-
-.beiton__test-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  padding-bottom: 50px;
-}
-
-.beiton__test-item {
-  display: flex;
-  flex-direction: column;
-  background: var(--white-color);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.beiton__test-item-header {
-  background: var(--block3-color);
-  padding: 14px 18px;
-}
-
-.beiton__test-item-header h4 {
-  color: var(--white-color);
-  margin: 0;
-}
-
-.beiton__test-item-text {
-  padding: 16px 18px 0;
-  line-height: 1.45;
-}
-
-.beiton__test-image-wrapper {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  overflow: hidden;
-}
-
-.beiton__test-image {
-  max-width: 100%;
-  max-height: 260px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-}
-
-.beiton-result__header {
-  text-align: center;
-  margin: 0 0 30px;
-}
-
-
-
-
-
-/* ------------------------------------------------------- GENTEST ------------------------------------------------------- */
-.gentest {
-  background: var(--white-color);
-}
-
-.gentest__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 10px;
-  column-gap: var(--grid-gap);
-}
-
-.gentest__list-item {
-  position: relative;
-  padding-left: 20px;
-  font-weight: 400;
-}
-
-.gentest__list-item:last-child {
-  padding-bottom: 0;
-}
-
-.gentest__list-item::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: var(--black-color);
-  font-size: 25px;
-}
-
-
-
-
-
-/* ---------------------------------------------- NDST DESKTOP (>= 768px) ---------------------------------------------- */
-@media (min-width: 768px) {
-
-  /* ----- HERO ----- */
+  /* NDST Desktop */
   .ndst-cover-mobile {
     display: none;
   }
@@ -1629,7 +1946,7 @@ a:focus-visible {
   }
 
   .ndst-cover {
-    padding-top: var(--ndst-hero-offset);
+    padding-top: 0vh;
     position: relative;
     overflow: hidden;
     padding: 0;
@@ -1681,7 +1998,7 @@ a:focus-visible {
   .beiton__content,
   .ndst-diagnostic__content {
     grid-template-columns: repeat(12, 1fr);
-    column-gap: var(--grid-gap);
+    column-gap: var(--gutter);
     row-gap: 24px;
   }
 
@@ -1723,21 +2040,11 @@ a:focus-visible {
     object-fit: contain;
   }
 
-
-
-
-
-  /* -------------------------------------------------- HYPERMOB DESKTOP -------------------------------------------------- */
   .hypermob__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
 
-
-
-
-
-  /* --------------------------------------------------- BEITON DESKTOP --------------------------------------------------- */
   .beiton__test {
     grid-column: 3 / span 8;
     align-items: center;
@@ -1780,11 +2087,6 @@ a:focus-visible {
     padding-bottom: 20px;
   }
 
-
-
-
-
-  /* -------------------------------------------------- GENTEST DESKTOP -------------------------------------------------- */
   .gentest__text {
     grid-column: 3 / span 8;
     padding-bottom: 20px;
@@ -1793,743 +2095,246 @@ a:focus-visible {
   .gentest__list {
     grid-column: 3 / span 8;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--grid-gap);
+    column-gap: var(--gutter);
     row-gap: 20px;
   }
 
-
-
-
-
-  /* ---------------------------------------------- --DIAGNOSTIC DESKTOP ------------------------------------------------ */
   .ndst-diagnostic__header {
     grid-column: 3 / span 8;
   }
 
-
-
-
-
-  /* ------------------------------------------------------ SED PAGE ------------------------------------------------------ */
-  .sed-cover {
-    background-color: var(--block6-color);
-    background-image: none;
-    height: 100vh;
-    display: flex;
-    align-items: flex-start;
+  /* SED Desktop */
+  .sed-types {
+    padding-top: 30px;
   }
 
   .sed-cover-mobile {
-    display: block;
+    display: none;
   }
 
   .sed-cover-desktop {
-    display: none;
-  }
-
-  .container.sed {
-    padding: 0;
-  }
-
-  .sed-cover-mobile__image-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .sed-cover-mobile__image {
-    width: 150px;
-    height: auto;
     display: block;
-    object-fit: contain;
-    padding: 30px 0 30px;
   }
 
-  .sed-cover-mobile__title {
+  .sed-cover {
+    padding-top: 0vh;
     position: relative;
-    z-index: 2;
-    padding: 0 16px 30px 16px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .sed-cover-mobile__subtitle p {
-    font-size: 2.8vh;
-  }
-
-  /* ----- ACCORDION ----- */
-  .sed-types {
-    background-color: var(--white-color);
-    padding-top: 0px;
-    padding-bottom: 50px;
-  }
-
-  .accordion-items.sed {
-    margin-bottom: 0;
-  }
-
-  .accordion-header.sed {
-    display: flex;
-    justify-content: space-between;
-    text-align: left;
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 30px 20px;
-    color: var(--black-color);
-    transition: background .3s ease, color .3s ease;
-  }
-
-  .accordion-header.sed h2 {
-    font-size: 3vh;
-    padding-right: 10px;
-  }
-
-  .accordion-header.sed[aria-expanded="true"] {
-    background: transparent;
-  }
-
-  .accordion-icon.sed {
-    width: 16px;
-    height: 20px;
-    border-right: 2px solid var(--black-color);
-    border-bottom: 2px solid var(--black-color);
-    transform: rotate(45deg);
-    transition: transform .3s ease;
-    padding-right: 20px;
-  }
-
-  .accordion-header.sed[aria-expanded="true"] .accordion-icon.sed {
-    transform: rotate(-135deg);
-  }
-
-  .accordion-body.sed {
-    max-height: 0;
     overflow: hidden;
-    background: var(--white-color);
-    color: var(--black-color);
-    transition: max-height .4s ease;
-    padding: 0;
+    height: auto;
+    width: 100%;
+    background-image: url('/static/images/cover__bg-02.svg');
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 
-  .accordion-header.sed[aria-expanded="true"]+.accordion-body.sed {
-    max-height: 2000px;
+  .sed-cover-desktop__content {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0px, 1fr));
+    column-gap: var(--gutter);
+    align-items: center;
   }
 
-  .accordion-item.sed {
-    padding: 0 20px 30px;
-    margin: 0;
+  .sed-cover-desktop__image-wrapper {
+    grid-column: 8 / 12;
+    align-self: end;
+    justify-self: start;
   }
 
-  .accordion-item.sed:first-child {
-    padding: 0 20px 30px;
-    margin: 0;
+  .sed-cover-desktop__image {
+    width: auto;
+    height: 300px;
+    object-fit: contain;
+    object-position: left center;
   }
 
-  .accordion-item.sed:last-child {
-    padding: 0 20px 30px;
-    margin: 0;
+  .sed-cover-desktop__text {
+    grid-column: 3 / 8;
+    display: grid;
+    padding: 50px 0 50px 0;
   }
 
-  .accordion-item-header.sed h3 {
-    margin-bottom: 10px;
+  .sed-cover-desktop__title h1 {
+    padding-bottom: 24px;
+    font-size: 3.8vh;
+  }
+
+  .sed-cover-desktop__subtitle p {
     font-size: 2.6vh;
+    line-height: 150%;
   }
 
-  .accordion-item-info.sed li {
-    font-weight: 400;
+  .sed-types .container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
   }
 
-  .accordion-divider {
-    border: none;
-    border-top: 1px solid var(--block5-color);
-    margin: 0;
-  }
-
-
-
-
-
-  /* ----------------------------------------------- SED DESKTOP (>= 768px) ----------------------------------------------- */
-  :root {
-    --sed-hero-offset: 0vh;
-  }
-
-  @media (min-width: 768px) {
-
-    .sed-types {
-      padding-top: 30px;
-    }
-
-    .sed-cover-mobile {
-      display: none;
-    }
-
-    .sed-cover-desktop {
-      display: block;
-    }
-
-    .sed-cover {
-      padding-top: var(--sed-hero-offset);
-      position: relative;
-      overflow: hidden;
-      height: auto;
-      width: 100%;
-      background-image: url('/static/images/cover__bg-02.svg');
-      background-size: contain;
-      background-position: top center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-
-    .sed-cover-desktop__content {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0px, 1fr));
-      column-gap: var(--gutter);
-      align-items: center;
-    }
-
-    .sed-cover-desktop__image-wrapper {
-      grid-column: 8 / 12;
-      align-self: end;
-      justify-self: start;
-    }
-
-    .sed-cover-desktop__image {
-      width: auto;
-      height: 300px;
-      object-fit: contain;
-      object-position: left center;
-    }
-
-    .sed-cover-desktop__text {
-      grid-column: 3 / 8;
-      display: grid;
-      padding: 50px 0 50px 0;
-    }
-
-    .sed-cover-desktop__title h1 {
-      padding-bottom: 24px;
-      font-size: 3.8vh;
-    }
-
-    .sed-cover-desktop__subtitle p {
-      font-size: 2.6vh;
-      line-height: 150%;
-    }
-
-    .sed-types .container {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      column-gap: var(--gutter);
-      padding-left: var(--container-pad);
-      padding-right: var(--container-pad);
-    }
-
-    .sed-types__content {
-      grid-column: 3 / span 8;
-      width: 100%;
-      display: block;
-    }
-  }
-
-
-
-
-
-  /* ----------------------------------------------------- MARFAN PAGE ----------------------------------------------------- */
-  :root {
-    --marfan-hero-offset: 0vh;
-  }
-
-  .marfan-cover {
-    background-color: var(--block1-color);
-    background-image: none;
-    height: 100vh;
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .marfan-cover-mobile {
+  .sed-types__content {
+    grid-column: 3 / span 8;
+    width: 100%;
     display: block;
+  }
+
+  /* Marfan Desktop */
+  .marfan-cover-mobile {
+    display: none;
   }
 
   .marfan-cover-desktop {
-    display: none;
+    display: block;
   }
 
-  .marfan-cover-mobile__image-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  .marfan-cover {
+    padding-top: 0vh;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: auto;
+    width: 100%;
+    background-image: url('/static/images/cover__bg.svg');
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 
-  .marfan-cover-mobile__image {
-    width: 150px;
+  .marfan-cover-desktop__content {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+
+  .marfan-cover-desktop__text {
+    grid-column: 3 / 8;
+    display: grid;
+    padding: 50px 0 50px 20px;
+  }
+
+  .marfan-cover-desktop__title h1 {
+    padding-bottom: 24px;
+    font-size: 3.8vh;
+  }
+
+  .marfan-cover-desktop__image-wrapper {
+    grid-column: 8 / 12;
+    align-self: end;
+    justify-self: start;
+  }
+
+  .marfan-cover-desktop__image {
+    max-width: 100%;
     height: auto;
     display: block;
-    object-fit: contain;
-    padding: 30px 0 30px;
-  }
-
-  .marfan-cover-mobile__title {
-    position: relative;
-    z-index: 2;
-    padding: 0 16px 30px 16px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .marfan-cover-mobile__title h1 {
-    font-size: 4vh;
-    color: var(--black-color);
-  }
-
-  .marfan-cover-mobile__subtitle {
-    padding-bottom: 50px;
-  }
-
-  .marfan-cover-mobile__subtitle p {
-    text-align: left;
-  }
-
-  .marfan-signs,
-  .marfan-diagnostic,
-  .marfan-treatment,
-  .marfan-prognosis,
-  .marfan-attention {
-    padding: 50px 0;
   }
 
   .marfan-signs__content,
   .marfan-diagnostic__content,
   .marfan-treatment__content,
-  .marfan-prognosis__content,
   .marfan-attention__content {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    column-gap: var(--grid-gap);
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--gutter);
     row-gap: 24px;
   }
 
   .marfan-signs__header,
   .marfan-diagnostic__header,
-  .marfan-attention__header,
-  .marfan-treatment__header,
-  .marfan-prognosis__header {
+  .marfan-treatment__header {
+    grid-column: 3 / span 8;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    gap: 10px;
-    padding-bottom: 20px;
+    justify-content: flex-start;
+    gap: 0;
+    text-align: left;
+    flex-direction: row;
+    padding-bottom: 10px;
   }
 
   .marfan-signs__icon,
   .marfan-diagnostic__icon,
-  .marfan-treatment__icon,
-  .marfan-prognosis__icon {
+  .marfan-treatment__icon {
+    flex: 0 0 var(--section-header-icon-w);
+    width: var(--section-header-icon-w);
+    min-width: var(--section-header-icon-w);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 0;
+    margin-bottom: 0;
   }
 
   .marfan-signs__icon img,
   .marfan-diagnostic__icon img,
-  .marfan-treatment__icon img,
-  .marfan-prognosis__icon img {
+  .marfan-treatment__icon img {
     width: 45px;
     height: auto;
     display: block;
     object-fit: contain;
   }
 
+  .marfan-signs__text {
+    grid-column: 3 / span 8;
+  }
 
-
-
-
-  /* -------------------------------------------------------- SIGNS -------------------------------------------------------- */
-  .marfan-signs {
-    background: var(--white-color);
+  .marfan-signs__comment {
+    grid-column: 3 / span 8;
   }
 
   .marfan-signs__item-header {
-    padding: 0 0 20px;
-    text-align: center;
-  }
-
-  .marfan-signs__text {
-    padding-bottom: 20px;
-  }
-
-  .marfan-signs__text:last-child {
-    padding-bottom: 0;
-  }
-
-
-
-
-
-  /* ----------------------------------------------------- DIAGNOSTIC ----------------------------------------------------- */
-  .marfan-diagnostic {
-    background: var(--block2-color);
-    padding-top: 50px;
-    padding-bottom: 50px;
-  }
-
-  .marfan-diagnostic__test-title {
-    text-align: center;
-    margin: 6px 0 16px;
-  }
-
-  .marfan-diagnostic__test-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .marfan-diagnostic__test-item {
-    display: flex;
-    flex-direction: column;
-    background: var(--black-color);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .marfan-diagnostic__test-item-header {
-    background: var(--block3-color);
-    padding: 14px 18px;
-  }
-
-  .marfan-diagnostic__test-item-header h4 {
-    color: var(--white-color);
-    margin: 0;
-  }
-
-  .marfan-diagnostic__test-item-text {
-    padding: 16px 18px 0;
-    line-height: 1.45;
-  }
-
-  .marfan-diagnostic__test-image-wrapper {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    overflow: hidden;
-  }
-
-  .marfan-diagnostic__test-image {
-    max-width: 100%;
-    max-height: 260px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
-  }
-
-  .marfan-diagnostic__header {
-    margin-top: 6px;
+    text-align: left;
   }
 
   .marfan-diagnostic__text {
+    grid-column: 3 / span 8;
     padding-bottom: 20px;
   }
 
   .marfan-diagnostic__list-item {
-    padding-bottom: 20px;
+    padding-bottom: 0;
   }
 
-
-
-
-
-  /* ------------------------------------------------------ TREATMENT ------------------------------------------------------ */
-  .marfan-treatment {
-    background: var(--white-color);
+  .marfan-diagnostic__instrument {
+    grid-column: 3 / span 8;
   }
 
-  .marfan-treatment__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .marfan-diagnostic__list {
     display: grid;
+    padding: 0;
+    margin: 0;
+    grid-column: 3 / span 8;
     grid-template-columns: 1fr;
-    row-gap: 10px;
-    column-gap: var(--grid-gap);
+    column-gap: var(--gutter);
+    row-gap: 20px;
   }
 
-  .marfan-treatment__list-item {
-    position: relative;
-    padding-left: 20px;
-    font-weight: 400;
-  }
-
-  .marfan-treatment__list-item::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: var(--black-color);
-    font-size: 25px;
-  }
-
-
-  /* ----- PROGNOSIS ----- */
-  .marfan-prognosis {
-    background: var(--block1-color);
-    padding-top: 50px;
-    padding-bottom: 50px;
-  }
-
-  .marfan-prognosis__text {
+  .marfan-treatment__text {
     grid-column: 3 / span 8;
-    padding-bottom: 20px;
   }
+}
 
-
-  /* ----- ATTENTION ----- */
-  .marfan-attention {
-    background-color: var(--block1-color);
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+}
 
-  .marfan-attention__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
 
-  .marfan-attention__header {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .marfan-attention__header-titile {
-    grid-column: 3 / span 8;
-    text-align: center;
-  }
-
-  .marfan-attention__header-titile h2 {
-    color: var(--black-color);
-  }
-
-  .marfan-attention__text {
-    grid-column: 3 / span 8;
-    text-align: center;
-  }
-
-  .marfan-attention__text p {
-    color: var(--black-color);
-    text-align: center;
-  }
-
-
-
-
-
-  /* ------------------------------------------- MARFAN PAGE DESKTOP (>= 768px) ------------------------------------------- */
-  @media (min-width: 768px) {
-
-    .marfan-signs__header,
-    .marfan-diagnostic__header,
-    .marfan-attention__header,
-    .marfan-treatment__header,
-    .marfan-prognosis__header {
-      padding-bottom: 0;
-    }
-
-
-    /* ===== COVER (HERO) ===== */
-    .marfan-cover-mobile {
-      display: none;
-    }
-
-    .marfan-cover-desktop {
-      display: block;
-    }
-
-    .marfan-cover {
-      padding-top: var(--marfan-hero-offset);
-      position: relative;
-      overflow: hidden;
-      padding: 0;
-      height: auto;
-      width: 100%;
-      background-image: url('/static/images/cover__bg.svg');
-      background-size: contain;
-      background-position: top center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-
-    .marfan-cover-desktop__content {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--gutter);
-      align-items: end;
-    }
-
-    .marfan-cover-desktop__text {
-      grid-column: 3 / 8;
-      display: grid;
-      padding: 50px 0 50px 20px;
-    }
-
-    .marfan-cover-desktop__title h1 {
-      padding-bottom: 24px;
-      font-size: 3.8vh;
-    }
-
-    .marfan-cover-desktop__image-wrapper {
-      grid-column: 8 / 12;
-      align-self: end;
-      justify-self: start;
-    }
-
-    .marfan-cover-desktop__image {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .marfan-signs__content,
-    .marfan-diagnostic__content,
-    .marfan-treatment__content,
-    .marfan-prognosis__content,
-    .marfan-attention__content {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      column-gap: var(--gutter);
-      row-gap: 24px;
-    }
-
-    .marfan-signs__header,
-    .marfan-diagnostic__header,
-    .marfan-treatment__header,
-    .marfan-prognosis__header {
-      grid-column: 3 / span 8;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 0;
-      text-align: left;
-      flex-direction: row;
-      padding-bottom: 10px;
-    }
-
-    .marfan-signs__icon,
-    .marfan-diagnostic__icon,
-    .marfan-treatment__icon,
-    .marfan-prognosis__icon {
-      flex: 0 0 var(--section-header-icon-w);
-      width: var(--section-header-icon-w);
-      min-width: var(--section-header-icon-w);
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0;
-      margin-bottom: 0;
-    }
-
-    .marfan-signs__icon img,
-    .marfan-diagnostic__icon img,
-    .marfan-treatment__icon img,
-    .marfan-prognosis__icon img {
-      width: 45px;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-
-
-
-
-
-    /* ------------------------------------------------------ SIGNS ------------------------------------------------------ */
-    .marfan-signs__text {
-      grid-column: 3 / span 8;
-    }
-
-    .marfan-signs__comment {
-      grid-column: 3 / span 8;
-    }
-
-    .marfan-signs__item-header {
-      text-align: left;
-    }
-
-
-
-
-
-    /* ---------------------------------------------------- DIAGNOSTIC ---------------------------------------------------- */
-    .marfan-diagnostic__test {
-      grid-column: 3 / span 8;
-      align-items: center;
-      text-align: left;
-      margin-bottom: 0;
-    }
-
-    .marfan-diagnostic__text {
-      grid-column: 3 / span 8;
-      padding-bottom: 20px;
-    }
-
-    .marfan-diagnostic__list-item {
-      padding-bottom: 0;
-    }
-
-
-    .marfan-diagnostic__instrument {
-      grid-column: 3 / span 8;
-    }
-
-    .marfan-diagnostic__list {
-      display: grid;
-      padding: 0;
-      margin: 0;
-      grid-column: 3 / span 8;
-      grid-template-columns: 1fr;
-      column-gap: var(--grid-gap);
-      row-gap: 20px;
-    }
-
-    .marfan-diagnostic__test-title {
-      grid-column: 6 / span 4;
-      text-align: left;
-    }
-
-    .marfan-diagnostic__test-list {
-      grid-column: 6 / span 4;
-    }
-
-    .marfan-diagnostic__test-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-
-
-
-
-    /* ---------------------------------------------------- TREATMENT ---------------------------------------------------- */
-    .marfan-treatment__text {
-      grid-column: 3 / span 8;
-    }
-
-    .marfan-treatment__list {
-      grid-column: 3 / span 8;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: var(--grid-gap);
-      row-gap: 5px;
-    }
+/* High contrast support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: var(--black-color);
   }
 }
