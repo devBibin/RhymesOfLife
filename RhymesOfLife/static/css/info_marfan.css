@@ -1,0 +1,231 @@
+/* ==================================================== MARFAN PAGE STYLES ==================================================== */
+.marfan-cover {
+  background-color: var(--color-accent);
+  padding: 0;
+  position: relative;
+}
+
+.marfan-cover-mobile {
+  display: block;
+}
+
+.marfan-cover-desktop {
+  display: none;
+}
+
+.marfan-cover-desktop__subtitle {
+  padding-bottom: 50px;
+}
+
+.marfan-cover-desktop__subtitle p {
+  margin: 0;
+}
+
+.marfan-cover-desktop__text {
+  grid-column: 3 / span 5;
+}
+
+.marfan-cover-desktop__image-wrapper {
+  grid-column: 8 / span 12;
+  display: flex;
+  align-items: flex-end;
+}
+
+.marfan-cover-mobile__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.marfan-cover-mobile__image {
+  width: 150px;
+  height: auto;
+  padding: 10px 0;
+}
+
+.marfan-cover-mobile__title h1 {
+  font-size: 4vh;
+  color: var(--black-color);
+}
+
+.marfan-cover-mobile__subtitle {
+  padding-bottom: 30px;
+}
+
+/* Sections common styles */
+.marfan-signs,
+.marfan-diagnostic,
+.marfan-treatment,
+.marfan-attention {
+  padding: 50px 0;
+}
+
+.marfan-signs__content,
+.marfan-diagnostic__content,
+.marfan-treatment__content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Headers */
+.marfan-signs__header,
+.marfan-diagnostic__header,
+.marfan-treatment__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.marfan-signs__icon,
+.marfan-diagnostic__icon,
+.marfan-treatment__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marfan-signs__icon img,
+.marfan-diagnostic__icon img,
+.marfan-treatment__icon img {
+  width: 45px;
+  height: auto;
+}
+
+/* Signs specific */
+.marfan-signs {
+  background: var(--white-color);
+}
+
+.marfan-signs__item-header {
+  padding: 0 0 20px;
+  text-align: center;
+}
+
+.marfan-signs__text {
+  padding-bottom: 20px;
+}
+
+.marfan-signs__text:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+.marfan-signs__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--black-color);
+  font-size: 25px;
+}
+
+.marfan-signs__comment {
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* Diagnostic specific */
+.marfan-diagnostic {
+  background: var(--block2-color);
+}
+
+.marfan-diagnostic__text {
+  padding-bottom: 20px;
+}
+
+.marfan-diagnostic__instrument {
+  margin: 20px 0;
+}
+
+.marfan-diagnostic__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-diagnostic__list-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 15px;
+}
+
+.marfan-diagnostic__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-diagnostic__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--block3-color);
+  font-size: 25px;
+}
+
+/* Treatment specific */
+.marfan-treatment {
+  background: var(--white-color);
+}
+
+/* Attention specific */
+.marfan-attention {
+  background-color: var(--block1-color);
+}
+
+.marfan-attention__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.marfan-attention__icon {
+  margin-bottom: 20px;
+}
+
+.marfan-attention__icon img {
+  width: 60px;
+  height: auto;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .marfan-cover-mobile {
+    display: none;
+  }
+
+  .marfan-cover-desktop {
+    display: block;
+  }
+
+  .marfan-cover-desktop__content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: center;
+  }
+
+  .marfan-cover-desktop__image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: 0 auto;
+  }
+}

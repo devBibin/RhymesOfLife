@@ -87,11 +87,11 @@ def register_view(request):
             messages.error(request, error)
             context["error"] = error
             log.warning("Signup validation failed: username=%s email=%s reason=%s", username, email, error)
-            return render(request, "base/register.html", context)
+            return render(request, "base/info/registration.html", context)
         _create_user_with_profile(username, email, password1)
         messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
         return redirect("verify_prompt")
-    return render(request, "base/register.html", context)
+    return render(request, "base/info/registration.html", context)
 
 
 @require_http_methods(["GET", "POST"])

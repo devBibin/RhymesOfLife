@@ -1,0 +1,661 @@
+{% extends "base/info/info_base.html" %}
+
+{% block title %}Синдром Элерса-Данло{% endblock %}
+
+{% block content %}
+<!-- ========== Cover ========== -->
+<section class="sed-cover">
+    <div class="container">
+        <!-- ========== Mobile ========== -->
+        <div class="sed-cover-mobile">
+            <div class="sed-cover-mobile__image-wrapper">
+                <img src="/static/images/sed__img-mob.png" alt="Иллюстрация дисплазии соединительной ткани"
+                    class="sed-cover-mobile__image">
+                <div class="sed-cover-mobile__title">
+                    <h1>Синдром Элерса-Данло</h1>
+                </div>
+            </div>
+            <div class="sed-cover-mobile__subtitle">
+                <p>
+                    На сегодня синдром Элерса-Данло (СЭД) подразделяют на 13 типов. Их объединяют общие черты
+                    (гипермобильность суставов, хрупкость тканей), однако каждый из 13 типов имеет свои
+                    характерные клинические особенности.
+                </p>
+            </div>
+        </div>
+
+        <!-- ========== Desktop ========== -->
+        <div class="sed-cover-desktop">
+            <div class="sed-cover-desktop__content">
+                <div class="sed-cover-desktop__text">
+                    <div class="sed-cover-desktop__title">
+                        <h1>Синдром Элерса-Данло</h1>
+                    </div>
+                    <div class="sed-cover-desktop__subtitle">
+                        <p>
+                            На сегодня синдром Элерса-Данло (СЭД) подразделяют на 13 типов. Их объединяют общие
+                            черты (гипермобильность суставов, хрупкость тканей), однако каждый из 13 типов имеет свои
+                            характерные клинические особенности.
+                        </p>
+                    </div>
+                </div>
+                <div class="sed-cover-desktop__image-wrapper">
+                    <img src="/static/images/sed__img.png" alt="Иллюстрация дисплазии соединительной ткани"
+                        class="sed-cover-desktop__image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== Accordion ========== -->
+<section class="sed-types">
+    <div class="container">
+        <div class="sed-types__content">
+
+            <!-- Гипермобильный СЭД -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Гипермобильный СЭД (гСЭД)</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Неизвестны</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Генерализованная гипермобильность суставов</li>
+                                <li>Нестабильность суставов</li>
+                                <li>Хроническая боль</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Классический СЭД -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Классический СЭД</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>COL5A1 (90%), COL5A2, COL1A1</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Хрупкость кожи с атрофическими рубцами</li>
+                                <li>Гиперрастяжимая кожа с бархатистой текстурой</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Сосудистый тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Сосудистый тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>COL3A1, COL1A1</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Хрупкость артерий с аневризмами/разрывами</li>
+                                <li>Хрупкость органов с их спонтанными разрывами</li>
+                                <li>Обширные синяки без травм</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Периодонтальный (зубной) тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Периодонтальный (зубной) тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>C1R, C1S</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Тяжёлый периодонтит с ранней потерей зубов</li>
+                                <li>Бляшки на передней поверхности голеней</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Кифосколиотический тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Кифосколиотический тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>PLOD1, FKBP14</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Ранний кифосколиоз</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Спондиолодиспластический тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Спондиолодиспластический тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>B4GALT7, B3GALT6, SLC39A13</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Низкий рост</li>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Переразгибание конечностей</li>
+                                <li>Черепно-лицевые особенности</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Синдром хрупкой роговицы -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Синдром хрупкой роговицы</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>ZNF469, PRDM5</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Тяжёлые патологии роговицы глаза</li>
+                                <li>Потеря слуха</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Артрохалязия -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Артрохалязия</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>COL1A1, COL1A2</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Тяжёлая гипермобильность суставов</li>
+                                <li>Врожденный двусторонний вывих бедра</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Мышечно-контрактурный тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Мышечно-контрактурный тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>CHST14, DSE</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Врожденные множественные контрактуры</li>
+                                <li>Черепно-лицевые особенности</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Классикоподобный тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Классикоподобный тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>TNXB</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Гиперрастяжимая бархатистая кожа без рубцов</li>
+                                <li>Деформация стоп</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Дерматоспарексис -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Дерматоспарексис</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>ADAMTS2</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Чрезвычайная хрупкость кожи</li>
+                                <li>Обширные гематомы</li>
+                                <li>Короткие конечности</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Миопатический тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Миопатический тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>COL12A1</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный или аутосомно-доминантный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Врожденная мышечная гипотония</li>
+                                <li>Проксимальные контрактуры</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+            <!-- Сердечно-клапанный тип -->
+            <div class="accordion-items sed">
+                <button class="accordion-header sed" aria-expanded="false">
+                    <h2>Сердечно-клапанный тип</h2>
+                    <span class="accordion-icon sed"></span>
+                </button>
+                <div class="accordion-body sed">
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Ассоциированный(-е) ген(-ы)</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>COL1A2</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Тип наследования</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>Аутосомно-рецессивный</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Отличительные особенности</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <ul>
+                                <li>Тяжёлая недостаточность сердечных клапанов</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="accordion-item sed">
+                        <div class="accordion-item-header sed">
+                            <h3>Критерии диагностики</h3>
+                        </div>
+                        <div class="accordion-item-info sed">
+                            <p>[ссылка]</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <hr class="accordion-divider">
+
+        </div>
+    </div>
+</section>
+{% endblock %}

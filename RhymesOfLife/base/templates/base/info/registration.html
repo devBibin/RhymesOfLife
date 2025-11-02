@@ -1,0 +1,40 @@
+{% extends "base/info/info_base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+
+<section class="section section--accent form-section">
+  <div class="container">
+    <div class="form-grid">
+      <div class="form-card">
+        <div class="form-tabs">
+          <button class="form-tab active">Регистрация</button>
+          <button class="form-tab">Войти</button>
+        </div>
+
+        <div class="form-body">
+          <h3 class="h3 text--center">
+            РИТМЫ <span class="text--primary">ЖИЗНЕЙ</span>
+          </h3>
+
+          <form class="form">
+            <input type="text" class="form-input" placeholder="Имя (username)" required>
+            <input type="email" class="form-input" placeholder="E-mail" required>
+            <input type="password" class="form-input" placeholder="Пароль" required>
+            <input type="password" class="form-input" placeholder="Подтверждение пароля" required>
+
+            <button type="submit" class="btn form-btn" disabled>Регистрация</button>
+
+            <p class="form-privacy text--small text--center">
+              Нажимая на кнопку, вы даёте согласие на обработку персональных данных
+              и соглашаетесь с политикой конфиденциальности
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
