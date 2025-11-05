@@ -3,6 +3,11 @@
   background-color: var(--color-accent);
   padding: 0;
   position: relative;
+  width: 100%;
+  background-image: url('/static/images/cover__bg.svg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .cover::before {
@@ -10,7 +15,7 @@
   position: absolute;
   inset: 0;
   background: var(--color-accent);
-  opacity: 0.7;
+  opacity: 0.3;
   pointer-events: none;
   z-index: 0;
 }
@@ -21,16 +26,33 @@
 }
 
 /* Desktop Cover */
+.cover-desktop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
 .cover-desktop__content {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   align-items: center;
+  width: 100%;
+  /* Добавьте это */
 }
+
+/* Desktop Cover */
+/* .cover-desktop__content {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+} */
 
 .cover-desktop__image-wrapper {
   grid-column: 1 / span 4;
   display: flex;
   align-items: end;
+  justify-content: flex-end;
+  padding: 0 20px 0 0;
 }
 
 .cover-desktop__img {
@@ -72,6 +94,10 @@
 /* Classification Section */
 .class__text-block {
   margin-bottom: var(--space-xl);
+}
+
+.class__text-block .text:last-child {
+  margin: 0 0 50px;
 }
 
 .class__sub-block {
@@ -120,19 +146,38 @@
 }
 
 .help__image {
-    max-width: 100%;
-    height: auto;
-    padding-top: 50px;
+  max-width: 100%;
+  height: auto;
+  padding-top: 50px;
 }
 
 /* ========== MOBILE STYLES ========== */
 @media (max-width: 768px) {
   .cover {
-    padding: var(--space-xxl) 0;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    padding: 0;
     background-image: url(/static/images/cover__img-mob.png);
-    background-size: 80%;
-    background-position: bottom center;
+    background-size: 112%;
+    background-position: top center;
     background-repeat: no-repeat;
+  }
+
+  .cover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(187, 228, 236, 0.829);
+    z-index: 1;
+  }
+
+  .cover>* {
+    position: relative;
+    z-index: 2;
   }
 
   .cover-desktop {
@@ -143,8 +188,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 70vh;
     text-align: center;
+    padding: 0;
     /* Центрируем весь текст в cover-mobile */
   }
 
@@ -158,16 +203,38 @@
 
   .cover-mobile__astra-project {
     margin-bottom: 0;
-    text-align: center;
   }
 
   .cover-mobile__title {
     display: block;
     text-align: center;
+    margin: 0;
+  }
+
+  .cover-mobile__title h1 {
+    font-size: 4.2rem;
+    line-height: 100%;
   }
 
   .cover-mobile__subtitle {
     text-align: center;
+  }
+
+  .cover-mobile__subtitle h3 {
+    font-size: 2.2rem;
+  }
+
+   .class__text-block {
+    margin: 0 0 var(--space-xxl);
+  }
+
+  .class__sub-block {
+    margin: 0 0 var(--space-xxl);
+  }
+
+
+  .class__sub-block:last-child {
+    margin-bottom: 0;
   }
 
   .diagnostic__list-block {
@@ -191,22 +258,24 @@
   .help__text-content {
     grid-column: 1 / -1;
     text-align: center;
+    padding: 20px 0 0;
     /* Центрируем текст в help секции */
   }
 
   .help__image-wrapper {
     grid-column: 1 / -1;
     justify-content: center;
-    padding-top: var(--space-md);
+    padding-top: 0;
   }
 
   .help__image {
-    max-width: 60%;
+    max-width: 70%;
   }
 
   /* Центрируем кнопки в группах */
   .btn-group {
     align-items: center;
+    margin-top: var(--space-xl);
   }
 
   /* Центрируем списки */

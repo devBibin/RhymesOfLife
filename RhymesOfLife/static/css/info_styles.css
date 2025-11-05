@@ -4,9 +4,11 @@
   --color-black: #232323;
   --color-white: #FAFAFA;
   --color-primary: #1b7e8b;
+  --color-primary-hover: #3699a6;
   --color-secondary: #91664b;
   --color-accent: #BBE4EC;
   --color-background: #EFECEB;
+  --color-background-cover: #f1e4db;
   --color-light: #f1f0ef;
 
   /* Typography */
@@ -29,6 +31,7 @@
 
   /* Section spacing */
   --section-padding: var(--space-xxl);
+  --padding-bottom-xxl: var(--space-xxl);
 
   /* Components */
   --border-radius: 8px;
@@ -41,22 +44,70 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html,
-body {
-  margin: 0;
-  width: 100%;
+html {
   height: 100%;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--font-basic);
   color: var(--color-black);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  line-height: 1;
+}
+
+/* ========== MAIN LAYOUT STRUCTURE ========== */
+.main-wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+/* Фиксированные высоты для header и footer */
+.header {
+  height: 50px;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--color-white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  height: 40px;
+  flex-shrink: 0;
+}
+
+/* Секции с полной высотой */
+.section--fullheight {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 50px - 40px);
 }
 
 /* ========== LAYOUT UTILITIES ========== */
@@ -116,10 +167,9 @@ body {
 }
 
 /* ========== TYPOGRAPHY ========== */
-/* Headers with unified spacing */
 .h1 {
   font-family: var(--font-styled);
-  font-size: 4rem;
+  font-size: 2.6rem;
   line-height: 1.1;
   font-weight: 800;
   margin: 0 0 var(--space-lg) 0;
@@ -127,7 +177,7 @@ body {
 
 .h2 {
   font-family: var(--font-styled);
-  font-size: 2rem;
+  font-size: 1.8rem;
   line-height: 1.1;
   font-weight: 700;
   margin: 0 0 var(--space-md) 0;
@@ -149,7 +199,6 @@ body {
   margin: 0 0 var(--space-sm) 0;
 }
 
-/* Text with unified spacing */
 .text {
   font-family: var(--font-basic);
   font-size: 1.10rem;
@@ -158,8 +207,12 @@ body {
   margin: 0 0 var(--space-md) 0;
 }
 
+.text:last-child {
+  margin: 0;
+}
+
 .text--large {
-  font-size: 1.25rem;
+  font-size: 1.6rem;
   line-height: 1.6;
 }
 
@@ -176,7 +229,6 @@ body {
   color: var(--color-white);
 }
 
-/* Links */
 .link {
   color: var(--color-black);
   text-decoration: none;
@@ -216,7 +268,7 @@ body {
   position: absolute;
   left: 0;
   font-size: 2rem;
-  line-height: 1;
+  line-height: 0.94;
 }
 
 .list--primary .list__item::before {
@@ -312,6 +364,10 @@ body {
   background: var(--color-background);
 }
 
+.section--background-cover {
+  background: var(--color-background-cover);
+}
+
 .section-header {
   display: flex;
   align-items: center;
@@ -359,6 +415,7 @@ body {
 .header .dropdown__menu>li::before,
 .header .mobile-menu__list>li::before {
   content: none !important;
+
 }
 
 .header ul,
@@ -368,25 +425,25 @@ body {
   padding: 0;
 }
 
-/* Header */
 .header {
   background: var(--color-white);
   box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 1000;
+  height: 50px;
 }
 
 .header__container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   max-width: var(--container-max);
   margin: 0 auto;
+  height: 100%;
 }
 
-/* Logo */
 .logo {
   font-family: var(--font-styled);
   font-size: 1.5rem;
@@ -399,7 +456,6 @@ body {
   color: var(--color-primary);
 }
 
-/* Burger Button */
 .burger-btn {
   display: none;
   flex-direction: column;
@@ -446,7 +502,6 @@ body {
   transform: translateY(50%) rotate(-45deg);
 }
 
-/* Desktop Navigation */
 .nav__list {
   display: flex;
   align-items: center;
@@ -474,7 +529,6 @@ body {
   outline: none;
 }
 
-/* Dropdown Menu */
 .dropdown {
   position: relative;
 }
@@ -520,11 +574,10 @@ body {
   outline: none;
 }
 
-/* Buttons in Header */
 .btn-help {
   background-color: var(--color-primary);
   color: var(--color-white);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 500;
@@ -543,7 +596,7 @@ body {
 .btn-outline {
   border: 2px solid var(--color-black);
   color: var(--color-black);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 500;
@@ -555,7 +608,7 @@ body {
 .btn-help__burger {
   border: 2px solid var(--color-black);
   color: var(--color-black);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 500;
@@ -565,7 +618,6 @@ body {
   font-size: 1rem;
 }
 
-/* Mobile Menu */
 .mobile-menu {
   position: fixed;
   top: 0;
@@ -595,12 +647,11 @@ body {
 .mobile-menu__close {
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
   color: var(--color-black);
   transition: transform 0.3s ease;
   width: 30px;
-  height: 30px;
+  height: 33px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -619,9 +670,13 @@ body {
 
 .mobile-menu__list>li {
   width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Mobile Dropdown */
 .mobile-menu .dropdown__toggle {
   display: flex;
   justify-content: center;
@@ -678,7 +733,6 @@ body {
   background-color: var(--color-background);
 }
 
-/* Body no-scroll */
 body.no-scroll {
   overflow: hidden;
 }
@@ -686,7 +740,10 @@ body.no-scroll {
 /* ========== FOOTER STYLES ========== */
 .footer {
   background: var(--color-black);
-  padding: var(--space-lg) 0;
+  padding: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .footer__text {
@@ -700,46 +757,41 @@ body.no-scroll {
 
 /* ========== MOBILE STYLES ========== */
 @media (max-width: 768px) {
-
-  /* Уменьшаем отступы контейнера для мобильных */
   .container {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: 0 16px 0;
   }
 
-  /* Центрирование заголовков */
   .h1 {
-    font-size: 2rem;
+    font-size: 2.4rem;
     margin-bottom: var(--space-md);
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.4;
   }
 
   .h2 {
-    font-size: 1.7rem;
-    margin-bottom: var(--space-sm);
+    font-size: 1.8rem;
     text-align: center;
     line-height: 1.2;
   }
 
   .h3 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-bottom: var(--space-xl);
     text-align: center;
     line-height: 1.3;
   }
 
   .h4 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: var(--space-xs);
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.4;
   }
 
   .text {
-    font-size: 1.05rem;
+    font-size: 1.4rem;
     margin-bottom: var(--space-sm);
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .grid {
@@ -753,12 +805,10 @@ body.no-scroll {
     grid-column: 1 / -1;
   }
 
-  /* Уменьшаем отступы секций для мобильных */
   .section {
     padding: var(--space-xxl) 0;
   }
 
-  /* Вертикальное расположение иконок и заголовков */
   .section-header {
     flex-direction: column;
     text-align: center;
@@ -771,7 +821,6 @@ body.no-scroll {
     margin-bottom: 0;
   }
 
-  /* Уменьшение иконок в 2 раза */
   .icon {
     width: 45px;
     height: 45px;
@@ -782,7 +831,6 @@ body.no-scroll {
     height: 65px;
   }
 
-  /* Вертикальное расположение кнопок */
   .btn-group {
     flex-direction: column;
     margin-top: var(--space-lg);
@@ -792,18 +840,20 @@ body.no-scroll {
 
   .btn {
     width: 100%;
-    max-width: 280px;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   .list__item {
-    font-size: 1.05rem;
-    margin-bottom: var(--space-xs);
+    font-size: 1.4rem;
+    /* margin-bottom: var(--space-xs); */
     line-height: 1.5;
   }
 
-  /* Header mobile styles */
+  .header {
+    height: 50px;
+  }
+
   .burger-btn {
     display: flex;
   }
@@ -813,12 +863,11 @@ body.no-scroll {
   }
 
   .header__container {
-    padding: 1rem 16px;
+    padding: 0.5rem 16px;
   }
 
-  /* Улучшаем мобильное меню */
   .mobile-menu__header {
-    padding: 1rem 16px;
+    padding: 0.5rem 16px;
   }
 
   .mobile-menu__list {
@@ -826,47 +875,60 @@ body.no-scroll {
   }
 
   .footer {
-    padding: var(--space-md) 0;
+    height: 40px;
   }
 
   .footer__text {
     font-size: 0.9rem;
   }
 
-  /* Уменьшаем отступы для списков на мобильных */
+  .list {
+    padding: 0 !important;
+  }
+
   .list__item {
-    padding-left: var(--space-sm);
+    font-size: 1.4rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    padding-left: 0;
   }
 
   .list__item::before {
-    font-size: 1.05rem;
+    content: "•";
+    position: relative;
+    left: 0;
+    font-size: 2rem;
+    line-height: 1.5;
+    margin-right: var(--space-sm);
+    bottom: 4px;
+    color: var(--color-primary);
   }
-}
 
-@media (min-width: 769px) {
-  .mobile-menu {
-    display: none;
+  @media (min-width: 769px) {
+    .mobile-menu {
+      display: none;
+    }
   }
-}
 
-/* ========== ACCESSIBILITY ========== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* ========== ACCESSIBILITY ========== */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
-}
 
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 
-/* High contrast support */
-@media (prefers-contrast: high) {
-  :root {
-    --border-color: var(--color-black);
+  @media (prefers-contrast: high) {
+    :root {
+      --border-color: var(--color-black);
+    }
   }
 }
