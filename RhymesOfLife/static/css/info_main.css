@@ -73,6 +73,11 @@
   margin-bottom: var(--space-md);
 }
 
+.cover-desktop__title h1 {
+font-size: 4rem;
+font-weight: 900;
+}
+
 /* Mobile Cover */
 .cover-mobile {
   display: none;
