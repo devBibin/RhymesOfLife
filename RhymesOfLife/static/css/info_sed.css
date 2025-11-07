@@ -127,7 +127,7 @@
 
 .accordion__header[aria-expanded="true"] {
   background-color: #D9C2AF;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .accordion__title {
@@ -231,7 +231,7 @@
 
   .sed-cover-mobile__subtitle {
     padding-bottom: var(--space-xl);
-    text-align: center;
+    text-align: left;
   }
 
   .grid {
@@ -243,7 +243,7 @@
   }
 
   .accordion__header {
-    padding: 20px 25px 20px 20px;
+    padding: 20px 18px 20px 16px;
     align-items: flex-start;
   }
 
@@ -273,14 +273,14 @@
     }
 
     .accordion__header h3 {
-            margin-bottom: 0;
-        }
+      margin-bottom: 0;
+    }
 
 
     .accordion__icon {
       flex-shrink: 0;
       height: 20px;
-      margin-left: var(--space-lg);
+      margin-left: var(--space-xl);
       position: relative;
       transition: var(--transition);
       width: 20px;
