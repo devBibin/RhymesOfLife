@@ -95,14 +95,14 @@ def register_view(request):
                 return JsonResponse({"ok": False, "error": str(error)}, status=400)
             messages.error(request, error)
             context["error"] = error
-            return render(request, "base/register.html", context)
+            return render(request, "base/login.html", context)
 
         _create_user_with_profile(username, email, password1)
         if is_ajax(request):
             return JsonResponse({"ok": True, "redirect": reverse("verify_prompt")})
         messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
         return redirect("verify_prompt")
-    return render(request, "base/register.html", context)
+    return render(request, "base/login.html", context)
 
 
 @require_http_methods(["GET", "POST"])
