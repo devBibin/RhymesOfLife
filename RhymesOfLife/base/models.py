@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _g
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.db.models import Q, UniqueConstraint
@@ -18,12 +19,12 @@ User = get_user_model()
 def _safe_username(aui):
     try:
         if not aui:
-            return _("unknown")
+            return _g("unknown")
         u = getattr(aui, "user", None)
         name = getattr(u, "username", None)
-        return name or _("unknown")
+        return name or _g("unknown")
     except Exception:
-        return _("unknown")
+        return _g("unknown")
 
 
 class PasswordResetCode(models.Model):
@@ -341,7 +342,7 @@ class Notification(SoftDeleteModel):
         ]
 
     def __str__(self):
-        s = _safe_username(self.sender) if self.sender_id else _("system")
+        s = _safe_username(self.sender) if self.sender_id else _g("system")
         r = _safe_username(self.recipient)
         return f"{self.notification_type} [{self.source}/{self.scope}] {s} -> {r}"
 
@@ -359,7 +360,7 @@ class Follower(models.Model):
         ]
 
     def __str__(self):
-        status = _("active") if self.is_active else _("inactive")
+        status = _g("active") if self.is_active else _g("inactive")
         f = _safe_username(self.follower)
         t = _safe_username(self.following)
         return f"{status} {f} -> {t}"
@@ -505,7 +506,7 @@ class PostComment(models.Model):
         verbose_name_plural = _("Post comments")
 
     def __str__(self):
-        return _("🗑 Deleted comment") if self.is_deleted else f"💬 {_safe_username(self.author)}: {self.text[:30]}"
+        return _g("🗑 Deleted comment") if self.is_deleted else f"💬 {_safe_username(self.author)}: {self.text[:30]}"
 
 
 class HelpRequest(models.Model):

@@ -8,6 +8,8 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _g
+from django.utils.encoding import force_str
 
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
@@ -20,6 +22,17 @@ from taggit.models import TaggedItemBase
 from base.models import AdditionalUserInfo
 
 User = get_user_model()
+
+
+def _safe_username(aui):
+    try:
+        if not aui:
+            return force_str(_g("unknown"))
+        u = getattr(aui, "user", None)
+        name = getattr(u, "username", None)
+        return name or force_str(_g("unknown"))
+    except Exception:
+        return force_str(_g("unknown"))
 
 
 class BlogIndexPage(Page):
@@ -241,7 +254,7 @@ class ArticleLike(models.Model):
         verbose_name_plural = _("Article likes")
 
     def __str__(self):
-        return f"👍 {self.author.user.username} → {self.article.title}"
+        return force_str(f"👍 {_safe_username(self.author)} → {getattr(self.article, 'title', '')}")
 
 
 class ArticleComment(models.Model):
@@ -259,5 +272,5 @@ class ArticleComment(models.Model):
 
     def __str__(self):
         if self.is_deleted:
-            return _("🗑 Deleted comment")
-        return f"💬 {self.author.user.username}: {self.text[:30]}"
+            return force_str(_g("🗑 Deleted comment"))
+        return force_str(f"💬 {_safe_username(self.author)}: {(self.text or '')[:30]}")
