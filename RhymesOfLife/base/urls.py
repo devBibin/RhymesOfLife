@@ -24,6 +24,7 @@ from .views.auth_views import (
     info_sed,
     info_marfan,
     info_sld,
+    auth_combined_view
 )
 from .views.profile_views import (
     profile_view,
@@ -111,6 +112,7 @@ urlpatterns = [
     path("register/", register_view, name="register"),
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
+    path("auth/", auth_combined_view, name="auth_combined"),
 
     path("verify/", verify_prompt_view, name="verify_prompt"),
     path("verify/request/", request_verification_view, name="request_verification"),

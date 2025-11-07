@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- ========== Cover ========== -->
-<section class="marfan-cover">
+<section class="marfan-cover section--color-accent">
     <div class="container">
         <!-- ========== Mobile ========== -->
         <div class="marfan-cover-mobile">
@@ -12,18 +12,23 @@
                 <img src="/static/images/marfan__img-mob.png" alt="Иллюстрация синдрома Марфана"
                     class="marfan-cover-mobile__image">
                 <div class="marfan-cover-mobile__title">
-                    <h1>Синдром Марфана</h1>
+                    <h1 class="h1">Синдром Марфана</h1>
                 </div>
             </div>
-            <div class="marfan-cover-mobile__subtitle">
-                <p>
+            <div class="marfan-cover-mobile__subtitle text">
+                <p class="text">
                     Синдром Марфана (СМ) связан с изменениями в белке фибриллина-1 (ген FBN1). Это наиболее
-                    распространенное наследственное заболевание соединительной ткани — 1 случай на 3000-5000 человек.
-                    <br><br>
-                    Для СМ характерен аутосомно-доминантный тип наследования: это значит, что каждый человек с синдромом
+                    распространенное наследственное заболевание соединительной ткани — 1 случай на 3000-5000
+                    человек.
+                </p>
+                <p class="text">
+                    Для СМ характерен аутосомно-доминантный тип наследования: это значит, что каждый человек с
+                    синдромом
                     Марфана имеет 50% вероятность передать заболевание своим детям.
-                    <br><br>
-                    В около 75% случаев заболевание передаётся по наследству от одного из родителей, но в 25% случаев
+                </p>
+                <p class="text">
+                    В около 75% случаев заболевание передаётся по наследству от одного из родителей, но в 25%
+                    случаев
                     возникает впервые.
                 </p>
             </div>
@@ -34,19 +39,20 @@
             <div class="marfan-cover-desktop__content">
                 <div class="marfan-cover-desktop__text">
                     <div class="marfan-cover-desktop__title">
-                        <h1>Синдром Марфана</h1>
+                        <h1 class="h1">Синдром Марфана</h1>
                     </div>
-                    <div class="marfan-cover-desktop__subtitle">
-                        <p>
-                        <p>
+                    <div class="marfan-cover-mobile__subtitle text">
+                        <p class="text">
                             Синдром Марфана (СМ) связан с изменениями в белке фибриллина-1 (ген FBN1). Это наиболее
                             распространенное наследственное заболевание соединительной ткани — 1 случай на 3000-5000
                             человек.
-                            <br><br>
+                        </p>
+                        <p class="text">
                             Для СМ характерен аутосомно-доминантный тип наследования: это значит, что каждый человек с
                             синдромом
                             Марфана имеет 50% вероятность передать заболевание своим детям.
-                            <br><br>
+                        </p>
+                        <p class="text">
                             В около 75% случаев заболевание передаётся по наследству от одного из родителей, но в 25%
                             случаев
                             возникает впервые.
@@ -62,216 +68,200 @@
     </div>
 </section>
 
-<!-- ========== Signs of Marfan syndrome ========== -->
-<section class="marfan-signs">
-    <div class="container">
-        <div class="marfan-signs__content">
-            <div class="marfan-signs__header">
-                <div class="marfan-signs__icon">
-                    <img src="/static/images/cross__icon-img.png" alt="Иконка проекта" class="title-icon">
+    <!-- ========== Signs Section ========== -->
+    <section class="section section--white" aria-labelledby="signs-title">
+        <div class="container">
+            <div class="grid">
+                <header class="section-header grid-item--center">
+                    <div class="section-header__icon">
+                        <img src="/static/images/cross__icon-img.png" alt="Иконка признаков" class="icon">
+                    </div>
+                    <h2 class="h2 section-header__title" id="signs-title">Признаки синдрома Марфана</h2>
+                </header>
+
+                <div class="grid-item--center">
+                    <div class="text-block">
+                        <h3 class="h3">1. Сердечно-сосудистая система:</h3>
+                        <ul class="list list--primary">
+                            <li class="list__item">Дилатация аорты (риск расслоения и разрыва)*</li>
+                            <li class="list__item">Пролапс митрального клапана и/или др. клапанов</li>
+                            <li class="list__item">Аритмии</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="h3">2. Опорно-двигательный аппарат:</h3>
+                        <ul class="list list--primary">
+                            <li class="list__item">Высокий рост, длинные конечности (долихостеномелия),
+                                длинные пальцы рук и ног (арахнодактилия)</li>
+                            <li class="list__item">Деформация грудной клетки (килевидная, воронкообразная,
+                                ассиметрия) и позвоночника (сколиоз, кифоз)</li>
+                            <li class="list__item">Плоскостопие, деформация нижних конечностей (вальгусная,
+                                варусная)</li>
+                            <li class="list__item">Гипермобильность суставов</li>
+                            <li class="list__item">Ограничение разгибания в локтевом суставе (≤170° при
+                                полном разгибании)</li>
+                            <li class="list__item">Протрузия вертлужной впадины</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="h3">3. Офтальмологические проявления:</h3>
+                        <ul class="list list--primary">
+                            <li class="list__item">Эктопия хрусталика (в 60-80% случаев)</li>
+                            <li class="list__item">Миопия высокой степени</li>
+                            <li class="list__item">Отслойка сетчатки</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="h3">4. Особенности лицевого скелета</h3>
+                        <ul class="list list--primary">
+                            <li class="list__item">Ретрогнатия</li>
+                            <li class="list__item">Микрогнатия</li>
+                            <li class="list__item">Высокое твердое «готическое» нёбо</li>
+                            <li class="list__item">Нарушения прикуса и роста зубов</li>
+                            <li class="list__item">Гипоплазия скул</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="h3">5. Другие:</h3>
+                        <ul class="list list--primary">
+                            <li class="list__item">Семейный анамнез разрыва аорты, подвывиха хрусталика*</li>
+                            <li class="list__item">Спонтанный пневмоторакс</li>
+                            <li class="list__item">Дуральная эктазия</li>
+                            <li class="list__item">Стрии на коже (без предшествующей потери веса,
+                                беременности)</li>
+                            <li class="list__item">Грыжи (пупочная, паховая, белой линии живота)</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-note">
+                        <p class="text text--italic">* — главные клинические признаки СМ</p>
+                    </div>
                 </div>
-                <div class="marfan-signs__header-titile">
-                    <h2>Признаки синдрома Марфана</h2>
-                </div>
-            </div>
-            <div class="marfan-signs__text">
-                <div class="marfan-signs__item-header">
-                    <h3>
-                        1.  Сердечно-сосудистая система:
-                    </h3>
-                </div>
-                <ul class="marfan-signs__list">
-                    <li class="marfan-signs__list-item">Дилатация аорты (риск расслоения и разрыва)*</li>
-                    <li class="marfan-signs__list-item">Пролапс митрального клапана и/или др. клапанов</li>
-                    <li class="marfan-signs__list-item">Аритмии</li>
-                </ul>
-            </div>
-            <div class="marfan-signs__text">
-                <div class="marfan-signs__item-header">
-                    <h3>
-                        2.  Опорно-двигательный аппарат:
-                    </h3>
-                </div>
-                <ul class="marfan-signs__list">
-                    <li class="marfan-signs__list-item">Высокий рост, длинные конечности (долихостеномелия),
-                        длинные пальцы рук и ног (арахнодактилия)</li>
-                    <li class="marfan-signs__list-item">Деформация грудной клетки (килевидная, воронкообразная,
-                        ассиметрия) и позвоночника (сколиоз, кифоз)</li>
-                    <li class="marfan-signs__list-item">Плоскостопие, деформация нижних конечностей (вальгусная,
-                        варусная)</li>
-                    <li class="marfan-signs__list-item">Гипермобильность суставов</li>
-                    <li class="marfan-signs__list-item">Ограничение разгибания в локтевом суставе (≤170° при
-                        полном разгибании)</li>
-                    <li class="marfan-signs__list-item">Протрузия вертлужной впадины</li>
-                </ul>
-            </div>
-            <div class="marfan-signs__text">
-                <div class="marfan-signs__item-header">
-                    <h3>
-                        3.  Офтальмологические проявления:
-                    </h3>
-                </div>
-                <ul class="marfan-signs__list">
-                    <li class="marfan-signs__list-item">Эктопия хрусталика (в 60-80% случаев)</li>
-                    <li class="marfan-signs__list-item">Миопия высокой степени</li>
-                    <li class="marfan-signs__list-item">Отслойка сетчатки</li>
-                </ul>
-            </div>
-            <div class="marfan-signs__text">
-                <div class="marfan-signs__item-header">
-                    <h3>
-                        4.  Особенности лицевого скелета
-                    </h3>
-                </div>
-                <ul class="marfan-signs__list">
-                    <li class="marfan-signs__list-item">Ретрогнатия</li>
-                    <li class="marfan-signs__list-item">Микрогнатия</li>
-                    <li class="marfan-signs__list-item">Высокое твердое «готическое» нёбо</li>
-                    <li class="marfan-signs__list-item">Нарушения прикуса и роста зубов</li>
-                    <li class="marfan-signs__list-item">Гипоплазия скул</li>
-                </ul>
-            </div>
-            <div class="marfan-signs__text">
-                <div class="marfan-signs__item-header">
-                    <h3>
-                        5.  Другие:
-                    </h3>
-                </div>
-                <ul class="marfan-signs__list">
-                    <li class="marfan-signs__list-item">Семейный анамнез разрыва аорты, подвывиха хрусталика*
-                    </li>
-                    <li class="marfan-signs__list-item">Спонтанный пневмоторакс</li>
-                    <li class="marfan-signs__list-item">Дуральная эктазия</li>
-                    <li class="marfan-signs__list-item">Стрии на коже (без предшествующей потери веса,
-                        беременности)</li>
-                    <li class="marfan-signs__list-item">Грыжи (пупочная, паховая, белой линии живота)</li>
-                </ul>
-            </div>
-            <div class="marfan-signs__comment">
-                <p>* — главные клинические признаки СМ</p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ========== Diagnostic ========== -->
-<section class="marfan-diagnostic" aria-labelledby="marfan-diagnostic__title">
-    <div class="container">
-        <div class="marfan-diagnostic__content">
-            <header class="marfan-diagnostic__header">
-                <div class="marfan-diagnostic__icon" aria-hidden="true">
-                    <img src="/static/images/search__icon-img.png" alt="" class="title-icon" />
+    <!-- ========== Diagnostic Section ========== -->
+    <section class="section section--light" aria-labelledby="diagnostic-title">
+        <div class="container">
+            <div class="grid">
+                <header class="section-header grid-item--center">
+                    <div class="section-header__icon">
+                        <img src="/static/images/search__icon-img.png" alt="Иконка диагностики" class="icon">
+                    </div>
+                    <h2 class="h2 section-header__title" id="diagnostic-title">Диагностика синдрома Марфана</h2>
+                </header>
+
+                <div class="grid-item--center">
+                    <div class="text-block">
+                        <p class="text">
+                            Диагностика состоит из осмотра врача, при котором выявляются характерные признаки
+                            заболевания и оценивается семейная история.
+                        </p>
+                        <p class="text">
+                            Далее проводится дообследование у профильных специалистов (генетика, офтальмолога,
+                            кардиолога) и генетическое тестирование.
+                        </p>
+                        <p class="text">
+                            Для облегчения диагностики были разработаны международные диагностические критерии —
+                            Гентские критерии пересмотра 2010 г., основанные на главных и/или второстепенных клинических
+                            признаках.
+                        </p>
+
+                    </div>
+                    <h3 class="h3">Инструментальные исследования для диагностики синдрома Марфана:</h3>
+                    <ol class="list list--secondary">
+                        <li class="list__item">Эхокардиография (УЗИ сердца) позволяет оценить
+                            состояние аорты — главного сосуда, выносящего кровь из сердца, а также проверить работу
+                            сердечных клапанов. Помогает вовремя обнаружить опасные изменения, например, расширение
+                            восходящего отдела аорты.</li>
+                        <li class="list__item">Электрокардиограмма (ЭКГ) позволяет оценить ритм и
+                            частоту сердечных сокращений, помогает обнаружить аритмии, которые иногда встречаются
+                            при
+                            СМ.</li>
+                        <li class="list__item">Осмотр офтальмолога с использованием щелевой лампы
+                            (биомикроскопия) – этот метод позволяет выявить смещение хрусталика, степень подвывиха.
+                            Для
+                            точной диагностики зрачки предварительно расширяют специальными каплями.</li>
+                        <li class="list__item">Генетическое тестирование. Позволяет подтвердить
+                            диагноз, а также выявить наличие мутации у родственников.</li>
+                        <li class="list__item">При необходимости — выполнение КТ-ангиография аорты и
+                            других сосудов. Используется для диагностики аневризм, более точной оценки их размеров.
+                        </li>
+                    </ol>
                 </div>
-                <div class="marfan-diagnostic__header-titile">
-                    <h2 id="marfan-diagnostic__title">Диагностика синдрома Марфана</h2>
-                </div>
-            </header>
-
-            <div class="marfan-diagnostic__text">
-                <p>
-                    Диагностика состоит из осмотра врача, при котором выявляются характерные признаки
-                    заболевания и оценивается семейная история.
-                    <br><br>
-                    Далее проводится дообследование у профильных специалистов (генетика, офтальмолога,
-                    кардиолога) и генетическое тестирование.
-                    <br><br>
-                    Для облегчения диагностики были разработаны международные диагностические критерии —
-                    Гентские критерии пересмотра 2010 г., основанные на главных и/или второстепенных клинических
-                    признаках.
-                </p>
-            </div>
-
-            <div class="marfan-diagnostic__instrument">
-                <h3>
-                    Инструментальные исследования для диагностики синдрома Марфана:
-                </h3>
-            </div>
-            <ol class="marfan-diagnostic__list">
-                <li class="marfan-diagnostic__list-item">Эхокардиография (УЗИ сердца) позволяет оценить
-                    состояние аорты — главного сосуда, выносящего кровь из сердца, а также проверить работу
-                    сердечных клапанов. Помогает вовремя обнаружить опасные изменения, например, расширение
-                    восходящего отдела аорты.
-                </li>
-                <li class="marfan-diagnostic__list-item">Электрокардиограмма (ЭКГ) позволяет оценить ритм и
-                    частоту сердечных сокращений, помогает обнаружить аритмии, которые иногда встречаются при
-                    СМ.
-                </li>
-                </li>
-                <li class="marfan-diagnostic__list-item">Осмотр офтальмолога с использованием щелевой лампы
-                    (биомикроскопия) – этот метод позволяет выявить смещение хрусталика, степень подвывиха. Для
-                    точной диагностики зрачки предварительно расширяют специальными каплями.
-                </li>
-                </li>
-                <li class="marfan-diagnostic__list-item">Генетическое тестирование. Позволяет подтвердить
-                    диагноз, а также выявить наличие мутации у родственников.
-                </li>
-                </li>
-                <li class="marfan-diagnostic__list-item">При необходимости — выполнение КТ-ангиография аорты и
-                    других сосудов. Используется для диагностики аневризм, более точной оценки их размеров. 
-                </li>
-            </ol>
-        </div>
-    </div>
-</section>
-
-<!-- ========== Treatment ========== -->
-<section class="marfan-treatment" aria-labelledby="marfan-treatment__title">
-    <div class="container">
-        <div class="marfan-treatment__content">
-            <header class="marfan-treatment__header">
-                <div class="marfan-treatment__icon" aria-hidden="true">
-                    <img src="/static/images/aid-kit__icon-img.png" alt="" class="title-icon" />
-                </div>
-                <div class="marfan-treatment__header-titile">
-                    <h2 id="marfan-treatment__title">Как лечится синдром Марфана?</h2>
-                </div>
-            </header>
-
-            <div class="marfan-treatment__text">
-                <p>
-                    Лечение СМ направлено на облегчение симптомов и профилактику осложнений. 
-                    <br><br>
-                    Медикаментозное лечение может включать в себя препараты, снижающие артериальное давление и
-                    предотвращающие расширение аорты. В некоторых случаях может потребоваться хирургическое вмешательство, например, для
-                    протезирования аорты, протезирование клапанов сердца, замены хрусталика, отслойки сетчатки.
-                    <br><br>
-                    Осложнения со стороны сердца и сосудов, такие как расширение аорты, являются основной
-                    причиной снижения продолжительности жизни. Однако, благодаря улучшениям в диагностике и
-                    лечении, прогноз для людей с синдромом Марфана значительно улучшился.                     
-                    <br><br>
-                    Регулярные медицинские осмотры и мониторинг состояния жизненно важных органов необходимы для
-                    своевременного выявления и лечения осложнений. Средняя
-                    продолжительность жизни людей с синдромом Марфана, получающих лечение, приближается к общей
-                    продолжительности жизни.
-                </p>
             </div>
         </div>
-</section>
+    </section>
 
-<!-- ========== Attention ========== -->
-<section class="marfan-attention" aria-labelledby="marfan-attention__title">
-    <div class="container">
-        <div class="marfan-attention__content">
-            <header class="marfan-attention__header">
-                <div class="marfan-attention__icon" aria-hidden="true">
-                    <img src="/static/images/attention__icon-img.png" alt="" class="title-icon-lg" />
+    <!-- ========== Treatment Section ========== -->
+    <section class="section section--white" aria-labelledby="treatment-title">
+        <div class="container">
+            <div class="grid">
+                <header class="section-header grid-item--center">
+                    <div class="section-header__icon">
+                        <img src="/static/images/aid-kit__icon-img.png" alt="Иконка лечения" class="icon">
+                    </div>
+                    <h2 class="h2 section-header__title" id="treatment-title">Как лечится синдром Марфана?</h2>
+                </header>
+
+                <div class="grid-item--center">
+                    <div class="text-block">
+                        <p class="text">
+                            Лечение СМ направлено на облегчение симптомов и профилактику осложнений. 
+                        </p>
+                        <p class="text">
+                            Медикаментозное лечение может включать в себя препараты, снижающие артериальное давление и
+                            предотвращающие расширение аорты. В некоторых случаях может потребоваться хирургическое
+                            вмешательство, например, для
+                            протезирования аорты, протезирование клапанов сердца, замены хрусталика, отслойки сетчатки.
+                        </p>
+                        <p class="text">
+                            Осложнения со стороны сердца и сосудов, такие как расширение аорты, являются основной
+                            причиной снижения продолжительности жизни. Однако, благодаря улучшениям в диагностике и
+                            лечении, прогноз для людей с синдромом Марфана значительно улучшился.
+                        </p>
+                        <p class="text">
+                            Регулярные медицинские осмотры и мониторинг состояния жизненно важных органов необходимы для
+                            своевременного выявления и лечения осложнений. Средняя
+                            продолжительность жизни людей с синдромом Марфана, получающих лечение, приближается к общей
+                            продолжительности жизни.
+                        </p>
+                    </div>
                 </div>
-            </header>
-            <!-- <div class="marfan-attention__header-titile">
-                <h2 id="marfan-attention__title">Важно!</h2>
-            </div> -->
-            <div class="marfan-attention__text">
-                <p>
-                    Люди с синдромом Марфана рождаются с ним, но симптомы этого состояния могут проявиться в
-                    разном возрасте.
-                    <br><br>
-                    Ранняя диагностика и лечение могут значительно улучшить прогноз и качество жизни. 
-                    <br><br>
-                    Если у вас или ваших близких есть признаки синдрома Марфана, обратитесь к специалистам:
-                    генетику, кардиологу, офтальмологу.
-                    Своевременное обследование может сохранить здоровье и улучшить качество жизни. 
-                </p>
             </div>
         </div>
-</section>
-{% endblock %}
+    </section>
+
+    <!-- ========== Attention Section ========== -->
+    <section class="section section--accent" aria-labelledby="attention-title">
+        <div class="container">
+            <div class="grid">
+                <header class="section-header grid-item--full section-header--center">
+                    <div class="section-header__icon">
+                        <img src="/static/images/attention__icon-img.png" alt="Иконка внимания"
+                            class="icon icon--large">
+                    </div>
+                </header>
+                <div class="attention__content">
+                    <p class="text text--center" id="attention-title">
+                        Люди с синдромом Марфана рождаются с ним, но симптомы этого состояния могут проявиться в
+                        разном возрасте.
+                    </p>
+                    <p class="text text--center" id="attention-title">
+                        Ранняя диагностика и лечение могут значительно улучшить прогноз и качество жизни. 
+                    </p>
+                    <p class="text text--center" id="attention-title">
+                        Если у вас или ваших близких есть признаки синдрома Марфана, обратитесь к специалистам:
+                        генетику, кардиологу, офтальмологу.
+                        Своевременное обследование может сохранить здоровье и улучшить качество жизни. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}

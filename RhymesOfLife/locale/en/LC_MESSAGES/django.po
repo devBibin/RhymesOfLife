@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 18:24+0000\n"
+"POT-Creation-Date: 2025-11-07 16:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: base/models.py:428 base/templates/base/feed.html:52
+#: base/models.py:428 base/templates/base/feed.html:68
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr ""
@@ -352,19 +352,19 @@ msgstr ""
 msgid "Can process help requests"
 msgstr ""
 
-#: base/models.py:533 base/templates/base/partials/health_wellness.html:54
+#: base/models.py:533 base/templates/base/partials/health_wellness.html:91
 msgid "Never"
 msgstr ""
 
-#: base/models.py:534 base/templates/base/partials/health_wellness.html:55
+#: base/models.py:534 base/templates/base/partials/health_wellness.html:92
 msgid "Every day"
 msgstr ""
 
-#: base/models.py:535 base/templates/base/partials/health_wellness.html:56
+#: base/models.py:535 base/templates/base/partials/health_wellness.html:93
 msgid "Every 3 days"
 msgstr ""
 
-#: base/models.py:536 base/templates/base/partials/health_wellness.html:57
+#: base/models.py:536 base/templates/base/partials/health_wellness.html:94
 msgid "Every 7 days"
 msgstr ""
 
@@ -374,7 +374,8 @@ msgstr ""
 
 #: base/signals.py:32 base/templates/base/help_request.html:30
 #: base/templates/base/home.html:92 base/templates/base/home.html:123
-#: base/templates/base/login.html:21 base/templates/base/register.html:45
+#: base/templates/base/info/auth_combined.html:30
+#: base/templates/base/info/auth_combined.html:57
 #: base/templates/base/staff_help_requests.html:50
 #: base/templates/base/staff_help_requests.html:84
 msgid "Username"
@@ -385,9 +386,9 @@ msgid "User ID"
 msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
+#: base/templates/base/info/auth_combined.html:34
 #: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:50
-#: base/templates/base/register.html:50
-#: base/templates/base/reset_request.html:39
+#: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:52
 #: base/templates/base/staff_help_requests.html:92
 msgid "Email"
@@ -679,7 +680,7 @@ msgstr ""
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:74
+#: base/templates/base/partials/health_wellness.html:111
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1193,24 +1194,24 @@ msgstr ""
 msgid "Feed"
 msgstr ""
 
-#: base/templates/base/feed.html:54 base/templates/base/feed.html:94
+#: base/templates/base/feed.html:70 base/templates/base/feed.html:110
 #: base/templates/base/post_create.html:3
 msgid "New post"
 msgstr ""
 
-#: base/templates/base/feed.html:62
+#: base/templates/base/feed.html:77 base/templates/base/feed.html:78
 msgid "My posts"
 msgstr ""
 
-#: base/templates/base/feed.html:67
+#: base/templates/base/feed.html:82 base/templates/base/feed.html:83
 msgid "Subscriptions"
 msgstr ""
 
-#: base/templates/base/feed.html:72
+#: base/templates/base/feed.html:87 base/templates/base/feed.html:88
 msgid "Latest"
 msgstr ""
 
-#: base/templates/base/feed.html:78
+#: base/templates/base/feed.html:93 base/templates/base/feed.html:94
 msgid "Pending approval"
 msgstr ""
 
@@ -1235,7 +1236,7 @@ msgstr ""
 
 #: base/templates/base/help_request.html:37 base/templates/base/profile.html:40
 #: base/templates/base/profile_edit.html:119
-#: base/templates/base/reset_request.html:40
+#: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr ""
 
@@ -1316,38 +1317,44 @@ msgid "Welcome to Rhymes of Life!"
 msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
-#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:19
+#: base/templates/base/info/auth_combined.html:70
 msgid "Sign up"
 msgstr ""
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
-#: base/templates/base/login.html:4 base/templates/base/login.html:10
-#: base/templates/base/login.html:36 base/templates/base/register.html:68
+#: base/templates/base/info/auth_combined.html:20
+#: base/templates/base/info/auth_combined.html:49
+#: base/templates/base/info/auth_combined.html:65
 #: blog/templates/blog/blog_page.html:179 templates/base.html:218
 msgid "Log in"
 msgstr ""
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/login.html:29 base/templates/base/register.html:55
+#: base/templates/base/info/auth_combined.html:38
+#: base/templates/base/info/auth_combined.html:61
 msgid "Password"
 msgstr ""
 
-#: base/templates/base/home.html:104 base/templates/base/register.html:60
-#: base/templates/base/reset_new.html:27
+#: base/templates/base/home.html:104
+#: base/templates/base/info/auth_combined.html:42
+#: base/templates/base/reset_new.html:30
 msgid "Confirm password"
 msgstr ""
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
-#: base/templates/base/reset_new.html:33
+#: base/templates/base/reset_new.html:36
 msgid "Show password"
 msgstr ""
 
-#: base/templates/base/home.html:135 base/templates/base/login.html:43
+#: base/templates/base/home.html:135
+#: base/templates/base/info/auth_combined.html:68
 msgid "Forgot password?"
 msgstr ""
 
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:70
 msgid "Don't have an account?"
 msgstr ""
 
@@ -1403,88 +1410,99 @@ msgstr ""
 msgid "Nothing found."
 msgstr ""
 
-#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:23
+#: base/templates/base/info/auth_combined.html:4
+msgid "Sign in / Sign up"
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:46
+msgid "Create account"
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:49
+msgid "Already have an account?"
+msgstr ""
+
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
 #: templates/base.html:69
 msgid "My health"
 msgstr ""
 
-#: base/templates/base/my_health.html:24
-msgid "All your health data in one place"
-msgstr ""
-
-#: base/templates/base/my_health.html:30 base/templates/base/my_health.html:80
+#: base/templates/base/my_health.html:65 base/templates/base/my_health.html:66
+#: base/templates/base/my_health.html:67 base/templates/base/my_health.html:137
 #: base/templates/base/patient_wellness.html:40
 #: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr ""
 
-#: base/templates/base/my_health.html:35
+#: base/templates/base/my_health.html:80 base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:82
 msgid "Examinations"
 msgstr ""
 
-#: base/templates/base/my_health.html:40
+#: base/templates/base/my_health.html:95 base/templates/base/my_health.html:96
+#: base/templates/base/my_health.html:97
 #: base/templates/base/partials/health_recommendations.html:3
 msgid "Doctor's comments"
 msgstr ""
 
-#: base/templates/base/my_health.html:79
+#: base/templates/base/my_health.html:136
 msgid "Failed to load. Please try again."
 msgstr ""
 
-#: base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:138
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr ""
 
-#: base/templates/base/my_health.html:82
+#: base/templates/base/my_health.html:139
 msgid "Paste link"
 msgstr ""
 
-#: base/templates/base/my_health.html:83
+#: base/templates/base/my_health.html:140
 msgid "Remove link"
 msgstr ""
 
-#: base/templates/base/my_health.html:84
+#: base/templates/base/my_health.html:141
 msgid "Remove file"
 msgstr ""
 
-#: base/templates/base/my_health.html:85
+#: base/templates/base/my_health.html:142
 msgid "Please specify the exam date."
 msgstr ""
 
-#: base/templates/base/my_health.html:86 base/views/wellness_views.py:85
+#: base/templates/base/my_health.html:143 base/views/wellness_views.py:85
 msgid "Failed to save."
 msgstr ""
 
-#: base/templates/base/my_health.html:87
+#: base/templates/base/my_health.html:144
 msgid "Network error."
 msgstr ""
 
-#: base/templates/base/my_health.html:88
+#: base/templates/base/my_health.html:145
 msgid "Unable to load data."
 msgstr ""
 
-#: base/templates/base/my_health.html:89
+#: base/templates/base/my_health.html:146
 msgid "Delete this exam?"
 msgstr ""
 
-#: base/templates/base/my_health.html:90
+#: base/templates/base/my_health.html:147
 msgid "Deletion failed."
 msgstr ""
 
-#: base/templates/base/my_health.html:91
+#: base/templates/base/my_health.html:148
 msgid "Delete this file?"
 msgstr ""
 
-#: base/templates/base/my_health.html:92
+#: base/templates/base/my_health.html:149
 #, python-format
 msgid "Unsupported file type: %%(name)s"
 msgstr ""
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:6
-#: base/templates/base/partials/health_wellness.html:46 templates/base.html:100
+#: base/templates/base/partials/health_wellness.html:22
+#: base/templates/base/partials/health_wellness.html:83 templates/base.html:100
 msgid "Notifications"
 msgstr ""
 
@@ -1558,8 +1576,8 @@ msgid ""
 msgstr ""
 
 #: base/templates/base/partials/health_documents.html:44
-#: base/templates/base/partials/health_wellness.html:22
-#: base/templates/base/partials/health_wellness.html:75
+#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:112
 #: base/templates/base/profile_edit.html:155
 msgid "Save"
 msgstr ""
@@ -1604,59 +1622,59 @@ msgstr ""
 msgid "No recommendations yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:5
+#: base/templates/base/partials/health_wellness.html:21
 msgid "My wellness"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:14
+#: base/templates/base/partials/health_wellness.html:31
 msgid "Score (1-10)"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:18
+#: base/templates/base/partials/health_wellness.html:54
 msgid "Comment"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:19
+#: base/templates/base/partials/health_wellness.html:55
 msgid "How do you feel today?"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:30
+#: base/templates/base/partials/health_wellness.html:67
 msgid "Trend"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:37
+#: base/templates/base/partials/health_wellness.html:74
 #: base/templates/base/patient_wellness.html:15
 msgid "Entries"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:39
+#: base/templates/base/partials/health_wellness.html:76
 #: base/templates/base/patient_wellness.html:26
 msgid "No entries yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:49
+#: base/templates/base/partials/health_wellness.html:86
 msgid ""
 "Choose how often to receive a reminder if you haven't added a wellness entry "
 "for the selected period. One reminder per day will be sent at the time below."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:52
+#: base/templates/base/partials/health_wellness.html:89
 msgid "Reminder frequency"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:96
 msgid "Set to Never to fully disable reminders."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:63
+#: base/templates/base/partials/health_wellness.html:100
 msgid "Hour"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:67
+#: base/templates/base/partials/health_wellness.html:104
 msgid "Minute"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:71
+#: base/templates/base/partials/health_wellness.html:108
 msgid "Your local time when the daily reminder may be sent."
 msgstr ""
 
@@ -1992,117 +2010,67 @@ msgstr ""
 msgid "Generate new link"
 msgstr ""
 
-#: base/templates/base/register.html:18
-msgid "What happens here"
-msgstr ""
-
-#: base/templates/base/register.html:20
-msgid "Share moments and short posts with a friendly community."
-msgstr ""
-
-#: base/templates/base/register.html:21
-msgid "Follow people, react to posts, and keep meaningful connections."
-msgstr ""
-
-#: base/templates/base/register.html:22
-msgid "Ask for help or offer support when someone needs it."
-msgstr ""
-
-#: base/templates/base/register.html:23
-msgid "Track your wellness and celebrate small wins."
-msgstr ""
-
-#: base/templates/base/register.html:24
-msgid "Communicate with qualified physicians for guidance and support."
-msgstr ""
-
-#: base/templates/base/register.html:27
-msgid ""
-"Medical guidance on this platform does not replace professional diagnosis or "
-"emergency care. Call your local emergency number in urgent situations."
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "Registration successful!"
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "You can"
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "log in"
-msgstr ""
-
-#: base/templates/base/register.html:64
-msgid "Create account"
-msgstr ""
-
-#: base/templates/base/register.html:68
-msgid "Already have an account?"
-msgstr ""
-
-#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:11
+#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:14
 msgid "Set new password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:22
+#: base/templates/base/reset_new.html:25
 msgid "New password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:36
+#: base/templates/base/reset_new.html:39
 msgid "Change password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:40
-#: base/templates/base/reset_request.html:51
-#: base/templates/base/reset_verify.html:46
+#: base/templates/base/reset_new.html:43
+#: base/templates/base/reset_request.html:56
+#: base/templates/base/reset_verify.html:48
 msgid "Back to sign in"
 msgstr ""
 
 #: base/templates/base/reset_request.html:4
-#: base/templates/base/reset_request.html:11
+#: base/templates/base/reset_request.html:14
 msgid "Reset password"
 msgstr ""
 
-#: base/templates/base/reset_request.html:23
+#: base/templates/base/reset_request.html:28
 msgid "Username or email"
 msgstr ""
 
-#: base/templates/base/reset_request.html:32
+#: base/templates/base/reset_request.html:37
 msgid "Your username or email"
 msgstr ""
 
-#: base/templates/base/reset_request.html:37
+#: base/templates/base/reset_request.html:42
 msgid "Delivery channel"
 msgstr ""
 
-#: base/templates/base/reset_request.html:43
+#: base/templates/base/reset_request.html:48
 msgid "If Telegram is not linked to your account, use Email."
 msgstr ""
 
-#: base/templates/base/reset_request.html:47
+#: base/templates/base/reset_request.html:52
 msgid "Send code"
 msgstr ""
 
 #: base/templates/base/reset_verify.html:4
-#: base/templates/base/reset_verify.html:11
+#: base/templates/base/reset_verify.html:14
 msgid "Enter code"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:13
+#: base/templates/base/reset_verify.html:15
 msgid "We have sent a one-time code. Enter it below."
 msgstr ""
 
-#: base/templates/base/reset_verify.html:25
+#: base/templates/base/reset_verify.html:26
 msgid "Code"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:40
+#: base/templates/base/reset_verify.html:42
 msgid "Verify"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:44
+#: base/templates/base/reset_verify.html:46
 msgid "Resend code"
 msgstr ""
 
@@ -2141,18 +2109,27 @@ msgid "Mark open"
 msgstr ""
 
 #: base/templates/base/verify_prompt.html:4
-#: base/templates/base/verify_prompt.html:9
+#: base/templates/base/verify_prompt.html:14
 msgid "Verify your email"
 msgstr ""
 
-#: base/templates/base/verify_prompt.html:11
+#: base/templates/base/verify_prompt.html:17
 msgid ""
 "We have sent a confirmation link to your email. Please click the link to "
 "activate your account."
 msgstr ""
 
-#: base/templates/base/verify_prompt.html:15
-msgid "Resend email"
+#: base/templates/base/verify_prompt.html:24
+#, python-format
+msgid "Email: %(e)s"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:31
+msgid "Back to main page"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
 msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
@@ -2191,6 +2168,16 @@ msgstr ""
 #: base/utils/decorators.py:14 base/utils/decorators.py:27
 #: base/utils/decorators.py:31
 msgid "You don't have permission to view this page."
+msgstr ""
+
+#: base/utils/i18n_messages.py:3
+msgid "Wellness reminder"
+msgstr ""
+
+#: base/utils/i18n_messages.py:5
+msgid ""
+"You haven't checked in for a while. Please rate your wellness (1–10) and "
+"leave a short note."
 msgstr ""
 
 #: base/utils/notify.py:94
@@ -2267,7 +2254,7 @@ msgstr ""
 msgid "Incorrect code."
 msgstr ""
 
-#: base/views/auth_reset_views.py:141 base/views/auth_views.py:52
+#: base/views/auth_reset_views.py:141 base/views/auth_views.py:53
 msgid "Passwords don't match."
 msgstr ""
 
@@ -2275,55 +2262,55 @@ msgstr ""
 msgid "Password has been reset. You can sign in now."
 msgstr ""
 
-#: base/views/auth_views.py:50
+#: base/views/auth_views.py:51
 msgid "Please fill in all fields."
 msgstr ""
 
-#: base/views/auth_views.py:54
+#: base/views/auth_views.py:55
 msgid "A user with that username already exists."
 msgstr ""
 
-#: base/views/auth_views.py:56 base/views/profile_views.py:153
+#: base/views/auth_views.py:57 base/views/profile_views.py:153
 msgid "This email is already registered."
 msgstr ""
 
-#: base/views/auth_views.py:92 base/views/auth_views.py:335
+#: base/views/auth_views.py:103 base/views/auth_views.py:365
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr ""
 
-#: base/views/auth_views.py:115 base/views/auth_views.py:349
+#: base/views/auth_views.py:133 base/views/auth_views.py:379
 msgid "Invalid username or password."
 msgstr ""
 
-#: base/views/auth_views.py:147
+#: base/views/auth_views.py:177
 msgid "A verification email has been sent. Please confirm your account."
 msgstr ""
 
-#: base/views/auth_views.py:171
+#: base/views/auth_views.py:201
 msgid "Email verification failed or token is invalid."
 msgstr ""
 
-#: base/views/auth_views.py:192
+#: base/views/auth_views.py:222
 msgid "Enter phone number."
 msgstr ""
 
-#: base/views/auth_views.py:198
+#: base/views/auth_views.py:228
 msgid "Failed to initiate call."
 msgstr ""
 
-#: base/views/auth_views.py:223
+#: base/views/auth_views.py:253
 msgid "No phone number set."
 msgstr ""
 
-#: base/views/auth_views.py:232 base/views/auth_views.py:235
+#: base/views/auth_views.py:262 base/views/auth_views.py:265
 msgid "Provider error"
 msgstr ""
 
-#: base/views/auth_views.py:272
+#: base/views/auth_views.py:302
 msgid "Please accept all items."
 msgstr ""
 
-#: base/views/auth_views.py:318
+#: base/views/auth_views.py:348
 msgid "You are already signed in."
 msgstr ""
 
@@ -2381,31 +2368,31 @@ msgstr ""
 msgid "You cannot report your own post."
 msgstr ""
 
-#: base/views/help_request_views.py:60
+#: base/views/help_request_views.py:61
 msgid "This field is required."
 msgstr ""
 
-#: base/views/help_request_views.py:66
+#: base/views/help_request_views.py:67
 msgid "Enter a valid email address."
 msgstr ""
 
-#: base/views/help_request_views.py:71
+#: base/views/help_request_views.py:72
 msgid "Enter a valid Telegram username (e.g. @john_doe)."
 msgstr ""
 
-#: base/views/help_request_views.py:82
+#: base/views/help_request_views.py:83
 msgid "Your request has been sent. We will contact you soon."
 msgstr ""
 
-#: base/views/help_request_views.py:146
+#: base/views/help_request_views.py:147
 msgid "Invalid request."
 msgstr ""
 
-#: base/views/help_request_views.py:151
+#: base/views/help_request_views.py:152
 msgid "Item not found."
 msgstr ""
 
-#: base/views/help_request_views.py:164
+#: base/views/help_request_views.py:165
 msgid "Invalid action."
 msgstr ""
 

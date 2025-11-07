@@ -1,0 +1,230 @@
+/* ==================================================== MARFAN PAGE STYLES ==================================================== */
+/* ========== MARFAN COVER ========== */
+.marfan-cover {
+  background-color: var(--color-accent);
+  padding: 0;
+  position: relative;
+  width: 100%;
+  background-image: url('/static/images/cover__bg.svg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.marfan-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.marfan-cover>* {
+  position: relative;
+  z-index: 1;
+}
+
+.marfan-cover-mobile {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.marfan-cover-desktop {
+  display: none;
+}
+
+.marfan-cover-desktop__content {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: end;
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.marfan-cover-desktop__title h1 {
+  margin: var(--space-xxl) 0 var(--space-xl);
+}
+
+.marfan-cover-desktop__subtitle p {
+  margin: 0;
+}
+
+.marfan-cover-desktop__text {
+  grid-column: 3 / span 5;
+}
+
+.marfan-cover-desktop__image-wrapper {
+  grid-column: 8 / span 12;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 0 0 30px;
+}
+
+.marfan-cover-mobile__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.marfan-cover-mobile__image {
+  width: 120px;
+  padding: var(--space-xl) 0;
+}
+
+.marfan-cover-mobile__title {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+}
+
+.marfan-cover-mobile__title h1 {
+  margin-bottom: var(--space-xl);
+}
+
+.marfan-cover-mobile__subtitle {
+  padding-bottom: var(--space-xxl);
+  text-align: left;
+}
+
+.text-block {
+  margin-bottom: var(--space-xxl);
+}
+
+/* Signs specific */
+.marfan-signs {
+  background: var(--white-color);
+}
+
+.marfan-signs__item-header {
+  padding: 0 0 20px;
+  text-align: center;
+}
+
+.marfan-signs__text {
+  padding-bottom: 20px;
+}
+
+.marfan-signs__text:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-signs__list-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+.marfan-signs__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-signs__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--black-color);
+  font-size: 25px;
+}
+
+.marfan-signs__comment {
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* Diagnostic specific */
+.marfan-diagnostic {
+  background: var(--white-color);
+}
+
+.marfan-diagnostic__text {
+  padding-bottom: 20px;
+}
+
+.marfan-diagnostic__instrument {
+  margin: 20px 0;
+}
+
+.marfan-diagnostic__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marfan-diagnostic__list-item {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 15px;
+}
+
+.marfan-diagnostic__list-item:last-child {
+  padding-bottom: 0;
+}
+
+.marfan-diagnostic__list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-size: 25px;
+}
+
+/* Treatment specific */
+.marfan-treatment {
+  background: var(--white-color);
+}
+
+/* Attention specific */
+.marfan-attention {
+  background-color: var(--color-accent);
+}
+
+.marfan-attention__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.marfan-attention__icon {
+  margin-bottom: 20px;
+}
+
+.marfan-attention__icon img {
+  width: 60px;
+  height: auto;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .marfan-cover-mobile {
+    display: none;
+  }
+
+  .marfan-cover-desktop {
+    display: block;
+  }
+
+  .marfan-cover-desktop__content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+  }
+
+  .marfan-cover-desktop__image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: 0;
+  }
+}

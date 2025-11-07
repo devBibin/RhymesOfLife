@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = "en"
+LANGUAGE_CODE = "ru"
 LANGUAGES = [
     ("en", "English"),
     ("ru", "Русский"),

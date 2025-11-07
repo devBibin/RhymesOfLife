@@ -1,0 +1,292 @@
+/* ========== COVER SECTION ========== */
+.cover {
+  background-color: var(--color-accent);
+  padding: 0;
+  position: relative;
+  width: 100%;
+  background-image: url('/static/images/cover__bg.svg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cover>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* Desktop Cover */
+.cover-desktop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.cover-desktop__content {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  width: 100%;
+  /* Добавьте это */
+}
+
+/* Desktop Cover */
+/* .cover-desktop__content {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+} */
+
+.cover-desktop__image-wrapper {
+  grid-column: 1 / span 4;
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  padding: 0 20px 0 0;
+}
+
+.cover-desktop__img {
+  max-width: 80%;
+  height: auto;
+}
+
+.cover-desktop__text {
+  grid-column: 5 / span 8;
+}
+
+.cover-desktop__header {
+  display: flex;
+  flex-direction: column;
+}
+
+.cover-desktop__title {
+  margin-bottom: var(--space-md);
+}
+
+.cover-desktop__title h1 {
+font-size: 4rem;
+font-weight: 900;
+}
+
+/* Mobile Cover */
+.cover-mobile {
+  display: none;
+  text-align: center;
+}
+
+.cover-mobile__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ========== SECTION SPECIFICS ========== */
+/* Info Section */
+.info .text:last-of-type {
+  margin-bottom: var(--space-xl);
+}
+
+/* Classification Section */
+.class__text-block {
+  margin-bottom: var(--space-xl);
+}
+
+.class__text-block .text:last-child {
+  margin: 0 0 50px;
+}
+
+.class__sub-block {
+  margin-bottom: var(--space-xl);
+}
+
+.class__term {
+  font-weight: 700;
+}
+
+/* Diagnostic Section */
+.diagnostic__list-block {
+  grid-column: 3 / span 9;
+}
+
+.dst-check {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Attention Section */
+.attention .section-header {
+  grid-column: 1 / -1;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+}
+
+.attention__content {
+  grid-column: 3 / span 8;
+  text-align: center;
+}
+
+/* Help Section */
+.help__text-content {
+  display: grid;
+  grid-column: 3 / 8;
+  gap: var(--gutter);
+  padding: 50px 0;
+}
+
+.help__image-wrapper {
+  grid-column: 8 / 12;
+  display: flex;
+  align-items: end;
+  justify-content: start;
+}
+
+.help__image {
+  max-width: 100%;
+  height: auto;
+  padding-top: 50px;
+}
+
+/* ========== MOBILE STYLES ========== */
+@media (max-width: 768px) {
+  .cover {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    padding: 0;
+    background-image: url(/static/images/cover__img-mob.png);
+    background-size: 112%;
+    background-position: top center;
+    background-repeat: no-repeat;
+  }
+
+  .cover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(187, 228, 236, 0.829);
+    z-index: 1;
+  }
+
+  .cover>* {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-desktop {
+    display: none;
+  }
+
+  .cover-mobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 0;
+    /* Центрируем весь текст в cover-mobile */
+  }
+
+  .cover-mobile__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+    /* Дублируем для надежности */
+  }
+
+  .cover-mobile__astra-project {
+    margin-bottom: 0;
+  }
+
+  .cover-mobile__title {
+    display: block;
+    text-align: center;
+    margin: 0;
+  }
+
+  .cover-mobile__title h1 {
+    font-size: 4.2rem;
+    line-height: 100%;
+  }
+
+  .cover-mobile__subtitle {
+    text-align: center;
+  }
+
+  .cover-mobile__subtitle h3 {
+    font-size: 2.2rem;
+  }
+
+   .class__text-block {
+    margin: 0 0 var(--space-xxl);
+  }
+
+  .class__sub-block {
+    margin: 0 0 var(--space-xxl);
+  }
+
+
+  .class__sub-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .diagnostic__list-block {
+    grid-column: 1 / -1;
+  }
+
+  .attention .section-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .attention__content {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .help__content {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .help__text-content {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 20px 0 0;
+    /* Центрируем текст в help секции */
+  }
+
+  .help__image-wrapper {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .help__image {
+    max-width: 70%;
+  }
+
+  /* Центрируем кнопки в группах */
+  .btn-group {
+    align-items: center;
+    margin-top: var(--space-xl);
+  }
+
+  /* Центрируем списки */
+  .list {
+    text-align: left;
+    /* Оставляем текст списков выровненным по левому краю для читаемости */
+    padding-left: var(--space-sm);
+  }
+}

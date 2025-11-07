@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 23:24+0000\n"
+"POT-Creation-Date: 2025-11-07 16:51+0000\n"
 "PO-Revision-Date: 2025-10-01 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -352,19 +352,19 @@ msgstr "Может просматривать запросы помощи"
 msgid "Can process help requests"
 msgstr "Может обрабатывать запросы помощи"
 
-#: base/models.py:533 base/templates/base/partials/health_wellness.html:87
+#: base/models.py:533 base/templates/base/partials/health_wellness.html:91
 msgid "Never"
 msgstr "Никогда"
 
-#: base/models.py:534 base/templates/base/partials/health_wellness.html:88
+#: base/models.py:534 base/templates/base/partials/health_wellness.html:92
 msgid "Every day"
 msgstr "Каждый день"
 
-#: base/models.py:535 base/templates/base/partials/health_wellness.html:89
+#: base/models.py:535 base/templates/base/partials/health_wellness.html:93
 msgid "Every 3 days"
 msgstr "Каждые 3 дня"
 
-#: base/models.py:536 base/templates/base/partials/health_wellness.html:90
+#: base/models.py:536 base/templates/base/partials/health_wellness.html:94
 msgid "Every 7 days"
 msgstr "Каждые 7 дней"
 
@@ -374,7 +374,8 @@ msgstr "Зарегистрирован новый пользователь"
 
 #: base/signals.py:32 base/templates/base/help_request.html:30
 #: base/templates/base/home.html:92 base/templates/base/home.html:123
-#: base/templates/base/login.html:21 base/templates/base/register.html:45
+#: base/templates/base/info/auth_combined.html:30
+#: base/templates/base/info/auth_combined.html:57
 #: base/templates/base/staff_help_requests.html:50
 #: base/templates/base/staff_help_requests.html:84
 msgid "Username"
@@ -385,9 +386,9 @@ msgid "User ID"
 msgstr "ID пользователя"
 
 #: base/signals.py:34 base/templates/base/home.html:96
+#: base/templates/base/info/auth_combined.html:34
 #: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:50
-#: base/templates/base/register.html:50
-#: base/templates/base/reset_request.html:39
+#: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:52
 #: base/templates/base/staff_help_requests.html:92
 msgid "Email"
@@ -679,7 +680,7 @@ msgstr "Продолжить"
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:107
+#: base/templates/base/partials/health_wellness.html:111
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1403,7 +1404,7 @@ msgstr "Имя пользователя вашего аккаунта будет
 
 #: base/templates/base/help_request.html:37 base/templates/base/profile.html:40
 #: base/templates/base/profile_edit.html:119
-#: base/templates/base/reset_request.html:40
+#: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr "Telegram"
 
@@ -1489,38 +1490,44 @@ msgid "Welcome to Rhymes of Life!"
 msgstr "Добро пожаловать в Rhymes of Life!"
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
-#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:19
+#: base/templates/base/info/auth_combined.html:70
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
-#: base/templates/base/login.html:4 base/templates/base/login.html:10
-#: base/templates/base/login.html:36 base/templates/base/register.html:68
+#: base/templates/base/info/auth_combined.html:20
+#: base/templates/base/info/auth_combined.html:49
+#: base/templates/base/info/auth_combined.html:65
 #: blog/templates/blog/blog_page.html:179 templates/base.html:218
 msgid "Log in"
 msgstr "Войти"
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/login.html:29 base/templates/base/register.html:55
+#: base/templates/base/info/auth_combined.html:38
+#: base/templates/base/info/auth_combined.html:61
 msgid "Password"
 msgstr "Пароль"
 
-#: base/templates/base/home.html:104 base/templates/base/register.html:60
-#: base/templates/base/reset_new.html:27
+#: base/templates/base/home.html:104
+#: base/templates/base/info/auth_combined.html:42
+#: base/templates/base/reset_new.html:30
 msgid "Confirm password"
 msgstr "Повторите пароль"
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
-#: base/templates/base/reset_new.html:33
+#: base/templates/base/reset_new.html:36
 msgid "Show password"
 msgstr "Показать пароль"
 
-#: base/templates/base/home.html:135 base/templates/base/login.html:43
+#: base/templates/base/home.html:135
+#: base/templates/base/info/auth_combined.html:68
 msgid "Forgot password?"
 msgstr "Забыли пароль?"
 
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:70
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
@@ -1580,6 +1587,18 @@ msgstr "Отметить обработанным"
 #: blog/templates/blog/includes/article_list_fragment.html:10
 msgid "Nothing found."
 msgstr "Ничего не найдено."
+
+#: base/templates/base/info/auth_combined.html:4
+msgid "Sign in / Sign up"
+msgstr "Войти / Зарегистрироваться"
+
+#: base/templates/base/info/auth_combined.html:46
+msgid "Create account"
+msgstr "Создать аккаунт"
+
+#: base/templates/base/info/auth_combined.html:49
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
 
 #: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
 #: templates/base.html:69
@@ -1660,8 +1679,8 @@ msgstr "Неподдерживаемый тип файла: %%(name)s"
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:18
-#: base/templates/base/partials/health_wellness.html:79 templates/base.html:100
+#: base/templates/base/partials/health_wellness.html:22
+#: base/templates/base/partials/health_wellness.html:83 templates/base.html:100
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -1743,8 +1762,8 @@ msgstr ""
 "HTTPS."
 
 #: base/templates/base/partials/health_documents.html:44
-#: base/templates/base/partials/health_wellness.html:55
-#: base/templates/base/partials/health_wellness.html:108
+#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:112
 #: base/templates/base/profile_edit.html:155
 msgid "Save"
 msgstr "Сохранить"
@@ -1789,37 +1808,37 @@ msgstr "Вперёд"
 msgid "No recommendations yet."
 msgstr "Пока нет рекомендаций."
 
-#: base/templates/base/partials/health_wellness.html:17
+#: base/templates/base/partials/health_wellness.html:21
 msgid "My wellness"
 msgstr "Моё самочувствие"
 
-#: base/templates/base/partials/health_wellness.html:27
+#: base/templates/base/partials/health_wellness.html:31
 msgid "Score (1-10)"
 msgstr "Оценка (1-10)"
 
-#: base/templates/base/partials/health_wellness.html:50
+#: base/templates/base/partials/health_wellness.html:54
 msgid "Comment"
 msgstr "Комментарий"
 
-#: base/templates/base/partials/health_wellness.html:51
+#: base/templates/base/partials/health_wellness.html:55
 msgid "How do you feel today?"
 msgstr "Как вы себя чувствуете сегодня?"
 
-#: base/templates/base/partials/health_wellness.html:63
+#: base/templates/base/partials/health_wellness.html:67
 msgid "Trend"
 msgstr "Тренд"
 
-#: base/templates/base/partials/health_wellness.html:70
+#: base/templates/base/partials/health_wellness.html:74
 #: base/templates/base/patient_wellness.html:15
 msgid "Entries"
 msgstr "Записи"
 
-#: base/templates/base/partials/health_wellness.html:72
+#: base/templates/base/partials/health_wellness.html:76
 #: base/templates/base/patient_wellness.html:26
 msgid "No entries yet."
 msgstr "Записей пока нет."
 
-#: base/templates/base/partials/health_wellness.html:82
+#: base/templates/base/partials/health_wellness.html:86
 msgid ""
 "Choose how often to receive a reminder if you haven't added a wellness entry "
 "for the selected period. One reminder per day will be sent at the time below."
@@ -1828,23 +1847,23 @@ msgstr ""
 "самочувствии за выбранный период. Одно напоминание в день будет отправляться "
 "в указанное ниже время."
 
-#: base/templates/base/partials/health_wellness.html:85
+#: base/templates/base/partials/health_wellness.html:89
 msgid "Reminder frequency"
 msgstr "Частота напоминаний"
 
-#: base/templates/base/partials/health_wellness.html:92
+#: base/templates/base/partials/health_wellness.html:96
 msgid "Set to Never to fully disable reminders."
 msgstr "Установите «Никогда», чтобы полностью отключить напоминания."
 
-#: base/templates/base/partials/health_wellness.html:96
+#: base/templates/base/partials/health_wellness.html:100
 msgid "Hour"
 msgstr "Час"
 
-#: base/templates/base/partials/health_wellness.html:100
+#: base/templates/base/partials/health_wellness.html:104
 msgid "Minute"
 msgstr "Минута"
 
-#: base/templates/base/partials/health_wellness.html:104
+#: base/templates/base/partials/health_wellness.html:108
 msgid "Your local time when the daily reminder may be sent."
 msgstr ""
 "Ваше местное время, когда может быть отправлено ежедневное напоминание."
@@ -2181,124 +2200,68 @@ msgstr "Ссылка активации недоступна."
 msgid "Generate new link"
 msgstr "Перегенерировать ссылку"
 
-#: base/templates/base/register.html:18
-msgid "What happens here"
-msgstr "Что здесь происходит"
-
-#: base/templates/base/register.html:20
-msgid "Share moments and short posts with a friendly community."
-msgstr "Делитесь моментами и короткими постами с дружелюбным сообществом."
-
-#: base/templates/base/register.html:21
-msgid "Follow people, react to posts, and keep meaningful connections."
-msgstr ""
-"Подписывайтесь на людей, реагируйте на посты и поддерживайте значимые связи."
-
-#: base/templates/base/register.html:22
-msgid "Ask for help or offer support when someone needs it."
-msgstr "Просите помощи или предлагайте поддержку, когда кому-то это нужно."
-
-#: base/templates/base/register.html:23
-msgid "Track your wellness and celebrate small wins."
-msgstr "Отслеживайте своё самочувствие и отмечайте маленькие победы."
-
-#: base/templates/base/register.html:24
-msgid "Communicate with qualified physicians for guidance and support."
-msgstr ""
-"Общайтесь с квалифицированными врачами для получения рекомендаций и "
-"поддержки."
-
-#: base/templates/base/register.html:27
-msgid ""
-"Medical guidance on this platform does not replace professional diagnosis or "
-"emergency care. Call your local emergency number in urgent situations."
-msgstr ""
-"Медицинские рекомендации на этой платформе не заменяют профессиональную "
-"диагностику или неотложную помощь. В срочных ситуациях звоните по местному "
-"номеру экстренной помощи."
-
-#: base/templates/base/register.html:38
-msgid "Registration successful!"
-msgstr "Регистрация прошла успешно!"
-
-#: base/templates/base/register.html:38
-msgid "You can"
-msgstr "Вы можете"
-
-#: base/templates/base/register.html:38
-msgid "log in"
-msgstr "войти"
-
-#: base/templates/base/register.html:64
-msgid "Create account"
-msgstr "Создать аккаунт"
-
-#: base/templates/base/register.html:68
-msgid "Already have an account?"
-msgstr "Уже есть аккаунт?"
-
-#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:11
+#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:14
 msgid "Set new password"
 msgstr "Установить новый пароль"
 
-#: base/templates/base/reset_new.html:22
+#: base/templates/base/reset_new.html:25
 msgid "New password"
 msgstr "Новый пароль"
 
-#: base/templates/base/reset_new.html:36
+#: base/templates/base/reset_new.html:39
 msgid "Change password"
 msgstr "Сменить пароль"
 
-#: base/templates/base/reset_new.html:40
-#: base/templates/base/reset_request.html:51
-#: base/templates/base/reset_verify.html:46
+#: base/templates/base/reset_new.html:43
+#: base/templates/base/reset_request.html:56
+#: base/templates/base/reset_verify.html:48
 msgid "Back to sign in"
 msgstr "Вернуться к входу"
 
 #: base/templates/base/reset_request.html:4
-#: base/templates/base/reset_request.html:11
+#: base/templates/base/reset_request.html:14
 msgid "Reset password"
 msgstr "Восстановить пароль"
 
-#: base/templates/base/reset_request.html:23
+#: base/templates/base/reset_request.html:28
 msgid "Username or email"
 msgstr "Имя пользователя или эл. почта"
 
-#: base/templates/base/reset_request.html:32
+#: base/templates/base/reset_request.html:37
 msgid "Your username or email"
 msgstr "Ваш username или email"
 
-#: base/templates/base/reset_request.html:37
+#: base/templates/base/reset_request.html:42
 msgid "Delivery channel"
 msgstr "Способ подтверждения"
 
-#: base/templates/base/reset_request.html:43
+#: base/templates/base/reset_request.html:48
 msgid "If Telegram is not linked to your account, use Email."
 msgstr ""
 "Если Telegram не привязан к вашей учётной записи, используйте эл. почту."
 
-#: base/templates/base/reset_request.html:47
+#: base/templates/base/reset_request.html:52
 msgid "Send code"
 msgstr "Отправить код"
 
 #: base/templates/base/reset_verify.html:4
-#: base/templates/base/reset_verify.html:11
+#: base/templates/base/reset_verify.html:14
 msgid "Enter code"
 msgstr "Введите код"
 
-#: base/templates/base/reset_verify.html:13
+#: base/templates/base/reset_verify.html:15
 msgid "We have sent a one-time code. Enter it below."
 msgstr "Мы отправили одноразовый код. Введите его ниже."
 
-#: base/templates/base/reset_verify.html:25
+#: base/templates/base/reset_verify.html:26
 msgid "Code"
 msgstr "Код"
 
-#: base/templates/base/reset_verify.html:40
+#: base/templates/base/reset_verify.html:42
 msgid "Verify"
 msgstr "Проверить"
 
-#: base/templates/base/reset_verify.html:44
+#: base/templates/base/reset_verify.html:46
 msgid "Resend code"
 msgstr "Отправить код ещё раз"
 
@@ -2337,11 +2300,11 @@ msgid "Mark open"
 msgstr "Отметить открытым"
 
 #: base/templates/base/verify_prompt.html:4
-#: base/templates/base/verify_prompt.html:9
+#: base/templates/base/verify_prompt.html:14
 msgid "Verify your email"
 msgstr "Подтвердите вашу почту"
 
-#: base/templates/base/verify_prompt.html:11
+#: base/templates/base/verify_prompt.html:17
 msgid ""
 "We have sent a confirmation link to your email. Please click the link to "
 "activate your account."
@@ -2349,9 +2312,19 @@ msgstr ""
 "Мы отправили ссылку подтверждения на ваш email. Пожалуйста, перейдите по "
 "ней, чтобы активировать аккаунт."
 
-#: base/templates/base/verify_prompt.html:15
-msgid "Resend email"
-msgstr "Отправить письмо ещё раз"
+#: base/templates/base/verify_prompt.html:24
+#, python-format
+msgid "Email: %(e)s"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:31
+#| msgid "Back to sign in"
+msgid "Back to main page"
+msgstr "Вернуться к входу"
+
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
+msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
 msgid "To confirm number"
@@ -2392,12 +2365,11 @@ msgid "You don't have permission to view this page."
 msgstr "У вас нет прав для просмотра этой страницы."
 
 #: base/utils/i18n_messages.py:3
-#, fuzzy
 #| msgid "Wellness"
 msgid "Wellness reminder"
 msgstr "Напоминание о самочувствии"
 
-#: base/i18n_messages.py:6
+#: base/utils/i18n_messages.py:5
 msgid ""
 "You haven't checked in for a while. Please rate your wellness (1–10) and "
 "leave a short note."
@@ -2481,7 +2453,7 @@ msgstr "Срок действия кода истёк или он недейст
 msgid "Incorrect code."
 msgstr "Неверный код."
 
-#: base/views/auth_reset_views.py:141 base/views/auth_views.py:52
+#: base/views/auth_reset_views.py:141 base/views/auth_views.py:53
 msgid "Passwords don't match."
 msgstr "Пароли не совпадают."
 
@@ -2489,55 +2461,55 @@ msgstr "Пароли не совпадают."
 msgid "Password has been reset. You can sign in now."
 msgstr "Пароль был сброшен. Теперь вы можете войти в систему."
 
-#: base/views/auth_views.py:50
+#: base/views/auth_views.py:51
 msgid "Please fill in all fields."
 msgstr "Пожалуйста, заполните все поля."
 
-#: base/views/auth_views.py:54
+#: base/views/auth_views.py:55
 msgid "A user with that username already exists."
 msgstr "Пользователь с таким именем уже существует."
 
-#: base/views/auth_views.py:56 base/views/profile_views.py:153
+#: base/views/auth_views.py:57 base/views/profile_views.py:153
 msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
-#: base/views/auth_views.py:92 base/views/auth_views.py:335
+#: base/views/auth_views.py:103 base/views/auth_views.py:365
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr "Регистрация прошла успешно! Письмо с подтверждением скоро придёт."
 
-#: base/views/auth_views.py:115 base/views/auth_views.py:349
+#: base/views/auth_views.py:133 base/views/auth_views.py:379
 msgid "Invalid username or password."
 msgstr "Неверное имя пользователя или пароль."
 
-#: base/views/auth_views.py:147
+#: base/views/auth_views.py:177
 msgid "A verification email has been sent. Please confirm your account."
 msgstr "Письмо для подтверждения отправлено. Пожалуйста, подтвердите аккаунт."
 
-#: base/views/auth_views.py:171
+#: base/views/auth_views.py:201
 msgid "Email verification failed or token is invalid."
 msgstr "Не удалось подтвердить email или токен недействителен."
 
-#: base/views/auth_views.py:192
+#: base/views/auth_views.py:222
 msgid "Enter phone number."
 msgstr "Введите номер телефона."
 
-#: base/views/auth_views.py:198
+#: base/views/auth_views.py:228
 msgid "Failed to initiate call."
 msgstr "Не удалось инициировать звонок."
 
-#: base/views/auth_views.py:223
+#: base/views/auth_views.py:253
 msgid "No phone number set."
 msgstr "Номер телефона не установлен."
 
-#: base/views/auth_views.py:232 base/views/auth_views.py:235
+#: base/views/auth_views.py:262 base/views/auth_views.py:265
 msgid "Provider error"
 msgstr "Ошибка провайдера"
 
-#: base/views/auth_views.py:272
+#: base/views/auth_views.py:302
 msgid "Please accept all items."
 msgstr "Пожалуйста, примите все пункты."
 
-#: base/views/auth_views.py:318
+#: base/views/auth_views.py:348
 msgid "You are already signed in."
 msgstr "Вы уже вошли в систему."
 
@@ -2595,32 +2567,32 @@ msgstr "Пост должен содержать текст или изобра�
 msgid "You cannot report your own post."
 msgstr "Вы не можете пожаловаться на свой собственный пост."
 
-#: base/views/help_request_views.py:60
+#: base/views/help_request_views.py:61
 msgid "This field is required."
 msgstr "Это поле обязательно."
 
-#: base/views/help_request_views.py:66
+#: base/views/help_request_views.py:67
 msgid "Enter a valid email address."
 msgstr "Введите действительный адрес электронной почты."
 
-#: base/views/help_request_views.py:71
+#: base/views/help_request_views.py:72
 msgid "Enter a valid Telegram username (e.g. @john_doe)."
 msgstr ""
 "Введите действительное имя пользователя Telegram (например, @john_doe)."
 
-#: base/views/help_request_views.py:82
+#: base/views/help_request_views.py:83
 msgid "Your request has been sent. We will contact you soon."
 msgstr "Ваш запрос отправлен. Мы скоро свяжемся с вами."
 
-#: base/views/help_request_views.py:146
+#: base/views/help_request_views.py:147
 msgid "Invalid request."
 msgstr "Неверный запрос."
 
-#: base/views/help_request_views.py:151
+#: base/views/help_request_views.py:152
 msgid "Item not found."
 msgstr "Элемент не найден."
 
-#: base/views/help_request_views.py:164
+#: base/views/help_request_views.py:165
 msgid "Invalid action."
 msgstr "Неверное действие."
 
@@ -3039,6 +3011,48 @@ msgstr "Сменить язык"
 #: templates/base.html:250
 msgid "All rights reserved."
 msgstr "Все права защищены."
+
+#~ msgid "What happens here"
+#~ msgstr "Что здесь происходит"
+
+#~ msgid "Share moments and short posts with a friendly community."
+#~ msgstr "Делитесь моментами и короткими постами с дружелюбным сообществом."
+
+#~ msgid "Follow people, react to posts, and keep meaningful connections."
+#~ msgstr ""
+#~ "Подписывайтесь на людей, реагируйте на посты и поддерживайте значимые "
+#~ "связи."
+
+#~ msgid "Ask for help or offer support when someone needs it."
+#~ msgstr "Просите помощи или предлагайте поддержку, когда кому-то это нужно."
+
+#~ msgid "Track your wellness and celebrate small wins."
+#~ msgstr "Отслеживайте своё самочувствие и отмечайте маленькие победы."
+
+#~ msgid "Communicate with qualified physicians for guidance and support."
+#~ msgstr ""
+#~ "Общайтесь с квалифицированными врачами для получения рекомендаций и "
+#~ "поддержки."
+
+#~ msgid ""
+#~ "Medical guidance on this platform does not replace professional diagnosis "
+#~ "or emergency care. Call your local emergency number in urgent situations."
+#~ msgstr ""
+#~ "Медицинские рекомендации на этой платформе не заменяют профессиональную "
+#~ "диагностику или неотложную помощь. В срочных ситуациях звоните по "
+#~ "местному номеру экстренной помощи."
+
+#~ msgid "Registration successful!"
+#~ msgstr "Регистрация прошла успешно!"
+
+#~ msgid "You can"
+#~ msgstr "Вы можете"
+
+#~ msgid "log in"
+#~ msgstr "войти"
+
+#~ msgid "Resend email"
+#~ msgstr "Отправить письмо ещё раз"
 
 #~ msgid "All your health data in one place"
 #~ msgstr "Все о вашем здоровье в одном месте"

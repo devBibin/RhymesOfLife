@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
+from django.urls import reverse
 
 from ..models import AdditionalUserInfo, PasswordResetCode
 from ..utils.logging import get_app_logger, get_security_logger
@@ -67,12 +68,18 @@ def _create_user_with_profile(username: str, email: str, raw_password: str) -> U
     return user
 
 
+def is_ajax(request: HttpRequest) -> bool:
+    return request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.POST.get("ajax") == "1"
+
+
 @require_http_methods(["GET", "POST"])
 @csrf_protect
 @never_cache
 @sensitive_post_parameters("username", "email", "password1", "password2")
 def register_view(request):
     if request.user.is_authenticated:
+        if is_ajax(request):
+            return JsonResponse({"ok": True, "redirect": reverse("home")})
         return redirect("home")
 
     context = {"values": {}}
@@ -84,14 +91,18 @@ def register_view(request):
         context["values"] = {"username": username, "email": email}
         error = _validate_signup_input(username, email, password1, password2)
         if error:
+            if is_ajax(request):
+                return JsonResponse({"ok": False, "error": str(error)}, status=400)
             messages.error(request, error)
             context["error"] = error
-            log.warning("Signup validation failed: username=%s email=%s reason=%s", username, email, error)
-            return render(request, "base/register.html", context)
+            return render(request, "base/login.html", context)
+
         _create_user_with_profile(username, email, password1)
+        if is_ajax(request):
+            return JsonResponse({"ok": True, "redirect": reverse("verify_prompt")})
         messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
         return redirect("verify_prompt")
-    return render(request, "base/register.html", context)
+    return render(request, "base/login.html", context)
 
 
 @require_http_methods(["GET", "POST"])
@@ -100,6 +111,8 @@ def register_view(request):
 @sensitive_post_parameters("username", "password")
 def login_view(request):
     if request.user.is_authenticated:
+        if is_ajax(request):
+            return JsonResponse({"ok": True, "redirect": reverse("home")})
         return redirect("home")
 
     if request.method == "POST":
@@ -109,14 +122,31 @@ def login_view(request):
             login(request, user)
             lang = _apply_user_language(request, user)
             seclog.info("Login success: user_id=%s username=%s", user.id, user.username)
+            response_url = reverse("home")
+            if is_ajax(request):
+                resp = JsonResponse({"ok": True, "redirect": response_url})
+                return resp
             response = redirect("home")
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
             return response
-        messages.error(request, _("Invalid username or password."))
-        seclog.warning("Login failed: username=%s ip=%s", request.POST.get("username"), request.META.get("REMOTE_ADDR"))
+
+        error = _("Invalid username or password.")
+        if is_ajax(request):
+            return JsonResponse({"ok": False, "error": str(error)}, status=400)
+
+        messages.error(request, error)
     else:
         form = AuthenticationForm()
-    return render(request, "base/login.html", {"form": form})
+    return render(request, "base/info/auth_combined.html", {"initial_tab": "login"})
+
+
+@require_http_methods(["GET"])
+@never_cache
+def auth_combined_view(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+    initial = request.GET.get("tab", "register")
+    return render(request, "base/info/auth_combined.html", {"initial_tab": initial})
 
 
 @require_http_methods(["POST"])

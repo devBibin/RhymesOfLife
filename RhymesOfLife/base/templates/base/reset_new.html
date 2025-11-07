@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/info/info_base.html" %}
 {% load static i18n %}
 
 {% block title %}{% trans "Set new password" %} — {{ block.super }}{% endblock %}
@@ -6,41 +6,47 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-  <div class="card shadow-sm p-4" style="width: 100%; max-width: 520px;">
-    <h2 class="mb-3 text-center">{% trans "Set new password" %}</h2>
+<section class="section section--accent form-section">
+  <div class="container">
+    <div class="form-grid">
+      <div class="form-card">
+        <div class="form-body">
+          <h2 class="mb-3 text-center">{% trans "Set new password" %}</h2>
 
-    {% if messages %}
-      {% for m in messages %}
-        <div class="alert alert-{{ m.tags }} mb-3">{{ m }}</div>
-      {% endfor %}
-    {% endif %}
+          {% if messages %}
+            {% for m in messages %}
+              <div class="alert alert-{{ m.tags }} mb-3">{{ m }}</div>
+            {% endfor %}
+          {% endif %}
 
-    <form method="post" novalidate>
-      {% csrf_token %}
-      <div class="mb-3">
-        <label for="password1" class="form-label">{% trans "New password" %}</label>
-        <input type="password" id="password1" name="password1" class="form-control" required autocomplete="new-password">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="password1" class="form-label">{% trans "New password" %}</label>
+              <input type="password" id="password1" name="password1" class="form-input" required autocomplete="new-password">
+            </div>
+
+            <div class="mb-2">
+              <label for="password2" class="form-label">{% trans "Confirm password" %}</label>
+              <input type="password" id="password2" name="password2" class="form-input" required autocomplete="new-password">
+            </div>
+
+            <div class="mb-3" style="display:flex;align-items:center;gap:.5rem;">
+              <input id="showpass" type="checkbox" style="width:18px;height:18px;">
+              <label for="showpass" class="form-label" style="margin:0;cursor:pointer;">{% trans "Show password" %}</label>
+            </div>
+
+            <button type="submit" class="btn form-btn">{% trans "Change password" %}</button>
+          </form>
+
+          <div class="recovery-links">
+            <a href="{% url 'login' %}" class="recovery-link">{% trans "Back to sign in" %}</a>
+          </div>
+        </div>
       </div>
-
-      <div class="mb-2">
-        <label for="password2" class="form-label">{% trans "Confirm password" %}</label>
-        <input type="password" id="password2" name="password2" class="form-control" required autocomplete="new-password">
-      </div>
-
-      <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="showpass">
-        <label class="form-check-label" for="showpass">{% trans "Show password" %}</label>
-      </div>
-
-      <button type="submit" class="btn btn-primary w-100">{% trans "Change password" %}</button>
-    </form>
-
-    <p class="mt-3 text-center">
-      <a href="{% url 'login' %}">{% trans "Back to sign in" %}</a>
-    </p>
+    </div>
   </div>
-</div>
+</section>
 
 <script>
 (function () {
@@ -55,4 +61,5 @@
   }
 })();
 </script>
+<script src="{% static 'js/auth_page.js' %}"></script>
 {% endblock %}
