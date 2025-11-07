@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-23 18:24+0000\n"
+"POT-Creation-Date: 2025-10-30 21:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: base/models.py:428 base/templates/base/feed.html:52
+#: base/models.py:428 base/templates/base/feed.html:68
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr ""
@@ -352,19 +352,19 @@ msgstr ""
 msgid "Can process help requests"
 msgstr ""
 
-#: base/models.py:533 base/templates/base/partials/health_wellness.html:54
+#: base/models.py:533 base/templates/base/partials/health_wellness.html:91
 msgid "Never"
 msgstr ""
 
-#: base/models.py:534 base/templates/base/partials/health_wellness.html:55
+#: base/models.py:534 base/templates/base/partials/health_wellness.html:92
 msgid "Every day"
 msgstr ""
 
-#: base/models.py:535 base/templates/base/partials/health_wellness.html:56
+#: base/models.py:535 base/templates/base/partials/health_wellness.html:93
 msgid "Every 3 days"
 msgstr ""
 
-#: base/models.py:536 base/templates/base/partials/health_wellness.html:57
+#: base/models.py:536 base/templates/base/partials/health_wellness.html:94
 msgid "Every 7 days"
 msgstr ""
 
@@ -679,7 +679,7 @@ msgstr ""
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:74
+#: base/templates/base/partials/health_wellness.html:111
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1193,24 +1193,24 @@ msgstr ""
 msgid "Feed"
 msgstr ""
 
-#: base/templates/base/feed.html:54 base/templates/base/feed.html:94
+#: base/templates/base/feed.html:70 base/templates/base/feed.html:110
 #: base/templates/base/post_create.html:3
 msgid "New post"
 msgstr ""
 
-#: base/templates/base/feed.html:62
+#: base/templates/base/feed.html:77 base/templates/base/feed.html:78
 msgid "My posts"
 msgstr ""
 
-#: base/templates/base/feed.html:67
+#: base/templates/base/feed.html:82 base/templates/base/feed.html:83
 msgid "Subscriptions"
 msgstr ""
 
-#: base/templates/base/feed.html:72
+#: base/templates/base/feed.html:87 base/templates/base/feed.html:88
 msgid "Latest"
 msgstr ""
 
-#: base/templates/base/feed.html:78
+#: base/templates/base/feed.html:93 base/templates/base/feed.html:94
 msgid "Pending approval"
 msgstr ""
 
@@ -1403,88 +1403,87 @@ msgstr ""
 msgid "Nothing found."
 msgstr ""
 
-#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:23
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
 #: templates/base.html:69
 msgid "My health"
 msgstr ""
 
-#: base/templates/base/my_health.html:24
-msgid "All your health data in one place"
-msgstr ""
-
-#: base/templates/base/my_health.html:30 base/templates/base/my_health.html:80
+#: base/templates/base/my_health.html:65 base/templates/base/my_health.html:66
+#: base/templates/base/my_health.html:67 base/templates/base/my_health.html:137
 #: base/templates/base/patient_wellness.html:40
 #: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr ""
 
-#: base/templates/base/my_health.html:35
+#: base/templates/base/my_health.html:80 base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:82
 msgid "Examinations"
 msgstr ""
 
-#: base/templates/base/my_health.html:40
+#: base/templates/base/my_health.html:95 base/templates/base/my_health.html:96
+#: base/templates/base/my_health.html:97
 #: base/templates/base/partials/health_recommendations.html:3
 msgid "Doctor's comments"
 msgstr ""
 
-#: base/templates/base/my_health.html:79
+#: base/templates/base/my_health.html:136
 msgid "Failed to load. Please try again."
 msgstr ""
 
-#: base/templates/base/my_health.html:81
+#: base/templates/base/my_health.html:138
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr ""
 
-#: base/templates/base/my_health.html:82
+#: base/templates/base/my_health.html:139
 msgid "Paste link"
 msgstr ""
 
-#: base/templates/base/my_health.html:83
+#: base/templates/base/my_health.html:140
 msgid "Remove link"
 msgstr ""
 
-#: base/templates/base/my_health.html:84
+#: base/templates/base/my_health.html:141
 msgid "Remove file"
 msgstr ""
 
-#: base/templates/base/my_health.html:85
+#: base/templates/base/my_health.html:142
 msgid "Please specify the exam date."
 msgstr ""
 
-#: base/templates/base/my_health.html:86 base/views/wellness_views.py:85
+#: base/templates/base/my_health.html:143 base/views/wellness_views.py:85
 msgid "Failed to save."
 msgstr ""
 
-#: base/templates/base/my_health.html:87
+#: base/templates/base/my_health.html:144
 msgid "Network error."
 msgstr ""
 
-#: base/templates/base/my_health.html:88
+#: base/templates/base/my_health.html:145
 msgid "Unable to load data."
 msgstr ""
 
-#: base/templates/base/my_health.html:89
+#: base/templates/base/my_health.html:146
 msgid "Delete this exam?"
 msgstr ""
 
-#: base/templates/base/my_health.html:90
+#: base/templates/base/my_health.html:147
 msgid "Deletion failed."
 msgstr ""
 
-#: base/templates/base/my_health.html:91
+#: base/templates/base/my_health.html:148
 msgid "Delete this file?"
 msgstr ""
 
-#: base/templates/base/my_health.html:92
+#: base/templates/base/my_health.html:149
 #, python-format
 msgid "Unsupported file type: %%(name)s"
 msgstr ""
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:6
-#: base/templates/base/partials/health_wellness.html:46 templates/base.html:100
+#: base/templates/base/partials/health_wellness.html:22
+#: base/templates/base/partials/health_wellness.html:83 templates/base.html:100
 msgid "Notifications"
 msgstr ""
 
@@ -1558,8 +1557,8 @@ msgid ""
 msgstr ""
 
 #: base/templates/base/partials/health_documents.html:44
-#: base/templates/base/partials/health_wellness.html:22
-#: base/templates/base/partials/health_wellness.html:75
+#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:112
 #: base/templates/base/profile_edit.html:155
 msgid "Save"
 msgstr ""
@@ -1604,59 +1603,59 @@ msgstr ""
 msgid "No recommendations yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:5
+#: base/templates/base/partials/health_wellness.html:21
 msgid "My wellness"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:14
+#: base/templates/base/partials/health_wellness.html:31
 msgid "Score (1-10)"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:18
+#: base/templates/base/partials/health_wellness.html:54
 msgid "Comment"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:19
+#: base/templates/base/partials/health_wellness.html:55
 msgid "How do you feel today?"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:30
+#: base/templates/base/partials/health_wellness.html:67
 msgid "Trend"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:37
+#: base/templates/base/partials/health_wellness.html:74
 #: base/templates/base/patient_wellness.html:15
 msgid "Entries"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:39
+#: base/templates/base/partials/health_wellness.html:76
 #: base/templates/base/patient_wellness.html:26
 msgid "No entries yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:49
+#: base/templates/base/partials/health_wellness.html:86
 msgid ""
 "Choose how often to receive a reminder if you haven't added a wellness entry "
 "for the selected period. One reminder per day will be sent at the time below."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:52
+#: base/templates/base/partials/health_wellness.html:89
 msgid "Reminder frequency"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:59
+#: base/templates/base/partials/health_wellness.html:96
 msgid "Set to Never to fully disable reminders."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:63
+#: base/templates/base/partials/health_wellness.html:100
 msgid "Hour"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:67
+#: base/templates/base/partials/health_wellness.html:104
 msgid "Minute"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:71
+#: base/templates/base/partials/health_wellness.html:108
 msgid "Your local time when the daily reminder may be sent."
 msgstr ""
 
@@ -2193,6 +2192,16 @@ msgstr ""
 msgid "You don't have permission to view this page."
 msgstr ""
 
+#: base/utils/i18n_messages.py:3
+msgid "Wellness reminder"
+msgstr ""
+
+#: base/utils/i18n_messages.py:5
+msgid ""
+"You haven't checked in for a while. Please rate your wellness (1–10) and "
+"leave a short note."
+msgstr ""
+
 #: base/utils/notify.py:94
 msgid "Notification"
 msgstr ""
@@ -2381,31 +2390,31 @@ msgstr ""
 msgid "You cannot report your own post."
 msgstr ""
 
-#: base/views/help_request_views.py:60
+#: base/views/help_request_views.py:61
 msgid "This field is required."
 msgstr ""
 
-#: base/views/help_request_views.py:66
+#: base/views/help_request_views.py:67
 msgid "Enter a valid email address."
 msgstr ""
 
-#: base/views/help_request_views.py:71
+#: base/views/help_request_views.py:72
 msgid "Enter a valid Telegram username (e.g. @john_doe)."
 msgstr ""
 
-#: base/views/help_request_views.py:82
+#: base/views/help_request_views.py:83
 msgid "Your request has been sent. We will contact you soon."
 msgstr ""
 
-#: base/views/help_request_views.py:146
+#: base/views/help_request_views.py:147
 msgid "Invalid request."
 msgstr ""
 
-#: base/views/help_request_views.py:151
+#: base/views/help_request_views.py:152
 msgid "Item not found."
 msgstr ""
 
-#: base/views/help_request_views.py:164
+#: base/views/help_request_views.py:165
 msgid "Invalid action."
 msgstr ""
 

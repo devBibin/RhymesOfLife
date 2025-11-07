@@ -1,537 +1,173 @@
-/* ========== FORM SECTIONS ========== */
-body.no-scroll {
-  overflow: hidden;
+body.no-scroll{overflow:hidden}
+
+.form-section,.password-recovery-section{align-items:center;min-height:calc(100vh - var(--header-height,3.7rem) - var(--footer-height,2rem));padding:2rem 1rem;box-sizing:border-box}
+.form-section{background-color:var(--color-accent);background-size:cover;background-position:center center;background-repeat:no-repeat;padding:var(--space-xxl) 0 0;position:relative;width:100%}
+.form-section::before{content:"";position:absolute;inset:0;background:var(--color-accent);opacity:.1;pointer-events:none;z-index:0}
+.form-section>*{position:relative;z-index:1}
+.password-recovery-section{background-color:#BBE4EC;display:none;position:relative;padding:var(--space-xxl) 0 0}
+
+.recovery-password-form h2{text-align:center}
+
+.form-grid,.password-recovery-grid{display:grid;place-items:center;width:100%;max-width:420px;margin:0 auto}
+
+.form-card{display:grid;grid-template-columns:1fr;background:var(--color-white);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1);max-width:420px;width:100%;overflow:hidden;margin:0 auto}
+.password-recovery-card{display:grid;grid-template-columns:1fr;background:var(--color-white);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1);max-width:420px;width:100%;overflow:hidden;margin:0 auto;padding:0}
+
+.form-tabs{display:grid;grid-template-columns:repeat(2,1fr);background:var(--color-white);border-radius:12px 12px 0 0;overflow:hidden}
+.form-tab{font-family:var(--font-styled);font-weight:700;font-size:1.1rem;padding:var(--space-md) 0;border:none;background:var(--color-white);color:var(--color-black);cursor:pointer;transition:var(--transition);transform:none!important;outline:none!important;box-shadow:none!important;-webkit-tap-highlight-color:transparent}
+.form-tab.active{background:var(--color-primary);color:var(--color-white)}
+.form-tab:not(.active):hover{background:rgba(0,0,0,.04);transform:none!important}
+.form-tab:first-child{border-top-left-radius:12px}
+.form-tab:last-child{border-top-right-radius:12px}
+
+.form-body{padding:var(--space-xxl) var(--space-lg) var(--space-xl);display:grid;gap:var(--space-md)}
+.password-recovery-body{padding:var(--space-xl) var(--space-lg) var(--space-xl);display:grid;gap:var(--space-md)}
+.form-body h1{font-size:1.8rem;text-align:center;line-height:1.3}
+
+.password-recovery-header{background-color:var(--color-white);padding:var(--space-xl);text-align:center;border-radius:10px 10px 0 0}
+.password-recovery-header h1{color:var(--color-black);margin:0}
+.password-recovery-title{margin:0;color:var(--color-black);font-size:1.4rem;font-weight:700;font-family:var(--font-styled)}
+
+.form-input{width:100%;padding:var(--space-sm) 0;border:none;border-bottom:2px solid #ccc;background:transparent;font-size:1rem;font-family:var(--font-basic);transition:border-color .3s ease;margin:0 0 15px}
+.form-input:focus{outline:none;border-bottom-color:var(--color-primary)}
+.form-input::placeholder{color:#999;font-size:.95rem}
+
+.form-btn{width:100%;border-radius:10px;padding:var(--space-sm);font-family:var(--font-styled);font-weight:700;font-size:1.1rem;background:var(--color-black);color:var(--color-white);border:none;transition:var(--transition);margin-top:10px;cursor:pointer;transform:none!important;-webkit-tap-highlight-color:transparent}
+.form-btn:hover:enabled{opacity:.9;transform:none!important}
+
+.form-links{text-align:center;margin-top:var(--space-md);min-height:20px}
+.forgot-password{color:var(--color-primary);text-decoration:none;font-size:.9rem;display:inline-block;padding:2px 4px;border:1px solid transparent;transition:color .3s ease;transform:none!important}
+.forgot-password:hover{text-decoration:underline;transform:none!important}
+
+.form-privacy{font-size:.8rem;color:#666;margin-top:var(--space-sm);line-height:1.4}
+
+.form-container{display:none}
+.form-container.active{display:block}
+
+.recovery-step{display:none}
+.recovery-step.active{display:block;animation:fadeIn .3s ease-in-out}
+@keyframes fadeIn{from{opacity:0;transform:none}to{opacity:1;transform:none}}
+
+.form-group{margin-bottom:var(--space-md)}
+.form-label{display:block;margin-bottom:8px;font-weight:600;color:var(--color-black);font-size:.95rem;font-family:var(--font-basic)}
+
+.form-error{display:none;color:#ff4444;font-size:.9rem;margin-top:5px;font-family:var(--font-basic)}
+.form-error.active{display:block}
+
+.recovery-message{text-align:center}
+.recovery-message h2{text-align:center;padding:0 0 var(--space-lg)}
+.recovery-password-form h2{text-align:center;padding:0 0 var(--space-lg)}
+
+.message-icon{margin-bottom:var(--space-sm)}
+.success-icon{color:#4CAF50}
+.message-title{color:var(--color-black);margin-bottom:var(--space-sm);font-family:var(--font-styled);font-size:1.3rem}
+.message-text{color:#666;line-height:1.5;font-family:var(--font-basic);margin-bottom:var(--space-lg)}
+.password-form-title{text-align:center;margin-bottom:var(--space-md);color:var(--color-black);font-family:var(--font-styled);font-size:1.3rem}
+
+.recovery-links{text-align:center;margin-top:var(--space-md);min-height:20px}
+.recovery-link{color:var(--color-primary);text-decoration:none;font-size:.9rem;font-family:var(--font-basic);transition:color .3s ease;display:inline-block;padding:2px 4px;border:1px solid transparent;transform:none!important;-webkit-tap-highlight-color:transparent}
+.recovery-link:hover{text-decoration:underline;transform:none!important}
+
+.success-login-btn{text-decoration:none;display:inline-block;width:auto;padding:var(--space-sm) var(--space-lg);transform:none!important}
+.success-login-btn:hover{transform:none!important}
+
+@media (max-width:768px){
+  .form-section{padding-top:1rem;padding-bottom:clamp(72px,10vh,120px)}
+  .form-grid{max-width:360px}
+  .form-card{max-width:360px;margin:.75rem auto 0;border-radius:14px;box-shadow:0 10px 28px rgba(0,0,0,.12);overflow:hidden}
+  .form-tabs{border-radius:14px 14px 0 0;overflow:hidden}
+  .form-tab{padding:.9rem 0;font-size:1rem;line-height:1;outline:none!important;box-shadow:none!important;-webkit-tap-highlight-color:transparent}
+  .form-body{padding:1rem .875rem 1rem;gap:.75rem}
+  .form-body h1,.form-body h2{font-size:1.1rem;margin:.25rem 0 .5rem;text-align:center}
+  .form-label{margin-bottom:.35rem;font-size:.95rem}
+  .form-input{padding:.65rem 0;margin:0 0 .6rem;font-size:1rem;border-bottom:2.5px solid #d5d5d5}
+  .form-input:focus{border-bottom-color:var(--color-primary);outline:none;box-shadow:none}
+  .form-btn{margin-top:.4rem;padding:.85rem 1rem;font-size:1.05rem;border-radius:12px}
+  .form-links{margin-top:.5rem}
+  .forgot-password,.recovery-link{font-size:.95rem;padding:4px 6px}
+  .form-card .form-tab:focus,
+  .form-card .form-tab:focus-visible,
+  .form-card a:focus,
+  .form-card a:focus-visible,
+  .form-card button:focus,
+  .form-card button:focus-visible{outline:none!important;box-shadow:none!important}
 }
 
-.form-section,
-.password-recovery-section {
+@media (max-width:480px){
+  .form-grid,.form-card{max-width:340px}
+  .form-body{padding:.9rem .75rem 1rem}
+  .form-tab{font-size:.95rem;padding:.8rem 0}
+  .form-input{font-size:.95rem}
+}
+.form-section {
+  display: flex;
+  justify-content: center;
   align-items: center;
   min-height: calc(100vh - var(--header-height, 3.7rem) - var(--footer-height, 2rem));
-  padding: 2rem 1rem;
-  box-sizing: border-box;
+  padding: 1.5rem 1rem;
 }
 
-/* === ОСНОВНОЙ ФОН === */
-/* .form-section {
-  background-color: #BBE4EC;
-} */
-
-
-
-
-.form-section {
-  background-color: var(--color-accent);
-  /* background-image: url('/static/images/cover__bg-02.svg'); */
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  padding: var(--space-xxl) 0 0;
-  position: relative;
-  width: 100%;
-}
-
-.form-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--color-accent);
-  opacity: 0.1;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.form-section>* {
-  position: relative;
-  z-index: 1;
-}
-
-.password-recovery-section {
-  background-color: #BBE4EC;
-  display: none;
-  position: relative;
-  padding: var(--space-xxl) 0 0;
-}
-
-.recovery-password-form h2 {
-  text-align: center;
-}
-
-/* === СЕТКА === */
-.form-grid,
-.password-recovery-grid {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-
-/* === КАРТОЧКА === */
-.form-card {
-  display: grid;
-  grid-template-columns: 1fr;
-  background: var(--color-white);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 420px;
-  width: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.password-recovery-card {
-  display: grid;
-  grid-template-columns: 1fr;
-  background: var(--color-white);
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 420px;
-  width: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-  padding: 0;
-}
-
-
-
-/* === ТАБЫ === */
-.form-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.form-tab {
-  font-family: var(--font-styled);
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: var(--space-md) 0;
-  border: none;
-  background: var(--color-primary);
-  color: var(--color-white);
-  cursor: pointer;
-  transition: var(--transition);
-  transform: none !important;
-}
-
-.form-tab.active {
-  background: var(--color-white);
-  color: var(--color-black);
-}
-
-.form-tab:not(.active):hover {
-  background: var(--color-primary-hover);
-  transform: none !important;
-}
-
-/* === ТЕЛО === */
-.form-body {
-  padding: var(--space-xxl) var(--space-lg) var(--space-xl);
-  display: grid;
-  gap: var(--space-md);
-}
-
-.password-recovery-body {
-  padding: var(--space-xl) var(--space-lg) var(--space-xl);
-  display: grid;
-  gap: var(--space-md);
-}
-
-.form-body h1 {
-  font-size: 1.8rem;
-  text-align: center;
-  line-height: 1.3;
-}
-
-/* === ЗАГОЛОВОК НА БИРЮЗОВОМ ФОНЕ === */
-.password-recovery-header {
-  background-color: var(--color-white);
-  padding: var(--space-xl);
-  text-align: center;
-  border-radius: 10px 10px 0 0;
-}
-
-.password-recovery-header h1 {
-  color: var(--color-black);
-  margin: 0;
-}
-
-.password-recovery-title {
-  margin: 0;
-  color: var(--color-black);
-  font-size: 1.4rem;
-  font-weight: 700;
-  font-family: var(--font-styled);
-}
-
-/* === ПОЛЯ === */
-.form-input {
-  width: 100%;
-  padding: var(--space-sm) 0;
-  border: none;
-  border-bottom: 2px solid #ccc;
-  background: transparent;
-  font-size: 1rem;
-  font-family: var(--font-basic);
-  transition: border-color 0.3s ease;
-  margin: 0 0 15px;
-}
-
-.form-input:focus {
-  outline: none;
-  border-bottom-color: var(--color-primary);
-}
-
-.form-input::placeholder {
-  color: #999;
-  font-size: 0.95rem;
-}
-
-/* === КНОПКА === */
-.form-btn {
-  width: 100%;
-  border-radius: 10px;
-  padding: var(--space-sm);
-  font-family: var(--font-styled);
-  font-weight: 700;
-  font-size: 1.1rem;
-  background: var(--color-black);
-  color: var(--color-white);
-  border: none;
-  transition: var(--transition);
-  margin-top: 10px;
-  cursor: pointer;
-  transform: none !important;
-}
-
-.form-btn:hover:enabled {
-  opacity: 0.9;
-  transform: none !important;
-}
-
-/* === ВСПОМОГАТЕЛЬНЫЕ ССЫЛКИ === */
-.form-links {
-  text-align: center;
-  margin-top: var(--space-md);
-  min-height: 20px;
-}
-
-.forgot-password {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  display: inline-block;
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  transition: color 0.3s ease;
-  transform: none !important;
-}
-
-.forgot-password:hover {
-  text-decoration: underline;
-  transform: none !important;
-}
-
-/* === ПОДПИСЬ === */
-.form-privacy {
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: var(--space-sm);
-  line-height: 1.4;
-}
-
-/* === СКРЫТЫЕ ФОРМЫ === */
-.form-container {
-  display: none;
-}
-
-.form-container.active {
-  display: block;
-}
-
-/* === ШАГИ ВОССТАНОВЛЕНИЯ === */
-.recovery-step {
-  display: none;
-}
-
-.recovery-step.active {
-  display: block;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: none;
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* === ГРУППЫ ФОРМ === */
-.form-group {
-  margin-bottom: var(--space-md);
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--color-black);
-  font-size: 0.95rem;
-  font-family: var(--font-basic);
-}
-
-/* === СООБЩЕНИЯ ОБ ОШИБКАХ === */
-.form-error {
-  display: none;
-  color: #ff4444;
-  font-size: 0.9rem;
-  margin-top: 5px;
-  font-family: var(--font-basic);
-}
-
-.form-error.active {
-  display: block;
-}
-
-/* === СООБЩЕНИЯ === */
-.recovery-message {
-  text-align: center;
-}
-
-.recovery-message h2 {
-  text-align: center;
-  padding: 0 0 var(--space-lg);
-}
-
-.recovery-password-form h2 {
-  text-align: center;
-  padding: 0 0 var(--space-lg);
-}
-
-
-.message-icon {
-  margin-bottom: var(--space-sm);
-}
-
-.success-icon {
-  color: #4CAF50;
-}
-
-.message-title {
-  color: var(--color-black);
-  margin-bottom: var(--space-sm);
-  font-family: var(--font-styled);
-  font-size: 1.3rem;
-}
-
-.message-text {
-  color: #666;
-  line-height: 1.5;
-  font-family: var(--font-basic);
-  margin-bottom: var(--space-lg);
-}
-
-.password-form-title {
-  text-align: center;
-  margin-bottom: var(--space-md);
-  color: var(--color-black);
-  font-family: var(--font-styled);
-  font-size: 1.3rem;
-}
-
-/* === ССЫЛКИ === */
-.recovery-links {
-  text-align: center;
-  margin-top: var(--space-md);
-  min-height: 20px;
-}
-
-.recovery-link {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-family: var(--font-basic);
-  transition: color 0.3s ease;
-  display: inline-block;
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  transform: none !important;
-}
-
-.recovery-link:hover {
-  text-decoration: underline;
-  transform: none !important;
-}
-
-.success-login-btn {
-  text-decoration: none;
-  display: inline-block;
-  width: auto;
-  padding: var(--space-sm) var(--space-lg);
-  transform: none !important;
-}
-
-.success-login-btn:hover {
-  transform: none !important;
-}
-
-/* ========== MOBILE STYLES ДЛЯ ФОРМ ========== */
 @media (max-width: 768px) {
-
-  .form-section,
-  .password-recovery-section {
-    display: flex;
-    padding: 1.5rem 1rem;
-    min-height: calc(100vh - var(--header-height, 70px) - var(--footer-height, 50px));
-  }
-
-  .form-container.active {
+  .form-grid {
     display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
-  }
-
-  .form-card,
-  .password-recovery-card {
-    max-width: 100%;
+    width: 100%;
+    max-width: 480px;
     margin: 0 auto;
   }
 
-  .form-body,
-  .password-recovery-body {
-    padding: var(--space-xl) var(--space-lg) var(--space-xl);
+  .form-card {
+    max-width: 480px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
   }
 
-  .form-body h1 {
-    font-size: 1.5rem;
+  .form-body {
+    padding: 1.5rem 1.25rem 1.75rem;
+    gap: 1rem;
   }
 
   .form-tab {
-    font-size: 1rem;
-    padding: var(--space-sm) 0;
+    font-size: 1.05rem;
+    padding: 1rem 0;
   }
 
   .form-input {
-    font-size: 0.95rem;
-    margin: 0 0 12px;
+    padding: 0.9rem 0;
+    font-size: 1.05rem;
   }
 
   .form-btn {
-    display: flex;
-    font-size: 1rem;
-    padding: var(--space-sm);
-  }
-
-  .password-recovery-title {
-    font-size: 1.3rem;
-  }
-
-  .password-recovery-header {
-    padding: var(--space-xl) var(--space-md) var(--space-lg);
-  }
-
-  .message-title,
-  .password-form-title {
-    font-size: 1.2rem;
-  }
-
-  .recovery-message h2 {
-    margin: 0 0 var(--space-xl) 0;
-  }
-
-  .recovery-password-form h2 {
-    margin: 0 0 var(--space-xl) 0;
-  }
-
-  .forgot-password:hover,
-  .recovery-link:hover,
-  .form-btn:hover,
-  .form-tab:hover {
-    transform: none !important;
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-radius: 14px;
   }
 }
 
 @media (max-width: 480px) {
+  .form-grid {
+    max-width: 420px;
+  }
 
-  .form-section,
-  .password-recovery-section {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    min-height: calc(100vh - var(--header-height, 3.7rem) - var(--footer-height, 2rem));
-    padding: 1rem 0.5rem;
+  .form-card {
+    max-width: 420px;
+    transform: scale(1.02);
   }
 
   .form-body {
-    padding: var(--space-xxl) var(--space-lg) var(--space-xl);
-  }
-
-  .form-body h1 {
-    font-size: 1.3rem;
-  }
-
-  .password-recovery-card {
-    padding: var(--space-lg) var(--space-lg) var(--space-xl);
-  }
-
-  .password-recovery-card {
-    padding: 0;
-  }
-
-
-  .form-tab {
-    font-size: 0.9rem;
+    padding: 1.25rem 1rem 1.5rem;
   }
 
   .form-input {
-    font-size: 0.9rem;
-    padding: 8px 0;
+    font-size: 1rem;
+    padding: 0.85rem 0;
   }
 
-  .form-privacy {
-    font-size: 0.6rem;
-  }
-
-  .password-recovery-title {
-    font-size: 1.2rem;
-  }
-
-  .message-title,
-  .password-form-title {
-    font-size: 1.1rem;
-  }
-
-  .recovery-password-form h2 {
-    margin: 0 0 var(--space-xl) 0;
-  }
-}
-
-/* ДОПОЛНИТЕЛЬНЫЙ ФИКС ДЛЯ ПОДПРЫГИВАНИЯ */
-.forgot-password,
-.recovery-link,
-.form-btn,
-.form-tab,
-.success-login-btn {
-  transform: none !important;
-  transition: color 0.3s ease, background-color 0.3s ease, opacity 0.3s ease !important;
-}
-
-/* Отключаем анимации для пользователей, которые их не хотят */
-@media (prefers-reduced-motion: reduce) {
-
-  .forgot-password,
-  .recovery-link,
-  .form-btn,
-  .form-tab,
-  .success-login-btn,
-  .recovery-step.active {
-    transition: none !important;
-    animation: none !important;
+  .form-btn {
+    font-size: 1rem;
+    padding: 0.9rem;
   }
 }
