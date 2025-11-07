@@ -28,7 +28,7 @@
           {% endif %}
 
           <div class="form-links" style="margin-top: 1rem;">
-            <a href="{% url 'home_public' %}" class="recovery-link">{% trans "Back to main page" %}</a>
+            <a href="{% url 'login' %}" class="recovery-link">{% trans "Back to main page" %}</a>
             {% if user.is_authenticated %}
               • <a href="{% url 'profile_edit' %}" class="recovery-link">{% trans "Change email in profile" %}</a>
             {% endif %}
