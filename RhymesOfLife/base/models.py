@@ -15,6 +15,17 @@ import uuid
 User = get_user_model()
 
 
+def _safe_username(aui):
+    try:
+        if not aui:
+            return _("unknown")
+        u = getattr(aui, "user", None)
+        name = getattr(u, "username", None)
+        return name or _("unknown")
+    except Exception:
+        return _("unknown")
+
+
 class PasswordResetCode(models.Model):
     class Channel(models.TextChoices):
         EMAIL = "email", "email"
@@ -178,7 +189,7 @@ class AdditionalUserInfo(models.Model):
             raise ValidationError({"confirmed_syndromes": _("Confirmed codes must be a subset of syndromes.")})
 
     def __str__(self):
-        return f"{self.user.username}'s info"
+        return f"{_safe_username(self)}'s info"
 
     @property
     def followers_count(self):
@@ -220,7 +231,8 @@ class TelegramAccount(models.Model):
         ]
 
     def __str__(self):
-        return f"tg:{self.telegram_id or '-'} for {self.user_info.user.username}"
+        owner = _safe_username(getattr(self, "user_info", None))
+        return f"tg:{self.telegram_id or '-'} for {owner}"
 
 
 class PhoneVerification(models.Model):
@@ -329,8 +341,8 @@ class Notification(SoftDeleteModel):
         ]
 
     def __str__(self):
-        s = self.sender.user.username if self.sender_id else "system"
-        r = self.recipient.user.username
+        s = _safe_username(self.sender) if self.sender_id else _("system")
+        r = _safe_username(self.recipient)
         return f"{self.notification_type} [{self.source}/{self.scope}] {s} -> {r}"
 
 
@@ -347,8 +359,10 @@ class Follower(models.Model):
         ]
 
     def __str__(self):
-        status = "active" if self.is_active else "inactive"
-        return f"{status} {self.follower.user.username} -> {self.following.user.username}"
+        status = _("active") if self.is_active else _("inactive")
+        f = _safe_username(self.follower)
+        t = _safe_username(self.following)
+        return f"{status} {f} -> {t}"
 
 
 class ExamComment(SoftDeleteModel):
@@ -368,7 +382,9 @@ class ExamComment(SoftDeleteModel):
         ]
 
     def __str__(self):
-        return f"Comment by {self.author.user.username} on {self.exam.exam_date:%Y-%m-%d}"
+        author = _safe_username(self.author)
+        date_str = self.exam.exam_date.strftime("%Y-%m-%d") if getattr(self, "exam", None) else "n/a"
+        return f"Comment by {author} on {date_str}"
 
 
 class Recommendation(SoftDeleteModel):
@@ -389,7 +405,9 @@ class Recommendation(SoftDeleteModel):
         ]
 
     def __str__(self):
-        return f"Recommendation to {self.patient.user.username} by {self.author.user.username}"
+        p = _safe_username(self.patient)
+        a = _safe_username(self.author)
+        return f"Recommendation to {p} by {a}"
 
 
 def post_upload_to(instance, filename):
@@ -428,7 +446,7 @@ class Post(models.Model):
         verbose_name_plural = _("Posts")
 
     def __str__(self):
-        return f"Post#{self.pk} by {self.author.user.username}"
+        return f"Post#{self.pk} by {_safe_username(self.author)}"
 
     @property
     def visible_comments(self):
@@ -445,7 +463,7 @@ class PostReport(models.Model):
         indexes = [models.Index(fields=["post", "author"])]
 
     def __str__(self):
-        return f"🚩 {self.author.user.username} → {self.post_id}"
+        return f"🚩 {_safe_username(self.author)} → {self.post_id}"
 
 
 class PostImage(models.Model):
@@ -470,7 +488,7 @@ class PostLike(models.Model):
         verbose_name_plural = _("Post likes")
 
     def __str__(self):
-        return f"👍 {self.author.user.username} → {self.post_id}"
+        return f"👍 {_safe_username(self.author)} → {self.post_id}"
 
 
 class PostComment(models.Model):
@@ -487,7 +505,7 @@ class PostComment(models.Model):
         verbose_name_plural = _("Post comments")
 
     def __str__(self):
-        return _("🗑 Deleted comment") if self.is_deleted else f"💬 {self.author.user.username}: {self.text[:30]}"
+        return _("🗑 Deleted comment") if self.is_deleted else f"💬 {_safe_username(self.author)}: {self.text[:30]}"
 
 
 class HelpRequest(models.Model):
@@ -556,8 +574,7 @@ class WellnessSettings(models.Model):
         ]
 
     def __str__(self):
-        return f"WellnessSettings for {self.user_info.user.username}"
-
+        return f"WellnessSettings for {_safe_username(self.user_info)}"
 
 
 class WellnessEntry(SoftDeleteModel):
