@@ -1,19 +1,41 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "base/info/info_base.html" %}
+{% load static i18n %}
 
 {% block title %}{% trans "Verify your email" %} — {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
-  <div class="card shadow-sm p-4" style="max-width: 560px; width: 100%;">
-    <h2 class="mb-3 text-center">{% trans "Verify your email" %}</h2>
-    <p class="mb-4 text-muted text-center">
-      {% trans "We have sent a confirmation link to your email. Please click the link to activate your account." %}
-    </p>
-    <form method="post" action="{% url 'request_verification' %}" class="text-center">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-primary">{% trans "Resend email" %}</button>
-    </form>
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+
+<section class="section section--accent form-section">
+  <div class="container">
+    <div class="form-grid">
+      <div class="form-card">
+        <div class="form-body">
+          <h2 class="mb-2 text-center">{% trans "Verify your email" %}</h2>
+
+          <p class="text-muted text-center" style="margin-top: .25rem;">
+            {% trans "We have sent a confirmation link to your email. Please click the link to activate your account." %}
+          </p>
+
+          {% if user.is_authenticated %}
+            {% with email=user.additional_info.email|default:user.email %}
+              {% if email %}
+                <p class="text-center" style="margin-top: .5rem;">
+                  {% blocktrans with e=email %}Email: {{ e }}{% endblocktrans %}
+                </p>
+              {% endif %}
+            {% endwith %}
+          {% endif %}
+
+          <div class="form-links" style="margin-top: 1rem;">
+            <a href="{% url 'home_public' %}" class="recovery-link">{% trans "Back to main page" %}</a>
+            {% if user.is_authenticated %}
+              • <a href="{% url 'profile_edit' %}" class="recovery-link">{% trans "Change email in profile" %}</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 {% endblock %}

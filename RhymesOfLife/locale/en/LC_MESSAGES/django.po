@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-30 21:06+0000\n"
+"POT-Creation-Date: 2025-11-07 16:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -374,7 +374,8 @@ msgstr ""
 
 #: base/signals.py:32 base/templates/base/help_request.html:30
 #: base/templates/base/home.html:92 base/templates/base/home.html:123
-#: base/templates/base/login.html:21 base/templates/base/register.html:45
+#: base/templates/base/info/auth_combined.html:30
+#: base/templates/base/info/auth_combined.html:57
 #: base/templates/base/staff_help_requests.html:50
 #: base/templates/base/staff_help_requests.html:84
 msgid "Username"
@@ -385,9 +386,9 @@ msgid "User ID"
 msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
+#: base/templates/base/info/auth_combined.html:34
 #: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:50
-#: base/templates/base/register.html:50
-#: base/templates/base/reset_request.html:39
+#: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:52
 #: base/templates/base/staff_help_requests.html:92
 msgid "Email"
@@ -1235,7 +1236,7 @@ msgstr ""
 
 #: base/templates/base/help_request.html:37 base/templates/base/profile.html:40
 #: base/templates/base/profile_edit.html:119
-#: base/templates/base/reset_request.html:40
+#: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr ""
 
@@ -1316,38 +1317,44 @@ msgid "Welcome to Rhymes of Life!"
 msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
-#: base/templates/base/register.html:4 base/templates/base/register.html:11
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:19
+#: base/templates/base/info/auth_combined.html:70
 msgid "Sign up"
 msgstr ""
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
-#: base/templates/base/login.html:4 base/templates/base/login.html:10
-#: base/templates/base/login.html:36 base/templates/base/register.html:68
+#: base/templates/base/info/auth_combined.html:20
+#: base/templates/base/info/auth_combined.html:49
+#: base/templates/base/info/auth_combined.html:65
 #: blog/templates/blog/blog_page.html:179 templates/base.html:218
 msgid "Log in"
 msgstr ""
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/login.html:29 base/templates/base/register.html:55
+#: base/templates/base/info/auth_combined.html:38
+#: base/templates/base/info/auth_combined.html:61
 msgid "Password"
 msgstr ""
 
-#: base/templates/base/home.html:104 base/templates/base/register.html:60
-#: base/templates/base/reset_new.html:27
+#: base/templates/base/home.html:104
+#: base/templates/base/info/auth_combined.html:42
+#: base/templates/base/reset_new.html:30
 msgid "Confirm password"
 msgstr ""
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
-#: base/templates/base/reset_new.html:33
+#: base/templates/base/reset_new.html:36
 msgid "Show password"
 msgstr ""
 
-#: base/templates/base/home.html:135 base/templates/base/login.html:43
+#: base/templates/base/home.html:135
+#: base/templates/base/info/auth_combined.html:68
 msgid "Forgot password?"
 msgstr ""
 
-#: base/templates/base/home.html:137 base/templates/base/login.html:40
+#: base/templates/base/home.html:137
+#: base/templates/base/info/auth_combined.html:70
 msgid "Don't have an account?"
 msgstr ""
 
@@ -1401,6 +1408,18 @@ msgstr ""
 #: base/templates/base/includes/staff_help_requests_rows.html:51
 #: blog/templates/blog/includes/article_list_fragment.html:10
 msgid "Nothing found."
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:4
+msgid "Sign in / Sign up"
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:46
+msgid "Create account"
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:49
+msgid "Already have an account?"
 msgstr ""
 
 #: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
@@ -1991,117 +2010,67 @@ msgstr ""
 msgid "Generate new link"
 msgstr ""
 
-#: base/templates/base/register.html:18
-msgid "What happens here"
-msgstr ""
-
-#: base/templates/base/register.html:20
-msgid "Share moments and short posts with a friendly community."
-msgstr ""
-
-#: base/templates/base/register.html:21
-msgid "Follow people, react to posts, and keep meaningful connections."
-msgstr ""
-
-#: base/templates/base/register.html:22
-msgid "Ask for help or offer support when someone needs it."
-msgstr ""
-
-#: base/templates/base/register.html:23
-msgid "Track your wellness and celebrate small wins."
-msgstr ""
-
-#: base/templates/base/register.html:24
-msgid "Communicate with qualified physicians for guidance and support."
-msgstr ""
-
-#: base/templates/base/register.html:27
-msgid ""
-"Medical guidance on this platform does not replace professional diagnosis or "
-"emergency care. Call your local emergency number in urgent situations."
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "Registration successful!"
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "You can"
-msgstr ""
-
-#: base/templates/base/register.html:38
-msgid "log in"
-msgstr ""
-
-#: base/templates/base/register.html:64
-msgid "Create account"
-msgstr ""
-
-#: base/templates/base/register.html:68
-msgid "Already have an account?"
-msgstr ""
-
-#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:11
+#: base/templates/base/reset_new.html:4 base/templates/base/reset_new.html:14
 msgid "Set new password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:22
+#: base/templates/base/reset_new.html:25
 msgid "New password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:36
+#: base/templates/base/reset_new.html:39
 msgid "Change password"
 msgstr ""
 
-#: base/templates/base/reset_new.html:40
-#: base/templates/base/reset_request.html:51
-#: base/templates/base/reset_verify.html:46
+#: base/templates/base/reset_new.html:43
+#: base/templates/base/reset_request.html:56
+#: base/templates/base/reset_verify.html:48
 msgid "Back to sign in"
 msgstr ""
 
 #: base/templates/base/reset_request.html:4
-#: base/templates/base/reset_request.html:11
+#: base/templates/base/reset_request.html:14
 msgid "Reset password"
 msgstr ""
 
-#: base/templates/base/reset_request.html:23
+#: base/templates/base/reset_request.html:28
 msgid "Username or email"
 msgstr ""
 
-#: base/templates/base/reset_request.html:32
+#: base/templates/base/reset_request.html:37
 msgid "Your username or email"
 msgstr ""
 
-#: base/templates/base/reset_request.html:37
+#: base/templates/base/reset_request.html:42
 msgid "Delivery channel"
 msgstr ""
 
-#: base/templates/base/reset_request.html:43
+#: base/templates/base/reset_request.html:48
 msgid "If Telegram is not linked to your account, use Email."
 msgstr ""
 
-#: base/templates/base/reset_request.html:47
+#: base/templates/base/reset_request.html:52
 msgid "Send code"
 msgstr ""
 
 #: base/templates/base/reset_verify.html:4
-#: base/templates/base/reset_verify.html:11
+#: base/templates/base/reset_verify.html:14
 msgid "Enter code"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:13
+#: base/templates/base/reset_verify.html:15
 msgid "We have sent a one-time code. Enter it below."
 msgstr ""
 
-#: base/templates/base/reset_verify.html:25
+#: base/templates/base/reset_verify.html:26
 msgid "Code"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:40
+#: base/templates/base/reset_verify.html:42
 msgid "Verify"
 msgstr ""
 
-#: base/templates/base/reset_verify.html:44
+#: base/templates/base/reset_verify.html:46
 msgid "Resend code"
 msgstr ""
 
@@ -2140,18 +2109,27 @@ msgid "Mark open"
 msgstr ""
 
 #: base/templates/base/verify_prompt.html:4
-#: base/templates/base/verify_prompt.html:9
+#: base/templates/base/verify_prompt.html:14
 msgid "Verify your email"
 msgstr ""
 
-#: base/templates/base/verify_prompt.html:11
+#: base/templates/base/verify_prompt.html:17
 msgid ""
 "We have sent a confirmation link to your email. Please click the link to "
 "activate your account."
 msgstr ""
 
-#: base/templates/base/verify_prompt.html:15
-msgid "Resend email"
+#: base/templates/base/verify_prompt.html:24
+#, python-format
+msgid "Email: %(e)s"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:31
+msgid "Back to main page"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
 msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
@@ -2276,7 +2254,7 @@ msgstr ""
 msgid "Incorrect code."
 msgstr ""
 
-#: base/views/auth_reset_views.py:141 base/views/auth_views.py:52
+#: base/views/auth_reset_views.py:141 base/views/auth_views.py:53
 msgid "Passwords don't match."
 msgstr ""
 
@@ -2284,55 +2262,55 @@ msgstr ""
 msgid "Password has been reset. You can sign in now."
 msgstr ""
 
-#: base/views/auth_views.py:50
+#: base/views/auth_views.py:51
 msgid "Please fill in all fields."
 msgstr ""
 
-#: base/views/auth_views.py:54
+#: base/views/auth_views.py:55
 msgid "A user with that username already exists."
 msgstr ""
 
-#: base/views/auth_views.py:56 base/views/profile_views.py:153
+#: base/views/auth_views.py:57 base/views/profile_views.py:153
 msgid "This email is already registered."
 msgstr ""
 
-#: base/views/auth_views.py:92 base/views/auth_views.py:335
+#: base/views/auth_views.py:103 base/views/auth_views.py:365
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr ""
 
-#: base/views/auth_views.py:115 base/views/auth_views.py:349
+#: base/views/auth_views.py:133 base/views/auth_views.py:379
 msgid "Invalid username or password."
 msgstr ""
 
-#: base/views/auth_views.py:147
+#: base/views/auth_views.py:177
 msgid "A verification email has been sent. Please confirm your account."
 msgstr ""
 
-#: base/views/auth_views.py:171
+#: base/views/auth_views.py:201
 msgid "Email verification failed or token is invalid."
 msgstr ""
 
-#: base/views/auth_views.py:192
+#: base/views/auth_views.py:222
 msgid "Enter phone number."
 msgstr ""
 
-#: base/views/auth_views.py:198
+#: base/views/auth_views.py:228
 msgid "Failed to initiate call."
 msgstr ""
 
-#: base/views/auth_views.py:223
+#: base/views/auth_views.py:253
 msgid "No phone number set."
 msgstr ""
 
-#: base/views/auth_views.py:232 base/views/auth_views.py:235
+#: base/views/auth_views.py:262 base/views/auth_views.py:265
 msgid "Provider error"
 msgstr ""
 
-#: base/views/auth_views.py:272
+#: base/views/auth_views.py:302
 msgid "Please accept all items."
 msgstr ""
 
-#: base/views/auth_views.py:318
+#: base/views/auth_views.py:348
 msgid "You are already signed in."
 msgstr ""
 
