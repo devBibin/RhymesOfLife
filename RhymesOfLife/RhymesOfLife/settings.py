@@ -57,6 +57,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+
 ONBOARDING_REQUIRE_CONSENTS = True
 ONBOARDING_REQUIRE_PHONE = True
 ONBOARDING_SKIP_FOR_STAFF = True
