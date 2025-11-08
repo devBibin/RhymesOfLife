@@ -1,16 +1,69 @@
 {% extends 'base.html' %}
 {% load static i18n avatar_tags %}
 
-{% block extra_css %}{% endblock %}
+{% block extra_css %}
+<style>
+  .profile-wrap{max-width:760px;margin:0 auto}
+  .card-profile{
+    border:none;border-radius:1rem;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 24px rgba(0,0,0,.08)
+  }
+  .profile-avatar{
+    width:clamp(96px,18vw,140px);
+    height:clamp(96px,18vw,140px);
+    object-fit:cover;border-radius:50%;
+    border:3px solid rgba(var(--bs-primary-rgb),.4);
+    box-shadow:0 0 12px rgba(var(--bs-primary-rgb),.2)
+  }
+  .profile-name{
+    font-weight:700;
+    font-size:clamp(1.125rem,2.2vw,1.5rem);
+    line-height:1.2;
+    overflow-wrap:anywhere
+  }
+  .profile-username{
+    color:var(--bs-secondary);
+    font-size:.95rem;
+    overflow:hidden;text-overflow:ellipsis
+  }
+  .profile-section{
+    border-top:1px solid rgba(0,0,0,.06);
+    margin-top:1rem;padding-top:1rem
+  }
+  .badge-cloud{
+    background:#f8f9fa;border:1px solid rgba(0,0,0,.08);
+    color:#212529;border-radius:2rem;padding:.35rem .7rem;
+    font-size:.85rem
+  }
+  .badges-flow{
+    display:flex;flex-wrap:wrap;gap:.5rem
+  }
+  .kv{
+    display:flex;flex-direction:column;gap:.25rem
+  }
+  .kv strong{font-weight:600}
+  .content-safe{
+    overflow-wrap:anywhere;word-break:break-word
+  }
+  .btn-responsive{min-width:180px}
+  @media (max-width: 576px){
+    .card-profile{border-radius:.875rem}
+    .btn-responsive{width:100%}
+    .mx-limit{max-width:100%}
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="card shadow-sm card-profile">
+<div class="container py-4 py-md-5 profile-wrap">
+  <div class="card card-profile p-3 p-md-4">
     <div class="card-body text-center">
-      <img src="{% avatar_url info %}" class="rounded-circle profile-avatar mb-3" style="width:120px;height:120px;" alt="{% trans 'User avatar' %}">
+      <img src="{% avatar_url info %}" class="profile-avatar mb-3" alt="{% trans 'User avatar' %}">
 
       {% with fn=info.first_name ln=info.last_name ufn=user_profile.first_name uln=user_profile.last_name %}
-        <h4 class="mb-1">
+        <h3 class="profile-name mb-1">
           {% if fn or ln %}
             {{ fn }}{% if fn and ln %} {% endif %}{{ ln }}
           {% elif ufn or uln %}
@@ -18,55 +71,68 @@
           {% else %}
             {{ user_profile.username }}
           {% endif %}
-        </h4>
+        </h3>
       {% endwith %}
 
-      <div class="text-muted">@{{ user_profile.username }}</div>
+      <div class="profile-username mb-3">@{{ user_profile.username }}</div>
 
-      <div class="row text-start gx-3 gy-3 mt-4">
-        <div class="col-12">
+      <div class="text-start mx-auto mx-limit" style="max-width:640px;">
+        <div class="mb-3">
           <strong class="d-block mb-1">{% trans "About me" %}</strong>
           {% if info.about_me %}
-            <div class="text-break">{{ info.about_me|linebreaksbr }}</div>
+            <div class="content-safe text-break">{{ info.about_me|linebreaksbr }}</div>
           {% else %}
             <div class="text-muted">{% trans "No bio yet." %}</div>
           {% endif %}
         </div>
 
-        <div class="col-6"><strong>{% trans "Email" %}:</strong> {{ info.email|default:user_profile.email }}</div>
-        <div class="col-6"><strong>{% trans "Date of birth" %}:</strong> {{ info.birth_date|date:"d.m.Y"|default:"—" }}</div>
+        <div class="row g-3 g-md-4">
+          <div class="col-12 col-md-6 kv">
+            <strong>{% trans "Email" %}</strong>
+            <div class="content-safe">{{ info.email|default:user_profile.email }}</div>
+          </div>
 
-        <div class="col-6">
-          <strong>{% trans "Telegram" %}:</strong>
-          {% if tg_is_verified %}
-            <span class="badge bg-success">{% trans "Linked" %}</span>
-            {% if tg_username %}<span class="ms-2">@{{ tg_username }}</span>{% endif %}
-          {% else %}
-            <span class="badge bg-secondary">{% trans "Not linked" %}</span>
-          {% endif %}
-        </div>
+          <div class="col-12 col-md-6 kv">
+            <strong>{% trans "Date of birth" %}</strong>
+            <div>{{ info.birth_date|date:"d.m.Y"|default:"—" }}</div>
+          </div>
 
-        <div class="col-12">
-          <strong class="d-block mb-1">{% trans "Syndromes" %}</strong>
-          {% if info.syndromes %}
-            {% for code,label in syndrome_choices %}
-              {% if code in info.syndromes %}
-                <span class="badge bg-secondary text-dark me-1 mb-1">{{ label }}</span>
+          <div class="col-12 col-md-6 kv">
+            <strong>{% trans "Telegram" %}</strong>
+            <div class="d-flex align-items-center flex-wrap gap-2">
+              {% if tg_is_verified %}
+                <span class="badge text-bg-success rounded-pill">{% trans "Linked" %}</span>
+                {% if tg_username %}<span class="content-safe">@{{ tg_username }}</span>{% endif %}
+              {% else %}
+                <span class="badge text-bg-secondary rounded-pill">{% trans "Not linked" %}</span>
               {% endif %}
-            {% endfor %}
-          {% else %}
-            <span>—</span>
-          {% endif %}
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {% if editable %}
-        <div class="mt-4">
-          <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">
-            <i class="bi bi-pencil-fill me-1"></i> {% trans "Edit" %}
+          <div class="col-12 profile-section">
+            <strong class="d-block mb-2">{% trans "Syndromes" %}</strong>
+            {% if info.syndromes %}
+              <div class="badges-flow">
+                {% for code,label in syndrome_choices %}
+                  {% if code in info.syndromes %}
+                    <span class="badge-cloud">{{ label }}</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if editable %}
+        <div class="text-center mt-4">
+          <a href="{% url 'profile_edit' %}" class="btn btn-primary btn-responsive">
+            <i class="bi bi-pencil-fill me-1"></i> {% trans "Edit profile" %}
           </a>
         </div>
-      {% endif %}
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

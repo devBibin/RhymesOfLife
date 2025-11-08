@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 16:51+0000\n"
+"POT-Creation-Date: 2025-11-08 23:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,239 +132,236 @@ msgstr ""
 msgid "Complete onboarding."
 msgstr ""
 
-#: base/models.py:69
+#: base/models.py:81
 msgid "Undifferentiated connective tissue dysplasia"
 msgstr ""
 
-#: base/models.py:70
+#: base/models.py:82
 msgid "Ehlers–Danlos syndrome"
 msgstr ""
 
-#: base/models.py:71
+#: base/models.py:83
 msgid "Marfan syndrome"
 msgstr ""
 
-#: base/models.py:85
+#: base/models.py:97
 #, python-format
 msgid "Invalid syndrome codes: %(codes)s"
 msgstr ""
 
-#: base/models.py:151
+#: base/models.py:163
 msgid "Pre-moderation enabled"
 msgstr ""
 
-#: base/models.py:152
+#: base/models.py:164
 msgid "Banned"
 msgstr ""
 
-#: base/models.py:153
+#: base/models.py:165
 msgid "Ban reason"
 msgstr ""
 
-#: base/models.py:154
+#: base/models.py:166
 msgid "Banned at"
 msgstr ""
 
-#: base/models.py:157
+#: base/models.py:169
 msgid "Banned by"
 msgstr ""
 
-#: base/models.py:170
+#: base/models.py:182
 msgid "Can view patient list"
 msgstr ""
 
-#: base/models.py:178
+#: base/models.py:190
 msgid "Confirmed codes must be a subset of syndromes."
 msgstr ""
 
-#: base/models.py:258
+#: base/models.py:271
 msgid "Can view patient exams"
 msgstr ""
 
-#: base/models.py:259
+#: base/models.py:272
 msgid "Can create and edit patient exams"
 msgstr ""
 
-#: base/models.py:278
+#: base/models.py:291
 msgid "Either a file or an external link is required."
 msgstr ""
 
-#: base/models.py:328
+#: base/models.py:341
 msgid "Can send notifications"
 msgstr ""
 
-#: base/models.py:366
+#: base/models.py:381
 msgid "Can comment exams"
 msgstr ""
 
-#: base/models.py:367
+#: base/models.py:382
 msgid "Can moderate exam comments"
 msgstr ""
 
-#: base/models.py:387
+#: base/models.py:404
 msgid "Can view recommendations"
 msgstr ""
 
-#: base/models.py:388
+#: base/models.py:405
 msgid "Can write recommendations"
 msgstr ""
 
-#: base/models.py:404 blog/models.py:122
+#: base/models.py:423 blog/models.py:135
 msgid "Author"
 msgstr ""
 
-#: base/models.py:406 base/models.py:479
-#: base/templates/base/post_create.html:15
-#: base/templates/base/post_edit.html:18 blog/models.py:250
+#: base/models.py:425 base/models.py:498
+#: base/templates/base/post_create.html:27
+#: base/templates/base/post_edit.html:36 blog/models.py:263
 msgid "Text"
 msgstr ""
 
-#: base/models.py:407
+#: base/models.py:426
 msgid "Hidden by author"
 msgstr ""
 
-#: base/models.py:408 base/models.py:482 blog/models.py:136 blog/models.py:253
+#: base/models.py:427 base/models.py:501 blog/models.py:149 blog/models.py:266
 msgid "Soft-deleted"
 msgstr ""
 
-#: base/models.py:410 blog/models.py:140
+#: base/models.py:429 blog/models.py:153
 msgid "Approved by admin"
 msgstr ""
 
-#: base/models.py:411 blog/models.py:141
+#: base/models.py:430 blog/models.py:154
 msgid "Approved at"
 msgstr ""
 
-#: base/models.py:413 blog/models.py:144
+#: base/models.py:432 blog/models.py:157
 msgid "Approved by"
 msgstr ""
 
-#: base/models.py:416 blog/models.py:137
+#: base/models.py:435 blog/models.py:150
 msgid "Likes count"
 msgstr ""
 
-#: base/models.py:417 blog/models.py:138
+#: base/models.py:436 blog/models.py:151
 msgid "Comments count"
 msgstr ""
 
-#: base/models.py:419 base/models.py:480 blog/models.py:251
+#: base/models.py:438 base/models.py:499 blog/models.py:264
 msgid "Created at"
 msgstr ""
 
-#: base/models.py:420
+#: base/models.py:439
 msgid "Updated at"
 msgstr ""
 
-#: base/models.py:422 base/templates/base/post_cards.html:55
+#: base/models.py:441 base/templates/base/post_cards.html:55
 msgid "Hidden by reports"
 msgstr ""
 
-#: base/models.py:423
+#: base/models.py:442
 msgid "Reports count"
 msgstr ""
 
-#: base/models.py:427 base/models.py:452
+#: base/models.py:446 base/models.py:471
 msgid "Post"
 msgstr ""
 
-#: base/models.py:428 base/templates/base/feed.html:68
+#: base/models.py:447 base/templates/base/feed.html:15
+#: base/templates/base/feed.html:61
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr ""
 
-#: base/models.py:453
+#: base/models.py:472
 msgid "Image"
 msgstr ""
 
-#: base/models.py:457
+#: base/models.py:476
 msgid "Post image"
 msgstr ""
 
-#: base/models.py:458
+#: base/models.py:477
 msgid "Post images"
 msgstr ""
 
-#: base/models.py:469
+#: base/models.py:488
 msgid "Post like"
 msgstr ""
 
-#: base/models.py:470
+#: base/models.py:489
 msgid "Post likes"
 msgstr ""
 
-#: base/models.py:481 blog/models.py:252
+#: base/models.py:500 blog/models.py:265
 msgid "Edited at"
 msgstr ""
 
-#: base/models.py:486
+#: base/models.py:505
 msgid "Post comment"
 msgstr ""
 
-#: base/models.py:487
+#: base/models.py:506
 msgid "Post comments"
 msgstr ""
 
-#: base/models.py:490 blog/models.py:262
-msgid "🗑 Deleted comment"
-msgstr ""
-
-#: base/models.py:494
+#: base/models.py:513
 msgid "name"
 msgstr ""
 
-#: base/models.py:495
+#: base/models.py:514
 msgid "email"
 msgstr ""
 
-#: base/models.py:496
+#: base/models.py:515
 msgid "telegram"
 msgstr ""
 
-#: base/models.py:497
+#: base/models.py:516
 msgid "message"
 msgstr ""
 
-#: base/models.py:498
+#: base/models.py:517
 msgid "created at"
 msgstr ""
 
-#: base/models.py:500
+#: base/models.py:519
 msgid "processed"
 msgstr ""
 
-#: base/models.py:501
+#: base/models.py:520
 msgid "processed at"
 msgstr ""
 
-#: base/models.py:507
+#: base/models.py:526
 msgid "help request"
 msgstr ""
 
-#: base/models.py:508
+#: base/models.py:527
 msgid "help requests"
 msgstr ""
 
-#: base/models.py:511
+#: base/models.py:530
 msgid "Can view help requests"
 msgstr ""
 
-#: base/models.py:512
+#: base/models.py:531
 msgid "Can process help requests"
 msgstr ""
 
-#: base/models.py:533 base/templates/base/partials/health_wellness.html:91
+#: base/models.py:552 base/templates/base/partials/health_wellness.html:133
 msgid "Never"
 msgstr ""
 
-#: base/models.py:534 base/templates/base/partials/health_wellness.html:92
+#: base/models.py:553 base/templates/base/partials/health_wellness.html:134
 msgid "Every day"
 msgstr ""
 
-#: base/models.py:535 base/templates/base/partials/health_wellness.html:93
+#: base/models.py:554 base/templates/base/partials/health_wellness.html:135
 msgid "Every 3 days"
 msgstr ""
 
-#: base/models.py:536 base/templates/base/partials/health_wellness.html:94
+#: base/models.py:555 base/templates/base/partials/health_wellness.html:136
 msgid "Every 7 days"
 msgstr ""
 
@@ -387,7 +384,7 @@ msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
 #: base/templates/base/info/auth_combined.html:34
-#: base/templates/base/profile.html:36 base/templates/base/profile_edit.html:50
+#: base/templates/base/profile.html:91 base/templates/base/profile_edit.html:91
 #: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:52
 #: base/templates/base/staff_help_requests.html:92
@@ -509,13 +506,14 @@ msgstr ""
 
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:16
-#: base/templates/base/post_cards.html:153
+#: base/templates/base/post_cards.html:161
 #: blog/templates/blog/blog_page.html:175
 msgid "Send"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:67
-#: base/templates/base/post_edit.html:63 blog/templates/blog/blog_page.html:222
+#: base/templates/base/post_create.html:52
+#: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:222
 msgid "Cancel"
 msgstr ""
 
@@ -558,7 +556,8 @@ msgid "edited"
 msgstr ""
 
 #: base/templates/base/comment_items.html:16
-#: base/templates/base/profile_edit.html:20
+#: base/templates/base/partials/health_documents.html:192
+#: base/templates/base/profile_edit.html:61
 #: blog/templates/blog/blog_page.html:133
 #: blog/templates/blog/blog_page.html:198
 #: blog/templates/blog/edit_article.html:88
@@ -574,7 +573,7 @@ msgid "Email verified."
 msgstr ""
 
 #: base/templates/base/connect_telegram.html:19
-#: base/templates/base/profile_edit.html:130
+#: base/templates/base/profile_edit.html:171
 msgid "Telegram bot is not configured."
 msgstr ""
 
@@ -680,7 +679,7 @@ msgstr ""
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:111
+#: base/templates/base/partials/health_wellness.html:153
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
 #: blog/templates/blog/blog_page.html:215
@@ -1190,29 +1189,33 @@ msgstr ""
 msgid "Get code by call"
 msgstr ""
 
-#: base/templates/base/feed.html:4
-msgid "Feed"
-msgstr ""
-
-#: base/templates/base/feed.html:70 base/templates/base/feed.html:110
-#: base/templates/base/post_create.html:3
-msgid "New post"
-msgstr ""
-
-#: base/templates/base/feed.html:77 base/templates/base/feed.html:78
+#: base/templates/base/feed.html:7 base/templates/base/feed.html:53
+#: base/templates/base/feed.html:73 base/templates/base/feed.html:75
+#: base/templates/base/feed.html:76
 msgid "My posts"
 msgstr ""
 
-#: base/templates/base/feed.html:82 base/templates/base/feed.html:83
+#: base/templates/base/feed.html:9 base/templates/base/feed.html:55
+#: base/templates/base/feed.html:80 base/templates/base/feed.html:82
+#: base/templates/base/feed.html:83
 msgid "Subscriptions"
 msgstr ""
 
-#: base/templates/base/feed.html:87 base/templates/base/feed.html:88
+#: base/templates/base/feed.html:11 base/templates/base/feed.html:57
+#: base/templates/base/feed.html:87 base/templates/base/feed.html:89
+#: base/templates/base/feed.html:90
 msgid "Latest"
 msgstr ""
 
-#: base/templates/base/feed.html:93 base/templates/base/feed.html:94
+#: base/templates/base/feed.html:13 base/templates/base/feed.html:59
+#: base/templates/base/feed.html:95 base/templates/base/feed.html:97
+#: base/templates/base/feed.html:98
 msgid "Pending approval"
+msgstr ""
+
+#: base/templates/base/feed.html:65 base/templates/base/feed.html:66
+#: base/templates/base/feed.html:114 base/templates/base/post_create.html:3
+msgid "New post"
 msgstr ""
 
 #: base/templates/base/help_request.html:10
@@ -1234,8 +1237,9 @@ msgstr ""
 msgid "Your account username will be attached to the request."
 msgstr ""
 
-#: base/templates/base/help_request.html:37 base/templates/base/profile.html:40
-#: base/templates/base/profile_edit.html:119
+#: base/templates/base/help_request.html:37
+#: base/templates/base/profile.html:101
+#: base/templates/base/profile_edit.html:163
 #: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr ""
@@ -1360,6 +1364,7 @@ msgstr ""
 
 #: base/templates/base/includes/profile_header.html:40
 #: base/templates/base/includes/profile_header.html:51
+#: base/templates/base/profile.html:131
 msgid "Edit profile"
 msgstr ""
 
@@ -1378,7 +1383,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: base/templates/base/includes/profile_header.html:82
-#: base/templates/base/profile.html:32
+#: base/templates/base/profile.html:85
 msgid "No bio yet."
 msgstr ""
 
@@ -1422,87 +1427,99 @@ msgstr ""
 msgid "Already have an account?"
 msgstr ""
 
-#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:51
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:35
 #: templates/base.html:69
 msgid "My health"
 msgstr ""
 
-#: base/templates/base/my_health.html:65 base/templates/base/my_health.html:66
-#: base/templates/base/my_health.html:67 base/templates/base/my_health.html:137
+#: base/templates/base/my_health.html:40 base/templates/base/my_health.html:41
+#: base/templates/base/my_health.html:91
 #: base/templates/base/patient_wellness.html:40
 #: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr ""
 
-#: base/templates/base/my_health.html:80 base/templates/base/my_health.html:81
-#: base/templates/base/my_health.html:82
+#: base/templates/base/my_health.html:45 base/templates/base/my_health.html:46
 msgid "Examinations"
 msgstr ""
 
-#: base/templates/base/my_health.html:95 base/templates/base/my_health.html:96
-#: base/templates/base/my_health.html:97
+#: base/templates/base/my_health.html:50 base/templates/base/my_health.html:51
 #: base/templates/base/partials/health_recommendations.html:3
 msgid "Doctor's comments"
 msgstr ""
 
-#: base/templates/base/my_health.html:136
+#: base/templates/base/my_health.html:90
 msgid "Failed to load. Please try again."
 msgstr ""
 
-#: base/templates/base/my_health.html:138
+#: base/templates/base/my_health.html:92
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr ""
 
-#: base/templates/base/my_health.html:139
+#: base/templates/base/my_health.html:93
 msgid "Paste link"
 msgstr ""
 
-#: base/templates/base/my_health.html:140
+#: base/templates/base/my_health.html:94
 msgid "Remove link"
 msgstr ""
 
-#: base/templates/base/my_health.html:141
+#: base/templates/base/my_health.html:95
 msgid "Remove file"
 msgstr ""
 
-#: base/templates/base/my_health.html:142
+#: base/templates/base/my_health.html:96
 msgid "Please specify the exam date."
 msgstr ""
 
-#: base/templates/base/my_health.html:143 base/views/wellness_views.py:85
+#: base/templates/base/my_health.html:97 base/views/wellness_views.py:85
 msgid "Failed to save."
 msgstr ""
 
-#: base/templates/base/my_health.html:144
+#: base/templates/base/my_health.html:98
 msgid "Network error."
 msgstr ""
 
-#: base/templates/base/my_health.html:145
+#: base/templates/base/my_health.html:99
 msgid "Unable to load data."
 msgstr ""
 
-#: base/templates/base/my_health.html:146
+#: base/templates/base/my_health.html:100
 msgid "Delete this exam?"
 msgstr ""
 
-#: base/templates/base/my_health.html:147
+#: base/templates/base/my_health.html:101
 msgid "Deletion failed."
 msgstr ""
 
-#: base/templates/base/my_health.html:148
+#: base/templates/base/my_health.html:102
 msgid "Delete this file?"
 msgstr ""
 
-#: base/templates/base/my_health.html:149
+#: base/templates/base/my_health.html:103
 #, python-format
 msgid "Unsupported file type: %%(name)s"
 msgstr ""
 
+#: base/templates/base/my_health.html:104
+#, python-format
+msgid "File is too large (max %%(size)s MB): %%(name)s"
+msgstr ""
+
+#: base/templates/base/my_health.html:105
+msgid "This file is already in the list."
+msgstr ""
+
+#: base/templates/base/my_health.html:106
+msgid "Note"
+msgstr ""
+
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:22
-#: base/templates/base/partials/health_wellness.html:83 templates/base.html:100
+#: base/templates/base/partials/health_wellness.html:49
+#: base/templates/base/partials/health_wellness.html:125
+#: templates/base.html:100
 msgid "Notifications"
 msgstr ""
 
@@ -1530,64 +1547,74 @@ msgstr ""
 msgid "No notifications"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:10
+#: base/templates/base/partials/health_documents.html:88
 msgid "My examinations"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:15
+#: base/templates/base/partials/health_documents.html:94
 msgid "Add examination"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:21
+#: base/templates/base/partials/health_documents.html:103
 msgid "Examination date"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:25
+#: base/templates/base/partials/health_documents.html:107
 msgid "Description"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:26
+#: base/templates/base/partials/health_documents.html:108
 msgid "Short description (optional)"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:29
+#: base/templates/base/partials/health_documents.html:114
 msgid "Files"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:31
-msgid "Drag files here or click"
+#: base/templates/base/partials/health_documents.html:123
+msgid "Drag & drop files here"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:36
+#: base/templates/base/partials/health_documents.html:124
+msgid "or click to choose"
+msgstr ""
+
+#: base/templates/base/partials/health_documents.html:142
 msgid "Links (optional)"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:37
+#: base/templates/base/partials/health_documents.html:150
 msgid "Paste a shared link (Google/Dropbox/Yandex/etc.)"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:39
+#: base/templates/base/partials/health_documents.html:155
 msgid "Add another link"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:40
+#: base/templates/base/partials/health_documents.html:159
 msgid ""
 "You can attach links instead of files or together with them. HTTP/HTTPS only."
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:44
-#: base/templates/base/partials/health_wellness.html:59
-#: base/templates/base/partials/health_wellness.html:112
-#: base/templates/base/profile_edit.html:155
+#: base/templates/base/partials/health_documents.html:166
+#: base/templates/base/partials/health_wellness.html:94
+#: base/templates/base/partials/health_wellness.html:154
 msgid "Save"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:74
+#: base/templates/base/partials/health_documents.html:189
+#: base/templates/base/post_cards.html:93
+#: blog/templates/blog/blog_page.html:130
+#: blog/templates/blog/blog_page.html:197
+msgid "Edit"
+msgstr ""
+
+#: base/templates/base/partials/health_documents.html:218
 #: base/templates/base/patient_exams.html:66
 msgid "No documents"
 msgstr ""
 
-#: base/templates/base/partials/health_documents.html:79
+#: base/templates/base/partials/health_documents.html:223
 msgid "No examinations yet."
 msgstr ""
 
@@ -1601,7 +1628,7 @@ msgstr ""
 #: base/templates/base/patients_list.html:99
 #: base/templates/base/patients_list.html:100
 #: base/templates/base/patients_list.html:105
-#: base/templates/base/post_edit.html:10
+#: base/templates/base/post_edit.html:27
 msgid "Back"
 msgstr ""
 
@@ -1622,59 +1649,79 @@ msgstr ""
 msgid "No recommendations yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:21
+#: base/templates/base/partials/health_wellness.html:47
 msgid "My wellness"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:31
+#: base/templates/base/partials/health_wellness.html:56
+msgid "New entry"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:63
 msgid "Score (1-10)"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:54
+#: base/templates/base/partials/health_wellness.html:82
+msgid "Choose a number from 1 (worst) to 10 (best)."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:87
 msgid "Comment"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:55
+#: base/templates/base/partials/health_wellness.html:88
 msgid "How do you feel today?"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:67
+#: base/templates/base/partials/health_wellness.html:89
+msgid "Add a short optional comment to remember the context."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:105
 msgid "Trend"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:74
+#: base/templates/base/partials/health_wellness.html:106
+msgid "Last 90 days"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:108
+msgid "Wellness chart"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:115
 #: base/templates/base/patient_wellness.html:15
 msgid "Entries"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:76
+#: base/templates/base/partials/health_wellness.html:117
 #: base/templates/base/patient_wellness.html:26
 msgid "No entries yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:86
+#: base/templates/base/partials/health_wellness.html:128
 msgid ""
 "Choose how often to receive a reminder if you haven't added a wellness entry "
 "for the selected period. One reminder per day will be sent at the time below."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:89
+#: base/templates/base/partials/health_wellness.html:131
 msgid "Reminder frequency"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:96
+#: base/templates/base/partials/health_wellness.html:138
 msgid "Set to Never to fully disable reminders."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:100
+#: base/templates/base/partials/health_wellness.html:142
 msgid "Hour"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:104
+#: base/templates/base/partials/health_wellness.html:146
 msgid "Minute"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:108
+#: base/templates/base/partials/health_wellness.html:150
 msgid "Your local time when the daily reminder may be sent."
 msgstr ""
 
@@ -1743,8 +1790,8 @@ msgstr ""
 msgid "Enter a query to search for patients."
 msgstr ""
 
-#: base/templates/base/post_cards.html:10 base/templates/base/profile.html:10
-#: base/templates/base/profile_edit.html:17
+#: base/templates/base/post_cards.html:10 base/templates/base/profile.html:63
+#: base/templates/base/profile_edit.html:58
 msgid "User avatar"
 msgstr ""
 
@@ -1776,112 +1823,104 @@ msgstr ""
 msgid "More actions"
 msgstr ""
 
-#: base/templates/base/post_cards.html:70
+#: base/templates/base/post_cards.html:72
+#: base/templates/base/post_create.html:51
 #: blog/templates/blog/create_article.html:67
 #: blog/templates/blog/edit_article.html:75
 msgid "Publish"
 msgstr ""
 
-#: base/templates/base/post_cards.html:72 blog/templates/blog/blog_page.html:33
+#: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:33
 #: blog/templates/blog/blog_page.html:223
 msgid "Reject"
 msgstr ""
 
-#: base/templates/base/post_cards.html:79 base/templates/base/post_edit.html:66
+#: base/templates/base/post_cards.html:85 base/templates/base/post_edit.html:93
 msgid "Unhide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:82 base/templates/base/post_edit.html:68
+#: base/templates/base/post_cards.html:90 base/templates/base/post_edit.html:98
 msgid "Hide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:85 base/templates/base/profile.html:66
-#: blog/templates/blog/blog_page.html:130
-#: blog/templates/blog/blog_page.html:197
-msgid "Edit"
-msgstr ""
-
-#: base/templates/base/post_cards.html:90
+#: base/templates/base/post_cards.html:98
 msgid "Copy link"
 msgstr ""
 
-#: base/templates/base/post_cards.html:97
+#: base/templates/base/post_cards.html:105
 msgid "Report"
 msgstr ""
 
-#: base/templates/base/post_cards.html:138
+#: base/templates/base/post_cards.html:146
 #: blog/templates/blog/blog_page.html:154
 msgid "Log in to like"
 msgstr ""
 
-#: base/templates/base/post_cards.html:152
+#: base/templates/base/post_cards.html:160
 msgid "Write a comment..."
 msgstr ""
 
-#: base/templates/base/post_cards.html:170
+#: base/templates/base/post_cards.html:178
 msgid "Show more"
 msgstr ""
 
-#: base/templates/base/post_cards.html:178
+#: base/templates/base/post_cards.html:186
 #: base/templates/base/profile_content_fragment.html:105
 msgid "No posts yet."
 msgstr ""
 
-#: base/templates/base/post_create.html:16
-#: base/templates/base/post_edit.html:19
+#: base/templates/base/post_create.html:28
+#: base/templates/base/post_edit.html:37
 msgid "Write something..."
 msgstr ""
 
-#: base/templates/base/post_create.html:20
+#: base/templates/base/post_create.html:33
 msgid "Images"
 msgstr ""
 
-#: base/templates/base/post_create.html:23
+#: base/templates/base/post_create.html:39
 msgid "Add photo"
 msgstr ""
 
-#: base/templates/base/post_create.html:24
+#: base/templates/base/post_create.html:40
 msgid "Drag & drop or click to upload"
 msgstr ""
 
-#: base/templates/base/post_create.html:26
-#: base/templates/base/post_edit.html:55
+#: base/templates/base/post_create.html:43
+#: base/templates/base/post_edit.html:79
 msgid "Choose files"
 msgstr ""
 
-#: base/templates/base/post_create.html:31
-msgid "Publish for review"
-msgstr ""
-
-#: base/templates/base/post_edit.html:4 base/templates/base/post_edit.html:9
+#: base/templates/base/post_edit.html:4 base/templates/base/post_edit.html:26
 msgid "Edit post"
 msgstr ""
 
-#: base/templates/base/post_edit.html:25
+#: base/templates/base/post_edit.html:43
 msgid "Current images"
 msgstr ""
 
-#: base/templates/base/post_edit.html:26
+#: base/templates/base/post_edit.html:44
 msgid "Click × to mark for removal"
 msgstr ""
 
-#: base/templates/base/post_edit.html:34
+#: base/templates/base/post_edit.html:51
 msgid "Remove"
 msgstr ""
 
-#: base/templates/base/post_edit.html:46
+#: base/templates/base/post_edit.html:63
 msgid "Add images"
 msgstr ""
 
-#: base/templates/base/post_edit.html:51
+#: base/templates/base/post_edit.html:75
 msgid "Upload from device"
 msgstr ""
 
-#: base/templates/base/post_edit.html:52
+#: base/templates/base/post_edit.html:76
 msgid "or drag & drop files here"
 msgstr ""
 
-#: base/templates/base/post_edit.html:62
+#: base/templates/base/post_edit.html:87
+#: base/templates/base/profile_edit.html:193
 msgid "Save changes"
 msgstr ""
 
@@ -1889,24 +1928,26 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: base/templates/base/profile.html:28 base/templates/base/profile_edit.html:85
+#: base/templates/base/profile.html:81
+#: base/templates/base/profile_edit.html:126
 msgid "About me"
 msgstr ""
 
-#: base/templates/base/profile.html:37 base/templates/base/profile_edit.html:55
+#: base/templates/base/profile.html:96 base/templates/base/profile_edit.html:96
 msgid "Date of birth"
 msgstr ""
 
-#: base/templates/base/profile.html:42
-#: base/templates/base/profile_edit.html:122
+#: base/templates/base/profile.html:104
+#: base/templates/base/profile_edit.html:166
 msgid "Linked"
 msgstr ""
 
-#: base/templates/base/profile.html:45
+#: base/templates/base/profile.html:107
 msgid "Not linked"
 msgstr ""
 
-#: base/templates/base/profile.html:50 base/templates/base/profile_edit.html:91
+#: base/templates/base/profile.html:113
+#: base/templates/base/profile_edit.html:133
 msgid "Syndromes"
 msgstr ""
 
@@ -1958,55 +1999,55 @@ msgstr ""
 msgid "No articles yet."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:19
+#: base/templates/base/profile_edit.html:60
 msgid "Upload new"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:41
+#: base/templates/base/profile_edit.html:81
 msgid "First name"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:45
+#: base/templates/base/profile_edit.html:86
 msgid "Last name"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:59
+#: base/templates/base/profile_edit.html:100
 msgid "Day"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:67
+#: base/templates/base/profile_edit.html:108
 msgid "Month"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:75
+#: base/templates/base/profile_edit.html:116
 msgid "Year"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:86
+#: base/templates/base/profile_edit.html:127
 msgid "A few words about yourself"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:87
+#: base/templates/base/profile_edit.html:128
 msgid "Up to 250 characters."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:110
+#: base/templates/base/profile_edit.html:152
 msgid "Genetically confirmed"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:126
+#: base/templates/base/profile_edit.html:168
 msgid "Unlink Telegram"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:134
+#: base/templates/base/profile_edit.html:174
 msgid "Link Telegram"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:137
+#: base/templates/base/profile_edit.html:176
 msgid "Activation link is not available."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:141
+#: base/templates/base/profile_edit.html:178
 msgid "Generate new link"
 msgstr ""
 
@@ -2360,11 +2401,23 @@ msgstr ""
 msgid "%(msg)s"
 msgstr ""
 
-#: base/views/feed_views.py:150
+#: base/views/feed_views.py:168
 msgid "Post must contain text or an image."
 msgstr ""
 
-#: base/views/feed_views.py:213
+#: base/views/feed_views.py:193
+msgid "Your post is under review. It will appear after approval."
+msgstr ""
+
+#: base/views/feed_views.py:193
+msgid "Post published."
+msgstr ""
+
+#: base/views/feed_views.py:242
+msgid "Post updated."
+msgstr ""
+
+#: base/views/feed_views.py:256
 msgid "You cannot report your own post."
 msgstr ""
 
@@ -2509,54 +2562,54 @@ msgstr ""
 msgid "Failed to save settings."
 msgstr ""
 
-#: blog/models.py:26
+#: blog/models.py:39
 msgid "Intro"
 msgstr ""
 
-#: blog/models.py:115
+#: blog/models.py:128
 msgid "Publication date"
 msgstr ""
 
-#: blog/models.py:124 blog/templates/blog/create_article.html:23
+#: blog/models.py:137 blog/templates/blog/create_article.html:23
 #: blog/templates/blog/edit_article.html:26
 msgid "Short description"
 msgstr ""
 
-#: blog/models.py:131 blog/templates/blog/create_article.html:28
+#: blog/models.py:144 blog/templates/blog/create_article.html:28
 #: blog/templates/blog/edit_article.html:31
 msgid "Main image"
 msgstr ""
 
-#: blog/models.py:133 blog/templates/blog/create_article.html:33
+#: blog/models.py:146 blog/templates/blog/create_article.html:33
 #: blog/templates/blog/edit_article.html:46
 msgid "Article content"
 msgstr ""
 
-#: blog/models.py:147
+#: blog/models.py:160
 msgid "Rejected by admin"
 msgstr ""
 
-#: blog/models.py:148
+#: blog/models.py:161
 msgid "Rejected at"
 msgstr ""
 
-#: blog/models.py:151
+#: blog/models.py:164
 msgid "Rejected by"
 msgstr ""
 
-#: blog/models.py:240
+#: blog/models.py:253
 msgid "Article like"
 msgstr ""
 
-#: blog/models.py:241
+#: blog/models.py:254
 msgid "Article likes"
 msgstr ""
 
-#: blog/models.py:257
+#: blog/models.py:270
 msgid "Article comment"
 msgstr ""
 
-#: blog/models.py:258
+#: blog/models.py:271
 msgid "Article comments"
 msgstr ""
 

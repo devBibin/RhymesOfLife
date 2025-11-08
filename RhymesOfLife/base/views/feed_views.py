@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
@@ -84,6 +84,23 @@ def _feed_queryset(request):
     return f, qs
 
 
+def _render_post_list_fragment(request, context):
+    html = render_to_string("base/post_list_fragment.html", context, request=request)
+    return html
+
+
+def _render_single_post_card(request, post, liked_ids=None, following_user_ids=None, current_filter="latest"):
+    ctx = {
+        "posts": [post],
+        "liked_ids": liked_ids or [],
+        "following_user_ids": list(following_user_ids or []),
+        "current_filter": current_filter,
+        "FIRST_COMMENTS_LIMIT": FIRST_COMMENTS_LIMIT,
+        "report_threshold": _report_threshold(),
+    }
+    return render_to_string("base/post_cards.html", ctx, request=request)
+
+
 @login_required
 def feed(request):
     if not request.user.is_authenticated:
@@ -127,7 +144,7 @@ def feed(request):
     }
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("base/post_list_fragment.html", context, request=request)
+        html = _render_post_list_fragment(request, context)
         return JsonResponse({"html": html})
 
     return render(request, "base/feed.html", context)
@@ -139,6 +156,7 @@ def feed(request):
 @transaction.atomic
 def create_post(request):
     if request.method != "POST":
+        # supports ajax modal/form fetch if needed later
         return render(request, "base/post_create.html")
 
     me = AdditionalUserInfo.objects.get(user=request.user)
@@ -148,7 +166,10 @@ def create_post(request):
     errors = _validate_images(files)
     if not text and not files:
         errors.append(_("Post must contain text or an image."))
+
     if errors:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"ok": False, "errors": errors}, status=400)
         return render(request, "base/post_create.html", {"errors": errors, "text": text})
 
     auto = _can_moderate(request.user) or not me.censorship_enabled
@@ -163,12 +184,22 @@ def create_post(request):
     for f in files:
         PostImage.objects.create(post=post, image=f)
 
-    return redirect("home")
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        liked_ids = []
+        following_user_ids = set(me.following.filter(is_active=True).values_list("following__user_id", flat=True))
+        card_html = _render_single_post_card(
+            request, post, liked_ids=liked_ids, following_user_ids=following_user_ids, current_filter="mine"
+        )
+        msg = _("Your post is under review. It will appear after approval.") if not auto else _("Post published.")
+        return JsonResponse({"ok": True, "approved": bool(auto), "html": card_html, "message": msg})
+
+    return render(request, "base/post_create.html", {"created": True})
 
 
 @login_required
 @require_http_methods(["GET", "POST"])
 @csrf_protect
+@transaction.atomic
 def edit_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = _me(request)
@@ -181,6 +212,8 @@ def edit_post(request, post_id: int):
         remove_ids = request.POST.getlist("remove")
         errors = _validate_images(files)
         if errors:
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"ok": False, "errors": errors}, status=400)
             return render(request, "base/post_edit.html", {"post": post, "errors": errors, "text": text})
 
         post.text = text
@@ -198,7 +231,17 @@ def edit_post(request, post_id: int):
         for f in files:
             PostImage.objects.create(post=post, image=f)
 
-        return redirect("home")
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            liked_ids = list(
+                PostLike.objects.filter(post=post, is_active=True, author=me).values_list("post_id", flat=True)
+            )
+            following_user_ids = set(me.following.filter(is_active=True).values_list("following__user_id", flat=True))
+            html = _render_single_post_card(
+                request, post, liked_ids=liked_ids, following_user_ids=following_user_ids
+            )
+            return JsonResponse({"ok": True, "html": html, "post_id": post.id, "message": _("Post updated.")})
+
+        return render(request, "base/post_edit.html", {"post": post})
 
     return render(request, "base/post_edit.html", {"post": post})
 
@@ -234,6 +277,7 @@ def report_post(request, post_id: int):
 
 
 @login_required
+@require_POST
 def hide_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = _me(request)
@@ -241,10 +285,13 @@ def hide_post(request, post_id: int):
         return HttpResponseForbidden()
     post.is_hidden = True
     post.save(update_fields=["is_hidden"])
-    return redirect("home")
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"ok": True, "post_id": post.id})
+    return JsonResponse({"ok": True})
 
 
 @login_required
+@require_POST
 def unhide_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     me = _me(request)
@@ -252,7 +299,12 @@ def unhide_post(request, post_id: int):
         return HttpResponseForbidden()
     post.is_hidden = False
     post.save(update_fields=["is_hidden"])
-    return redirect("home")
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        liked_ids = []
+        following_user_ids = set()
+        html = _render_single_post_card(request, post, liked_ids, following_user_ids)
+        return JsonResponse({"ok": True, "post_id": post.id, "html": html})
+    return JsonResponse({"ok": True})
 
 
 @login_required
@@ -358,7 +410,7 @@ def approve_post(request, post_id: int):
     post.approved_at = timezone.now()
     post.approved_by = request.user
     post.save(update_fields=["is_approved", "approved_at", "approved_by"])
-    return redirect("home")
+    return JsonResponse({"ok": True, "post_id": post.id})
 
 
 @login_required
@@ -368,4 +420,4 @@ def reject_post(request, post_id: int):
     post = get_object_or_404(Post, pk=post_id, is_deleted=False)
     post.is_deleted = True
     post.save(update_fields=["is_deleted"])
-    return redirect("home")
+    return JsonResponse({"ok": True, "post_id": post.id})

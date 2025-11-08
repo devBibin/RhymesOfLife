@@ -15,6 +15,7 @@ function ajaxLoad(params) {
       if (typeof window.initCommentForms === 'function') window.initCommentForms();
       attachPagination();
       if (history && history.replaceState) history.replaceState(null, '', url.toString());
+      document.dispatchEvent(new CustomEvent('feed:reloaded'));
     })
     .catch((e) => console.error(e));
 }
@@ -46,7 +47,6 @@ function attachPagination() {
     });
   });
 }
-
 
 function getCSRF(scopeEl) {
   const local = scopeEl && scopeEl.querySelector ? scopeEl.querySelector('[name=csrfmiddlewaretoken]') : null;
@@ -90,9 +90,49 @@ function bindModerationSwitch() {
   });
 }
 
+function toast(msg, type='info') {
+  let box = document.getElementById('toast-box');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'toast-box';
+    box.style.position = 'fixed';
+    box.style.right = '16px';
+    box.style.bottom = '16px';
+    box.style.zIndex = '2000';
+    document.body.appendChild(box);
+  }
+  const el = document.createElement('div');
+  el.className = `alert alert-${type} shadow-sm mt-2`;
+  el.role = 'alert';
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   attachTabs();
   attachPagination();
   if (typeof window.initCommentForms === 'function') window.initCommentForms();
   bindModerationSwitch();
+
+  document.addEventListener('follow:changed', () => {
+    const f = document.getElementById('current-filter').value;
+    if (f === 'subscriptions') ajaxLoad({ filter: f, page: 1 });
+  });
+
+  document.addEventListener('post:updated', (e) => {
+    const f = document.getElementById('current-filter').value;
+    if (['mine','latest','pending','subscriptions'].includes(f)) {
+      ajaxLoad({ filter: f, page: 1 });
+    }
+    if (e.detail && e.detail.message) toast(e.detail.message, 'success');
+  });
+
+  document.addEventListener('post:created', (e) => {
+    const f = document.getElementById('current-filter').value;
+    if (f === 'mine' || f === 'latest') {
+      ajaxLoad({ filter: f, page: 1 });
+    }
+    if (e.detail && e.detail.message) toast(e.detail.message, e.detail.approved ? 'success' : 'warning');
+  });
 });

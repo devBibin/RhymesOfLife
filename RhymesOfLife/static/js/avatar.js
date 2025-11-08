@@ -1,18 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const avatarImg   = document.getElementById("avatar-img");
-  const avatarMenu  = document.getElementById("avatar-menu");
-  const avatarInput = document.getElementById("avatar-input");
-  const deleteInput = document.getElementById("delete-avatar");
-  const changeBtn   = document.getElementById("change-avatar-btn");
-  const deleteBtn   = document.getElementById("delete-avatar-btn");
+  if (window.__avatarInit) return;
+  window.__avatarInit = true;
 
-  if (!avatarImg || !avatarMenu) return;
+  const avatarImg    = document.getElementById("avatar-img");
+  const avatarMenu   = document.getElementById("avatar-menu");
+  const avatarInput  = document.getElementById("avatar-input");
+  const deleteInput  = document.getElementById("delete-avatar");
+  const changeBtn    = document.getElementById("change-avatar-btn");
+  const deleteBtn    = document.getElementById("delete-avatar-btn");
+  const profileForm  = document.getElementById("profile-form");
+  const fallbackSrc  = (avatarImg && avatarImg.dataset.defaultSrc) || "/static/images/default-avatar.png";
 
-  avatarImg.addEventListener("click", (e) => {
-    e.stopPropagation();
-    avatarMenu.classList.toggle("show");
-  });
+  const submitForm = () => { if (profileForm) profileForm.submit(); };
+
+  if (avatarImg) {
+    avatarImg.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (avatarMenu) avatarMenu.classList.toggle("show");
+    });
+    avatarImg.addEventListener("error", () => { avatarImg.src = fallbackSrc; });
+  }
+
   document.addEventListener("click", (e) => {
+    if (!avatarMenu || !avatarImg) return;
     if (!avatarMenu.contains(e.target) && !avatarImg.contains(e.target)) {
       avatarMenu.classList.remove("show");
     }
@@ -20,7 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (changeBtn && avatarInput) {
     changeBtn.addEventListener("click", () => {
-      avatarMenu.classList.remove("show");
+      if (avatarMenu) avatarMenu.classList.remove("show");
+      if (deleteInput) deleteInput.value = "";
       avatarInput.click();
     });
   }
@@ -28,10 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (deleteBtn) {
     deleteBtn.addEventListener("click", () => {
       if (deleteInput) deleteInput.value = "1";
-      avatarMenu.classList.remove("show");
+      if (avatarMenu) avatarMenu.classList.remove("show");
       if (avatarInput) avatarInput.value = "";
-      const fallback = avatarImg.dataset.defaultSrc || "/static/images/default-avatar.png";
-      avatarImg.src = fallback;
+      if (avatarImg) avatarImg.src = fallbackSrc;
+      submitForm();
     });
   }
 
@@ -39,12 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     avatarInput.addEventListener("change", () => {
       const file = avatarInput.files && avatarInput.files[0];
       if (!file) return;
+      if (deleteInput) deleteInput.value = "";
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (e.target && e.target.result) avatarImg.src = e.target.result;
+        if (avatarImg && e.target && e.target.result) {
+          avatarImg.src = e.target.result;
+        }
       };
       reader.readAsDataURL(file);
-      if (deleteInput) deleteInput.value = "";
+
+      submitForm();
     });
   }
 });

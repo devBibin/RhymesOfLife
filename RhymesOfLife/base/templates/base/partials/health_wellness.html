@@ -2,81 +2,123 @@
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
 <style>
+  .page-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .btn-soft{border:1px solid rgba(0,0,0,.08);background:#fff}
+  .btn-soft:hover{border-color:rgba(var(--bs-primary-rgb),.35);color:var(--bs-primary)}
+  .card-elevated{border:0;border-radius:1rem;background:linear-gradient(180deg,#fff,rgba(255,255,255,.96));box-shadow:0 8px 28px rgba(16,24,40,.08)}
+  .card-elevated .card-header{border:0;background:transparent;padding:1rem 1.25rem .25rem}
+  .form-label{font-weight:600}
+
   .entry-note{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
-  .list-group-item.entry-row{display:flex;gap:.75rem;align-items:flex-start}
+
+  /* timeline */
+  .timeline{position:relative;padding-left:1rem;margin:0}
+  .timeline:before{content:"";position:absolute;left:.35rem;top:.5rem;bottom:.5rem;width:2px;background:rgba(0,0,0,.06)}
+  .timeline-item{position:relative;padding:.6rem .75rem .6rem 1rem;border-radius:12px;border:1px solid rgba(0,0,0,.06);background:#fff}
+  .timeline-item+.timeline-item{margin-top:.6rem}
+  .timeline-item:before{content:"";position:absolute;left:-.05rem;top:1rem;width:.6rem;height:.6rem;border-radius:50%;background:rgba(var(--bs-primary-rgb),.9)}
+  .entry-row{display:flex;gap:.75rem;align-items:flex-start}
   .entry-left{min-width:180px;flex:0 0 auto}
   .entry-right{min-width:0;flex:1 1 auto}
-  .select-wrap{position:relative}
-  .select-modern{appearance:none}
-  .select-modern.form-select{padding-right:3rem;border-radius:999px}
-  .select-arrow{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.55}
-  .form-label{font-weight:600}
+  .muted{color:var(--bs-secondary-color)}
+
+  .chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+  .chart-sub{font-size:.925rem;color:var(--bs-secondary-color)}
+
+  /* numeric dropdown */
+  .score-dropdown .btn{
+    border-radius:999px;border:1px solid rgba(0,0,0,.08);
+    background:#fff;font-weight:700;
+    display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;
+  }
+  .score-dropdown .btn:hover{border-color:rgba(var(--bs-primary-rgb),.35);color:var(--bs-primary)}
+  .score-dropdown .dropdown-menu{border-radius:14px;box-shadow:0 10px 30px rgba(16,24,40,.12);min-width:6rem;text-align:center}
+  .score-dropdown .dropdown-item{font-weight:600}
+  .score-dropdown .dropdown-item.active,.score-dropdown .dropdown-item:active{background:rgba(var(--bs-primary-rgb),.12);color:var(--bs-primary)}
+
+  /* layout tweaks */
+  .form-help{font-size:.925rem;color:var(--bs-secondary-color)}
   @media (max-width:576px){
-    .select-modern.form-select{font-size:1.05rem}
     .entry-left{min-width:120px}
   }
 </style>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="page-head">
   <h2 class="mb-0">🩺 {% trans "My wellness" %}</h2>
-  <button id="btn-settings" class="btn btn-outline-secondary btn-sm">{% trans "Notifications" %}</button>
+  <button id="btn-settings" class="btn btn-soft btn-sm">
+    <i class="bi bi-bell me-1"></i>{% trans "Notifications" %}
+  </button>
 </div>
 
-<div class="card shadow-sm mb-4">
+<!-- entry form -->
+<div class="card card-elevated mb-4">
+  <div class="card-header">
+    <h5 class="mb-0">{% trans "New entry" %}</h5>
+  </div>
   <div class="card-body">
-    <form id="entry-form" class="row g-3" novalidate>
+    <form id="entry-form" class="row g-4" novalidate>
       {% csrf_token %}
 
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-lg-5">
         <label for="score" class="form-label">{% trans "Score (1-10)" %}</label>
-        <div class="select-wrap">
-          <select id="score" name="score" class="form-select form-select-lg select-modern" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5" selected>5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <span class="select-arrow" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M7 10l5 5 5-5H7z"></path>
-            </svg>
-          </span>
+
+        <!-- hidden select for backend -->
+        <select id="score" name="score" class="visually-hidden" aria-hidden="true">
+          {% for _ in ".........."|make_list %}
+            <option value="{{ forloop.counter }}" {% if forloop.counter == 5 %}selected{% endif %}>{{ forloop.counter }}</option>
+          {% endfor %}
+        </select>
+
+        <!-- clean dropdown -->
+        <div class="dropdown score-dropdown mt-1" data-score-dropdown>
+          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="score-dd-btn">
+            <span class="value" id="score-label">5</span>
+          </button>
+          <ul class="dropdown-menu" id="score-dd-menu" aria-labelledby="score-dd-btn">
+            {% for _ in ".........."|make_list %}
+              <li><button class="dropdown-item" type="button" data-val="{{ forloop.counter }}">{{ forloop.counter }}</button></li>
+            {% endfor %}
+          </ul>
+          <div class="form-help mt-2">{% trans "Choose a number from 1 (worst) to 10 (best)." %}</div>
         </div>
       </div>
 
-      <div class="col-12 col-md-7">
+      <div class="col-12 col-lg-7">
         <label for="note" class="form-label">{% trans "Comment" %}</label>
         <textarea id="note" name="note" class="form-control autosize" rows="5" placeholder="{% trans 'How do you feel today?' %}"></textarea>
+        <div class="form-help mt-2">{% trans "Add a short optional comment to remember the context." %}</div>
       </div>
 
       <div class="col-12 text-end">
-        <button type="button" id="btn-save" class="btn btn-primary">{% trans "Save" %}</button>
+        <button type="button" id="btn-save" class="btn btn-primary">
+          <i class="bi bi-save me-1"></i>{% trans "Save" %}
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<div class="card shadow-sm mb-4">
+<!-- chart -->
+<div class="card card-elevated mb-4">
   <div class="card-body">
-    <h5 class="mb-3">{% trans "Trend" %}</h5>
-    <canvas id="chart" height="120"></canvas>
+    <div class="chart-head">
+      <h5 class="mb-0">{% trans "Trend" %}</h5>
+      <div class="chart-sub">{% trans "Last 90 days" %}</div>
+    </div>
+    <canvas id="chart" height="120" aria-label="{% trans 'Wellness chart' %}"></canvas>
   </div>
 </div>
 
-<div class="card shadow-sm">
+<!-- entries -->
+<div class="card card-elevated">
   <div class="card-body">
     <h5 class="mb-3">{% trans "Entries" %}</h5>
-    <ul id="entries-list" class="list-group"></ul>
+    <ul id="entries-list" class="timeline"></ul>
     <div id="no-entries" class="alert alert-info mb-0 d-none">{% trans "No entries yet." %}</div>
   </div>
 </div>
 
+<!-- settings modal -->
 <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -114,12 +156,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded",function(){
-    document.querySelectorAll("textarea.autosize").forEach(function(ta){
-      const resize=()=>{ta.style.height="auto";ta.style.height=ta.scrollHeight+"px"};
-      ta.addEventListener("input",resize);resize();
-    });
-  });
-</script>

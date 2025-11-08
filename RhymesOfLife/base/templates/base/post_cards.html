@@ -2,7 +2,7 @@
 <div class="row gy-4">
 {% for p in posts %}
   <div class="col-12">
-    <div class="card post-card" id="p-{{ p.id }}">
+    <div class="card post-card" id="p-{{ p.id }}" data-post-id="{{ p.id }}">
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between mb-2 post-header">
           <div class="d-flex align-items-center">
@@ -66,19 +66,27 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
               {% if request.user.is_staff and not p.is_approved %}
-                <li><a class="dropdown-item" href="{% url 'post_approve' p.id %}">
+                <li><a class="dropdown-item" href="#"
+                       data-action="approve"
+                       data-url="{% url 'post_approve' p.id %}">
                   <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{% trans "Publish" %}</a></li>
-                <li><a class="dropdown-item text-danger" href="{% url 'post_reject' p.id %}">
+                <li><a class="dropdown-item text-danger" href="#"
+                       data-action="reject"
+                       data-url="{% url 'post_reject' p.id %}">
                   <i class="bi bi-x-circle me-2" aria-hidden="true"></i>{% trans "Reject" %}</a></li>
                 <li><hr class="dropdown-divider"></li>
               {% endif %}
 
               {% if p.author.user_id == request.user.id or request.user.is_superuser %}
                 {% if p.is_hidden %}
-                  <li><a class="dropdown-item" href="{% url 'post_unhide' p.id %}">
+                  <li><a class="dropdown-item" href="#"
+                         data-action="unhide"
+                         data-url="{% url 'post_unhide' p.id %}">
                     <i class="bi bi-eye me-2" aria-hidden="true"></i>{% trans "Unhide" %}</a></li>
                 {% else %}
-                  <li><a class="dropdown-item" href="{% url 'post_hide' p.id %}">
+                  <li><a class="dropdown-item" href="#"
+                         data-action="hide"
+                         data-url="{% url 'post_hide' p.id %}">
                     <i class="bi bi-eye-slash me-2" aria-hidden="true"></i>{% trans "Hide" %}</a></li>
                 {% endif %}
                 <li><a class="dropdown-item" href="{% url 'post_edit' p.id %}">

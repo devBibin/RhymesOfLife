@@ -3,7 +3,7 @@
   const endpoints = CFG.endpoints || {};
   const i18n = CFG.i18n || {};
   const examApi = (id) => (endpoints.examApiPattern || "").replace("/0/", `/${id}/`);
-  const docApi  = (id) => (endpoints.docDeletePattern || "").replace("/0/", `/${id}/`);
+  const docApi = (id) => (endpoints.docDeletePattern || "").replace("/0/", `/${id}/`);
 
   if (!endpoints.wellness || !endpoints.exams) return;
 
@@ -53,16 +53,11 @@
     const lines = [];
     let line = "";
     for (const w of words) {
-      if ((line + " " + w).trim().length <= maxLen) {
-        line = (line ? line + " " : "") + w;
-      } else {
+      if ((line + " " + w).trim().length <= maxLen) line = (line ? line + " " : "") + w;
+      else {
         if (line) lines.push(line);
-        if (w.length > maxLen) {
-          for (let i = 0; i < w.length; i += maxLen) lines.push(w.slice(i, i + maxLen));
-          line = "";
-        } else {
-          line = w;
-        }
+        if (w.length > maxLen) { for (let i = 0; i < w.length; i += maxLen) lines.push(w.slice(i, i + maxLen)); line = ""; }
+        else line = w;
       }
     }
     if (line) lines.push(line);
@@ -72,10 +67,8 @@
   function renderChart(items) {
     const canvas = document.getElementById("chart");
     if (!canvas) return;
-
     const dataPoints = items.map(i => ({ x: i.date, y: i.score, note: i.note || "" }));
     const labels = items.map(i => i.date);
-
     const ctx = canvas.getContext("2d");
     if (chart) chart.destroy();
 
@@ -95,7 +88,7 @@
       },
       options: {
         interaction: { mode: "nearest", intersect: false },
-        scales: { y: { min: 1, max: 12, ticks: { stepSize: 1 } } },
+        scales: { y: { min: 1, max: 11, ticks: { stepSize: 1 } } },
         plugins: {
           tooltip: {
             displayColors: false,
@@ -120,21 +113,21 @@
     const list = document.getElementById("entries-list");
     const empty = document.getElementById("no-entries");
     if (!list || !empty) return;
+
     list.innerHTML = "";
     if (!items || !items.length) { empty.classList.remove("d-none"); return; }
     empty.classList.add("d-none");
+
     items.slice().reverse().forEach(e => {
       const li = document.createElement("li");
-      li.className = "list-group-item entry-row";
+      li.className = "timeline-item entry-row";
       const left = document.createElement("div");
       left.className = "entry-left";
       left.innerHTML = `<strong>${e.date}</strong> · ${i18n.score || "Score"}: ${e.score}`;
       const right = document.createElement("div");
-      right.className = "entry-right text-muted entry-note text-break flex-grow-1 ms-3";
+      right.className = "entry-right text-muted entry-note text-break";
       right.textContent = e.note || "";
-      li.appendChild(left);
-      li.appendChild(right);
-      list.appendChild(li);
+      li.appendChild(left); li.appendChild(right); list.appendChild(li);
     });
   }
 
@@ -214,16 +207,41 @@
     return s;
   }
 
+  function bindWellnessUI() {
+    document.querySelectorAll("#pane-wellness textarea.autosize").forEach(function (ta) {
+      const resize = () => { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; };
+      ta.addEventListener("input", resize);
+      resize();
+    });
+
+    const select = document.querySelector("#pane-wellness #score");
+    const btn = document.querySelector("#pane-wellness #score-dd-btn");
+    const label = document.querySelector("#pane-wellness #score-label");
+    const menu = document.querySelector("#pane-wellness #score-dd-menu");
+
+    function apply(val) {
+      if (!select) return;
+      const v = String(Math.max(1, Math.min(10, parseInt(val || "5", 10))));
+      select.value = v;
+      if (label) label.textContent = v;
+      if (btn) btn.blur();
+      if (menu) menu.querySelectorAll(".dropdown-item").forEach(it => it.classList.toggle("active", it.getAttribute("data-val") === v));
+    }
+
+    if (menu) {
+      menu.querySelectorAll(".dropdown-item").forEach(it => {
+        it.addEventListener("click", function () { apply(this.getAttribute("data-val")); });
+      });
+    }
+
+    if (select) apply(select.value || "5");
+  }
+
   function initWellness() {
     lazyLoadChartJs().then(() => {
       const modalEl = document.querySelector("#pane-wellness #settingsModal");
-      if (modalEl && !modalEl.dataset.moved) {
-        document.body.appendChild(modalEl);
-        modalEl.dataset.moved = "1";
-      }
-      document.addEventListener("show.bs.modal", () => {
-        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-      });
+      if (modalEl && !modalEl.dataset.moved) { document.body.appendChild(modalEl); modalEl.dataset.moved = "1"; }
+      document.addEventListener("show.bs.modal", () => { document.querySelectorAll(".modal-backdrop").forEach(el => el.remove()); });
       document.addEventListener("hidden.bs.modal", () => {
         document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
         document.body.classList.remove("modal-open");
@@ -231,7 +249,13 @@
         document.body.style.removeProperty("padding-right");
       });
 
-      fetchEntries().then(d => { const items = d.items || []; renderChart(items); renderList(items); });
+      bindWellnessUI();
+
+      fetchEntries().then(d => {
+        const items = d.items || [];
+        renderChart(items);
+        renderList(items);
+      });
 
       const btnSave = document.getElementById("btn-save");
       const btnSettings = document.getElementById("btn-settings");
@@ -241,7 +265,9 @@
         btnSave.dataset.bound = "1";
         btnSave.addEventListener("click", () => {
           saveEntry().then(() => fetchEntries().then(d => {
-            const items = d.items || []; renderChart(items); renderList(items);
+            const items = d.items || [];
+            renderChart(items);
+            renderList(items);
           }));
         });
       }
@@ -268,30 +294,62 @@
     });
   }
 
-  function refreshDocumentsPane() {
-    return htmlLoad("#pane-exams", endpoints.exams);
-  }
+  function refreshDocumentsPane() { return htmlLoad("#pane-exams", endpoints.exams); }
 
   function initDocumentsTab() {
     const root = document.querySelector("#pane-exams");
-    if (!root || root.dataset.bound) return;
-    root.dataset.bound = "1";
+    if (!root) return;
 
-    const form        = root.querySelector("#exam-form");
-    const dateInput   = root.querySelector("#exam_date");
-    const descInput   = root.querySelector("#description");
-    const csrfEl      = root.querySelector("[name=csrfmiddlewaretoken]");
-    const csrfToken   = csrfEl ? csrfEl.value : getCsrfToken();
+    const form = root.querySelector("#exam-form");
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = "1";
 
-    const dropZone    = root.querySelector("#drop-zone");
-    const fileInput   = root.querySelector("#file-input");
-    const fileList    = root.querySelector("#file-list");
-    const submitBtn   = root.querySelector("#submit-exam");
-    const examIdInput = root.querySelector("#exam_id");
+    const dateInput = form.querySelector("#exam_date");
+    const descInput = form.querySelector("#description");
+    const csrfEl = form.querySelector("[name=csrfmiddlewaretoken]");
+    const csrfToken = csrfEl ? csrfEl.value : getCsrfToken();
 
-    const linkList    = root.querySelector("#link-list");
-    const addLinkBtn  = root.querySelector("#add-link-btn");
-    const singleLink  = root.querySelector("#external_url");
+    const dropZone = form.querySelector("#drop-zone");
+    const fileInput = form.querySelector("#file-input");
+    const fileList = form.querySelector("#file-list");
+    const submitBtn = form.querySelector("#submit-exam");
+    const examIdInput = form.querySelector("#exam_id");
+
+    const linkList = form.querySelector("#link-list");
+    const addLinkBtn = form.querySelector("#add-link-btn");
+    const singleLink = form.querySelector("#external_url");
+
+    const allowedExts = (dropZone?.dataset.allowedExt || ".pdf,.jpg,.jpeg,.png").split(",").map(s => s.trim().replace(/^\./, "").toLowerCase());
+    const maxSize = parseInt(dropZone?.dataset.maxSize || "20971520", 10);
+
+    function formatMB(bytes) { const mb = bytes / (1024 * 1024); return (Math.round(mb * 10) / 10) + " MB"; }
+
+    (function ensureDropHint() {
+      const extsText = allowedExts.map(e => "." + e).join(", ");
+      const sizeText = formatMB(maxSize);
+      const tpl = i18n.allowedFilesTpl || "Allowed: %(ext)s. Max size: %(size)s";
+      const text = tpl.replace("%(ext)s", extsText).replace("%(size)s", sizeText);
+      let hint = form.querySelector("#drop-hint");
+      if (!hint) {
+        hint = document.createElement("div");
+        hint.id = "drop-hint";
+        hint.className = "form-text mt-2";
+        if (dropZone) dropZone.appendChild(hint); else form.appendChild(hint);
+      }
+      hint.textContent = text;
+    })();
+
+    (function ensureLinkHint() {
+      if (!linkList) return;
+      let h = form.querySelector("#link-hint");
+      if (!h) {
+        h = document.createElement("div");
+        h.id = "link-hint";
+        h.className = "form-text mt-1";
+        linkList.parentElement.appendChild(h);
+      }
+      h.textContent = i18n.linkHint || "You can attach external links (e.g., Google Drive, Dropbox, OneDrive).";
+    })();
 
     let filesToUpload = [];
 
@@ -307,40 +365,54 @@
     }
     if (addLinkBtn && linkList) addLinkBtn.addEventListener("click", () => addLinkInput(""));
 
+    function renderFileCard(file) {
+      const div = document.createElement("div");
+      div.className = "file-card d-flex justify-content-between align-items-center border p-2 mb-2 rounded";
+      div.dataset.name = file.name; div.dataset.size = file.size;
+      div.innerHTML = `
+        <span class="me-2">📎 <strong>${file.name}</strong></span>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || "Remove file"}">✖</button>
+      `;
+      fileList.appendChild(div);
+    }
+
+    function attachRemoveHandlers() {
+      form.querySelectorAll(".remove-file-btn").forEach(btn => {
+        btn.onclick = () => {
+          const { name, size } = btn.dataset;
+          filesToUpload = filesToUpload.filter(f => !(f.name === name && String(f.size) === String(size)));
+          btn.closest(".file-card")?.remove();
+        };
+      });
+    }
+
+    function extOf(name) { const p = name.lastIndexOf("."); return p >= 0 ? name.slice(p + 1).toLowerCase() : ""; }
+
+    function handleFiles(list) {
+      Array.from(list).forEach(file => {
+        const ext = extOf(file.name);
+        if (!allowedExts.includes(ext)) {
+          const tpl = i18n.unsupportedTypeTpl || "Unsupported file type: %(name)s";
+          alert(tpl.replace("%(name)s", file.name));
+          return;
+        }
+        if (file.size > maxSize) {
+          const mb = Math.ceil(maxSize / (1024 * 1024));
+          const tpl = i18n.tooLargeTpl || "File is too large (max %(size)s MB): %(name)s";
+          alert(tpl.replace("%(size)s", String(mb)).replace("%(name)s", file.name));
+          return;
+        }
+        if (filesToUpload.some(f => f.name === file.name && f.size === file.size)) {
+          alert(i18n.duplicateFile || "This file is already in the list.");
+          return;
+        }
+        filesToUpload.push(file);
+        renderFileCard(file);
+      });
+      attachRemoveHandlers();
+    }
+
     if (dropZone && fileInput && fileList) {
-      function renderFileCard(file) {
-        const div = document.createElement("div");
-        div.className = "file-card d-flex justify-content-between align-items-center border p-2 mb-2 rounded";
-        div.dataset.name = file.name; div.dataset.size = file.size;
-        div.innerHTML = `
-          <span class="me-2">📎 <strong>${file.name}</strong></span>
-          <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || "Remove file"}">✖</button>
-        `;
-        fileList.appendChild(div);
-      }
-      function attachRemoveHandlers() {
-        root.querySelectorAll(".remove-file-btn").forEach(btn => {
-          btn.onclick = () => {
-            const { name, size } = btn.dataset;
-            filesToUpload = filesToUpload.filter(f => !(f.name===name && f.size==size));
-            btn.closest(".file-card")?.remove();
-          };
-        });
-      }
-      function handleFiles(list) {
-        Array.from(list).forEach(file => {
-          const ext = file.name.split('.').pop().toLowerCase();
-          if (!['pdf','jpg','jpeg','png'].includes(ext)) {
-            const msg = (i18n.unsupportedTypeTpl || "Unsupported file type: %(name)s").replace("%(name)s", file.name);
-            alert(msg);
-            return;
-          }
-          if (filesToUpload.some(f => f.name===file.name && f.size===file.size)) return;
-          filesToUpload.push(file);
-          renderFileCard(file);
-        });
-        attachRemoveHandlers();
-      }
       dropZone.addEventListener("click", e => { if (!e.target.closest(".dropdown")) fileInput.click(); });
       dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
       dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
@@ -356,11 +428,8 @@
         fd.append("exam_date", dateInput.value);
         fd.append("description", (descInput?.value || "").trim());
 
-        if (singleLink && singleLink.value.trim()) {
-          fd.append("external_url", normalizeUrlMaybe(singleLink.value));
-        }
-        const multiLinks = Array.from(root.querySelectorAll(".ext-link"))
-          .map(inp => normalizeUrlMaybe(inp.value)).filter(v => v.length > 0);
+        if (singleLink && singleLink.value.trim()) fd.append("external_url", normalizeUrlMaybe(singleLink.value));
+        const multiLinks = Array.from(form.querySelectorAll(".ext-link")).map(inp => normalizeUrlMaybe(inp.value)).filter(v => v.length > 0);
         multiLinks.forEach(u => fd.append("external_urls[]", u));
 
         filesToUpload.forEach(f => fd.append("files", f));
@@ -377,6 +446,9 @@
         .then(r => r.json())
         .then(j => {
           if (j.status === "ok") {
+            filesToUpload = [];
+            if (fileList) fileList.innerHTML = "";
+            if (fileInput) fileInput.value = "";
             refreshDocumentsPane();
           } else {
             alert(j.message || i18n.failedSave || "Failed to save.");
@@ -388,19 +460,18 @@
 
     root.addEventListener("click", (e) => {
       const editBtn = e.target.closest(".edit-exam-btn");
-      const delBtn  = e.target.closest(".delete-exam-btn");
+      const delBtn = e.target.closest(".delete-exam-btn");
       const delFileBtn = e.target.closest(".remove-existing-file-btn");
 
       if (editBtn) {
         const id = editBtn.dataset.id; if (!id) return;
-        fetch(examApi(id), { headers:{"X-Requested-With":"XMLHttpRequest"}, credentials: "same-origin" })
-          .then(r=>r.json())
+        fetch(examApi(id), { headers: { "X-Requested-With": "XMLHttpRequest" }, credentials: "same-origin" })
+          .then(r => r.json())
           .then(data => {
             if (!data || !data.id) return;
-            const examIdInput = root.querySelector("#exam_id");
-            const dateInput   = root.querySelector("#exam_date");
-            const descInput   = root.querySelector("#description");
-            const fileList    = root.querySelector("#file-list");
+            const dateInput = form.querySelector("#exam_date");
+            const descInput = form.querySelector("#description");
+            const fileList = form.querySelector("#file-list");
             if (examIdInput) examIdInput.value = data.id;
             if (dateInput) dateInput.value = data.exam_date || "";
             if (descInput) descInput.value = data.description || "";
@@ -414,10 +485,9 @@
               `;
               fileList && fileList.appendChild(div);
             });
-            const form = root.querySelector("#exam-form");
-            form && form.scrollIntoView({ behavior:"smooth" });
+            form.scrollIntoView({ behavior: "smooth" });
           })
-          .catch(()=>alert(i18n.unableLoad || "Unable to load data."));
+          .catch(() => alert(i18n.unableLoad || "Unable to load data."));
       }
 
       if (delBtn) {
@@ -426,12 +496,12 @@
         if (!confirm(i18n.deleteExamQ || "Delete this exam?")) return;
         fetch(examApi(id), {
           method: "DELETE",
-          headers:{"X-CSRFToken": getCsrfToken(), "X-Requested-With":"XMLHttpRequest"},
+          headers: { "X-CSRFToken": getCsrfToken(), "X-Requested-With": "XMLHttpRequest" },
           credentials: "same-origin"
         })
-        .then(r=>r.json())
-        .then(j=>{ if(j.status==="ok") refreshDocumentsPane(); else alert(i18n.deletionFailed || "Deletion failed."); })
-        .catch(()=>alert(i18n.networkError || "Network error."));
+        .then(r => r.json())
+        .then(j => { if (j.status === "ok") refreshDocumentsPane(); else alert(i18n.deletionFailed || "Deletion failed."); })
+        .catch(() => alert(i18n.networkError || "Network error."));
       }
 
       if (delFileBtn) {
@@ -439,40 +509,58 @@
         if (!id) return;
         if (!confirm(i18n.deleteFileQ || "Delete this file?")) return;
         fetch(docApi(id), {
-          method:"DELETE",
-          headers:{"X-CSRFToken": getCsrfToken(), "X-Requested-With":"XMLHttpRequest"},
+          method: "DELETE",
+          headers: { "X-CSRFToken": getCsrfToken(), "X-Requested-With": "XMLHttpRequest" },
           credentials: "same-origin"
         })
-        .then(r=>r.json())
-        .then(j=>{ if(j.status==="ok") delFileBtn.closest(".file-card")?.remove(); else alert(i18n.deletionFailed || "Deletion failed."); })
-        .catch(()=>alert(i18n.networkError || "Network error."));
+        .then(r => r.json())
+        .then(j => { if (j.status === "ok") delFileBtn.closest(".file-card")?.remove(); else alert(i18n.deletionFailed || "Deletion failed."); })
+        .catch(() => alert(i18n.networkError || "Network error."));
       }
     });
+  }
+
+  function labelForTarget(target) {
+    const btn = document.querySelector(`[data-bs-target="${target}"]`);
+    const a = btn?.getAttribute("aria-label") || btn?.title || btn?.querySelector(".label")?.textContent || "";
+    return a.trim();
+  }
+
+  function setMobileTitle(target) {
+    const el = document.getElementById("mobile-section-title");
+    if (!el) return;
+    const txt = labelForTarget(target) || (i18n.mobileDefault || "My health");
+    el.textContent = txt;
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     htmlLoad("#pane-wellness", endpoints.wellness).then(() => {
       loaded["#pane-wellness"] = true;
+      setMobileTitle("#pane-wellness");
     });
 
     function onShown(e) {
       const target = e.target.getAttribute("data-bs-target");
       if (!target) return;
-      if (loaded[target]) return;
-      loaded[target] = true;
-      if (target === "#pane-exams") htmlLoad("#pane-exams", endpoints.exams);
-      if (target === "#pane-comments") htmlLoad("#pane-comments", endpoints.recs);
-      if (target === "#pane-wellness") htmlLoad("#pane-wellness", endpoints.wellness);
-      sessionStorage.setItem("my-health-tab-id", target.substring(1));
+      if (!loaded[target]) {
+        loaded[target] = true;
+        if (target === "#pane-exams") htmlLoad("#pane-exams", endpoints.exams);
+        if (target === "#pane-comments") htmlLoad("#pane-comments", endpoints.recs);
+        if (target === "#pane-wellness") htmlLoad("#pane-wellness", endpoints.wellness);
+        sessionStorage.setItem("my-health-tab-id", target.substring(1));
+      }
+      setMobileTitle(target);
     }
 
     if (window.bootstrap) {
-      document.getElementById("healthTabs").addEventListener("shown.bs.tab", onShown);
+      const tabs = document.getElementById("healthTabs");
+      if (tabs) tabs.addEventListener("shown.bs.tab", onShown);
     } else {
       const check = setInterval(() => {
         if (window.bootstrap) {
           clearInterval(check);
-          document.getElementById("healthTabs").addEventListener("shown.bs.tab", onShown);
+          const tabs = document.getElementById("healthTabs");
+          if (tabs) tabs.addEventListener("shown.bs.tab", onShown);
         }
       }, 20);
     }
