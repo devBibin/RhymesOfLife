@@ -7,40 +7,24 @@
 <style>
   .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
   .subtext{color:var(--bs-secondary-color);font-size:.925rem}
-
   #drop-zone{transition:.15s;cursor:pointer}
   #drop-zone.dragover,#drop-zone.border-primary{background:rgba(13,110,253,.06)}
   .file-card{display:flex;gap:.75rem;align-items:center}
   .link-item{display:flex;gap:.5rem;align-items:center;margin-top:.5rem}
   .link-item input[type=url]{flex:1}
   .tab-content{backdrop-filter:saturate(1.2) blur(2px)}
-
   .nav-modern{display:flex;flex-wrap:wrap;gap:.5rem}
-  .nav-modern .nav-link{
-    display:inline-flex;align-items:center;gap:.45rem;
-    border:0;border-radius:999px;padding:.5rem .9rem;
-    font-weight:500;color:var(--bs-body-color);opacity:.9
-  }
+  .nav-modern .nav-link{display:inline-flex;align-items:center;gap:.45rem;border:0;border-radius:999px;padding:.5rem .9rem;font-weight:500;color:var(--bs-body-color);opacity:.9}
   .nav-modern .nav-link:hover{opacity:1;background:rgba(0,0,0,.04)}
-  .nav-modern .nav-link.active{
-    opacity:1;background:rgba(var(--bs-primary-rgb),.12);
-    color:var(--bs-primary);box-shadow:inset 0 0 0 1px rgba(var(--bs-primary-rgb),.25)
-  }
+  .nav-modern .nav-link.active{opacity:1;background:rgba(var(--bs-primary-rgb),.12);color:var(--bs-primary);box-shadow:inset 0 0 0 1px rgba(var(--bs-primary-rgb),.25)}
   .nav-modern .nav-link .bi{font-size:1rem}
-
   @media (max-width:576px){
     #drop-zone{padding:1.5rem 1rem}
     .file-card{flex-direction:column;align-items:flex-start}
     .file-card span{margin-bottom:.5rem}
-
     .nav-modern{gap:.5rem}
     .nav-modern .nav-item{flex:1 1 0}
-    .nav-modern .nav-link{
-      width:100%;
-      justify-content:center;
-      padding:.75rem 0;
-      border-radius:14px
-    }
+    .nav-modern .nav-link{width:100%;justify-content:center;padding:.75rem 0;border-radius:14px}
     .nav-modern .nav-link .label{display:none}
     .nav-modern .nav-link .bi{font-size:1.25rem;margin:0}
   }
@@ -48,52 +32,25 @@
 
 <div class="container py-4">
   <div class="topbar">
-    <h1 class="h4 mb-0">{% trans "My health" %}</h1>
+    <h1 class="h4 mb-0">
+      <span class="d-none d-sm-inline">{% trans "My health" %}</span>
+      <span id="mobile-section-title" class="d-inline d-sm-none">{% trans "My health" %}</span>
+    </h1>
   </div>
 
   <ul class="nav nav-pills nav-modern mb-3" id="healthTabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button
-        class="nav-link active"
-        id="tab-wellness"
-        data-bs-toggle="tab"
-        data-bs-target="#pane-wellness"
-        type="button"
-        role="tab"
-        aria-controls="pane-wellness"
-        aria-selected="true"
-        aria-label="{% trans 'Wellness' %}"
-        title="{% trans 'Wellness' %}">
+      <button class="nav-link active" id="tab-wellness" data-bs-toggle="tab" data-bs-target="#pane-wellness" type="button" role="tab" aria-controls="pane-wellness" aria-selected="true" aria-label="{% trans 'Wellness' %}" title="{% trans 'Wellness' %}">
         <i class="bi bi-activity"></i><span class="label">{% trans "Wellness" %}</span>
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="tab-exams"
-        data-bs-toggle="tab"
-        data-bs-target="#pane-exams"
-        type="button"
-        role="tab"
-        aria-controls="pane-exams"
-        aria-selected="false"
-        aria-label="{% trans 'Examinations' %}"
-        title="{% trans 'Examinations' %}">
+      <button class="nav-link" id="tab-exams" data-bs-toggle="tab" data-bs-target="#pane-exams" type="button" role="tab" aria-controls="pane-exams" aria-selected="false" aria-label="{% trans 'Examinations' %}" title="{% trans 'Examinations' %}">
         <i class="bi bi-file-earmark-medical"></i><span class="label">{% trans "Examinations" %}</span>
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        id="tab-comments"
-        data-bs-toggle="tab"
-        data-bs-target="#pane-comments"
-        type="button"
-        role="tab"
-        aria-controls="pane-comments"
-        aria-selected="false"
-        aria-label="{% trans "Doctor's comments" %}"
-        title="{% trans "Doctor's comments" %}">
+      <button class="nav-link" id="tab-comments" data-bs-toggle="tab" data-bs-target="#pane-comments" type="button" role="tab" aria-controls="pane-comments" aria-selected="false" aria-label="{% trans "Doctor's comments" %}" title="{% trans "Doctor's comments" %}">
         <i class="bi bi-chat-dots"></i><span class="label">{% trans "Doctor's comments" %}</span>
       </button>
     </li>
@@ -147,6 +104,12 @@
       deletionFailed: "{% trans 'Deletion failed.' %}",
       deleteFileQ: "{% trans 'Delete this file?' %}",
       unsupportedTypeTpl: "{% blocktrans %}Unsupported file type: %(name)s{% endblocktrans %}",
+      tooLargeTpl: "{% blocktrans %}File is too large (max %(size)s MB): %(name)s{% endblocktrans %}",
+      duplicateFile: "{% trans 'This file is already in the list.' %}",
+      note: "{% trans 'Note' %}",
+      allowedFilesTpl: "{% blocktrans %}Allowed: %(ext)s. Max size: %(size)s{% endblocktrans %}",
+      linkHint: "{% trans 'You can attach external links (e.g., Google Drive, Dropbox, OneDrive).' %}",
+      mobileDefault: "{% trans 'My health' %}"
     }
   };
 </script>

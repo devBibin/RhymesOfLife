@@ -4,73 +4,104 @@
 {% block title %}{% trans "Edit post" %} — {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-4 feed-container">
+<style>
+  .compose-wrap{max-width:840px;margin:0 auto}
+  .card-modern{border:1px solid rgba(16,24,40,.08);border-radius:16px;box-shadow:0 6px 30px rgba(16,24,40,.06)}
+  .dz-modern{border:2px dashed rgba(99,102,241,.35);border-radius:16px;padding:28px;text-align:center;background:linear-gradient(180deg,#fff,rgba(249,250,251,.6))}
+  .dz-modern.drag{background:linear-gradient(180deg,#eef2ff,#fff)}
+  .thumb{position:relative;border-radius:12px;overflow:hidden}
+  .thumb img{display:block;width:100%;height:160px;object-fit:cover}
+  .thumb .remove{position:absolute;top:6px;right:6px;border:none;border-radius:10px;padding:.25rem .5rem;background:rgba(0,0,0,.55);color:#fff}
+  .meta-row{display:flex;justify-content:space-between;align-items:center}
+  .count-chip{font-size:.875rem;padding:.25rem .55rem;border-radius:999px;background:rgba(99,102,241,.12);color:#4f46e5;font-weight:600}
+  .btn-gradient{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;border:none}
+  .btn-gradient:hover{filter:brightness(1.05);color:#fff}
+  .soft-card{border:1px solid rgba(16,24,40,.06);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,rgba(249,250,251,.55))}
+  .note{font-size:.875rem;color:#64748b}
+  .toggle-btn{min-width:120px}
+</style>
+
+<div class="container py-4 compose-wrap">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h4 mb-0">{% trans "Edit post" %}</h1>
     <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">{% trans "Back" %}</a>
   </div>
 
-  <form method="post" enctype="multipart/form-data" class="card post-card">
+  <div id="post-edit-alert" class="alert d-none" role="alert"></div>
+
+  <form id="post-edit-form" method="post" enctype="multipart/form-data" class="card-modern p-4">
     {% csrf_token %}
-    <div class="card-body">
 
-      <div class="mb-3">
-        <label for="post-text" class="form-label">{% trans "Text" %}</label>
-        <textarea id="post-text" name="text" rows="4" class="form-control" placeholder="{% trans 'Write something...' %}">{{ post.text }}</textarea>
+    <div class="mb-3">
+      <label for="post-text" class="form-label fw-semibold">{% trans "Text" %}</label>
+      <textarea id="post-text" name="text" rows="4" class="form-control" placeholder="{% trans 'Write something...' %}">{{ post.text }}</textarea>
+    </div>
+
+    {% if post.images.all %}
+    <div class="mb-4 soft-card">
+      <div class="meta-row mb-2">
+        <span class="fw-semibold">{% trans "Current images" %}</span>
+        <span class="note">{% trans "Click × to mark for removal" %}</span>
       </div>
-
-      {% if post.images.all %}
-      <div class="mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="fw-semibold">{% trans "Current images" %}</span>
-          <span class="text-muted small">{% trans "Click × to mark for removal" %}</span>
-        </div>
-        <div class="row g-2" id="existing-images">
-          {% for img in post.images.all %}
-          <div class="col-6 col-md-4">
-            <div class="position-relative border rounded p-1">
-              <img src="{{ img.image.url }}" class="img-fluid rounded" alt="">
-              <button type="button" class="btn btn-sm btn-light position-absolute top-0 end-0 m-1"
-                      data-remove-image="{{ img.id }}" aria-label="{% trans 'Remove' %}">
-                <i class="bi bi-x-lg"></i>
-              </button>
-              <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
-            </div>
+      <div class="row g-3" id="existing-images">
+        {% for img in post.images.all %}
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="thumb border">
+            <img src="{{ img.image.url }}" alt="">
+            <button type="button" class="remove btn-light" data-remove-image="{{ img.id }}" aria-label="{% trans 'Remove' %}">×</button>
+            <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
           </div>
-          {% endfor %}
         </div>
+        {% endfor %}
       </div>
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <div class="meta-row mb-2">
+        {% with existing_count=post.images.count %}
+        <label class="form-label fw-semibold mb-0">{% trans "Add images" %}</label>
+        <span class="count-chip">
+          <span data-files-count>{{ existing_count }}</span> /
+          <span data-files-max>10</span>
+        </span>
+      </div>
+
+      <div id="dropzone" class="dz-modern"
+           data-max="10"
+           data-existing="{{ existing_count }}">
+        {% endwith %}
+        <div class="mb-1"><i class="bi bi-cloud-upload fs-1"></i></div>
+        <div class="fw-semibold">{% trans "Upload from device" %}</div>
+        <div class="text-muted small mb-3">{% trans "or drag & drop files here" %}</div>
+        <input id="images-input" type="file" name="images" accept="image/*" multiple class="d-none">
+        <button type="button" id="pick-files" class="btn btn-outline-primary" data-open-file>
+          <i class="bi bi-images me-1"></i>{% trans "Choose files" %}
+        </button>
+      </div>
+
+      <div id="new-files" class="row g-3 mt-2" aria-live="polite"></div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-gradient px-4">{% trans "Save changes" %}</button>
+      <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+
+      {% if post.is_hidden %}
+        <button type="button" class="btn btn-secondary ms-auto toggle-btn"
+                data-action="unhide" data-url="{% url 'post_unhide' post.id %}">
+          {% trans "Unhide" %}
+        </button>
+      {% else %}
+        <button type="button" class="btn btn-outline-secondary ms-auto toggle-btn"
+                data-action="hide" data-url="{% url 'post_hide' post.id %}">
+          {% trans "Hide" %}
+        </button>
       {% endif %}
-
-      <div class="mb-3">
-        <label class="form-label d-block">{% trans "Add images" %}</label>
-        <div id="dropzone" class="border border-2 border-dashed rounded-3 p-4 text-center"
-             style="border-style: dashed;">
-          <div class="mb-2">
-            <i class="bi bi-cloud-upload fs-3 d-block"></i>
-            <div class="fw-semibold">{% trans "Upload from device" %}</div>
-            <div class="text-muted small">{% trans "or drag & drop files here" %}</div>
-          </div>
-          <input id="images-input" type="file" name="images" accept="image/*" multiple class="d-none">
-          <button type="button" id="pick-files" class="btn btn-outline-primary btn-sm">{% trans "Choose files" %}</button>
-        </div>
-
-        <div id="new-files" class="row g-2 mt-2" aria-live="polite"></div>
-      </div>
-
-      <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
-        <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
-
-        {% if post.is_hidden %}
-          <a href="{% url 'post_unhide' post.id %}" class="btn btn-secondary ms-auto">{% trans "Unhide" %}</a>
-        {% else %}
-          <a href="{% url 'post_hide' post.id %}" class="btn btn-outline-secondary ms-auto">{% trans "Hide" %}</a>
-        {% endif %}
-      </div>
     </div>
   </form>
 </div>
 
 <script src="{% static 'js/post_editor.js' %}"></script>
+<script src="{% static 'js/posts.js' %}"></script>
 {% endblock %}

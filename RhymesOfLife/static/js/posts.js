@@ -192,6 +192,7 @@ function initCommentForms() {
     });
   });
 }
+window.initCommentForms = initCommentForms;
 
 (function initCommentsMoreDelegated() {
   if (document.body.dataset.commentsMoreBound === '1') return;
@@ -298,38 +299,250 @@ function initCommentForms() {
 
 function initDropzone() {
   const dz = document.getElementById('dropzone');
-  const fi = document.getElementById('file-input');
-  const preview = document.getElementById('preview');
-  const opener = document.querySelector('[data-open-file]');
+  const fi = document.getElementById('file-input') || document.getElementById('images-input');
+  const preview = document.getElementById('preview') || document.getElementById('new-files');
+  const opener = document.querySelector('[data-open-file]') || document.getElementById('pick-files');
   if (!dz || !fi || !preview) return;
+
+  if (dz.dataset.bound === '1') return;
+  dz.dataset.bound = '1';
+
+  const max = parseInt(dz.getAttribute('data-max') || '10', 10);
+  const existing = parseInt(dz.getAttribute('data-existing') || '0', 10);
+  let removedExisting = 0;
+
+  const counter = document.querySelector('[data-files-count]');
+  const maxEl = document.querySelector('[data-files-max]');
+  if (maxEl) maxEl.textContent = String(max);
+
+  let store = [];
+  let uid = 0;
+  let lastOpenAt = 0;
+
+  const updateCounter = () => {
+    const total = existing - removedExisting + store.length;
+    if (counter) counter.textContent = String(Math.max(0, total));
+  };
+
+  const rebuildFileList = () => {
+    const dt = new DataTransfer();
+    store.forEach(it => dt.items.add(it.file));
+    fi.files = dt.files;
+    updateCounter();
+  };
 
   const renderPreview = () => {
     preview.innerHTML = '';
-    Array.from(fi.files).forEach((f) => {
-      const url = URL.createObjectURL(f);
+    store.forEach(it => {
       const col = document.createElement('div');
-      col.className = 'col-4';
-      col.innerHTML = `<img src="${url}" class="img-fluid rounded" alt="">`;
+      col.className = 'col-6 col-md-4 col-lg-3';
+      const wrap = document.createElement('div');
+      wrap.className = 'thumb';
+      const img = document.createElement('img');
+      img.alt = it.file.name;
+      wrap.appendChild(img);
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'remove';
+      rm.setAttribute('data-remove-id', String(it.id));
+      rm.setAttribute('aria-label', t('Remove'));
+      rm.textContent = '×';
+      wrap.appendChild(rm);
+      col.appendChild(wrap);
       preview.appendChild(col);
+
+      const reader = new FileReader();
+      reader.onload = e => { img.src = e.target.result; };
+      reader.readAsDataURL(it.file);
     });
   };
 
-  if (opener) opener.addEventListener('click', () => fi.click());
-  dz.addEventListener('click', () => fi.click());
-  dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('bg-light'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('bg-light'));
+  const addFiles = (files) => {
+    const remaining = Math.max(0, max - (existing - removedExisting + store.length));
+    if (remaining <= 0) return;
+    const list = Array.from(files || []).slice(0, remaining);
+    for (const f of list) {
+      store.push({ id: ++uid, file: f });
+    }
+    rebuildFileList();
+    renderPreview();
+  };
+
+  if (opener) {
+    opener.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const now = Date.now();
+      if (now - lastOpenAt < 300) return;
+      lastOpenAt = now;
+      fi.click();
+    });
+  }
+
+  dz.addEventListener('click', (e) => {
+    if (e.target.closest('[data-open-file],input[type="file"],#pick-files,button,a')) return;
+    const now = Date.now();
+    if (now - lastOpenAt < 300) return;
+    lastOpenAt = now;
+    fi.click();
+  });
+
+  dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
   dz.addEventListener('drop', (e) => {
     e.preventDefault();
-    dz.classList.remove('bg-light');
-    fi.files = e.dataTransfer.files;
+    dz.classList.remove('drag');
+    addFiles(e.dataTransfer.files);
+  });
+
+  fi.addEventListener('change', () => addFiles(fi.files));
+
+  preview.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-remove-id]');
+    if (!btn) return;
+    const id = parseInt(btn.getAttribute('data-remove-id') || '0', 10);
+    store = store.filter(it => it.id !== id);
+    rebuildFileList();
     renderPreview();
   });
-  fi.addEventListener('change', renderPreview);
+
+  document.addEventListener('existing:toggle', (e) => {
+    const active = !!(e && e.detail && e.detail.active);
+    removedExisting += active ? 1 : -1;
+    if (removedExisting < 0) removedExisting = 0;
+    updateCounter();
+  });
+
+  updateCounter();
+  rebuildFileList();
+  renderPreview();
 }
+
+async function ajaxSubmitForm(form, onSuccess) {
+  const csrftoken = getCSRF(form);
+  const r = await fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken, 'Accept': 'application/json' }
+  });
+  const text = await r.text();
+  let data = {};
+  try { data = JSON.parse(text); } catch { }
+  if (!r.ok) throw { status: r.status, data, text };
+  if (onSuccess) onSuccess(data);
+  return data;
+}
+
+function bindCreateFormAjax() {
+  const form = document.getElementById('post-create-form');
+  if (!form) return;
+  if (form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+
+  const alertBox = document.getElementById('post-create-alert');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const data = await ajaxSubmitForm(form, (d) => d);
+      document.dispatchEvent(new CustomEvent('post:created', {
+        detail: { approved: !!data.approved, message: data.message || t('Post created') }
+      }));
+      if (alertBox) {
+        alertBox.className = 'alert alert-success';
+        alertBox.textContent = data.message || t('Post created');
+        alertBox.classList.remove('d-none');
+      }
+      form.reset();
+      const preview = document.getElementById('preview');
+      if (preview) preview.innerHTML = '';
+      const counter = document.querySelector('[data-files-count]');
+      if (counter) counter.textContent = '0';
+    } catch (err) {
+      const errors = (err && err.data && err.data.errors) || [];
+      if (alertBox) {
+        alertBox.className = 'alert alert-danger';
+        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || t('Error'));
+        alertBox.classList.remove('d-none');
+      }
+    }
+  });
+}
+
+function bindEditFormAjax() {
+  const form = document.getElementById('post-edit-form');
+  if (!form) return;
+  if (form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+
+  const alertBox = document.getElementById('post-edit-alert');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const data = await ajaxSubmitForm(form, (d) => d);
+      if (alertBox) {
+        alertBox.className = 'alert alert-success';
+        alertBox.textContent = data.message || t('Post updated.');
+        alertBox.classList.remove('d-none');
+      }
+      document.dispatchEvent(new CustomEvent('post:updated', {
+        detail: { post_id: data.post_id, message: data.message || t('Post updated.') }
+      }));
+    } catch (err) {
+      const errors = (err && err.data && err.data.errors) || [];
+      if (alertBox) {
+        alertBox.className = 'alert alert-danger';
+        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || t('Error'));
+        alertBox.classList.remove('d-none');
+      }
+    }
+  });
+}
+
+(function bindCardActionsDelegated() {
+  document.addEventListener('click', async (e) => {
+    const a = e.target.closest('[data-action]');
+    if (!a) return;
+    const action = a.getAttribute('data-action');
+    const url = a.getAttribute('data-url');
+    if (!url) return;
+    e.preventDefault();
+
+    const csrftoken = getCSRF(document);
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'X-Requested-With':'XMLHttpRequest','X-CSRFToken':csrftoken,'Accept':'application/json' }
+    });
+    if (!r.ok) return;
+
+    const data = await r.json();
+    const card = a.closest('.post-card');
+
+    if (action === 'hide' && card) {
+      card.remove();
+    }
+    if (action === 'unhide') {
+      if (data.html) {
+        if (card) card.outerHTML = data.html;
+        else {
+          const container = document.querySelector('#posts-container .row.gy-4') || document.getElementById('posts-container');
+          if (container) container.insertAdjacentHTML('afterbegin', data.html);
+        }
+      }
+    }
+    if (action === 'approve' && card) {
+      document.dispatchEvent(new CustomEvent('post:updated', { detail: { message: t('Post approved') } }));
+    }
+    if (action === 'reject' && card) {
+      card.remove();
+    }
+  });
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
   initCommentForms();
   initDropzone();
+  bindCreateFormAjax();
+  bindEditFormAjax();
 });
-
-window.initCommentForms = initCommentForms;

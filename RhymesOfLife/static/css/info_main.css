@@ -140,7 +140,14 @@ font-weight: 900;
   display: grid;
   grid-column: 3 / 8;
   gap: var(--gutter);
-  padding: 50px 0;
+  padding: 50px 0 60px;
+}
+
+.grid--align--end {
+    display: grid !important;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gutter);
+    align-items: center;
 }
 
 .help__image-wrapper {
@@ -217,7 +224,7 @@ font-weight: 900;
   }
 
   .cover-mobile__title h1 {
-    font-size: 4.2rem;
+    font-size: 4rem;
     line-height: 100%;
   }
 
@@ -226,7 +233,7 @@ font-weight: 900;
   }
 
   .cover-mobile__subtitle h3 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 
    .class__text-block {

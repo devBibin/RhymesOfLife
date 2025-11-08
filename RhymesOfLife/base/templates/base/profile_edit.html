@@ -1,21 +1,62 @@
 {% extends 'base.html' %}
 {% load static i18n avatar_tags %}
 
+{% block extra_css %}
+<style>
+  .profile-edit-wrap{max-width:880px;margin:0 auto}
+  .card-profile{border:none;border-radius:1rem;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(16,24,40,.08);overflow:visible}
+  .card-profile .card-body{overflow:visible}
+  .avatar-shell{position:relative;display:inline-block;z-index:2}
+  .avatar-editable{width:140px;height:140px;object-fit:cover;border-radius:50%;border:3px solid rgba(var(--bs-primary-rgb),.35);box-shadow:0 2px 16px rgba(16,24,40,.15);transition:transform .2s ease}
+  .avatar-editable:hover{transform:scale(1.02)}
+  .avatar-menu{
+    position:absolute;
+    top:100%;
+    left:50%;
+    transform:translate(-50%,.5rem);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .15s ease,transform .15s ease;
+    background:#fff;
+    border:1px solid rgba(16,24,40,.06);
+    border-radius:.75rem;
+    box-shadow:0 8px 24px rgba(16,24,40,.12);
+    min-width:220px;
+    z-index:1055;
+    overflow:hidden
+  }
+  .avatar-menu.show{opacity:1;visibility:visible;transform:translate(-50%,.25rem)}
+  .avatar-menu .dropdown-item{padding:.6rem .9rem}
+  .fieldset{border:1px solid rgba(16,24,40,.06);border-radius:.75rem;padding:1rem}
+  .legend{font-weight:600;margin-bottom:.5rem}
+  .btn-action{border-radius:.75rem}
+  .btn-primary{box-shadow:0 6px 16px rgba(var(--bs-primary-rgb),.25)}
+  .toolbar{display:flex;gap:.75rem;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+  .form-text{margin-top:.25rem}
+  .content-safe{overflow-wrap:anywhere;word-break:break-word}
+  @media (max-width:576px){
+    .card-profile{border-radius:.875rem}
+    .toolbar{justify-content:stretch}
+    .toolbar .btn{width:100%}
+    .avatar-editable{width:112px;height:112px}
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-  <div class="card shadow-sm card-profile">
+<div class="container py-4 py-md-5 profile-edit-wrap">
+  <div class="card card-profile">
     <div class="card-body">
 
       <div class="text-center mb-4">
-        <div class="d-inline-block position-relative">
+        <div class="avatar-shell">
           <img
             id="avatar-img"
             src="{% avatar_url info %}"
             data-default-src="{% static 'images/default-avatar.png' %}"
-            class="rounded-circle avatar-editable"
-            style="width:140px;height:140px;object-fit:cover;"
+            class="avatar-editable"
             alt="{% trans 'User avatar' %}">
-          <div id="avatar-menu" class="avatar-menu">
+          <div id="avatar-menu" class="avatar-menu" role="menu" aria-labelledby="avatar-img">
             <button type="button" class="dropdown-item" id="change-avatar-btn">📤 {% trans "Upload new" %}</button>
             <button type="button" class="dropdown-item text-danger" id="delete-avatar-btn">🗑 {% trans "Delete" %}</button>
           </div>
@@ -23,10 +64,9 @@
         <h5 class="mb-0 mt-3">{{ request.user.get_full_name|default:request.user.username }}</h5>
       </div>
 
-      <input type="file" id="avatar-input" name="avatar" hidden form="profile-form">
+      <input type="file" id="avatar-input" name="avatar" hidden form="profile-form" accept="image/*">
       <input type="hidden" id="delete-avatar" name="delete_avatar" value="" form="profile-form">
 
-      {# ---- ВНЕШНИЕ ФОРМЫ ДЛЯ TG-ДЕЙСТВИЙ (НЕ ВНУТРИ profile-form!) ---- #}
       <form id="tg-unlink-form" action="{% url 'telegram_unlink' %}" method="post" class="d-none">
         {% csrf_token %}
       </form>
@@ -34,24 +74,25 @@
         {% csrf_token %}
       </form>
 
-      <form id="profile-form" action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data" class="row g-3">
+      <form id="profile-form" action="{% url 'profile_edit' %}" method="post" enctype="multipart/form-data" class="row g-3 g-md-4">
         {% csrf_token %}
 
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <label class="form-label">{% trans "First name" %} <span class="text-danger">*</span></label>
-          <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}" required aria-required="true">
+          <input type="text" name="first_name" class="form-control" value="{{ info.first_name }}" required aria-required="true" autocomplete="given-name">
         </div>
-        <div class="col-6">
+
+        <div class="col-12 col-md-6">
           <label class="form-label">{% trans "Last name" %} <span class="text-danger">*</span></label>
-          <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}" required aria-required="true">
+          <input type="text" name="last_name" class="form-control" value="{{ info.last_name }}" required aria-required="true" autocomplete="family-name">
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <label class="form-label">{% trans "Email" %}</label>
-          <input type="email" name="email" class="form-control" value="{{ info.email }}">
+          <input type="email" name="email" class="form-control" value="{{ info.email }}" autocomplete="email" inputmode="email">
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <label class="form-label">{% trans "Date of birth" %} <span class="text-danger">*</span></label>
           <div class="row g-2">
             <div class="col-4">
@@ -88,71 +129,69 @@
         </div>
 
         <div class="col-12">
-          <label class="form-label">{% trans "Syndromes" %}</label>
-          <div class="row gy-2">
-            {% for code,label in syndrome_choices %}
-              <div class="col-12 col-md-6">
-                <div class="border rounded p-2 h-100">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
-                           {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
-                    <label class="form-check-label" for="s-{{ code }}">{{ label }}</label>
-                  </div>
-                  <div class="form-check mt-1">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="confirmed_syndromes"
-                           value="{{ code }}"
-                           id="sync-{{ code }}"
-                           data-main="#s-{{ code }}"
-                           {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
-                           {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
-                    <label class="form-check-label" for="sync-{{ code }}">{% trans "Genetically confirmed" %}</label>
+          <div class="fieldset">
+            <div class="legend">{% trans "Syndromes" %}</div>
+            <div class="row gy-2">
+              {% for code,label in syndrome_choices %}
+                <div class="col-12 col-md-6">
+                  <div class="border rounded p-2 h-100">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
+                             {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
+                      <label class="form-check-label content-safe" for="s-{{ code }}">{{ label }}</label>
+                    </div>
+                    <div class="form-check mt-1">
+                      <input class="form-check-input"
+                             type="checkbox"
+                             name="confirmed_syndromes"
+                             value="{{ code }}"
+                             id="sync-{{ code }}"
+                             data-main="#s-{{ code }}"
+                             {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
+                             {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
+                      <label class="form-check-label" for="sync-{{ code }}">{% trans "Genetically confirmed" %}</label>
+                    </div>
                   </div>
                 </div>
-              </div>
-            {% endfor %}
+              {% endfor %}
+            </div>
           </div>
         </div>
 
         <div class="col-12">
-          <label class="form-label">{% trans "Telegram" %}</label>
-          <div class="border rounded p-3 d-flex flex-wrap align-items-center gap-2">
-            {% if tg_is_verified %}
-              <span class="badge bg-success">{% trans "Linked" %}</span>
-              {% if tg_username %}<span class="text-muted">@{{ tg_username }}</span>{% endif %}
-              {# Кнопка сабмитит ВНЕШНЮЮ форму tg-unlink-form #}
-              <button type="submit" form="tg-unlink-form" class="btn btn-outline-danger btn-sm ms-auto">
-                {% trans "Unlink Telegram" %}
-              </button>
-            {% else %}
-              {% if tg_not_configured %}
-                <span class="text-muted">{% trans "Telegram bot is not configured." %}</span>
+          <div class="fieldset">
+            <div class="legend">{% trans "Telegram" %}</div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+              {% if tg_is_verified %}
+                <span class="badge text-bg-success rounded-pill">{% trans "Linked" %}</span>
+                {% if tg_username %}<span class="text-muted">@{{ tg_username }}</span>{% endif %}
+                <button type="submit" form="tg-unlink-form" class="btn btn-outline-danger btn-sm ms-auto btn-action">{% trans "Unlink Telegram" %}</button>
               {% else %}
-                {% if tg_link %}
-                  <a href="{{ tg_link }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-                    {% trans "Link Telegram" %}
-                  </a>
+                {% if tg_not_configured %}
+                  <span class="text-muted">{% trans "Telegram bot is not configured." %}</span>
                 {% else %}
-                  <span class="text-muted">{% trans "Activation link is not available." %}</span>
+                  {% if tg_link %}
+                    <a href="{{ tg_link }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm btn-action">{% trans "Link Telegram" %}</a>
+                  {% else %}
+                    <span class="text-muted">{% trans "Activation link is not available." %}</span>
+                  {% endif %}
+                  <button type="submit" form="tg-regenerate-form" class="btn btn-outline-secondary btn-sm btn-action">{% trans "Generate new link" %}</button>
                 {% endif %}
-                {# Кнопка сабмитит ВНЕШНЮЮ форму tg-regenerate-form #}
-                <button type="submit" form="tg-regenerate-form" class="btn btn-outline-secondary btn-sm">
-                  {% trans "Generate new link" %}
-                </button>
               {% endif %}
-            {% endif %}
+            </div>
           </div>
         </div>
 
         {% if error %}
-          <div class="col-12">
-            <div class="alert alert-danger mt-2">{{ error }}</div>
-          </div>
+        <div class="col-12">
+          <div class="alert alert-danger mt-2">{{ error }}</div>
+        </div>
         {% endif %}
 
-        <div class="col-12 text-end mt-2">
-          <button type="submit" class="btn btn-primary px-4">{% trans "Save" %}</button>
+        <div class="col-12">
+          <div class="toolbar mt-2">
+            <button type="submit" class="btn btn-primary px-4 btn-action">{% trans "Save changes" %}</button>
+          </div>
         </div>
       </form>
 
@@ -163,42 +202,60 @@
 
 {% block extra_js %}
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function (c) {
-    var m = document.querySelector(c.getAttribute("data-main"));
-    var sync = function () {
-      var on = !!(m && m.checked);
-      c.disabled = !on;
-      if (!on) c.checked = false;
+(function(){
+  if(window.__profileEditBound)return;window.__profileEditBound=true;
+
+  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
+    var m=document.querySelector(c.getAttribute('data-main'));
+    var sync=function(){
+      var on=!!(m&&m.checked);
+      c.disabled=!on;
+      if(!on)c.checked=false;
     };
-    if (m) { m.addEventListener("change", sync); sync(); }
-    else { c.disabled = true; c.checked = false; }
+    if(m){m.addEventListener('change',sync);sync();}else{c.disabled=true;c.checked=false;}
   });
 
-  var avatarImg = document.getElementById("avatar-img");
-  var menu = document.getElementById("avatar-menu");
-  var changeBtn = document.getElementById("change-avatar-btn");
-  var delBtn = document.getElementById("delete-avatar-btn");
-  var input = document.getElementById("avatar-input");
-  var delInput = document.getElementById("delete-avatar");
+  var avatarImg=document.getElementById('avatar-img');
+  var menu=document.getElementById('avatar-menu');
+  var changeBtn=document.getElementById('change-avatar-btn');
+  var delBtn=document.getElementById('delete-avatar-btn');
+  var input=document.getElementById('avatar-input');
+  var delInput=document.getElementById('delete-avatar');
+  var form=document.getElementById('profile-form');
 
-  if (avatarImg && menu) {
-    avatarImg.addEventListener("click", function () { menu.classList.toggle("show"); });
-    document.addEventListener("click", function (e) {
-      if (!menu.contains(e.target) && e.target !== avatarImg) { menu.classList.remove("show"); }
+  var closeMenu=function(){if(menu)menu.classList.remove('show');};
+  var toggleMenu=function(){if(menu)menu.classList.toggle('show');};
+
+  if(avatarImg&&menu){
+    avatarImg.addEventListener('click',function(e){e.stopPropagation();toggleMenu();});
+    document.addEventListener('click',function(e){if(!menu.contains(e.target)&&e.target!==avatarImg)closeMenu();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
+  }
+
+  if(changeBtn&&input){
+    changeBtn.addEventListener('click',function(){
+      delInput.value='';
+      closeMenu();
+      input.click();
     });
   }
-  if (changeBtn && input) {
-    changeBtn.addEventListener("click", function () { delInput.value = ""; input.click(); });
-  }
-  if (delBtn) {
-    delBtn.addEventListener("click", function () { delInput.value = "1"; document.getElementById("profile-form").submit(); });
-  }
-  if (input) {
-    input.addEventListener("change", function () {
-      if (input.files && input.files[0]) { delInput.value = ""; document.getElementById("profile-form").submit(); }
+
+  if(delBtn){
+    delBtn.addEventListener('click',function(){
+      delInput.value='1';
+      closeMenu();
+      form.submit();
     });
   }
-});
+
+  if(input){
+    input.addEventListener('change',function(){
+      if(input.files&&input.files[0]){
+        delInput.value='';
+        form.submit();
+      }
+    });
+  }
+})();
 </script>
 {% endblock %}

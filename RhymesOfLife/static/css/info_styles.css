@@ -167,6 +167,24 @@ body {
 }
 
 /* ========== TYPOGRAPHY ========== */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+
+  a:visited {
+    color: #5b5b5b;
+  }
+}
+
+a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .h1 {
   font-family: var(--font-styled);
   font-size: 2.6rem;
@@ -254,7 +272,7 @@ body {
 .list__item {
   position: relative;
   padding-left: var(--space-lg);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xxs);
   font-size: 1.10rem;
   line-height: 1.6;
 }
@@ -577,13 +595,14 @@ body {
 .btn-help {
   background-color: var(--color-primary);
   color: var(--color-white);
-  padding: 0.5rem 1.5rem;
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--border-radius);
   text-decoration: none;
   font-weight: 500;
   transition: var(--transition);
   font-family: var(--font-basic);
   font-size: 1rem;
+  margin: 3px;
 }
 
 .btn-help:hover,
@@ -605,7 +624,7 @@ body {
   background: var(--color-white);
 }
 
-.btn-help__burger {
+/* .btn-help__burger {
   border: 2px solid var(--color-black);
   color: var(--color-black);
   padding: 0.5rem 1.5rem;
@@ -616,7 +635,7 @@ body {
   font-family: var(--font-basic);
   background: var(--color-white);
   font-size: 1rem;
-}
+} */
 
 .mobile-menu {
   position: fixed;
@@ -670,7 +689,7 @@ body {
 
 .mobile-menu__list>li {
   width: 100%;
-  width: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -688,12 +707,12 @@ body {
   padding: 1rem;
   width: 100%;
   text-align: center;
-  font-size: 1.125rem;
+  font-size: 1.4rem;
+  line-height: 1.6;
   color: var(--color-black);
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid var(--color-background);
-  border-radius: var(--border-radius);
 }
 
 .mobile-menu .dropdown__toggle[aria-expanded="true"] {
@@ -717,7 +736,7 @@ body {
 }
 
 .mobile-menu .dropdown__item {
-  padding: 0.75rem 1rem;
+  padding: var(--space-md) var(--space-lg);
   text-align: center;
   display: block;
   color: var(--color-black);
@@ -725,7 +744,7 @@ body {
   font-family: var(--font-basic);
   transition: background-color 0.3s ease;
   background: var(--color-white);
-  font-size: 1rem;
+  font-size: 1.2rem;
   width: 100%;
 }
 
@@ -764,33 +783,34 @@ body.no-scroll {
   .h1 {
     font-size: 2.4rem;
     margin-bottom: var(--space-md);
-    text-align: center;
+    /* text-align: center; */
     line-height: 1.4;
   }
 
   .h2 {
     font-size: 1.8rem;
-    text-align: center;
+    margin-bottom: var(--space-md);
+    /* text-align: center; */
     line-height: 1.2;
   }
 
   .h3 {
-    font-size: 1.6rem;
-    margin-bottom: var(--space-xl);
-    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: var(--space-md);
+    /* text-align: center; */
     line-height: 1.3;
   }
 
   .h4 {
-    font-size: 1.4rem;
-    margin-bottom: var(--space-xs);
-    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: var(--space-md);
+    /* text-align: center; */
     line-height: 1.4;
   }
 
   .text {
-    font-size: 1.4rem;
-    margin-bottom: var(--space-sm);
+    font-size: 1.2rem;
+    margin-bottom: var(--space-md);
     line-height: 1.6;
   }
 
@@ -844,8 +864,20 @@ body.no-scroll {
     font-size: 1.4rem;
   }
 
-  .list__item {
+  .btn-help__burger {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+    font-family: var(--font-basic);
     font-size: 1.4rem;
+  }
+
+  .list__item {
+    font-size: 1.2rem;
     /* margin-bottom: var(--space-xs); */
     line-height: 1.5;
   }
@@ -887,10 +919,10 @@ body.no-scroll {
   }
 
   .list__item {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     line-height: 1.5;
     display: flex;
-    align-items: flex-start;
+    align-items: baseline;
     padding-left: 0;
   }
 
@@ -901,7 +933,7 @@ body.no-scroll {
     font-size: 2rem;
     line-height: 1.5;
     margin-right: var(--space-sm);
-    bottom: 4px;
+    top: 5px;
     color: var(--color-primary);
   }
 

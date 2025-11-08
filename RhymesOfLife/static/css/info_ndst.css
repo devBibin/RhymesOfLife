@@ -194,31 +194,32 @@
 
 /* ========== MOBILE STYLES ========== */
 @media (max-width: 768px) {
-.ndst-cover {
-  background-color: var(--color-accent);
-  padding: 0;
-  position: relative;
-  width: 100%;
-  background-image: url('/static/images/cover__bg.svg');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
+  .ndst-cover {
+    background-color: var(--color-accent);
+    padding: 0;
+    position: relative;
+    width: 100%;
+    background-image: url('/static/images/cover__bg.svg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
 
-.ndst-cover::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--color-accent);
-  opacity: 0.1;
-  pointer-events: none;
-  z-index: 0;
-}
+  .ndst-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent);
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-.ndst-cover>* {
-  position: relative;
-  z-index: 1;
-}
+  .ndst-cover>* {
+    position: relative;
+    z-index: 1;
+  }
+
   .ndst-cover-desktop {
     display: none;
   }
@@ -239,12 +240,12 @@
     z-index: 2;
     width: 100%;
     text-align: center;
-            padding: 0;
+    padding: 0;
   }
 
-    .ndst-cover-mobile__title h1 {
-     font-size: 1.6rem;
-     margin-bottom: var(--space-xl);
+  .ndst-cover-mobile__title h1 {
+    font-size: 1.6rem;
+    margin-bottom: var(--space-xl);
   }
 
   .ndst-cover-mobile__subtitle h3 {
@@ -317,7 +318,7 @@
   }
 
   .beiton__text {
-    margin-bottom: var(--space-xxl);
+    margin-bottom: var(--space-xl);
   }
 }
 
