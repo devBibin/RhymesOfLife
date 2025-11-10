@@ -1,7 +1,14 @@
 (function () {
   function getCookie(name) {
-    const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return v ? v.pop() : '';
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? decodeURIComponent(m.pop()) : '';
+  }
+
+  function t(s) {
+    try {
+      if (typeof window.gettext === 'function') return window.gettext(s);
+    } catch (e) {}
+    return s;
   }
 
   function showMessage(container, text, type) {
@@ -16,30 +23,37 @@
   function switchTab(target) {
     const tabs = root.querySelectorAll('.form-tab');
     const forms = root.querySelectorAll('.form-container');
-    tabs.forEach(t => {
-      const isActive = t.getAttribute('data-tab') === target;
-      t.classList.toggle('active', isActive);
-      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    tabs.forEach(btn => {
+      const active = btn.getAttribute('data-tab') === target;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
-    forms.forEach(f => {
-      const isActive = f.id === `${target}-form`;
-      f.classList.toggle('active', isActive);
-    });
+    forms.forEach(f => f.classList.toggle('active', f.id === `${target}-form`));
     messages.innerHTML = '';
   }
 
-  async function submitAjax(url, form) {
+  async function submitAjax(url, form, submitBtn) {
     const fd = new FormData(form);
-    const resp = await fetch(url, {
+    const opts = {
       method: 'POST',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRFToken': getCookie('csrftoken')
-      },
+      headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
       body: fd,
       credentials: 'same-origin'
-    });
-    return resp.json();
+    };
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
+    try {
+      const resp = await fetch(url, opts);
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) throw data;
+      return data;
+    } catch (err) {
+      const msg = (err && (err.error || err.message)) || t('Network error. Please try again.');
+      return { ok: false, error: msg };
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
+    }
   }
 
   function bindTabs() {
@@ -53,31 +67,26 @@
         switchTab(a.getAttribute('data-switch'));
       });
     });
-    const initial = root.getAttribute('data-initial-tab') || 'register';
-    switchTab(initial);
+    switchTab(root.getAttribute('data-initial-tab') || 'register');
   }
 
   function bindForms() {
     regForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       showMessage(messages, '', 'info');
-      const res = await submitAjax(registerUrl, regForm);
-      if (res.ok && res.redirect) {
-        window.location.href = res.redirect;
-        return;
-      }
-      showMessage(messages, res.error || res.message || 'Error', 'danger');
+      const btn = regForm.querySelector('button[type=submit]');
+      const res = await submitAjax(registerUrl, regForm, btn);
+      if (res.ok && res.redirect) { window.location.href = res.redirect; return; }
+      showMessage(messages, res.error || t('Unknown error'), 'danger');
     });
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       showMessage(messages, '', 'info');
-      const res = await submitAjax(loginUrl, loginForm);
-      if (res.ok && res.redirect) {
-        window.location.href = res.redirect;
-        return;
-      }
-      showMessage(messages, res.error || res.message || 'Error', 'danger');
+      const btn = loginForm.querySelector('button[type=submit]');
+      const res = await submitAjax(loginUrl, loginForm, btn);
+      if (res.ok && res.redirect) { window.location.href = res.redirect; return; }
+      showMessage(messages, res.error || t('Unknown error'), 'danger');
     });
   }
 
