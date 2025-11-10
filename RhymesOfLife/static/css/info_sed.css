@@ -109,6 +109,8 @@
 }
 
 .accordion__header {
+    -webkit-appearance: none;
+  appearance: none;
   align-items: center;
   background: transparent;
   border: none;

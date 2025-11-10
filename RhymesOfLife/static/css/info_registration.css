@@ -101,7 +101,8 @@ body.no-scroll {
   transform: none !important;
   outline: none !important;
   box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent
+  -webkit-tap-highlight-color: transparent;
+  width: 60%;
 }
 
 .form-tab.active {
@@ -387,7 +388,8 @@ body.no-scroll {
 
   .form-tabs {
     border-radius: 14px 14px 0 0;
-    overflow: hidden
+    overflow: hidden;
+    display: flex
   }
 
   .form-tab {
