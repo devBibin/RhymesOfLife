@@ -81,45 +81,67 @@ body.no-scroll {
 }
 
 .form-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  background: var(--color-white);
+  display: flex;
+  width: 100%;
   border-radius: 12px 12px 0 0;
-  overflow: hidden
+  overflow: hidden;
+  background: var(--color-white);
 }
 
+.form-tabs {
+  display: flex;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+/* каждая вкладка растягивается пропорционально содержимому */
 .form-tab {
+  flex: 1 1 auto;
   font-family: var(--font-styled);
   font-weight: 700;
   font-size: 1.1rem;
-  padding: var(--space-md) 0;
-  border: none;
+  padding: var(--space-md) var(--space-xl);
   background: rgb(237, 237, 237);
   color: var(--color-black);
+  border: none;
   cursor: pointer;
+  text-align: center;
   transition: var(--transition);
-  transform: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent
+  white-space: nowrap;
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* активная вкладка */
 .form-tab.active {
   background: var(--color-primary);
-  color: var(--color-white)
+  color: var(--color-white);
 }
 
-.form-tab:not(.active):hover {
-  background: rgba(0, 0, 0, .04);
-  transform: none !important
-}
-
+/* скругления по позициям */
 .form-tab:first-child {
-  border-top-left-radius: 12px
+  border-top-left-radius: 12px;
+  border-top-right-radius: 0;
 }
 
 .form-tab:last-child {
-  border-top-right-radius: 12px
+  border-top-left-radius: 0;
+  border-top-right-radius: 12px;
+}
+
+/* hover эффект */
+.form-tab:not(.active):hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* убираем синюю обводку при фокусе */
+.form-tab:focus,
+.form-tab:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .form-body {
@@ -162,7 +184,7 @@ body.no-scroll {
 
 .form-input {
   width: 100%;
-  padding: 0;
+  padding: 7px 0;
   border: none;
   border-bottom: 2px solid #ccc;
   background: transparent;
@@ -268,7 +290,7 @@ body.no-scroll {
 
 .form-label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   font-weight: 600;
   color: var(--color-black);
   font-size: .95rem;
@@ -387,7 +409,8 @@ body.no-scroll {
 
   .form-tabs {
     border-radius: 14px 14px 0 0;
-    overflow: hidden
+    overflow: hidden;
+    display: flex
   }
 
   .form-tab {

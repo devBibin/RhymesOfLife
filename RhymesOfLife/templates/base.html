@@ -18,6 +18,7 @@
 
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+
   {% block extra_css %}{% endblock %}
   {% block extra_head %}{% endblock %}
 </head>
@@ -30,6 +31,7 @@
            href="{% if request.user.is_authenticated %}{% if request.user.additional_info.is_banned %}{% url 'banned' %}{% else %}{% url 'home' %}{% endif %}{% else %}{% url 'home_public' %}{% endif %}">
           {% trans "Rhymes of Life" %}
         </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
           <span class="navbar-toggler-icon"></span>
@@ -65,6 +67,12 @@
                 </li>
 
                 <li class="nav-item">
+                  <a class="nav-link" href="{% url 'home_public' %}">
+                    <i class="bi bi-activity"></i> {% trans "Symptoms" %}
+                  </a>
+                </li>
+
+                <li class="nav-item">
                   <a class="nav-link" href="{% url 'my_health' %}">
                     <i class="bi bi-heart-pulse"></i> {% trans "My health" %}
                   </a>
@@ -83,7 +91,6 @@
                   </a>
                 </li>
 
-                <!-- NOTIFICATIONS DROPDOWN -->
                 <li class="nav-item dropdown">
                   <a class="nav-link position-relative" href="#" id="notifDropdown" role="button"
                      data-bs-toggle="dropdown" aria-expanded="false">
@@ -126,6 +133,7 @@
                                       {{ n.created_at|date:"d.m.Y H:i" }}
                                     </a>
                                   </div>
+
                                   {% if n.title %}
                                     <div class="fw-semibold text-break">
                                       <a href="{% url 'notifications' %}#n-{{ n.id }}" class="stretched-link text-reset text-decoration-none">
@@ -133,6 +141,7 @@
                                       </a>
                                     </div>
                                   {% endif %}
+
                                   <div class="text-break">
                                     {% if n.notification_type == 'FOLLOW' %}
                                       {% blocktrans with username=n.sender.user.username %}
@@ -154,15 +163,18 @@
                                   {% endif %}
                                 </div>
                               </div>
+
                               {% if not n.url %}
                                 <a href="{% url 'notifications' %}#n-{{ n.id }}" class="stretched-link"></a>
                               {% endif %}
+
                               {% if not forloop.last %}<hr class="my-2">{% endif %}
                             </div>
                           {% endfor %}
                         </div>
                       </li>
                       <li><hr class="dropdown-divider"></li>
+
                     {% else %}
                       <li><span class="dropdown-item text-muted">{% trans "No new notifications" %}</span></li>
                       <li><hr class="dropdown-divider"></li>
@@ -175,29 +187,28 @@
                     </li>
                   </ul>
                 </li>
-                <!-- /NOTIFICATIONS DROPDOWN -->
 
                 {% if request.user|hasanyperm:'base.view_patient_list,base.can_notify_users,base.view_help_requests' %}
                   {% if request.user|hasperm:'base.view_patient_list' %}
-                  <li class="nav-item">
-                    <a class="nav-link text-warning" href="{% url 'patients_list' %}">
-                      <i class="bi bi-people-fill"></i> {% trans "Patients" %}
-                    </a>
-                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-warning" href="{% url 'patients_list' %}">
+                        <i class="bi bi-people-fill"></i> {% trans "Patients" %}
+                      </a>
+                    </li>
                   {% endif %}
                   {% if request.user|hasperm:'base.can_notify_users' %}
-                  <li class="nav-item">
-                    <a class="nav-link text-warning" href="{% url 'admin_notify' %}">
-                      <i class="bi bi-megaphone-fill"></i> {% trans "Notify users" %}
-                    </a>
-                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-warning" href="{% url 'admin_notify' %}">
+                        <i class="bi bi-megaphone-fill"></i> {% trans "Notify users" %}
+                      </a>
+                    </li>
                   {% endif %}
                   {% if request.user|hasperm:'base.view_help_requests' %}
-                  <li class="nav-item">
-                    <a class="nav-link text-warning" href="{% url 'staff_help_requests' %}">
-                      <i class="bi bi-life-preserver"></i> {% trans "Help requests" %}
-                    </a>
-                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-warning" href="{% url 'staff_help_requests' %}">
+                        <i class="bi bi-life-preserver"></i> {% trans "Help requests" %}
+                      </a>
+                    </li>
                   {% endif %}
                 {% endif %}
 
@@ -212,14 +223,13 @@
               {% endif %}
 
             {% else %}
-
               <li class="nav-item">
                 <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}">
                   <i class="bi bi-box-arrow-in-right me-1"></i> {% trans "Log in" %}
                 </a>
               </li>
-
             {% endif %}
+
 
             {% with code=LANGUAGE_CODE|slice:":2" %}
               <li class="nav-item ms-2">

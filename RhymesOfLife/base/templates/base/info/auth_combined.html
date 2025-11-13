@@ -6,6 +6,103 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
+<style>
+  .password-field {
+    margin-bottom: 1rem;
+  }
+
+  .password-field .form-label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-input .form-input {
+    width: 100%;
+    padding: 0.6rem 2.9rem 0.6rem 0.85rem;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #f6f8ff;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .password-input .form-input:focus {
+    border-color: rgba(var(--bs-primary-rgb, 59, 130, 246), 1);
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb, 59, 130, 246), 0.25);
+    outline: none;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    width: 2.2rem;
+    height: 2.2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6b7280;
+    transition: color .15s ease, transform .1s ease;
+
+    font-size: 0;
+  }
+
+  .password-toggle:hover {
+    color: #111827;
+    transform: translateY(-50%) translateY(-1px);
+  }
+
+  .password-toggle:active {
+    transform: translateY(-50%);
+  }
+
+  .password-toggle:focus,
+  .password-toggle:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .password-toggle-icon {
+    width: 1.45rem;
+    height: 1.45rem;
+    display: block;
+    pointer-events: none;
+    transform: translateY(-6px);
+  }
+
+  @media (max-width: 576px) {
+    .password-input .form-input {
+      padding: 0.7rem 3.1rem 0.7rem 0.9rem;
+      font-size: 0.95rem;
+    }
+
+    .password-toggle {
+      right: 0.6rem;
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+
+    .password-toggle-icon {
+      width: 1.55rem;
+      height: 1.55rem;
+    }
+  }
+</style>
+
 <section class="section section--accent form-section"
          id="auth-root"
          data-login-url="{% url 'login' %}"
@@ -16,8 +113,8 @@
     <div class="form-grid">
       <div class="form-card">
         <div class="form-tabs">
-          <button class="form-tab active" data-tab="register">{% trans "Sign up" %}</button>
           <button class="form-tab" data-tab="login">{% trans "Log in" %}</button>
+          <button class="form-tab active" data-tab="register">{% trans "Sign up" %}</button>
         </div>
 
         <div class="form-body">
@@ -34,19 +131,64 @@
               <label for="reg-email" class="form-label">{% trans "Email" %}</label>
               <input type="email" id="reg-email" name="email" class="form-input" required autocomplete="email">
             </div>
-            <div class="mb-3">
+
+            <div class="mb-3 password-field">
               <label for="reg-pass1" class="form-label">{% trans "Password" %}</label>
-              <input type="password" id="reg-pass1" name="password1" class="form-input" required autocomplete="new-password">
+              <div class="password-input">
+                <input type="password"
+                       id="reg-pass1"
+                       name="password1"
+                       class="form-input"
+                       required
+                       autocomplete="new-password">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-toggle
+                  data-target="reg-pass1"
+                  data-label-show="{% trans 'Show password' %}"
+                  data-label-hide="{% trans 'Hide password' %}">
+                  <img src="{% static 'images/open_eye.svg' %}"
+                       alt=""
+                       class="password-toggle-icon"
+                       aria-hidden="true">
+                  <span class="visually-hidden">{% trans "Show password" %}</span>
+                </button>
+              </div>
             </div>
-            <div class="mb-3">
+
+            <div class="mb-3 password-field">
               <label for="reg-pass2" class="form-label">{% trans "Confirm password" %}</label>
-              <input type="password" id="reg-pass2" name="password2" class="form-input" required autocomplete="new-password">
+              <div class="password-input">
+                <input type="password"
+                       id="reg-pass2"
+                       name="password2"
+                       class="form-input"
+                       required
+                       autocomplete="new-password">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-toggle
+                  data-target="reg-pass2"
+                  data-label-show="{% trans 'Show password' %}"
+                  data-label-hide="{% trans 'Hide password' %}">
+                  <img src="{% static 'images/open_eye.svg' %}"
+                       alt=""
+                       class="password-toggle-icon"
+                       aria-hidden="true">
+                  <span class="visually-hidden">{% trans "Show password" %}</span>
+                </button>
+              </div>
             </div>
+
             <input type="hidden" name="ajax" value="1">
             <button type="submit" class="btn form-btn">{% trans "Create account" %}</button>
 
             <div class="form-links">
-              <a href="#" class="recovery-link" data-switch="login">{% trans "Already have an account?" %} {% trans "Log in" %}</a>
+              <a href="#" class="recovery-link" data-switch="login">
+                {% trans "Already have an account?" %} {% trans "Log in" %}
+              </a>
             </div>
           </form>
 
@@ -54,20 +196,46 @@
           <form class="form-container" id="login-form" novalidate>
             {% csrf_token %}
             <div class="mb-3">
-              <label for="login-username" class="form-label">{% trans "Username" %}</label>
+              <label for="login-username" class="form-label">{% trans "Username or email" %}</label>
               <input type="text" id="login-username" name="username" class="form-input" required autocomplete="username">
             </div>
-            <div class="mb-3">
+
+            <div class="mb-3 password-field">
               <label for="login-password" class="form-label">{% trans "Password" %}</label>
-              <input type="password" id="login-password" name="password" class="form-input" required autocomplete="current-password">
+              <div class="password-input">
+                <input type="password"
+                       id="login-password"
+                       name="password"
+                       class="form-input"
+                       required
+                       autocomplete="current-password">
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-toggle
+                  data-target="login-password"
+                  data-label-show="{% trans 'Show password' %}"
+                  data-label-hide="{% trans 'Hide password' %}">
+                  <img src="{% static 'images/open_eye.svg' %}"
+                       alt=""
+                       class="password-toggle-icon"
+                       aria-hidden="true">
+                  <span class="visually-hidden">{% trans "Show password" %}</span>
+                </button>
+              </div>
             </div>
+
             <input type="hidden" name="ajax" value="1">
             <button type="submit" class="btn form-btn">{% trans "Log in" %}</button>
 
             <div class="form-links">
-              <a class="forgot-password" href="{% url 'password_reset_request' %}">{% trans "Forgot password?" %}</a>
+              <a class="forgot-password" href="{% url 'password_reset_request' %}">
+                {% trans "Forgot password?" %}
+              </a>
               <div class="mt-3">
-                <a href="#" class="recovery-link" data-switch="register">{% trans "Don't have an account?" %} {% trans "Sign up" %}</a>
+                <a href="#" class="recovery-link" data-switch="register">
+                  {% trans "Don't have an account?" %} {% trans "Sign up" %}
+                </a>
               </div>
             </div>
           </form>

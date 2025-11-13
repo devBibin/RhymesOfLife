@@ -72,6 +72,19 @@ def is_ajax(request: HttpRequest) -> bool:
     return request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.POST.get("ajax") == "1"
 
 
+class EmailOrUsernameAuthenticationForm(AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        if username and "@" in username:
+            try:
+                user = User.objects.get(email__iexact=username.strip())
+            except User.DoesNotExist:
+                pass
+            else:
+                self.cleaned_data["username"] = user.get_username()
+        return super().clean()
+
+
 @require_http_methods(["GET", "POST"])
 @csrf_protect
 @never_cache
@@ -82,27 +95,35 @@ def register_view(request):
             return JsonResponse({"ok": True, "redirect": reverse("home")})
         return redirect("home")
 
-    context = {"values": {}}
+    context = {"values": {}, "initial_tab": "register"}
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         email = request.POST.get("email", "").strip().lower()
         password1 = request.POST.get("password1", "")
         password2 = request.POST.get("password2", "")
         context["values"] = {"username": username, "email": email}
+
         error = _validate_signup_input(username, email, password1, password2)
+        if not error:
+            from django.contrib.auth.password_validation import validate_password
+            try:
+                validate_password(password1)
+            except Exception:
+                error = _("Password is too weak.")
+
         if error:
             if is_ajax(request):
                 return JsonResponse({"ok": False, "error": str(error)}, status=400)
             messages.error(request, error)
-            context["error"] = error
-            return render(request, "base/login.html", context)
+            return render(request, "base/info/auth_combined.html", context)
 
         _create_user_with_profile(username, email, password1)
         if is_ajax(request):
             return JsonResponse({"ok": True, "redirect": reverse("verify_prompt")})
         messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
         return redirect("verify_prompt")
-    return render(request, "base/login.html", context)
+
+    return render(request, "base/info/auth_combined.html", context)
 
 
 @require_http_methods(["GET", "POST"])
@@ -116,15 +137,16 @@ def login_view(request):
         return redirect("home")
 
     if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
+        form = EmailOrUsernameAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             lang = _apply_user_language(request, user)
             seclog.info("Login success: user_id=%s username=%s", user.id, user.username)
-            response_url = reverse("home")
+            target = reverse("home")
             if is_ajax(request):
-                resp = JsonResponse({"ok": True, "redirect": response_url})
+                resp = JsonResponse({"ok": True, "redirect": target})
+                resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
                 return resp
             response = redirect("home")
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
@@ -133,10 +155,9 @@ def login_view(request):
         error = _("Invalid username or password.")
         if is_ajax(request):
             return JsonResponse({"ok": False, "error": str(error)}, status=400)
-
         messages.error(request, error)
-    else:
-        form = AuthenticationForm()
+        return render(request, "base/info/auth_combined.html", {"initial_tab": "login"})
+
     return render(request, "base/info/auth_combined.html", {"initial_tab": "login"})
 
 
@@ -367,7 +388,7 @@ def home_public_view(request):
         if form_type == "login":
             context["active_tab"] = "login"
             context["login_values"] = {"username": request.POST.get("username", "").strip()}
-            form = AuthenticationForm(data=request.POST)
+            form = EmailOrUsernameAuthenticationForm(data=request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)

@@ -74,8 +74,12 @@
 }
 
 .cover-desktop__title h1 {
-font-size: 4rem;
-font-weight: 900;
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+.cover-desktop__astra-project {
+  padding-bottom: 5px;
 }
 
 /* Mobile Cover */
@@ -144,10 +148,10 @@ font-weight: 900;
 }
 
 .grid--align--end {
-    display: grid !important;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--gutter);
-    align-items: center;
+  display: grid !important;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  align-items: center;
 }
 
 .help__image-wrapper {
@@ -217,6 +221,10 @@ font-weight: 900;
     margin-bottom: 0;
   }
 
+  .cover-mobile__astra-project h4 {
+    font-size: 1rem;
+  }
+
   .cover-mobile__title {
     display: block;
     text-align: center;
@@ -224,7 +232,7 @@ font-weight: 900;
   }
 
   .cover-mobile__title h1 {
-    font-size: 4rem;
+    font-size: 2.4rem;
     line-height: 100%;
   }
 
@@ -233,10 +241,10 @@ font-weight: 900;
   }
 
   .cover-mobile__subtitle h3 {
-    font-size: 2rem;
+    font-size: 1.4rem;
   }
 
-   .class__text-block {
+  .class__text-block {
     margin: 0 0 var(--space-xxl);
   }
 
@@ -271,7 +279,6 @@ font-weight: 900;
     grid-column: 1 / -1;
     text-align: center;
     padding: 20px 0 0;
-    /* Центрируем текст в help секции */
   }
 
   .help__image-wrapper {
@@ -284,7 +291,6 @@ font-weight: 900;
     max-width: 70%;
   }
 
-  /* Центрируем кнопки в группах */
   .btn-group {
     align-items: center;
     margin-top: var(--space-xl);
@@ -293,7 +299,12 @@ font-weight: 900;
   /* Центрируем списки */
   .list {
     text-align: left;
-    /* Оставляем текст списков выровненным по левому краю для читаемости */
     padding-left: var(--space-sm);
+    padding: 0 !important
+  }
+
+  .list__item::before {
+    color: var(--color-black);
+
   }
 }

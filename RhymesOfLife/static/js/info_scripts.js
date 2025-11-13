@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (mobileMenu) {
       mobileMenu.classList.toggle('mobile-menu--active', isMobileMenuOpen);
-      mobileMenu.setAttribute('aria-hidden', String(!isMobileMenuOpen));
+      // mobileMenu.setAttribute('aria-hidden', isMobileMenuOpen ? 'false' : 'true');
     }
     if (burgerBtn) {
       burgerBtn.setAttribute('aria-expanded', String(isMobileMenuOpen));
