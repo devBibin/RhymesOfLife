@@ -62,6 +62,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+
+
 ONBOARDING_REQUIRE_CONSENTS = True
 ONBOARDING_REQUIRE_PHONE = True
 ONBOARDING_SKIP_FOR_STAFF = True

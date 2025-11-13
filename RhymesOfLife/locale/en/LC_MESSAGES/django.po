@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-08 23:26+0000\n"
+"POT-Creation-Date: 2025-11-13 22:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,7 +214,7 @@ msgid "Author"
 msgstr ""
 
 #: base/models.py:425 base/models.py:498
-#: base/templates/base/post_create.html:27
+#: base/templates/base/post_create.html:34
 #: base/templates/base/post_edit.html:36 blog/models.py:263
 msgid "Text"
 msgstr ""
@@ -371,8 +371,7 @@ msgstr ""
 
 #: base/signals.py:32 base/templates/base/help_request.html:30
 #: base/templates/base/home.html:92 base/templates/base/home.html:123
-#: base/templates/base/info/auth_combined.html:30
-#: base/templates/base/info/auth_combined.html:57
+#: base/templates/base/info/auth_combined.html:127
 #: base/templates/base/staff_help_requests.html:50
 #: base/templates/base/staff_help_requests.html:84
 msgid "Username"
@@ -383,7 +382,7 @@ msgid "User ID"
 msgstr ""
 
 #: base/signals.py:34 base/templates/base/home.html:96
-#: base/templates/base/info/auth_combined.html:34
+#: base/templates/base/info/auth_combined.html:131
 #: base/templates/base/profile.html:91 base/templates/base/profile_edit.html:91
 #: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:52
@@ -500,7 +499,7 @@ msgstr ""
 
 #: base/templates/base/admin_notify.html:62
 #: base/templates/base/notifications.html:31 base/utils/notify.py:26
-#: templates/base.html:151
+#: templates/base.html:160
 msgid "Details"
 msgstr ""
 
@@ -512,12 +511,12 @@ msgid "Send"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:67
-#: base/templates/base/post_create.html:52
+#: base/templates/base/post_create.html:59
 #: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:222
 msgid "Cancel"
 msgstr ""
 
-#: base/templates/base/banned.html:4 templates/base.html:47
+#: base/templates/base/banned.html:4 templates/base.html:49
 msgid "Account banned"
 msgstr ""
 
@@ -537,8 +536,8 @@ msgstr ""
 msgid "Since"
 msgstr ""
 
-#: base/templates/base/banned.html:20 templates/base.html:54
-#: templates/base.html:207
+#: base/templates/base/banned.html:20 templates/base.html:56
+#: templates/base.html:218
 msgid "Log out"
 msgstr ""
 
@@ -1322,43 +1321,49 @@ msgstr ""
 
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
 #: base/templates/base/home.html:137
-#: base/templates/base/info/auth_combined.html:19
-#: base/templates/base/info/auth_combined.html:70
+#: base/templates/base/info/auth_combined.html:117
+#: base/templates/base/info/auth_combined.html:237
 msgid "Sign up"
 msgstr ""
 
 #: base/templates/base/home.html:77 base/templates/base/home.html:134
-#: base/templates/base/info/auth_combined.html:20
-#: base/templates/base/info/auth_combined.html:49
-#: base/templates/base/info/auth_combined.html:65
-#: blog/templates/blog/blog_page.html:179 templates/base.html:218
+#: base/templates/base/info/auth_combined.html:116
+#: base/templates/base/info/auth_combined.html:190
+#: base/templates/base/info/auth_combined.html:229
+#: blog/templates/blog/blog_page.html:179 templates/base.html:228
 msgid "Log in"
 msgstr ""
 
 #: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/info/auth_combined.html:38
-#: base/templates/base/info/auth_combined.html:61
+#: base/templates/base/info/auth_combined.html:136
+#: base/templates/base/info/auth_combined.html:204
 msgid "Password"
 msgstr ""
 
 #: base/templates/base/home.html:104
-#: base/templates/base/info/auth_combined.html:42
+#: base/templates/base/info/auth_combined.html:161
 #: base/templates/base/reset_new.html:30
 msgid "Confirm password"
 msgstr ""
 
 #: base/templates/base/home.html:109 base/templates/base/home.html:132
+#: base/templates/base/info/auth_combined.html:149
+#: base/templates/base/info/auth_combined.html:155
+#: base/templates/base/info/auth_combined.html:174
+#: base/templates/base/info/auth_combined.html:180
+#: base/templates/base/info/auth_combined.html:217
+#: base/templates/base/info/auth_combined.html:223
 #: base/templates/base/reset_new.html:36
 msgid "Show password"
 msgstr ""
 
 #: base/templates/base/home.html:135
-#: base/templates/base/info/auth_combined.html:68
+#: base/templates/base/info/auth_combined.html:233
 msgid "Forgot password?"
 msgstr ""
 
 #: base/templates/base/home.html:137
-#: base/templates/base/info/auth_combined.html:70
+#: base/templates/base/info/auth_combined.html:237
 msgid "Don't have an account?"
 msgstr ""
 
@@ -1419,107 +1424,128 @@ msgstr ""
 msgid "Sign in / Sign up"
 msgstr ""
 
-#: base/templates/base/info/auth_combined.html:46
+#: base/templates/base/info/auth_combined.html:150
+#: base/templates/base/info/auth_combined.html:175
+#: base/templates/base/info/auth_combined.html:218
+msgid "Hide password"
+msgstr ""
+
+#: base/templates/base/info/auth_combined.html:186
 msgid "Create account"
 msgstr ""
 
-#: base/templates/base/info/auth_combined.html:49
+#: base/templates/base/info/auth_combined.html:190
 msgid "Already have an account?"
 msgstr ""
 
-#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:35
-#: templates/base.html:69
+#: base/templates/base/info/auth_combined.html:199
+#: base/templates/base/reset_request.html:28
+msgid "Username or email"
+msgstr ""
+
+#: base/templates/base/my_health.html:4 base/templates/base/my_health.html:36
+#: base/templates/base/my_health.html:37 base/templates/base/my_health.html:112
+#: templates/base.html:77
 msgid "My health"
 msgstr ""
 
-#: base/templates/base/my_health.html:40 base/templates/base/my_health.html:41
-#: base/templates/base/my_health.html:91
+#: base/templates/base/my_health.html:43 base/templates/base/my_health.html:44
+#: base/templates/base/my_health.html:94
 #: base/templates/base/patient_wellness.html:40
 #: base/templates/base/patients_list.html:87
 msgid "Wellness"
 msgstr ""
 
-#: base/templates/base/my_health.html:45 base/templates/base/my_health.html:46
+#: base/templates/base/my_health.html:48 base/templates/base/my_health.html:49
 msgid "Examinations"
 msgstr ""
 
-#: base/templates/base/my_health.html:50 base/templates/base/my_health.html:51
+#: base/templates/base/my_health.html:53 base/templates/base/my_health.html:54
 #: base/templates/base/partials/health_recommendations.html:3
 msgid "Doctor's comments"
 msgstr ""
 
-#: base/templates/base/my_health.html:90
+#: base/templates/base/my_health.html:93
 msgid "Failed to load. Please try again."
 msgstr ""
 
-#: base/templates/base/my_health.html:92
+#: base/templates/base/my_health.html:95
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
 msgstr ""
 
-#: base/templates/base/my_health.html:93
+#: base/templates/base/my_health.html:96
 msgid "Paste link"
 msgstr ""
 
-#: base/templates/base/my_health.html:94
+#: base/templates/base/my_health.html:97
 msgid "Remove link"
 msgstr ""
 
-#: base/templates/base/my_health.html:95
+#: base/templates/base/my_health.html:98
 msgid "Remove file"
 msgstr ""
 
-#: base/templates/base/my_health.html:96
+#: base/templates/base/my_health.html:99
 msgid "Please specify the exam date."
 msgstr ""
 
-#: base/templates/base/my_health.html:97 base/views/wellness_views.py:85
+#: base/templates/base/my_health.html:100 base/views/wellness_views.py:85
 msgid "Failed to save."
 msgstr ""
 
-#: base/templates/base/my_health.html:98
+#: base/templates/base/my_health.html:101
 msgid "Network error."
 msgstr ""
 
-#: base/templates/base/my_health.html:99
+#: base/templates/base/my_health.html:102
 msgid "Unable to load data."
 msgstr ""
 
-#: base/templates/base/my_health.html:100
+#: base/templates/base/my_health.html:103
 msgid "Delete this exam?"
 msgstr ""
 
-#: base/templates/base/my_health.html:101
+#: base/templates/base/my_health.html:104
 msgid "Deletion failed."
 msgstr ""
 
-#: base/templates/base/my_health.html:102
+#: base/templates/base/my_health.html:105
 msgid "Delete this file?"
 msgstr ""
 
-#: base/templates/base/my_health.html:103
+#: base/templates/base/my_health.html:106
 #, python-format
 msgid "Unsupported file type: %%(name)s"
 msgstr ""
 
-#: base/templates/base/my_health.html:104
+#: base/templates/base/my_health.html:107
 #, python-format
 msgid "File is too large (max %%(size)s MB): %%(name)s"
 msgstr ""
 
-#: base/templates/base/my_health.html:105
+#: base/templates/base/my_health.html:108
 msgid "This file is already in the list."
 msgstr ""
 
-#: base/templates/base/my_health.html:106
+#: base/templates/base/my_health.html:109
 msgid "Note"
+msgstr ""
+
+#: base/templates/base/my_health.html:110
+#, python-format
+msgid "Allowed: %%(ext)s. Max size: %%(size)s"
+msgstr ""
+
+#: base/templates/base/my_health.html:111
+msgid "You can attach external links (e.g., Google Drive, Dropbox, OneDrive)."
 msgstr ""
 
 #: base/templates/base/notifications.html:4
 #: base/templates/base/notifications.html:9
 #: base/templates/base/partials/health_wellness.html:49
 #: base/templates/base/partials/health_wellness.html:125
-#: templates/base.html:100
+#: templates/base.html:107
 msgid "Notifications"
 msgstr ""
 
@@ -1628,6 +1654,7 @@ msgstr ""
 #: base/templates/base/patients_list.html:99
 #: base/templates/base/patients_list.html:100
 #: base/templates/base/patients_list.html:105
+#: base/templates/base/post_create.html:24
 #: base/templates/base/post_edit.html:27
 msgid "Back"
 msgstr ""
@@ -1824,7 +1851,7 @@ msgid "More actions"
 msgstr ""
 
 #: base/templates/base/post_cards.html:72
-#: base/templates/base/post_create.html:51
+#: base/templates/base/post_create.html:58
 #: blog/templates/blog/create_article.html:67
 #: blog/templates/blog/edit_article.html:75
 msgid "Publish"
@@ -1869,24 +1896,24 @@ msgstr ""
 msgid "No posts yet."
 msgstr ""
 
-#: base/templates/base/post_create.html:28
+#: base/templates/base/post_create.html:35
 #: base/templates/base/post_edit.html:37
 msgid "Write something..."
 msgstr ""
 
-#: base/templates/base/post_create.html:33
+#: base/templates/base/post_create.html:40
 msgid "Images"
 msgstr ""
 
-#: base/templates/base/post_create.html:39
+#: base/templates/base/post_create.html:46
 msgid "Add photo"
 msgstr ""
 
-#: base/templates/base/post_create.html:40
+#: base/templates/base/post_create.html:47
 msgid "Drag & drop or click to upload"
 msgstr ""
 
-#: base/templates/base/post_create.html:43
+#: base/templates/base/post_create.html:50
 #: base/templates/base/post_edit.html:79
 msgid "Choose files"
 msgstr ""
@@ -1984,7 +2011,7 @@ msgid "User has been unbanned."
 msgstr ""
 
 #: base/templates/base/profile_content_fragment.html:41
-#: blog/templates/blog/blog_index_page.html:7 templates/base.html:76
+#: blog/templates/blog/blog_index_page.html:7 templates/base.html:84
 msgid "Articles"
 msgstr ""
 
@@ -2074,10 +2101,6 @@ msgstr ""
 msgid "Reset password"
 msgstr ""
 
-#: base/templates/base/reset_request.html:28
-msgid "Username or email"
-msgstr ""
-
 #: base/templates/base/reset_request.html:37
 msgid "Your username or email"
 msgstr ""
@@ -2115,7 +2138,7 @@ msgstr ""
 msgid "Resend code"
 msgstr ""
 
-#: base/templates/base/staff_help_requests.html:13 templates/base.html:198
+#: base/templates/base/staff_help_requests.html:13 templates/base.html:209
 msgid "Help requests"
 msgstr ""
 
@@ -2315,43 +2338,47 @@ msgstr ""
 msgid "This email is already registered."
 msgstr ""
 
-#: base/views/auth_views.py:103 base/views/auth_views.py:365
+#: base/views/auth_views.py:112
+msgid "Password is too weak."
+msgstr ""
+
+#: base/views/auth_views.py:123 base/views/auth_views.py:386
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr ""
 
-#: base/views/auth_views.py:133 base/views/auth_views.py:379
+#: base/views/auth_views.py:155 base/views/auth_views.py:400
 msgid "Invalid username or password."
 msgstr ""
 
-#: base/views/auth_views.py:177
+#: base/views/auth_views.py:198
 msgid "A verification email has been sent. Please confirm your account."
 msgstr ""
 
-#: base/views/auth_views.py:201
+#: base/views/auth_views.py:222
 msgid "Email verification failed or token is invalid."
 msgstr ""
 
-#: base/views/auth_views.py:222
+#: base/views/auth_views.py:243
 msgid "Enter phone number."
 msgstr ""
 
-#: base/views/auth_views.py:228
+#: base/views/auth_views.py:249
 msgid "Failed to initiate call."
 msgstr ""
 
-#: base/views/auth_views.py:253
+#: base/views/auth_views.py:274
 msgid "No phone number set."
 msgstr ""
 
-#: base/views/auth_views.py:262 base/views/auth_views.py:265
+#: base/views/auth_views.py:283 base/views/auth_views.py:286
 msgid "Provider error"
 msgstr ""
 
-#: base/views/auth_views.py:302
+#: base/views/auth_views.py:323
 msgid "Please accept all items."
 msgstr ""
 
-#: base/views/auth_views.py:348
+#: base/views/auth_views.py:369
 msgid "You are already signed in."
 msgstr ""
 
@@ -2786,23 +2813,27 @@ msgstr ""
 msgid "Upload error."
 msgstr ""
 
-#: templates/base.html:31
+#: templates/base.html:32
 msgid "Rhymes of Life"
 msgstr ""
 
-#: templates/base.html:34
+#: templates/base.html:36
 msgid "Toggle navigation"
 msgstr ""
 
-#: templates/base.html:63
+#: templates/base.html:65
 msgid "My profile"
 msgstr ""
 
-#: templates/base.html:82
+#: templates/base.html:71
+msgid "Symptoms"
+msgstr ""
+
+#: templates/base.html:90
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:138
+#: templates/base.html:147
 #, python-format
 msgid ""
 "\n"
@@ -2811,26 +2842,26 @@ msgid ""
 "                                      "
 msgstr ""
 
-#: templates/base.html:167
+#: templates/base.html:179
 msgid "No new notifications"
 msgstr ""
 
-#: templates/base.html:173
+#: templates/base.html:185
 msgid "Show all notifications"
 msgstr ""
 
-#: templates/base.html:184
+#: templates/base.html:195
 msgid "Patients"
 msgstr ""
 
-#: templates/base.html:191
+#: templates/base.html:202
 msgid "Notify users"
 msgstr ""
 
-#: templates/base.html:231 templates/base.html:234
+#: templates/base.html:241 templates/base.html:244
 msgid "Switch language"
 msgstr ""
 
-#: templates/base.html:250
+#: templates/base.html:260
 msgid "All rights reserved."
 msgstr ""
