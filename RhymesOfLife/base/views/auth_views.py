@@ -72,6 +72,19 @@ def is_ajax(request: HttpRequest) -> bool:
     return request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.POST.get("ajax") == "1"
 
 
+class EmailOrUsernameAuthenticationForm(AuthenticationForm):
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        if username and "@" in username:
+            try:
+                user = User.objects.get(email__iexact=username.strip())
+            except User.DoesNotExist:
+                pass
+            else:
+                self.cleaned_data["username"] = user.get_username()
+        return super().clean()
+
+
 @require_http_methods(["GET", "POST"])
 @csrf_protect
 @never_cache
@@ -95,7 +108,7 @@ def register_view(request):
             from django.contrib.auth.password_validation import validate_password
             try:
                 validate_password(password1)
-            except Exception as e:
+            except Exception:
                 error = _("Password is too weak.")
 
         if error:
@@ -124,7 +137,7 @@ def login_view(request):
         return redirect("home")
 
     if request.method == "POST":
-        form = AuthenticationForm(data=request.POST)
+        form = EmailOrUsernameAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -375,7 +388,7 @@ def home_public_view(request):
         if form_type == "login":
             context["active_tab"] = "login"
             context["login_values"] = {"username": request.POST.get("username", "").strip()}
-            form = AuthenticationForm(data=request.POST)
+            form = EmailOrUsernameAuthenticationForm(data=request.POST)
             if form.is_valid():
                 user = form.get_user()
                 login(request, user)

@@ -18,6 +18,13 @@
 </style>
 
 <div class="container py-4 compose-wrap">
+
+  <div class="mb-3">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary">
+      ← {% trans "Back" %}
+    </a>
+  </div>
+
   <div id="post-create-alert" class="alert d-none" role="alert"></div>
 
   <form id="post-create-form" action="{% url 'post_create' %}" method="post" enctype="multipart/form-data" class="card-modern p-4">

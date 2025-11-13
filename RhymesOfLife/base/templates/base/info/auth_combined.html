@@ -58,7 +58,7 @@
     color: #6b7280;
     transition: color .15s ease, transform .1s ease;
 
-    font-size: 0; /* << убираем влияние текстовых метрик */
+    font-size: 0;
   }
 
   .password-toggle:hover {
@@ -81,7 +81,7 @@
     height: 1.45rem;
     display: block;
     pointer-events: none;
-    transform: translateY(-6px); /* << чуть поднимаем сам SVG */
+    transform: translateY(-6px);
   }
 
   @media (max-width: 576px) {
@@ -196,7 +196,7 @@
           <form class="form-container" id="login-form" novalidate>
             {% csrf_token %}
             <div class="mb-3">
-              <label for="login-username" class="form-label">{% trans "Username" %}</label>
+              <label for="login-username" class="form-label">{% trans "Username or email" %}</label>
               <input type="text" id="login-username" name="username" class="form-input" required autocomplete="username">
             </div>
 
