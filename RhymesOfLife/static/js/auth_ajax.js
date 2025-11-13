@@ -36,7 +36,10 @@
     const fd = new FormData(form);
     const opts = {
       method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
       body: fd,
       credentials: 'same-origin'
     };
@@ -76,7 +79,10 @@
       showMessage(messages, '', 'info');
       const btn = regForm.querySelector('button[type=submit]');
       const res = await submitAjax(registerUrl, regForm, btn);
-      if (res.ok && res.redirect) { window.location.href = res.redirect; return; }
+      if (res.ok && res.redirect) {
+        window.location.href = res.redirect;
+        return;
+      }
       showMessage(messages, res.error || t('Unknown error'), 'danger');
     });
 
@@ -85,13 +91,40 @@
       showMessage(messages, '', 'info');
       const btn = loginForm.querySelector('button[type=submit]');
       const res = await submitAjax(loginUrl, loginForm, btn);
-      if (res.ok && res.redirect) { window.location.href = res.redirect; return; }
+      if (res.ok && res.redirect) {
+        window.location.href = res.redirect;
+        return;
+      }
       showMessage(messages, res.error || t('Unknown error'), 'danger');
+    });
+  }
+
+  function bindPasswordToggles() {
+    const toggles = root.querySelectorAll('[data-password-toggle]');
+    toggles.forEach(btn => {
+      const targetId = btn.getAttribute('data-target');
+      const input = targetId ? document.getElementById(targetId) : null;
+      if (!input) return;
+
+      const labelShow = btn.getAttribute('data-label-show') || t('Show password');
+      const labelHide = btn.getAttribute('data-label-hide') || t('Hide password');
+
+      btn.setAttribute('aria-label', labelShow);
+      btn.setAttribute('aria-pressed', 'false');
+
+      btn.addEventListener('click', () => {
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+        btn.setAttribute('aria-label', isHidden ? labelHide : labelShow);
+        btn.classList.toggle('is-visible', isHidden);
+      });
     });
   }
 
   const root = document.getElementById('auth-root');
   if (!root) return;
+
   const messages = document.getElementById('auth-messages');
   const regForm = document.getElementById('register-form');
   const loginForm = document.getElementById('login-form');
@@ -100,4 +133,5 @@
 
   bindTabs();
   bindForms();
+  bindPasswordToggles();
 })();
