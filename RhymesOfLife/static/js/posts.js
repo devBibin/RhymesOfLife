@@ -448,10 +448,13 @@ function bindCreateFormAjax() {
       document.dispatchEvent(new CustomEvent('post:created', {
         detail: { approved: !!data.approved, message: data.message || t('Post created') }
       }));
+      if (data.redirect) {
+        window.location.href = data.redirect;
+        return;
+      }
       if (alertBox) {
-        alertBox.className = 'alert alert-success';
-        alertBox.textContent = data.message || t('Post created');
-        alertBox.classList.remove('d-none');
+        alertBox.classList.add('d-none');
+        alertBox.textContent = '';
       }
       form.reset();
       const preview = document.getElementById('preview');

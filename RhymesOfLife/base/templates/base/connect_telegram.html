@@ -21,7 +21,12 @@
     {% if is_verified %}
       <div class="alert alert-success">{% trans "Telegram is connected and phone is verified." %}</div>
     {% else %}
-      <p class="text-muted">{% trans "To continue, please link your Telegram account." %}</p>
+      <p class="text-muted mb-3">{% trans "To continue, please link your Telegram account." %}</p>
+      <div class="alert alert-info">
+        {% blocktrans %}
+        We use Telegram to send reminders to fill in your wellness diary and to keep in touch with you for support.
+        {% endblocktrans %}
+      </div>
 
       <div class="howto mb-3">
         <p class="fw-semibold mb-2">{% trans "Instructions:" %}</p>

@@ -72,7 +72,6 @@ class EnforceOnboardingMiddleware:
     @staticmethod
     def _default_exempt_names():
         return {
-            "home",
             "home_public",
             "login",
             "logout",
@@ -85,10 +84,8 @@ class EnforceOnboardingMiddleware:
             "phone_wait",
             "phone_status_api",
             "phone_change",
-            "consents",
             "profile_edit",
-            "my_profile",
-            "user_profile",
+            "consents",
             "set_language",
             "javascript-catalog",
             "admin:jsi18n",
