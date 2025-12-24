@@ -20,7 +20,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 <link rel="stylesheet" href="{% static 'css/post_cards.css' %}">
-<div class="container py-3">
+<div class="feed-page py-3">
   {% include "base/includes/profile_header.html" with profile_user=profile_user info=info posts_count=posts_total followers_count=info.followers_count request=request only %}
 
   <div class="feed-container">
