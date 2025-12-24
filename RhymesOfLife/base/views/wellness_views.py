@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -33,6 +34,13 @@ def my_wellness_view(request):
 @sensitive_post_parameters("score", "note", "date")
 def wellness_entries_api(request):
     user_info = request.user.additional_info
+    user_tz = None
+    tz_name = getattr(getattr(user_info, "wellness_settings", None), "reminder_tz", None) or ""
+    if tz_name:
+        try:
+            user_tz = ZoneInfo(tz_name)
+        except ZoneInfoNotFoundError:
+            user_tz = None
 
     if request.method == "GET":
         try:
@@ -59,7 +67,10 @@ def wellness_entries_api(request):
         if score < 1 or score > 10:
             return _json_error(_("Score must be between 1 and 10."))
 
-        d = date.today()
+        if user_tz:
+            d = datetime.now(tz=user_tz).date()
+        else:
+            d = date.today()
         if date_str:
             try:
                 d = datetime.strptime(date_str, "%Y-%m-%d").date()
@@ -116,12 +127,18 @@ def wellness_settings_api(request):
                 "reminder_hour": obj.reminder_hour,
                 "reminder_minute": obj.reminder_minute,
                 "reminder_interval": obj.reminder_interval,
+                "tg_notifications_enabled": obj.tg_notifications_enabled,
+                "email_notifications_enabled": obj.email_notifications_enabled,
+                "reminder_tz": getattr(obj, "reminder_tz", "") or "",
             }
         })
 
     hour = request.POST.get("reminder_hour")
     minute = request.POST.get("reminder_minute")
     interval = request.POST.get("reminder_interval")
+    tg_enabled = request.POST.get("tg_notifications_enabled")
+    email_enabled = request.POST.get("email_notifications_enabled")
+    reminder_tz = (request.POST.get("reminder_tz") or "").strip()
 
     try:
         fields = []
@@ -136,9 +153,29 @@ def wellness_settings_api(request):
             if iv in (0, 1, 3, 7):
                 obj.reminder_interval = iv
                 fields.append("reminder_interval")
-                obj.tg_notifications_enabled = iv > 0
-                fields.append("tg_notifications_enabled")
+                if iv == 0:
+                    obj.tg_notifications_enabled = False
+                    obj.email_notifications_enabled = False
+                    fields.extend(["tg_notifications_enabled", "email_notifications_enabled"])
+        if tg_enabled is not None:
+            obj.tg_notifications_enabled = str(tg_enabled).lower() in ("1", "true", "on", "yes")
+            fields.append("tg_notifications_enabled")
+        if email_enabled is not None:
+            obj.email_notifications_enabled = str(email_enabled).lower() in ("1", "true", "on", "yes")
+            fields.append("email_notifications_enabled")
+        if obj.reminder_interval == 0:
+            obj.tg_notifications_enabled = False
+            obj.email_notifications_enabled = False
+            fields.extend(["tg_notifications_enabled", "email_notifications_enabled"])
+        if reminder_tz:
+            try:
+                ZoneInfo(reminder_tz)
+                obj.reminder_tz = reminder_tz
+                fields.append("reminder_tz")
+            except ZoneInfoNotFoundError:
+                pass
         if fields:
+            fields = list(dict.fromkeys(fields))
             obj.save(update_fields=fields)
     except Exception:
         log.exception("Wellness settings save failed: user_id=%s", request.user.id)

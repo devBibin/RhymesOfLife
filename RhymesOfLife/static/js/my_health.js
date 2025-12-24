@@ -42,6 +42,21 @@
     return "";
   }
 
+  function getUserTimeZone() {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function formatLocalDate(d = new Date()) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
   function fetchEntries() {
     return fetch(`${endpoints.apiEntries}?days=90`, { headers: { "X-Requested-With": "XMLHttpRequest" }, credentials: "same-origin" })
       .then(r => r.json());
@@ -136,9 +151,13 @@
     if (!el) return;
     const hour = document.getElementById("rem-hour");
     const minute = document.getElementById("rem-min");
+    const tg = document.getElementById("tg-enabled");
+    const email = document.getElementById("email-enabled");
     const disabled = parseInt(el.value || "3", 10) === 0;
     if (hour) hour.disabled = disabled;
     if (minute) minute.disabled = disabled;
+    if (tg) tg.disabled = disabled;
+    if (email) email.disabled = disabled;
   }
 
   function openSettings() {
@@ -153,9 +172,30 @@
         const h = document.getElementById("rem-hour");
         const m = document.getElementById("rem-min");
         const iv = document.getElementById("rem-interval");
+        const tg = document.getElementById("tg-enabled");
+        const email = document.getElementById("email-enabled");
+        const tzLabel = document.getElementById("rem-tz-label");
         if (h) h.value = s.reminder_hour ?? 20;
         if (m) m.value = s.reminder_minute ?? 0;
         if (iv) iv.value = s.reminder_interval ?? 3;
+        if (tg) tg.checked = !!s.tg_notifications_enabled;
+        if (email) email.checked = !!s.email_notifications_enabled;
+        if (tzLabel) {
+          const tz = getUserTimeZone();
+          tzLabel.textContent = tz ? `(${tz})` : "";
+        }
+        if (!s.reminder_tz) {
+          const tz = getUserTimeZone();
+          if (tz) {
+            const fd = new FormData();
+            fd.append("reminder_tz", tz);
+            fetch(endpoints.apiSettings, {
+              method: "POST",
+              headers: { "X-Requested-With": "XMLHttpRequest", "X-CSRFToken": getCsrfToken() },
+              body: fd, credentials: "same-origin"
+            }).catch(() => {});
+          }
+        }
         applyIntervalState();
         modal.show();
       });
@@ -166,6 +206,12 @@
     fd.append("reminder_hour", document.getElementById("rem-hour").value || "0");
     fd.append("reminder_minute", document.getElementById("rem-min").value || "0");
     fd.append("reminder_interval", document.getElementById("rem-interval").value || "3");
+    const tg = document.getElementById("tg-enabled");
+    const email = document.getElementById("email-enabled");
+    if (tg) fd.append("tg_notifications_enabled", tg.checked ? "1" : "0");
+    if (email) fd.append("email_notifications_enabled", email.checked ? "1" : "0");
+    const tz = getUserTimeZone();
+    if (tz) fd.append("reminder_tz", tz);
     return fetch(endpoints.apiSettings, {
       method: "POST",
       headers: { "X-Requested-With": "XMLHttpRequest", "X-CSRFToken": getCsrfToken() },
@@ -177,6 +223,7 @@
     const form = document.getElementById("entry-form");
     if (!form) return Promise.resolve();
     const fd = new FormData(form);
+    fd.append("date", formatLocalDate());
     return fetch(endpoints.apiEntries, {
       method: "POST",
       headers: { "X-Requested-With": "XMLHttpRequest", "X-CSRFToken": getCsrfToken() },

@@ -338,7 +338,13 @@ def serialize_comment(c, request):
     info = c.author
     user = info.user
     can_delete = (user == request.user) or _can_moderate(request.user)
-    avatar_url = getattr(getattr(info, "avatar", None), "url", "/static/img/avatar-default.png")
+    avatar_url = "/static/img/avatar-default.png"
+    avatar = getattr(info, "avatar", None)
+    if avatar and getattr(avatar, "name", ""):
+        try:
+            avatar_url = avatar.url
+        except ValueError:
+            avatar_url = "/static/img/avatar-default.png"
     return {
         "id": c.id,
         "post": c.post_id,

@@ -2,6 +2,7 @@ import os
 import time
 import signal
 from datetime import date, timedelta
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from orm_connector import settings  # noqa: F401
 
@@ -9,7 +10,6 @@ from django.db import transaction, connection
 from django.utils import timezone
 from django.utils.translation import override
 from django.db.models import Max
-from django.db.models.functions import TruncDate
 
 from RhymesOfLifeShadows.create_log import create_log
 from base.models import AdditionalUserInfo, Notification
@@ -57,14 +57,13 @@ def already_sent_db(info: AdditionalUserInfo, today: date) -> bool:
             recipient=info,
             notification_type="SYSTEM_MESSAGE",
             payload__kind="wellness_reminder",
+            payload__local_date=today.isoformat(),
         )
-        .annotate(d=TruncDate("created_at"))
-        .filter(d=today)
         .exists()
     )
 
 
-def mark_sent_db(info: AdditionalUserInfo, title: str, message: str) -> Notification:
+def mark_sent_db(info: AdditionalUserInfo, title: str, message: str, local_date: date) -> Notification:
     return Notification.objects.create(
         recipient=info,
         sender=None,
@@ -72,7 +71,7 @@ def mark_sent_db(info: AdditionalUserInfo, title: str, message: str) -> Notifica
         title=title,
         message=message,
         url="",
-        payload={"kind": "wellness_reminder"},
+        payload={"kind": "wellness_reminder", "local_date": local_date.isoformat()},
         source=Notification.Source.SYSTEM,
         scope=Notification.Scope.PERSONAL,
     )
@@ -93,6 +92,16 @@ def build_message(info):
         return str(WELLNESS_REMINDER_MSG)
 
 
+def _get_user_timezone(info) -> ZoneInfo | None:
+    tz_name = getattr(getattr(info, "wellness_settings", None), "reminder_tz", "") or ""
+    if not tz_name:
+        return None
+    try:
+        return ZoneInfo(tz_name)
+    except ZoneInfoNotFoundError:
+        return None
+
+
 def pg_try_advisory_lock(user_id: int, day: date) -> bool:
     lock_key2 = int(day.strftime("%Y%m%d"))
     with connection.cursor() as c:
@@ -102,18 +111,11 @@ def pg_try_advisory_lock(user_id: int, day: date) -> bool:
 
 
 def loop_once() -> int:
-    tz = timezone.get_current_timezone()
-    now_local = timezone.now().astimezone(tz)
-    today = now_local.date()
-
     qs = (
         AdditionalUserInfo.objects.select_related("user", "telegram_account", "wellness_settings")
         .annotate(last_entry=Max("wellness_entries__date"))
         .filter(
             wellness_settings__isnull=False,
-            wellness_settings__tg_notifications_enabled=True,
-            telegram_account__telegram_verified=True,
-            telegram_account__telegram_id__isnull=False,
         )
     )
 
@@ -122,6 +124,23 @@ def loop_once() -> int:
 
     for info in qs:
         s = info.wellness_settings
+        tz = _get_user_timezone(info) or timezone.get_current_timezone()
+        now_local = timezone.now().astimezone(tz)
+        today = now_local.date()
+
+        can_tg = bool(
+            getattr(s, "tg_notifications_enabled", False)
+            and getattr(info, "telegram_account", None)
+            and getattr(info.telegram_account, "telegram_verified", False)
+            and getattr(info.telegram_account, "telegram_id", None)
+        )
+        can_email = bool(
+            getattr(s, "email_notifications_enabled", False)
+            and ((info.email or "") or (getattr(info.user, "email", "") or ""))
+        )
+        if not (can_tg or can_email):
+            continue
+
         interval_days = getattr(s, "reminder_interval", 3) or 3
         if interval_days == 0:
             continue
@@ -144,10 +163,10 @@ def loop_once() -> int:
             if already_sent_db(info, today):
                 continue
 
-            marker = mark_sent_db(info, str(title), str(msg))
+            marker = mark_sent_db(info, str(title), str(msg), today)
 
-            via_telegram = bool(getattr(s, "tg_notifications_enabled", True))
-            via_email = bool(getattr(s, "email_notifications_enabled", True))
+            via_telegram = can_tg
+            via_email = can_email
 
             res = send_notification_multichannel(
                 recipient=info,
@@ -156,7 +175,7 @@ def loop_once() -> int:
                 title=title,
                 message=msg,
                 url="",
-                payload={"kind": "wellness_reminder"},
+                payload={"kind": "wellness_reminder", "local_date": today.isoformat()},
                 source=Notification.Source.SYSTEM,
                 scope=Notification.Scope.PERSONAL,
                 via_site=False,
