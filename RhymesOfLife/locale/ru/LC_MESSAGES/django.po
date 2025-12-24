@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RhymesOfLife\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-13 22:41+0000\n"
+"POT-Creation-Date: 2025-12-24 12:43+0000\n"
 "PO-Revision-Date: 2025-10-01 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -153,7 +153,7 @@ msgstr "Недопустимые коды синдромов: %(codes)s"
 msgid "Pre-moderation enabled"
 msgstr "Премодерация включена"
 
-#: base/models.py:164
+#: base/models.py:164 templates/base.html:73
 msgid "Banned"
 msgstr "Заблокирован"
 
@@ -268,7 +268,7 @@ msgid "Post"
 msgstr "Пост"
 
 #: base/models.py:447 base/templates/base/feed.html:15
-#: base/templates/base/feed.html:61
+#: base/templates/base/feed.html:39
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr "Посты"
@@ -390,7 +390,7 @@ msgstr "ID пользователя"
 msgid "Email"
 msgstr "Эл. почта"
 
-#: base/signals.py:37 base/signals.py:57
+#: base/signals.py:37 base/signals.py:57 templates/base.html:191
 msgid "Admin"
 msgstr "Администратор"
 
@@ -499,24 +499,24 @@ msgstr "Причина (необязательно)"
 
 #: base/templates/base/admin_notify.html:62
 #: base/templates/base/notifications.html:31 base/utils/notify.py:26
-#: templates/base.html:160
+#: templates/base.html:157
 msgid "Details"
 msgstr "Подробности"
 
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:16
-#: base/templates/base/post_cards.html:161
-#: blog/templates/blog/blog_page.html:175
+#: base/templates/base/post_cards.html:162
+#: blog/templates/blog/blog_page.html:202
 msgid "Send"
 msgstr "Отправить"
 
 #: base/templates/base/admin_notify.html:67
 #: base/templates/base/post_create.html:59
-#: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:222
+#: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:258
 msgid "Cancel"
 msgstr "Отмена"
 
-#: base/templates/base/banned.html:4 templates/base.html:49
+#: base/templates/base/banned.html:4
 msgid "Account banned"
 msgstr "Аккаунт заблокирован"
 
@@ -536,29 +536,28 @@ msgstr "Причина"
 msgid "Since"
 msgstr "С"
 
-#: base/templates/base/banned.html:20 templates/base.html:56
-#: templates/base.html:218
+#: base/templates/base/banned.html:20 templates/base.html:247
 msgid "Log out"
 msgstr "Выйти"
 
 #: base/templates/base/comment_items.html:4
 #: base/templates/base/includes/profile_header.html:35
-#: blog/templates/blog/blog_page.html:188
-#: blog/templates/blog/includes/article_cards.html:47
-#: blog/templates/blog/includes/article_cards.html:114
+#: blog/templates/blog/blog_page.html:216
+#: blog/templates/blog/includes/article_cards.html:44
+#: blog/templates/blog/includes/article_cards.html:112
 msgid "Avatar"
 msgstr "Аватар"
 
 #: base/templates/base/comment_items.html:9
-#: blog/templates/blog/blog_page.html:193
+#: blog/templates/blog/blog_page.html:222
 msgid "edited"
 msgstr "изменено"
 
 #: base/templates/base/comment_items.html:16
 #: base/templates/base/partials/health_documents.html:192
 #: base/templates/base/profile_edit.html:61
-#: blog/templates/blog/blog_page.html:133
-#: blog/templates/blog/blog_page.html:198
+#: blog/templates/blog/blog_page.html:155
+#: blog/templates/blog/blog_page.html:231
 #: blog/templates/blog/edit_article.html:88
 msgid "Delete"
 msgstr "Удалить"
@@ -584,40 +583,52 @@ msgstr "Telegram подключён, телефон подтверждён."
 msgid "To continue, please link your Telegram account."
 msgstr "Чтобы продолжить, привяжите свой аккаунт Telegram."
 
-#: base/templates/base/connect_telegram.html:27
+#: base/templates/base/connect_telegram.html:26
+msgid ""
+"\n"
+"        We use Telegram to send reminders to fill in your wellness diary and "
+"to keep in touch with you for support.\n"
+"        "
+msgstr ""
+"\n"
+"        Мы используем Telegram, чтобы отправлять напоминания о заполнении дневника самочувствия и "
+"поддерживать с вами связь для оказания поддержки.\n"
+"        "
+
+#: base/templates/base/connect_telegram.html:32
 msgid "Instructions:"
 msgstr "Инструкции:"
 
-#: base/templates/base/connect_telegram.html:29
+#: base/templates/base/connect_telegram.html:34
 msgid "Open Telegram and follow this link:"
 msgstr "Откройте Telegram и перейдите по этой ссылке:"
 
-#: base/templates/base/connect_telegram.html:30
+#: base/templates/base/connect_telegram.html:35
 msgid "Press \"Start\" in the chat with the bot."
 msgstr "Нажмите «Старт» в чате с ботом."
 
-#: base/templates/base/connect_telegram.html:31
+#: base/templates/base/connect_telegram.html:36
 msgid "The bot will ask you to share your phone number."
 msgstr "Бот попросит поделиться вашим номером телефона."
 
-#: base/templates/base/connect_telegram.html:32
+#: base/templates/base/connect_telegram.html:37
 msgid "Return to this page and click \"Continue\"."
 msgstr "Вернитесь на эту страницу и нажмите «Продолжить»."
 
-#: base/templates/base/connect_telegram.html:36
+#: base/templates/base/connect_telegram.html:41
 #, python-format
 msgid "Open @%(bot_username)s"
 msgstr "Открыть @%(bot_username)s"
 
-#: base/templates/base/connect_telegram.html:43
+#: base/templates/base/connect_telegram.html:48
 msgid "Continue (I've interacted with the bot)"
 msgstr "Продолжить (я уже взаимодействовал(а) с ботом)"
 
-#: base/templates/base/connect_telegram.html:47
+#: base/templates/base/connect_telegram.html:52
 msgid "No Telegram or don't want to use it?"
 msgstr "Нет Telegram или не хотите его использовать?"
 
-#: base/templates/base/connect_telegram.html:49
+#: base/templates/base/connect_telegram.html:54
 msgid "Skip Telegram and verify by phone call"
 msgstr "Пропустить Telegram и подтвердить по звонку"
 
@@ -681,7 +692,7 @@ msgstr "Продолжить"
 #: base/templates/base/partials/health_wellness.html:153
 #: base/templates/base/staff_help_requests.html:71
 #: base/templates/base/staff_help_requests.html:103
-#: blog/templates/blog/blog_page.html:215
+#: blog/templates/blog/blog_page.html:251
 msgid "Close"
 msgstr "Закрыть"
 
@@ -1353,32 +1364,32 @@ msgstr "Используйте международный формат, напр
 msgid "Get code by call"
 msgstr "Получить код звонком"
 
-#: base/templates/base/feed.html:7 base/templates/base/feed.html:53
-#: base/templates/base/feed.html:73 base/templates/base/feed.html:75
-#: base/templates/base/feed.html:76
+#: base/templates/base/feed.html:7 base/templates/base/feed.html:31
+#: base/templates/base/feed.html:51 base/templates/base/feed.html:53
+#: base/templates/base/feed.html:54
 msgid "My posts"
 msgstr "Мои публикации"
 
-#: base/templates/base/feed.html:9 base/templates/base/feed.html:55
-#: base/templates/base/feed.html:80 base/templates/base/feed.html:82
-#: base/templates/base/feed.html:83
+#: base/templates/base/feed.html:9 base/templates/base/feed.html:33
+#: base/templates/base/feed.html:58 base/templates/base/feed.html:60
+#: base/templates/base/feed.html:61
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: base/templates/base/feed.html:11 base/templates/base/feed.html:57
-#: base/templates/base/feed.html:87 base/templates/base/feed.html:89
-#: base/templates/base/feed.html:90
+#: base/templates/base/feed.html:11 base/templates/base/feed.html:35
+#: base/templates/base/feed.html:65 base/templates/base/feed.html:67
+#: base/templates/base/feed.html:68
 msgid "Latest"
 msgstr "Последние"
 
-#: base/templates/base/feed.html:13 base/templates/base/feed.html:59
-#: base/templates/base/feed.html:95 base/templates/base/feed.html:97
-#: base/templates/base/feed.html:98
+#: base/templates/base/feed.html:13 base/templates/base/feed.html:37
+#: base/templates/base/feed.html:73 base/templates/base/feed.html:75
+#: base/templates/base/feed.html:76
 msgid "Pending approval"
 msgstr "Ожидают одобрения"
 
-#: base/templates/base/feed.html:65 base/templates/base/feed.html:66
-#: base/templates/base/feed.html:114 base/templates/base/post_create.html:3
+#: base/templates/base/feed.html:43 base/templates/base/feed.html:44
+#: base/templates/base/feed.html:92 base/templates/base/post_create.html:3
 msgid "New post"
 msgstr "Новая запись"
 
@@ -1495,7 +1506,7 @@ msgstr "Добро пожаловать в Rhymes of Life!"
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
 #: base/templates/base/home.html:137
 #: base/templates/base/info/auth_combined.html:117
-#: base/templates/base/info/auth_combined.html:237
+#: base/templates/base/info/auth_combined.html:237 templates/base.html:271
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
@@ -1503,7 +1514,7 @@ msgstr "Зарегистрироваться"
 #: base/templates/base/info/auth_combined.html:116
 #: base/templates/base/info/auth_combined.html:190
 #: base/templates/base/info/auth_combined.html:229
-#: blog/templates/blog/blog_page.html:179 templates/base.html:228
+#: blog/templates/blog/blog_page.html:207
 msgid "Log in"
 msgstr "Войти"
 
@@ -1594,7 +1605,7 @@ msgid "Mark processed"
 msgstr "Отметить обработанным"
 
 #: base/templates/base/includes/staff_help_requests_rows.html:51
-#: blog/templates/blog/includes/article_list_fragment.html:10
+#: blog/templates/blog/includes/article_list_fragment.html:7
 msgid "Nothing found."
 msgstr "Ничего не найдено."
 
@@ -1605,7 +1616,6 @@ msgstr "Войти / Зарегистрироваться"
 #: base/templates/base/info/auth_combined.html:150
 #: base/templates/base/info/auth_combined.html:175
 #: base/templates/base/info/auth_combined.html:218
-#| msgid "New password"
 msgid "Hide password"
 msgstr "Новый пароль"
 
@@ -1624,7 +1634,7 @@ msgstr "Имя пользователя или эл. почта"
 
 #: base/templates/base/my_health.html:4 base/templates/base/my_health.html:36
 #: base/templates/base/my_health.html:37 base/templates/base/my_health.html:112
-#: templates/base.html:77
+#: templates/base.html:81
 msgid "My health"
 msgstr "Мое здоровье"
 
@@ -1724,7 +1734,7 @@ msgstr ""
 #: base/templates/base/notifications.html:9
 #: base/templates/base/partials/health_wellness.html:49
 #: base/templates/base/partials/health_wellness.html:125
-#: templates/base.html:107
+#: templates/base.html:104 templates/base.html:113
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -1817,8 +1827,8 @@ msgstr "Сохранить"
 
 #: base/templates/base/partials/health_documents.html:189
 #: base/templates/base/post_cards.html:93
-#: blog/templates/blog/blog_page.html:130
-#: blog/templates/blog/blog_page.html:197
+#: blog/templates/blog/blog_page.html:149
+#: blog/templates/blog/blog_page.html:228
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -1901,7 +1911,6 @@ msgid "Last 90 days"
 msgstr "Последние 90 дней"
 
 #: base/templates/base/partials/health_wellness.html:108
-#| msgid "Wellness"
 msgid "Wellness chart"
 msgstr "Самочувствие"
 
@@ -1982,7 +1991,7 @@ msgid "Enter first or last name..."
 msgstr "Введите имя или фамилию..."
 
 #: base/templates/base/patients_list.html:48
-#: blog/templates/blog/blog_index_page.html:30
+#: blog/templates/blog/blog_index_page.html:33
 msgid "Search"
 msgstr "Поиск"
 
@@ -2017,21 +2026,22 @@ msgstr "Аватар пользователя"
 
 #: base/templates/base/post_cards.html:26
 #: base/templates/base/post_cards.html:38
-#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:74
-#: blog/templates/blog/blog_page.html:89 blog/templates/blog/blog_page.html:94
+#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:92
+#: blog/templates/blog/blog_page.html:107
+#: blog/templates/blog/blog_page.html:112
 msgid "Follow"
 msgstr "Подписаться"
 
 #: base/templates/base/post_cards.html:27
 #: base/templates/base/post_cards.html:30
-#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:75
-#: blog/templates/blog/blog_page.html:79 blog/templates/blog/blog_page.html:90
+#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:93
+#: blog/templates/blog/blog_page.html:97 blog/templates/blog/blog_page.html:108
 msgid "Unfollow"
 msgstr "Отписаться"
 
 #: base/templates/base/post_cards.html:29
-#: base/templates/base/post_cards.html:41 blog/templates/blog/blog_page.html:77
-#: blog/templates/blog/blog_page.html:92
+#: base/templates/base/post_cards.html:41 blog/templates/blog/blog_page.html:95
+#: blog/templates/blog/blog_page.html:110
 msgid "Toggle follow"
 msgstr "Подписаться/Отписаться"
 
@@ -2050,8 +2060,8 @@ msgstr "Дополнительно"
 msgid "Publish"
 msgstr "Опубликовать"
 
-#: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:33
-#: blog/templates/blog/blog_page.html:223
+#: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:36
+#: blog/templates/blog/blog_page.html:259
 msgid "Reject"
 msgstr "Отклонить"
 
@@ -2072,19 +2082,19 @@ msgid "Report"
 msgstr "Пожаловаться"
 
 #: base/templates/base/post_cards.html:146
-#: blog/templates/blog/blog_page.html:154
+#: blog/templates/blog/blog_page.html:179
 msgid "Log in to like"
 msgstr "Войдите, чтобы лайкнуть"
 
-#: base/templates/base/post_cards.html:160
+#: base/templates/base/post_cards.html:161
 msgid "Write a comment..."
 msgstr "Напишите комментарий..."
 
-#: base/templates/base/post_cards.html:178
+#: base/templates/base/post_cards.html:179
 msgid "Show more"
 msgstr "Показать еще"
 
-#: base/templates/base/post_cards.html:186
+#: base/templates/base/post_cards.html:187
 #: base/templates/base/profile_content_fragment.html:105
 msgid "No posts yet."
 msgstr "Пока нет публикаций."
@@ -2204,7 +2214,7 @@ msgid "User has been unbanned."
 msgstr "Пользователь разблокирован."
 
 #: base/templates/base/profile_content_fragment.html:41
-#: blog/templates/blog/blog_index_page.html:7 templates/base.html:84
+#: blog/templates/blog/blog_index_page.html:10 templates/base.html:89
 msgid "Articles"
 msgstr "Статьи"
 
@@ -2332,7 +2342,7 @@ msgstr "Проверить"
 msgid "Resend code"
 msgstr "Отправить код ещё раз"
 
-#: base/templates/base/staff_help_requests.html:13 templates/base.html:209
+#: base/templates/base/staff_help_requests.html:13 templates/base.html:214
 msgid "Help requests"
 msgstr "Запросы помощи"
 
@@ -2390,7 +2400,7 @@ msgstr "Вернуться к входу"
 
 #: base/templates/base/verify_prompt.html:33
 msgid "Change email in profile"
-msgstr ""
+msgstr "Изменить адрес электронной почты в профиле"
 
 #: base/templates/base/wait_for_phone_call.html:10
 msgid "To confirm number"
@@ -2539,7 +2549,6 @@ msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
 #: base/views/auth_views.py:112
-#| msgid "Passwords don't match."
 msgid "Password is too weak."
 msgstr "Пароли не совпадают."
 
@@ -2620,33 +2629,33 @@ msgstr "Не удалось загрузить документы. Попроб�
 msgid "Failed to update the exam."
 msgstr "Не удалось обновить обследование."
 
-#: base/views/feed_views.py:33
+#: base/views/feed_views.py:34
 msgid "Too many images."
 msgstr "Слишком много изображений."
 
-#: base/views/feed_views.py:44
+#: base/views/feed_views.py:45
 #, python-format
 msgid "%(msg)s"
 msgstr "%(msg)s"
 
-#: base/views/feed_views.py:168
+#: base/views/feed_views.py:169
 msgid "Post must contain text or an image."
 msgstr "Пост должен содержать текст или изображение."
 
-#: base/views/feed_views.py:193
+#: base/views/feed_views.py:194
 msgid "Your post is under review. It will appear after approval."
 msgstr ""
 "Ваша публикация находится на рассмотрении. Она появится после одобрения."
 
-#: base/views/feed_views.py:193
+#: base/views/feed_views.py:194
 msgid "Post published."
 msgstr "Пост опубликован"
 
-#: base/views/feed_views.py:242
+#: base/views/feed_views.py:249
 msgid "Post updated."
 msgstr "Профиль обновлён"
 
-#: base/views/feed_views.py:256
+#: base/views/feed_views.py:263
 msgid "You cannot report your own post."
 msgstr "Вы не можете пожаловаться на свой собственный пост."
 
@@ -2852,41 +2861,41 @@ msgstr "Удалить блок"
 msgid "Caption..."
 msgstr "Подпись..."
 
-#: blog/templates/blog/blog_index_page.html:9
+#: blog/templates/blog/blog_index_page.html:15
 #: blog/templates/blog/create_article.html:4
 #: blog/templates/blog/create_article.html:8
 msgid "New article"
 msgstr "Новая статья"
 
-#: blog/templates/blog/blog_index_page.html:29
+#: blog/templates/blog/blog_index_page.html:28
 msgid "Search by title, author or tags"
 msgstr "Поиск по названию, автору или тегам"
 
-#: blog/templates/blog/blog_index_page.html:36
+#: blog/templates/blog/blog_index_page.html:40
 msgid "Sort"
 msgstr "Сортировать"
 
-#: blog/templates/blog/blog_index_page.html:40
+#: blog/templates/blog/blog_index_page.html:46
 msgid "Newest"
 msgstr "Новые"
 
-#: blog/templates/blog/blog_index_page.html:45
+#: blog/templates/blog/blog_index_page.html:53
 msgid "Most popular"
 msgstr "Популярные"
 
-#: blog/templates/blog/blog_page.html:16 blog/templates/blog/blog_page.html:20
+#: blog/templates/blog/blog_page.html:19 blog/templates/blog/blog_page.html:23
 msgid "This article has been rejected by an administrator."
 msgstr "Эта статья была отклонена администратором."
 
-#: blog/templates/blog/blog_page.html:26
+#: blog/templates/blog/blog_page.html:29
 msgid "This article is awaiting approval."
 msgstr "Эта статья ожидает одобрения."
 
-#: blog/templates/blog/blog_page.html:30
+#: blog/templates/blog/blog_page.html:33
 msgid "Approve"
 msgstr "Одобрить"
 
-#: blog/templates/blog/blog_page.html:39
+#: blog/templates/blog/blog_page.html:42
 msgid ""
 "Your article is awaiting admin approval and is not visible to other users "
 "yet."
@@ -2894,22 +2903,32 @@ msgstr ""
 "Ваша статья ожидает одобрения администратора и пока не видна другим "
 "пользователям."
 
-#: blog/templates/blog/blog_page.html:47
+#: blog/templates/blog/blog_page.html:56
 msgid "Author avatar"
 msgstr "Аватар автора"
 
-#: blog/templates/blog/blog_page.html:54
-#, python-format
+#: blog/templates/blog/blog_page.html:62
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "          <span data-followers-count data-author-"
+#| "id=\"%(page.author.user.id)s\">%(n)s</span> follower\n"
+#| "        "
+#| msgid_plural ""
+#| "\n"
+#| "          <span data-followers-count data-author-"
+#| "id=\"%(page.author.user.id)s\">%(n)s</span> followers\n"
+#| "        "
 msgid ""
 "\n"
-"          <span data-followers-count data-author-"
+"              <span data-followers-count data-author-"
 "id=\"%(page.author.user.id)s\">%(n)s</span> follower\n"
-"        "
+"            "
 msgid_plural ""
 "\n"
-"          <span data-followers-count data-author-"
+"              <span data-followers-count data-author-"
 "id=\"%(page.author.user.id)s\">%(n)s</span> followers\n"
-"        "
+"            "
 msgstr[0] ""
 "\n"
 "          <span data-followers-count data-author-"
@@ -2931,36 +2950,44 @@ msgstr[3] ""
 "id=\"%(page.author.user.id)s\">%(n)s</span> подписчика\n"
 "        "
 
-#: blog/templates/blog/blog_page.html:61
+#: blog/templates/blog/blog_page.html:75
+#: blog/templates/blog/includes/article_cards.html:49
+#: blog/templates/blog/includes/article_cards.html:117
 msgid "Anonymous author"
 msgstr "Анонимный автор"
 
-#: blog/templates/blog/blog_page.html:131
+#: blog/templates/blog/blog_page.html:152
 #: blog/templates/blog/edit_article.html:86
 msgid "Delete the article?"
 msgstr "Удалить статью?"
 
-#: blog/templates/blog/blog_page.html:167
+#: blog/templates/blog/blog_page.html:173
+#| msgid "Like"
+msgid "Likes"
+msgstr "Поставить лайк"
+
+#: blog/templates/blog/blog_page.html:183
+#: blog/templates/blog/blog_page.html:193
 msgid "Comments"
 msgstr "Комментарии"
 
-#: blog/templates/blog/blog_page.html:173
+#: blog/templates/blog/blog_page.html:199
 msgid "Leave a comment..."
 msgstr "Оставьте комментарий..."
 
-#: blog/templates/blog/blog_page.html:179
+#: blog/templates/blog/blog_page.html:207
 msgid "to leave a comment"
 msgstr "чтобы оставить комментарий"
 
-#: blog/templates/blog/blog_page.html:214
+#: blog/templates/blog/blog_page.html:250
 msgid "Reject publication"
 msgstr "Отклонить публикацию"
 
-#: blog/templates/blog/blog_page.html:218
+#: blog/templates/blog/blog_page.html:254
 msgid "Reason (optional)"
 msgstr "Причина (необязательно)"
 
-#: blog/templates/blog/blog_page.html:219
+#: blog/templates/blog/blog_page.html:255
 msgid "Write a short reason..."
 msgstr "Напишите короткую причину..."
 
@@ -2971,6 +2998,8 @@ msgstr "Начните писать…"
 
 #: blog/templates/blog/create_article.html:44
 #: blog/templates/blog/edit_article.html:57
+#: blog/templates/blog/includes/article_cards.html:34
+#: blog/templates/blog/includes/article_cards.html:102
 msgid "Tags"
 msgstr "Теги"
 
@@ -2984,7 +3013,7 @@ msgid "Edit article"
 msgstr "Редактировать статью"
 
 #: blog/templates/blog/edit_article.html:9
-#: blog/templates/blog/includes/article_cards.html:93
+#: blog/templates/blog/includes/article_cards.html:96
 msgid "Draft"
 msgstr "Черновик"
 
@@ -2996,11 +3025,7 @@ msgstr "Текущее изображение"
 msgid "Remove image"
 msgstr "Удалить изображение"
 
-#: blog/templates/blog/includes/article_cards.html:95
-msgid "Unpublished changes"
-msgstr "Неопубликованные изменения"
-
-#: blog/templates/blog/includes/article_list_fragment.html:16
+#: blog/templates/blog/includes/article_list_fragment.html:12
 msgid "Page navigation"
 msgstr "Навигация по страницам"
 
@@ -3037,27 +3062,19 @@ msgstr "Файл не загружен."
 msgid "Upload error."
 msgstr "Ошибка загрузки."
 
-#: templates/base.html:32
-msgid "Rhymes of Life"
-msgstr "Ритмы Жизней"
+#: templates/base.html:38
+msgid "Health & Wellbeing"
+msgstr "Здоровье и благополучие"
 
-#: templates/base.html:36
-msgid "Toggle navigation"
-msgstr "Переключить навигацию"
+#: templates/base.html:42
+msgid "Toggle menu"
+msgstr "Переключение меню"
 
-#: templates/base.html:65
-msgid "My profile"
-msgstr "Мой профиль"
-
-#: templates/base.html:71
-msgid "Symptoms"
-msgstr "Классификация и диагностика ДСТ"
-
-#: templates/base.html:90
+#: templates/base.html:96
 msgid "Help"
 msgstr "Помощь"
 
-#: templates/base.html:147
+#: templates/base.html:144
 #, fuzzy, python-format
 #| msgid ""
 #| "\n"
@@ -3075,29 +3092,66 @@ msgstr ""
 "подписался(ась) на вас.\n"
 "                                  "
 
-#: templates/base.html:179
+#: templates/base.html:171
 msgid "No new notifications"
 msgstr "Новых уведомлений нет"
 
-#: templates/base.html:185
+#: templates/base.html:180
 msgid "Show all notifications"
 msgstr "Показать все уведомления"
 
-#: templates/base.html:195
+#: templates/base.html:196
+#| msgid "Admin message"
+msgid "Admin Panel"
+msgstr "Сообщение администратора"
+
+#: templates/base.html:202
 msgid "Patients"
 msgstr "Пациенты"
 
-#: templates/base.html:202
+#: templates/base.html:208
 msgid "Notify users"
 msgstr "Уведомить пользователей"
 
-#: templates/base.html:241 templates/base.html:244
-msgid "Switch language"
-msgstr "Сменить язык"
+#: templates/base.html:238
+#| msgid "My profile"
+msgid "My Profile"
+msgstr "Мой профиль"
 
 #: templates/base.html:260
+msgid "Logout"
+msgstr "Выйти"
+
+#: templates/base.html:267
+msgid "Login"
+msgstr "Войти"
+
+#: templates/base.html:281
+msgid "Switch to Russian"
+msgstr "Переключить на Русский"
+
+#: templates/base.html:287
+msgid "Switch to English"
+msgstr "Переключить на Английский"
+
+#: templates/base.html:306
 msgid "All rights reserved."
 msgstr "Все права защищены."
+
+#~ msgid "Unpublished changes"
+#~ msgstr "Неопубликованные изменения"
+
+#~ msgid "Rhymes of Life"
+#~ msgstr "Ритмы Жизней"
+
+#~ msgid "Toggle navigation"
+#~ msgstr "Переключить навигацию"
+
+#~ msgid "Symptoms"
+#~ msgstr "Классификация и диагностика ДСТ"
+
+#~ msgid "Switch language"
+#~ msgstr "Сменить язык"
 
 #~ msgid "🗑 Deleted comment"
 #~ msgstr "🗑 Удалённый комментарий"
@@ -3208,9 +3262,6 @@ msgstr "Все права защищены."
 #~ "\n"
 #~ "          %(n)s подписчика\n"
 #~ "        "
-
-#~ msgid "Like"
-#~ msgstr "Поставить лайк"
 
 #~ msgid "Or external link"
 #~ msgstr "Или внешняя ссылка"
