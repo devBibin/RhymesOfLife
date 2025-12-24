@@ -112,6 +112,76 @@ function updatePostCommentsCount(scopeEl, count) {
   numEl.textContent = String(count);
 }
 
+function resetSubmitState(form) {
+  if (!(form instanceof HTMLFormElement)) return;
+  form.removeAttribute('data-submitting');
+  form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((btn) => {
+    btn.disabled = false;
+    btn.classList.remove('is-submitting');
+    if (btn.dataset.loadingApplied === '1') {
+      btn.innerHTML = btn.dataset.originalHtml || btn.innerHTML;
+      delete btn.dataset.originalHtml;
+      delete btn.dataset.loadingApplied;
+      btn.classList.remove('is-loading');
+      btn.removeAttribute('aria-busy');
+    }
+  });
+}
+
+function renderPendingComment(text) {
+  const li = document.createElement('li');
+  li.className = 'mb-2 d-flex align-items-start text-muted comment-pending';
+
+  const spinner = document.createElement('span');
+  spinner.className = 'spinner-border spinner-border-sm me-2';
+  spinner.setAttribute('role', 'status');
+  spinner.setAttribute('aria-hidden', 'true');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'flex-grow-1';
+
+  const label = document.createElement('div');
+  label.className = 'small fw-semibold';
+  label.textContent = t('Sending...');
+
+  wrap.appendChild(label);
+  if (text) {
+    const preview = document.createElement('div');
+    preview.className = 'text-break';
+    preview.textContent = text;
+    wrap.appendChild(preview);
+  }
+
+  li.appendChild(spinner);
+  li.appendChild(wrap);
+  return li;
+}
+
+async function refreshCommentsList(postId, limitHint) {
+  const ul = document.getElementById(`comments-${postId}`);
+  if (!ul) return;
+
+  const limit = Math.max(
+    10,
+    limitHint || ul.children.length || 0
+  );
+  try {
+    const qs = new URLSearchParams({ offset: '0', limit: String(limit) });
+    const r = await fetch(`/posts/${postId}/comments/?${qs.toString()}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+    });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!Array.isArray(data.items)) return;
+    ul.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    data.items.forEach((item) => frag.appendChild(renderCommentItem({ ...item, post: Number(postId) })));
+    ul.appendChild(frag);
+  } catch (err) {
+    console.error('Failed to refresh comments', err);
+  }
+}
+
 (function initLikesDelegated() {
   document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.js-like-toggle');
@@ -165,30 +235,46 @@ function initCommentForms() {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const csrftoken = getCSRF(form);
-      const r = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRFToken': csrftoken,
-          'Accept': 'application/json'
+      const postId = form.getAttribute('data-post-id')
+        || form.closest('.post-card')?.getAttribute('data-post-id')
+        || (form.action.match(/posts\/(\d+)/) || [])[1]
+        || '';
+      const draftText = (form.querySelector('input[name="text"], textarea[name="text"]')?.value || '').trim();
+      const targetList = postId ? document.getElementById('comments-' + postId) : null;
+      const pending = targetList ? renderPendingComment(draftText) : null;
+      if (pending && targetList) targetList.prepend(pending);
+
+      try {
+        const data = await ajaxSubmitForm(form, (d) => d);
+        const ul = targetList || document.getElementById('comments-' + data.post);
+
+        if (ul && data.item) {
+          const el = renderCommentItem({ ...data.item, post: data.post });
+          if (pending && ul.contains(pending)) pending.replaceWith(el);
+          else ul.prepend(el);
+        } else if (pending) {
+          pending.remove();
+          const pid = data.post || postId;
+          if (pid) refreshCommentsList(pid, data.count || undefined);
         }
-      });
-      if (!r.ok) return;
 
-      const data = await r.json();
-      const ul = document.getElementById('comments-' + data.post);
-      if (!ul) return;
+        const postCard = form.closest('.post-card') || document;
+        if (typeof data.count === 'number') updatePostCommentsCount(postCard, data.count);
 
-      if (data.item) {
-        const el = renderCommentItem({ ...data.item, post: data.post });
-        ul.prepend(el);
+        if (ul && data.item) {
+          const existing = ul.querySelector(`#c-${data.item.id}`);
+          if (!existing) refreshCommentsList(data.post || postId, data.count || undefined);
+        }
+
+        form.reset();
+      } catch (err) {
+        if (pending) pending.remove();
+        const msg = (err && err.data && err.data.error) || t('Failed to add comment. Please try again.');
+        console.error(err);
+        alert(msg);
+      } finally {
+        resetSubmitState(form);
       }
-      const postCard = form.closest('.post-card') || document;
-      if (typeof data.count === 'number') updatePostCommentsCount(postCard, data.count);
-
-      form.reset();
     });
   });
 }

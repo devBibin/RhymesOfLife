@@ -2,128 +2,136 @@
 
 {% if page.live %}
   {% with href=page.url %}
-    <div class="blog-card card shadow-sm mb-3 js-clickable-card" data-href="{{ href|default:'#' }}" style="cursor:pointer;">
-      <div class="row g-0 align-items-stretch">
-
+    <article class="rl-card js-clickable-card" data-href="{{ href|default:'#' }}">
+      <a class="rl-card__link" href="{{ href|default:'#' }}" aria-label="{{ page.title }}">
         {% if page.main_image %}
-          {% image page.main_image fill-320x240 format-webp as img_320 %}
-          {% image page.main_image fill-480x360 format-webp as img_480 %}
-          {% image page.main_image fill-640x480 format-webp as img_640 %}
-          <div class="col-auto">
-            <div class="card-thumb">
-              <img
-                src="{{ img_640.url }}"
-                width="{{ img_640.width }}"
-                height="{{ img_640.height }}"
-                alt="{{ page.title }}"
-                loading="lazy"
-                decoding="async"
-                srcset="{{ img_320.url }} 320w, {{ img_480.url }} 480w, {{ img_640.url }} 640w"
-                sizes="(max-width:576px) 100vw, 160px"
-              >
-            </div>
+          {% image page.main_image fill-960x600 format-webp as img_960 %}
+          {% image page.main_image fill-640x400 format-webp as img_640 %}
+          <div class="rl-card__media">
+            <img
+              src="{{ img_960.url }}"
+              width="{{ img_960.width }}"
+              height="{{ img_960.height }}"
+              alt="{{ page.title }}"
+              loading="lazy"
+              decoding="async"
+              srcset="{{ img_640.url }} 640w, {{ img_960.url }} 960w"
+              sizes="(max-width: 992px) 100vw, 50vw"
+            >
           </div>
+        {% else %}
+          <div class="rl-card__media" aria-hidden="true"></div>
         {% endif %}
 
-        <div class="col d-flex flex-column">
-          <div class="card-body d-flex flex-column h-100">
-            <h5 class="card-title mb-2">{{ page.title }}</h5>
+        <div class="rl-card__body">
+          <div>
+            <h2 class="rl-card__title">{{ page.title }}</h2>
+          </div>
 
-            <p class="card-text mb-2 text-break small">
-              {{ page.intro|truncatechars:160 }}
-            </p>
+          <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>
 
-            {% if page.tags.all %}
-              <div class="mb-2">
-                {% for tag in page.tags.all %}
-                  <a href="?q={{ tag.name }}" class="badge bg-secondary text-decoration-none">{{ tag.name }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
+          {% if page.tags.all %}
+            <div class="rl-card__tags" aria-label="{% trans 'Tags' %}">
+              {% for tag in page.tags.all %}
+                <span class="rl-tag">{{ tag.name }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
 
-            <div class="d-flex align-items-center gap-2 text-muted small mt-auto pt-2">
+          <div class="rl-card__meta">
+            <div class="rl-author">
               {% if page.author %}
-                <a href="{% url 'public_profile' page.author.user.username %}" class="d-inline-flex align-items-center text-decoration-none">
-                  <img src="{% avatar_url page.author %}" class="rounded-circle me-2" width="24" height="24" alt="{% trans 'Avatar' %}">
-                  <span>{{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}</span>
-                </a>
-                <span class="mx-1">|</span>
+                <img src="{% avatar_url page.author %}" alt="{% trans 'Avatar' %}">
+                <span>
+                  {{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}
+                </span>
+              {% else %}
+                <span>{% trans "Anonymous author" %}</span>
               {% endif %}
-              <span>🗓 {{ page.date|date:"j E Y" }}</span>
-              <span class="mx-2">❤️ {{ page.likes_count }}</span>
-              <span>💬 {{ page.comments_count }}</span>
+            </div>
+
+            <div class="rl-stats">
+              <span class="rl-pill">
+                <i class="bi bi-calendar3 me-1" aria-hidden="true"></i>{{ page.date|date:"j E Y" }}
+              </span>
+              <span class="rl-pill">
+                <i class="bi bi-heart me-1" aria-hidden="true"></i>{{ page.likes_count }}
+              </span>
+              <span class="rl-pill">
+                <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ page.comments_count }}
+              </span>
             </div>
           </div>
         </div>
-
-      </div>
-    </div>
+      </a>
+    </article>
   {% endwith %}
 {% else %}
   {% url 'edit_article' page.id as edit_url %}
   {% with href=edit_url|add:"?edit=1" %}
-    <div class="blog-card card shadow-sm mb-3 js-clickable-card" data-href="{{ href }}" style="cursor:pointer;">
-      <div class="row g-0 align-items-stretch">
-
+    <article class="rl-card js-clickable-card" data-href="{{ href }}">
+      <a class="rl-card__link" href="{{ href }}" aria-label="{{ page.title }}">
         {% if page.main_image %}
-          {% image page.main_image fill-320x240 format-webp as img_320 %}
-          {% image page.main_image fill-480x360 format-webp as img_480 %}
-          {% image page.main_image fill-640x480 format-webp as img_640 %}
-          <div class="col-auto">
-            <div class="card-thumb">
-              <img
-                src="{{ img_640.url }}"
-                width="{{ img_640.width }}"
-                height="{{ img_640.height }}"
-                alt="{{ page.title }}"
-                loading="lazy"
-                decoding="async"
-                srcset="{{ img_320.url }} 320w, {{ img_480.url }} 480w, {{ img_640.url }} 640w"
-                sizes="(max-width:576px) 100vw, 160px"
-              >
-            </div>
+          {% image page.main_image fill-960x600 format-webp as img_960 %}
+          {% image page.main_image fill-640x400 format-webp as img_640 %}
+          <div class="rl-card__media">
+            <img
+              src="{{ img_960.url }}"
+              width="{{ img_960.width }}"
+              height="{{ img_960.height }}"
+              alt="{{ page.title }}"
+              loading="lazy"
+              decoding="async"
+              srcset="{{ img_640.url }} 640w, {{ img_960.url }} 960w"
+              sizes="(max-width: 992px) 100vw, 50vw"
+            >
           </div>
+        {% else %}
+          <div class="rl-card__media" aria-hidden="true"></div>
         {% endif %}
 
-        <div class="col d-flex flex-column">
-          <div class="card-body d-flex flex-column h-100">
-            <h5 class="card-title mb-2">
-              {{ page.title }}
-              {% if not page.live %}
-                <span class="badge bg-warning text-dark">{% trans "Draft" %}</span>
-              {% elif page.has_unpublished_changes %}
-                <span class="badge bg-info text-dark">{% trans "Unpublished changes" %}</span>
-              {% endif %}
-            </h5>
+        <div class="rl-card__body">
+          <div class="d-flex align-items-start justify-content-between gap-2">
+            <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
+            <span class="badge bg-secondary">{% trans "Draft" %}</span>
+          </div>
 
-            <p class="card-text mb-2 text-break small">
-              {{ page.intro|truncatechars:160 }}
-            </p>
+          <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>
 
-            {% if page.tags.all %}
-              <div class="mb-2">
-                {% for tag in page.tags.all %}
-                  <a href="?q={{ tag.name }}" class="badge bg-secondary text-decoration-none">{{ tag.name }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
+          {% if page.tags.all %}
+            <div class="rl-card__tags" aria-label="{% trans 'Tags' %}">
+              {% for tag in page.tags.all %}
+                <span class="rl-tag">{{ tag.name }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
 
-            <div class="d-flex align-items-center gap-2 text-muted small mt-auto pt-2">
+          <div class="rl-card__meta">
+            <div class="rl-author">
               {% if page.author %}
-                <a href="{% url 'public_profile' page.author.user.username %}" class="d-inline-flex align-items-center text-decoration-none">
-                  <img src="{% avatar_url page.author %}" class="rounded-circle me-2" width="24" height="24" alt="{% trans 'Avatar' %}">
-                  <span>{{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}</span>
-                </a>
-                <span class="mx-1">|</span>
+                <img src="{% avatar_url page.author %}" alt="{% trans 'Avatar' %}">
+                <span>
+                  {{ page.author.first_name|default:page.author.user.username }}{% if page.author.last_name %} {{ page.author.last_name }}{% endif %}
+                </span>
+              {% else %}
+                <span>{% trans "Anonymous author" %}</span>
               {% endif %}
-              <span>🗓 {{ page.date|date:"j E Y" }}</span>
-              <span class="mx-2">❤️ {{ page.likes_count }}</span>
-              <span>💬 {{ page.comments_count }}</span>
+            </div>
+
+            <div class="rl-stats">
+              <span class="rl-pill">
+                <i class="bi bi-calendar3 me-1" aria-hidden="true"></i>{{ page.date|date:"j E Y" }}
+              </span>
+              <span class="rl-pill">
+                <i class="bi bi-heart me-1" aria-hidden="true"></i>{{ page.likes_count }}
+              </span>
+              <span class="rl-pill">
+                <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ page.comments_count }}
+              </span>
             </div>
           </div>
         </div>
-
-      </div>
-    </div>
+      </a>
+    </article>
   {% endwith %}
 {% endif %}
