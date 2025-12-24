@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
@@ -191,9 +192,15 @@ def create_post(request):
             request, post, liked_ids=liked_ids, following_user_ids=following_user_ids, current_filter="mine"
         )
         msg = _("Your post is under review. It will appear after approval.") if not auto else _("Post published.")
-        return JsonResponse({"ok": True, "approved": bool(auto), "html": card_html, "message": msg})
+        return JsonResponse({
+            "ok": True,
+            "approved": bool(auto),
+            "html": card_html,
+            "message": msg,
+            "redirect": reverse("home"),
+        })
 
-    return render(request, "base/post_create.html", {"created": True})
+    return redirect("home")
 
 
 @login_required

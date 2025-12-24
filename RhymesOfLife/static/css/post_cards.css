@@ -1,0 +1,134 @@
+.post-card {
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(16,24,40,.06);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,0,0,.12);
+  box-shadow: 0 16px 40px rgba(16,24,40,.10);
+}
+
+.post-card .card-body {
+  padding: 1rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .post-card .card-body {
+    padding: 1.1rem 1.2rem;
+  }
+}
+
+.post-header .avatar {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(16,24,40,.10);
+}
+
+.post-meta {
+  margin-top: .15rem;
+  font-size: .875rem;
+  color: rgba(33,37,41,.7);
+}
+
+.post-text {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(33,37,41,.92);
+}
+
+.post-actions-menu .btn {
+  border-radius: 999px;
+}
+
+.post-actions {
+  gap: .5rem;
+}
+
+.js-like-toggle {
+  border-radius: 999px;
+  font-weight: 700;
+  padding: .35rem .75rem;
+  box-shadow: 0 1px 2px rgba(16,24,40,.06);
+}
+
+.js-like-toggle.active {
+  background: rgba(220,53,69,.08);
+  border-color: rgba(220,53,69,.25);
+}
+
+.js-like-toggle i {
+  margin-right: .35rem;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.post-img-single {
+  border-radius: 16px;
+  max-height: 520px;
+  object-fit: cover;
+  box-shadow: 0 12px 30px rgba(16,24,40,.10);
+}
+
+.post-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .5rem;
+}
+
+@media (min-width: 768px) {
+  .post-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.post-thumb {
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: rgba(0,0,0,.03);
+}
+
+.post-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .16s ease;
+}
+
+.post-thumb:hover img {
+  transform: scale(1.03);
+}
+
+[data-comment-form] .form-control {
+  border-radius: 999px;
+  padding: .65rem 1rem;
+  border-color: rgba(0,0,0,.12);
+}
+
+[data-comment-form] .form-control:focus {
+  border-color: rgba(var(--bs-primary-rgb), .45);
+  box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .12);
+}
+
+[data-comments-more].btn-link {
+  text-decoration: none;
+  font-weight: 700;
+  color: rgba(var(--bs-primary-rgb), .95);
+}
+
+[data-comments-more].btn-link:hover {
+  text-decoration: underline;
+}

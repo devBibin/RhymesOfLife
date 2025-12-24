@@ -1,3 +1,6 @@
+let feedReqSeq = 0;
+let feedReqAbort = null;
+
 function ajaxLoad(params) {
   const url = new URL(window.location.href);
   Object.entries(params).forEach(([k, v]) => {
@@ -5,10 +8,19 @@ function ajaxLoad(params) {
     else url.searchParams.set(k, v);
   });
 
-  return fetch(url.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+  if (feedReqAbort) feedReqAbort.abort();
+  feedReqAbort = new AbortController();
+  const seq = ++feedReqSeq;
+
+  return fetch(url.toString(), {
+    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+    credentials: 'same-origin',
+    signal: feedReqAbort.signal
+  })
     .then(async (r) => {
       const text = await r.text();
       if (!r.ok) throw new Error(text || r.statusText);
+      if (seq !== feedReqSeq) return;
       let data;
       try { data = JSON.parse(text); } catch { throw new Error(text); }
       document.getElementById('posts-container').innerHTML = data.html;
@@ -17,7 +29,10 @@ function ajaxLoad(params) {
       if (history && history.replaceState) history.replaceState(null, '', url.toString());
       document.dispatchEvent(new CustomEvent('feed:reloaded'));
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      if (e?.name === 'AbortError') return;
+      console.error(e);
+    });
 }
 
 function attachTabs() {

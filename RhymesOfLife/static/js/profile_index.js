@@ -5,16 +5,27 @@ function getCSRF(scopeEl){
   return raw ? decodeURIComponent(raw.split('=')[1] || '') : '';
 }
 
+let profileReqSeq = 0;
+let profileReqAbort = null;
+
 function ajaxLoadProfile(params){
   const url = new URL(window.location.href);
   Object.entries(params || {}).forEach(([k,v])=>{
     if (v===null || v===undefined || v==='') url.searchParams.delete(k);
     else url.searchParams.set(k, v);
   });
-  return fetch(url.toString(), { headers: {'X-Requested-With':'XMLHttpRequest'} })
+  if (profileReqAbort) profileReqAbort.abort();
+  profileReqAbort = new AbortController();
+  const seq = ++profileReqSeq;
+  return fetch(url.toString(), {
+    headers: {'X-Requested-With':'XMLHttpRequest','Accept':'application/json'},
+    credentials: 'same-origin',
+    signal: profileReqAbort.signal
+  })
     .then(async(r)=>{
       const text = await r.text();
       if(!r.ok) throw new Error(text||r.statusText);
+      if (seq !== profileReqSeq) return;
       let data; try{ data = JSON.parse(text); }catch{ throw new Error(text); }
       const box = document.getElementById('profile-content');
       if (box) box.innerHTML = data.html;
@@ -24,7 +35,10 @@ function ajaxLoadProfile(params){
       if (typeof window.initCommentForms === 'function') window.initCommentForms();
       if (history && history.replaceState) history.replaceState(null, '', url.toString());
     })
-    .catch((e)=>console.error(e));
+    .catch((e)=>{
+      if (e?.name === 'AbortError') return;
+      console.error(e);
+    });
 }
 
 function attachProfileTabs(){

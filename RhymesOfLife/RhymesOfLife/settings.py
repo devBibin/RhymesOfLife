@@ -76,7 +76,6 @@ ONBOARDING_DEFAULT_EXEMPT_PATHS_EXTRA = [
 
 
 ONBOARDING_EXEMPT_URLNAMES = {
-    "home",
     "home_public",
     "login",
     "logout",

@@ -38,7 +38,8 @@
       method: 'POST',
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRFToken': getCookie('csrftoken')
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Accept': 'application/json'
       },
       body: fd,
       credentials: 'same-origin'

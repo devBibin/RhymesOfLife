@@ -5,9 +5,12 @@
 {% block meta_description %}{{ page.intro }}{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+
 <input type="hidden" id="page-id" value="{{ page.id }}">
-<div class="container article-container py-4">
-  <h1 class="article-title text-break">{{ page.title }}</h1>
+
+<div class="container py-4 rl-article">
+  <h1 class="article-title rl-article__title text-break">{{ page.title }}</h1>
 
   {% if not page.is_approved %}
     {% if page.is_rejected %}
@@ -42,25 +45,40 @@
     {% endif %}
   {% endif %}
 
-  <div class="article-meta d-flex align-items-center flex-wrap gap-2 mb-3">
+  <div class="article-meta rl-article__meta mb-3">
     {% if page.author %}
-      <img src="{% avatar_url page.author %}" class="author-avatar rounded-circle me-2 object-fit-cover" width="48" height="48" alt="{% trans 'Author avatar' %}">
+      <div class="rl-meta__author">
+        <img
+          src="{% avatar_url page.author %}"
+          class="author-avatar object-fit-cover"
+          width="48"
+          height="48"
+          alt="{% trans 'Author avatar' %}">
+        <div class="d-flex flex-column">
+          <strong class="text-break">
+            {{ page.author.first_name }} {{ page.author.last_name }}
+          </strong>
+          <div class="rl-meta__line">
+            {% blocktrans count n=page.author.followers_count %}
+              <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> follower
+            {% plural %}
+              <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> followers
+            {% endblocktrans %}
+            <span aria-hidden="true">•</span>
+            <span>{{ page.date|date:"j E Y" }}</span>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="rl-meta__author">
+        <div class="d-flex flex-column">
+          <strong>{% trans "Anonymous author" %}</strong>
+          <div class="rl-meta__line">
+            <span>{{ page.date|date:"j E Y" }}</span>
+          </div>
+        </div>
+      </div>
     {% endif %}
-
-    <div class="small text-muted me-2">
-      {% if page.author %}
-        {{ page.author.first_name }} {{ page.author.last_name }}
-        •
-        {% blocktrans count n=page.author.followers_count %}
-          <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> follower
-        {% plural %}
-          <span data-followers-count data-author-id="{{ page.author.user.id }}">{{ n }}</span> followers
-        {% endblocktrans %}
-        • {{ page.date|date:"j E Y" }}
-      {% else %}
-        {% trans "Anonymous author" %} • {{ page.date|date:"j E Y" }}
-      {% endif %}
-    </div>
 
     {% if request.user.is_authenticated and page.author and request.user != page.author.user %}
       {% if page.author.user.id in following_user_ids %}
@@ -101,7 +119,7 @@
     {% image page.main_image fill-640x360 format-webp as hero_640 %}
     {% image page.main_image fill-1024x576 format-webp as hero_1024 %}
     {% image page.main_image fill-1280x720 format-webp as hero_1280 %}
-    <div class="article-main-image mb-4">
+    <div class="article-main-image mb-4 rl-hero">
       <img
         src="{{ hero_1280.url }}"
         width="{{ hero_1280.width }}"
@@ -112,7 +130,7 @@
         decoding="async"
         style="display:block;object-fit:cover;aspect-ratio:16/9;"
         srcset="{{ hero_640.url }} 640w, {{ hero_1024.url }} 1024w, {{ hero_1280.url }} 1280w"
-        sizes="(max-width:576px) 100vw, (max-width:992px) 90vw, 800px"
+        sizes="(max-width:576px) 100vw, (max-width:992px) 90vw, 860px"
       >
     </div>
   {% endif %}
@@ -126,80 +144,98 @@
   </div>
 
   {% if request.user == page.author.user or request.user.is_superuser %}
-    <div class="article-actions mt-4">
-      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary me-2">{% trans "Edit" %}</a>
-      <form action="{% url 'delete_article' page.id %}" method="post" style="display:inline;" onsubmit="return confirm('{% trans 'Delete the article?' %}');">
+    <div class="article-actions mt-4 d-flex gap-2 flex-wrap">
+      <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary">
+        <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>{% trans "Edit" %}
+      </a>
+      <form action="{% url 'delete_article' page.id %}" method="post"
+            onsubmit="return confirm('{% trans 'Delete the article?' %}');">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-danger">{% trans "Delete" %}</button>
+        <button type="submit" class="btn btn-outline-danger">
+          <i class="bi bi-trash me-1" aria-hidden="true"></i>{% trans "Delete" %}
+        </button>
       </form>
     </div>
   {% endif %}
 
   <div class="article-interactions mt-4">
-    <div class="d-flex align-items-center post-actions">
+    <div class="rl-chipbar">
       {% if request.user.is_authenticated %}
         {% with liked=page.is_liked_by|call_method:request.user %}
           <button
             type="button"
-            class="btn btn-sm btn-outline-primary me-3 js-like-toggle {% if liked %}active{% endif %}"
+            class="rl-chip rl-like js-like-toggle {% if liked %}is-active{% endif %}"
             data-like-url="{% url 'like_article' page.id %}"
             data-liked="{% if liked %}true{% else %}false{% endif %}"
             aria-pressed="{% if liked %}true{% else %}false{% endif %}">
-            <i class="bi {% if liked %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" aria-hidden="true"></i>
+            <i class="bi {% if liked %}bi-heart-fill{% else %}bi-heart{% endif %}" aria-hidden="true"></i>
             <span class="js-like-count" id="like-count">{{ page.likes_count }}</span>
+            <span class="visually-hidden">{% trans "Likes" %}</span>
           </button>
         {% endwith %}
       {% else %}
-        <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary btn-sm me-3">
+        <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="rl-chip text-decoration-none">
+          <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
           {% trans "Log in to like" %}
         </a>
       {% endif %}
 
-      <div class="text-muted small d-flex align-items-center">
-        <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i><span id="comment-count">{{ page.comments_count }}</span>
+      <div class="rl-chip" aria-label="{% trans 'Comments' %}">
+        <i class="bi bi-chat-left-text" aria-hidden="true"></i>
+        <span id="comment-count">{{ page.comments_count }}</span>
       </div>
     </div>
   </div>
 
-  <hr class="my-4">
+  <hr class="rl-divider">
 
   <div class="article-comments">
-    <h5 class="mb-3">{% trans "Comments" %}</h5>
+    <h5 class="mb-3 rl-comments__title">{% trans "Comments" %}</h5>
 
     {% if request.user.is_authenticated %}
-      <form id="comment-form" class="mb-4">
+      <form id="comment-form" class="mb-3">
         {% csrf_token %}
         <div class="mb-2">
           <textarea name="text" class="form-control" placeholder="{% trans 'Leave a comment...' %}" required rows="3"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-send me-1" aria-hidden="true"></i>{% trans "Send" %}
+        </button>
       </form>
     {% else %}
-      <div class="alert alert-info mb-4">
+      <div class="alert alert-info mb-3">
         <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">{% trans "Log in" %}</a>, {% trans "to leave a comment" %}.
       </div>
     {% endif %}
 
-    <div id="comments">
+    <div id="comments" class="d-flex flex-column gap-2">
       {% for comment in page.visible_comments %}
-        <div class="comment mb-3" data-comment-id="{{ comment.id }}">
-          <div class="d-flex align-items-center mb-1">
+        <div class="rl-comment" data-comment-id="{{ comment.id }}">
+          <div class="rl-comment__head">
             {% if comment.author %}
-              <img src="{% avatar_url comment.author %}" class="comment-avatar rounded-circle me-2 object-fit-cover" width="32" height="32" alt="{% trans 'Avatar' %}">
+              <img src="{% avatar_url comment.author %}" class="rl-comment__avatar" width="34" height="34" alt="{% trans 'Avatar' %}">
             {% endif %}
-            <strong>{{ comment.author.first_name }}</strong>
-            <small class="text-muted ms-2">
-              {{ comment.created_at|date:"d.m.Y H:i" }}
-              {% if comment.edited_at %}({% trans "edited" %}){% endif %}
-            </small>
+
+            <div class="d-flex flex-column">
+              <span class="rl-comment__name">{{ comment.author.first_name }}</span>
+              <span class="rl-comment__time">
+                {{ comment.created_at|date:"d.m.Y H:i" }}{% if comment.edited_at %} ({% trans "edited" %}){% endif %}
+              </span>
+            </div>
+
             {% if comment.author.user == request.user or request.user.is_superuser %}
-              <div class="ms-auto">
-                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="{% trans 'Edit' %}">✏️</button>
-                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="{% trans 'Delete' %}">🗑</button>
+              <div class="rl-comment__actions">
+                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="{% trans 'Edit' %}">
+                  <i class="bi bi-pencil" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="{% trans 'Delete' %}">
+                  <i class="bi bi-trash" aria-hidden="true"></i>
+                </button>
               </div>
             {% endif %}
           </div>
-          <p class="comment-text text-break">{{ comment.text|linebreaks }}</p>
+
+          <p class="rl-comment__text comment-text text-break">{{ comment.text|linebreaks }}</p>
         </div>
       {% endfor %}
     </div>
