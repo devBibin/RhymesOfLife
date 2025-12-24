@@ -177,8 +177,10 @@ async function refreshCommentsList(postId, limitHint) {
     const frag = document.createDocumentFragment();
     data.items.forEach((item) => frag.appendChild(renderCommentItem({ ...item, post: Number(postId) })));
     ul.appendChild(frag);
+    return true;
   } catch (err) {
     console.error('Failed to refresh comments', err);
+    return false;
   }
 }
 
@@ -269,9 +271,20 @@ function initCommentForms() {
         form.reset();
       } catch (err) {
         if (pending) pending.remove();
-        const msg = (err && err.data && err.data.error) || t('Failed to add comment. Please try again.');
-        console.error(err);
-        alert(msg);
+        if (err && (err.status === 401 || err.status === 403)) {
+          const login = document.querySelector('#like-login-link,[data-login-url]');
+          if (login) {
+            window.location.href = login.href || login.dataset.loginUrl;
+            return;
+          }
+        }
+        const pid = postId || (err && err.data && err.data.post) || '';
+        const refreshed = pid ? await refreshCommentsList(pid) : false;
+        if (!refreshed) {
+          const msg = (err && err.data && err.data.error) || t('Failed to add comment. Please try again.');
+          console.error(err);
+          alert(msg);
+        }
       } finally {
         resetSubmitState(form);
       }
@@ -509,7 +522,8 @@ async function ajaxSubmitForm(form, onSuccess) {
   const r = await fetch(form.action, {
     method: 'POST',
     body: new FormData(form),
-    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken, 'Accept': 'application/json' }
+    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken, 'Accept': 'application/json' },
+    credentials: 'same-origin'
   });
   const text = await r.text();
   let data = {};

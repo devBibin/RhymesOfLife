@@ -18,6 +18,9 @@ from base.models import Post, PostImage, PostLike, PostComment, PostReport
 from base.utils.files import validate_mixed_upload
 from base.utils.moderation import get_moderation_config
 from base.utils.decorators import permission_or_staff_required
+from base.utils.logging import get_app_logger
+
+log = get_app_logger(__name__)
 
 ALLOWED_IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
@@ -353,18 +356,23 @@ def serialize_comment(c, request):
 @require_POST
 @csrf_protect
 def add_comment(request, post_id: int):
-    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
-    me = AdditionalUserInfo.objects.get(user=request.user)
-    text = (request.POST.get("text") or "").strip()
-    if not text:
-        return JsonResponse({"error": "empty"}, status=400)
+    try:
+        post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+        me = AdditionalUserInfo.objects.get(user=request.user)
+        text = (request.POST.get("text") or "").strip()
+        if not text:
+            return JsonResponse({"error": "empty"}, status=400)
 
-    c = PostComment.objects.create(post=post, author=me, text=text)
-    post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
-    post.save(update_fields=["comments_count"])
+        c = PostComment.objects.create(post=post, author=me, text=text)
+        post.comments_count = PostComment.objects.filter(post=post, is_deleted=False).count()
+        post.save(update_fields=["comments_count"])
 
-    data = serialize_comment(c, request)
-    return JsonResponse({"item": data, "post": post.id, "count": post.comments_count})
+        data = serialize_comment(c, request)
+        log.info("Post comment added: post_id=%s comment_id=%s user_id=%s", post.id, c.id, request.user.id)
+        return JsonResponse({"item": data, "post": post.id, "count": post.comments_count})
+    except Exception:
+        log.exception("Post comment add failed: post_id=%s user_id=%s", post_id, getattr(request.user, "id", None))
+        return JsonResponse({"error": "server_error"}, status=500)
 
 
 @login_required
