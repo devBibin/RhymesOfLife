@@ -559,6 +559,7 @@ class WellnessSettings(models.Model):
     email_notifications_enabled = models.BooleanField(default=True, db_index=True)
     reminder_hour = models.PositiveSmallIntegerField(default=20, validators=[MinValueValidator(0), MaxValueValidator(23)])
     reminder_minute = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(59)])
+    reminder_tz = models.CharField(max_length=64, blank=True, default="")
     reminder_interval = models.PositiveSmallIntegerField(
         choices=ReminderInterval.choices,
         default=ReminderInterval.EVERY_3_DAYS,

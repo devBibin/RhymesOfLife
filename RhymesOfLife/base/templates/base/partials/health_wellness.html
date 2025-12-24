@@ -137,6 +137,17 @@
           </select>
           <div class="form-text">{% trans "Set to Never to fully disable reminders." %}</div>
         </div>
+        <div class="mb-3">
+          <label class="form-label">{% trans "Delivery channels" %}</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tg-enabled">
+            <label class="form-check-label" for="tg-enabled">{% trans "Telegram reminders" %}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="email-enabled">
+            <label class="form-check-label" for="email-enabled">{% trans "Email reminders" %}</label>
+          </div>
+        </div>
         <div class="row g-2 mb-2">
           <div class="col">
             <label for="rem-hour" class="form-label">{% trans "Hour" %}</label>
@@ -147,7 +158,10 @@
             <input type="number" id="rem-min" class="form-control" min="0" max="59">
           </div>
         </div>
-        <div class="form-text">{% trans "Your local time when the daily reminder may be sent." %}</div>
+        <div class="form-text">
+          {% trans "Your local time when the daily reminder may be sent." %}
+          <span id="rem-tz-label" class="ms-1 text-muted"></span>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
