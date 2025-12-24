@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const ajaxBase = container.dataset.api;
   const pagePath = location.pathname;
+  let reqSeq = 0;
+  let reqAbort = null;
 
   function buildQuery({ sort, query, page }) {
     const params = new URLSearchParams();
@@ -44,18 +46,34 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  async function loadFragment(opts) {
+  async function loadFragment(opts, { pushState = true } = {}) {
     const apiUrl = buildApiUrl(opts);
+    if (reqAbort) reqAbort.abort();
+    reqAbort = new AbortController();
+    const seq = ++reqSeq;
     try {
-      const resp = await fetch(apiUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+      const resp = await fetch(apiUrl, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+        credentials: 'same-origin',
+        signal: reqAbort.signal,
+      });
       if (!resp.ok) return;
+      const ct = resp.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) return;
       const data = await resp.json();
+      if (seq !== reqSeq) return;
       if (!data?.html) return;
       container.innerHTML = data.html;
-      history.pushState(opts, '', buildDisplayUrl(opts));
+      if (currentSortInput && opts.sort) currentSortInput.value = opts.sort;
+      if (searchInput && Object.prototype.hasOwnProperty.call(opts, 'query')) {
+        searchInput.value = opts.query || '';
+      }
+      if (pushState) history.pushState(opts, '', buildDisplayUrl(opts));
       attachPagination();
       activateSortButton(opts.sort || 'date');
-    } catch {}
+    } catch (e) {
+      if (e?.name === 'AbortError') return;
+    }
   }
 
   sortButtons.forEach((btn) => {
@@ -104,16 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       query: params.get('q') || '',
       page: params.get('page') || '1',
     };
-    fetch(buildApiUrl(opts), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (d?.html) {
-          container.innerHTML = d.html;
-          attachPagination();
-          activateSortButton(opts.sort || 'date');
-        }
-      })
-      .catch(() => {});
+    loadFragment(opts, { pushState: false });
   });
 
   activateSortButton(currentSortInput?.value || 'date');

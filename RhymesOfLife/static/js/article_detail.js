@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const commentsDiv = document.getElementById('comments');
   const commentForm = document.getElementById('comment-form');
 
+  function jsonHeaders(extra = {}) {
+    return {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'application/json',
+      ...extra,
+    };
+  }
+
   const escapeHtml = (s) =>
     String(s)
       .replaceAll('&', '&amp;')
@@ -46,7 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       btn.disabled = true;
       try {
-        const r = await fetch(url, { method: 'POST', headers: { 'X-CSRFToken': csrftoken } });
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: jsonHeaders({ 'X-CSRFToken': csrftoken }),
+          credentials: 'same-origin',
+        });
         if (!r.ok) return;
         const data = await r.json();
         setLikeState(btn, !!data.liked, data.like_count);
@@ -91,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           const r = await fetch(`/articles/comment/${id}/delete/`, {
             method: 'POST',
-            headers: { 'X-CSRFToken': csrftoken },
+            headers: jsonHeaders({ 'X-CSRFToken': csrftoken }),
+            credentials: 'same-origin',
           });
           if (!r.ok) return;
           const d = await r.json();
@@ -157,7 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             const r = await fetch(`/articles/comment/${id}/edit/`, {
               method: 'POST',
-              headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/x-www-form-urlencoded' },
+              headers: jsonHeaders({
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+              }),
+              credentials: 'same-origin',
               body: `text=${encodeURIComponent(ta.value)}`,
             });
             if (!r.ok) return;
@@ -194,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const r = await fetch(`/articles/${pageId}/comment/`, {
           method: 'POST',
-          headers: { 'X-CSRFToken': csrftoken },
+          headers: jsonHeaders({ 'X-CSRFToken': csrftoken }),
+          credentials: 'same-origin',
           body: fd,
         });
         if (!r.ok) return;

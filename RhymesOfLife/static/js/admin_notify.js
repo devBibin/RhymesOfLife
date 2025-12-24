@@ -45,16 +45,24 @@ function getCookie(name){
   async function loadSuggest(query){
     if(suggestAbort) suggestAbort.abort();
     suggestAbort = new AbortController();
-    const r = await fetch(`${SUGGEST_URL}?q=${encodeURIComponent(query)}`, { signal: suggestAbort.signal });
-    if(!r.ok) return;
-    const {items=[]} = await r.json();
-    suggestList.innerHTML = '';
-    for(const it of items){
-      const opt = document.createElement('option');
-      opt.value = it.username;
-      opt.dataset.id = it.id;
-      opt.label = it.email || it.username;
-      suggestList.appendChild(opt);
+    try{
+      const r = await fetch(`${SUGGEST_URL}?q=${encodeURIComponent(query)}`, {
+        signal: suggestAbort.signal,
+        credentials: 'same-origin',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+      });
+      if(!r.ok) return;
+      const {items=[]} = await r.json();
+      suggestList.innerHTML = '';
+      for(const it of items){
+        const opt = document.createElement('option');
+        opt.value = it.username;
+        opt.dataset.id = it.id;
+        opt.label = it.email || it.username;
+        suggestList.appendChild(opt);
+      }
+    }catch(e){
+      if(e && e.name === 'AbortError') return;
     }
   }
 
@@ -84,7 +92,13 @@ function getCookie(name){
     try{
       const r = await fetch(API_URL, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json','X-CSRFToken': getCookie('csrftoken')},
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        credentials: 'same-origin',
         body: JSON.stringify(body)
       });
       if(!r.ok){

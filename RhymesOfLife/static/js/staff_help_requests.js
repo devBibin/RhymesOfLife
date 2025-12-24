@@ -28,7 +28,10 @@
     u.searchParams.set('status', statusEl.value);
     u.searchParams.set('q', qEl.value || '');
     u.searchParams.set('page', currentPage);
-    const resp=await fetch(u.toString(), {headers:{'X-Requested-With':'XMLHttpRequest'}});
+    const resp=await fetch(u.toString(), {
+      headers:{'X-Requested-With':'XMLHttpRequest','Accept':'application/json'},
+      credentials: 'same-origin'
+    });
     if(!resp.ok) return;
     const data=await resp.json();
     if(!data.ok) return;
@@ -51,7 +54,16 @@
       const fd=new FormData();
       fd.append('id', toggle.dataset.id);
       fd.append('action', toggle.dataset.action);
-      const resp=await fetch(apiUrl, {method:'POST', headers:{'X-CSRFToken':getCookie('csrftoken')}, body:fd});
+      const resp=await fetch(apiUrl, {
+        method:'POST',
+        headers:{
+          'X-CSRFToken':getCookie('csrftoken'),
+          'X-Requested-With':'XMLHttpRequest',
+          'Accept':'application/json'
+        },
+        credentials: 'same-origin',
+        body:fd
+      });
       if(!resp.ok) return;
       const data=await resp.json();
       if(!data.ok) return;
@@ -139,7 +151,16 @@
     const fd=new FormData();
     fd.append('id', id);
     fd.append('action', action);
-    const resp=await fetch(root.dataset.urlApi, {method:'POST', headers:{'X-CSRFToken':getCookie('csrftoken')}, body:fd});
+    const resp=await fetch(root.dataset.urlApi, {
+      method:'POST',
+      headers:{
+        'X-CSRFToken':getCookie('csrftoken'),
+        'X-Requested-With':'XMLHttpRequest',
+        'Accept':'application/json'
+      },
+      credentials: 'same-origin',
+      body:fd
+    });
     if(!resp.ok) return;
     const data=await resp.json();
     if(!data.ok) return;
