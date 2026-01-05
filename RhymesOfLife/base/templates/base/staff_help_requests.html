@@ -20,6 +20,7 @@
         <div class="col-6 col-md-3">
           <select class="form-select" name="status" id="hr-status">
             <option value="open">{% trans "Open" %}</option>
+            <option value="in_work">{% trans "In work" %}</option>
             <option value="processed">{% trans "Processed" %}</option>
             <option value="all">{% trans "All" %}</option>
           </select>
@@ -40,6 +41,7 @@
             <col class="hr-col-username">
             <col class="hr-col-telegram">
             <col class="hr-col-email">
+            <col class="hr-col-profile">
             <col class="hr-col-status">
             <col class="hr-col-actions">
           </colgroup>
@@ -50,6 +52,7 @@
               <th class="hr-th">{% trans "Username" %}</th>
               <th class="hr-th">Telegram</th>
               <th class="hr-th d-none d-lg-table-cell">{% trans "Email" %}</th>
+              <th class="hr-th">{% trans "Profile" %}</th>
               <th class="hr-th">{% trans "Status" %}</th>
               <th class="hr-th"></th>
             </tr>
@@ -92,6 +95,34 @@
             <div class="small text-muted">{% trans "Email" %}</div>
             <div id="hm-email"></div>
           </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "Profile" %}</div>
+            <div id="hm-profile"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "Phone" %}</div>
+            <div id="hm-phone"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "Birth date" %}</div>
+            <div id="hm-birth"></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="small text-muted">{% trans "City" %}</div>
+            <div id="hm-city"></div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="small text-muted">{% trans "Syndrome" %}</div>
+            <div id="hm-syndrome"></div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="small text-muted">{% trans "Gen" %}</div>
+            <div id="hm-gen"></div>
+          </div>
+          <div class="col-12">
+            <div class="small text-muted mb-1">{% trans "Medications" %}</div>
+            <pre id="hm-medications" class="mb-0" style="white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;"></pre>
+          </div>
           <div class="col-12">
             <div class="small text-muted mb-1">Message</div>
             <pre id="hm-message" class="mb-0" style="white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;max-height:50vh;"></pre>
@@ -104,6 +135,7 @@
         </div>
         <div>
           <button type="button" id="hm-undo" class="btn btn-outline-secondary d-none">{% trans "Mark open" %}</button>
+          <button type="button" id="hm-work" class="btn btn-outline-primary d-none">{% trans "Mark in work" %}</button>
           <button type="button" id="hm-process" class="btn btn-primary d-none">{% trans "Mark processed" %}</button>
         </div>
       </div>

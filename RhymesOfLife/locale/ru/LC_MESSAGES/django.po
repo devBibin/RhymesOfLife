@@ -3105,6 +3105,12 @@ msgstr "Показать все уведомления"
 msgid "Admin Panel"
 msgstr "Сообщение администратора"
 
+msgid "Doctor"
+msgstr "Врач"
+
+msgid "Doctor Panel"
+msgstr "Панель врача"
+
 #: templates/base.html:202
 msgid "Patients"
 msgstr "Пациенты"

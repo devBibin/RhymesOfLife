@@ -6,7 +6,16 @@
     data-username="{{ r.name|default_if_none:''|escape }}"
     data-telegram="{{ r.telegram|default_if_none:''|escape }}"
     data-email="{{ r.email|default_if_none:''|escape }}"
-    data-status="{% if r.is_processed %}processed{% else %}open{% endif %}"
+    data-phone="{{ r.phone|default_if_none:''|escape }}"
+    data-birth="{{ r.birth_date|date:'Y-m-d' }}"
+    data-city="{{ r.city|default_if_none:''|escape }}"
+    data-syndrome="{{ r.syndrome|default_if_none:''|escape }}"
+    data-gen="{{ r.gen|default_if_none:''|escape }}"
+    data-medications="{{ r.medications|default_if_none:''|escape }}"
+    data-status="{{ r.status }}"
+    data-processor="{{ r.processed_by.username|default_if_none:''|escape }}"
+    data-profile="{% if r.user %}{% url 'public_profile' r.user.username %}{% endif %}"
+    data-profile-name="{{ r.user.username|default_if_none:''|escape }}"
     data-message="{{ r.message|escape }}">
   <td class="hr-nowrap text-muted">{{ r.id }}</td>
   <td class="hr-nowrap">{{ r.created_at|date:"Y-m-d H:i" }}</td>
@@ -28,19 +37,41 @@
       —
     {% endif %}
   </td>
+  <td class="hr-truncate">
+    {% if r.user %}
+      <a href="{% url 'public_profile' r.user.username %}" class="text-decoration-none">{{ r.user.username }}</a>
+    {% else %}
+      ¢?"
+    {% endif %}
+  </td>
   <td class="hr-nowrap">
-    {% if r.is_processed %}
+    {% if r.status == "done" %}
       <span class="badge rounded-pill bg-success">{% trans "Processed" %}</span>
+    {% elif r.status == "in_work" %}
+      <span class="badge rounded-pill bg-primary">{% trans "In work" %}</span>
     {% else %}
       <span class="badge rounded-pill bg-secondary">{% trans "Open" %}</span>
     {% endif %}
+    {% if r.processed_by %}
+      <div class="small text-muted">{{ r.processed_by.username }}</div>
+    {% endif %}
   </td>
   <td class="text-end hr-nowrap hr-actions">
-    {% if r.is_processed %}
+    {% if r.status == "done" %}
       <button class="btn btn-sm btn-outline-secondary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
         {% trans "Undo" %}
       </button>
+    {% elif r.status == "in_work" %}
+      <button class="btn btn-sm btn-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
+        {% trans "Mark processed" %}
+      </button>
+      <button class="btn btn-sm btn-outline-secondary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
+        {% trans "Mark open" %}
+      </button>
     {% else %}
+      <button class="btn btn-sm btn-outline-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="work">
+        {% trans "Mark in work" %}
+      </button>
       <button class="btn btn-sm btn-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
         {% trans "Mark processed" %}
       </button>
@@ -48,5 +79,5 @@
   </td>
 </tr>
 {% empty %}
-<tr><td colspan="7" class="text-center text-muted py-4">{% trans "Nothing found." %}</td></tr>
+<tr><td colspan="8" class="text-center text-muted py-4">{% trans "Nothing found." %}</td></tr>
 {% endfor %}

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 
-VALID_ROLES = {"doctor", "volunteer", "user"}
+VALID_ROLES = {"doctor", "volunteer", "user", "external_doctor"}
 
 
 def set_user_role(user, role: str):

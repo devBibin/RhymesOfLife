@@ -84,6 +84,15 @@
       username: tr.dataset.username || '',
       telegram: tr.dataset.telegram || '',
       email: tr.dataset.email || '',
+      phone: tr.dataset.phone || '',
+      birth: tr.dataset.birth || '',
+      city: tr.dataset.city || '',
+      syndrome: tr.dataset.syndrome || '',
+      gen: tr.dataset.gen || '',
+      medications: tr.dataset.medications || '',
+      profile: tr.dataset.profile || '',
+      profileName: tr.dataset.profileName || '',
+      processor: tr.dataset.processor || '',
       status: tr.dataset.status || 'open',
       message: tr.dataset.message || ''
     };
@@ -118,26 +127,55 @@
       a.textContent=d.email;
       mailEl.appendChild(a);
     }else{
-      mailEl.textContent='—';
+      mailEl.textContent='-';
+    }
+
+    setText('hm-phone', d.phone || '-');
+    setText('hm-birth', d.birth || '-');
+    setText('hm-city', d.city || '-');
+    setText('hm-syndrome', d.syndrome || '-');
+    setText('hm-gen', d.gen || '-');
+    setText('hm-medications', d.medications || '-');
+    const profileEl = document.getElementById('hm-profile');
+    if (profileEl) {
+      profileEl.innerHTML = '';
+      if (d.profile) {
+        const a = document.createElement('a');
+        a.href = d.profile;
+        a.className = 'text-decoration-none';
+        a.textContent = d.profileName || d.profile;
+        profileEl.appendChild(a);
+      } else {
+        profileEl.textContent = '-';
+      }
     }
 
     const sEl=document.getElementById('hm-status');
     sEl.innerHTML='';
     const span=document.createElement('span');
-    span.className='badge rounded-pill ' + (d.status==='processed'?'bg-success':'bg-secondary');
-    span.textContent=(d.status==='processed'?'Processed':'Open');
+    span.className='badge rounded-pill ' + (d.status==='done'?'bg-success':(d.status==='in_work'?'bg-primary':'bg-secondary'));
+    span.textContent=(d.status==='done'?'Processed':(d.status==='in_work'?'In work':'Open'));
     sEl.appendChild(span);
+    if (d.processor) {
+      const who = document.createElement('div');
+      who.className = 'small text-muted';
+      who.textContent = d.processor;
+      sEl.appendChild(who);
+    }
 
     const msgEl=document.getElementById('hm-message');
     msgEl.textContent=d.message;
 
     const btnProcess=document.getElementById('hm-process');
     const btnUndo=document.getElementById('hm-undo');
-    btnProcess.classList.toggle('d-none', d.status==='processed');
-    btnUndo.classList.toggle('d-none', d.status!=='processed');
+    const btnWork=document.getElementById('hm-work');
+    btnProcess.classList.toggle('d-none', d.status==='done');
+    btnUndo.classList.toggle('d-none', d.status==='open');
+    if (btnWork) btnWork.classList.toggle('d-none', d.status!=='open');
 
     btnProcess.onclick=()=>updateStatus(d.id,'process',m);
     btnUndo.onclick=()=>updateStatus(d.id,'undo',m);
+    if (btnWork) btnWork.onclick=()=>updateStatus(d.id,'work',m);
 
     m.show();
   }
