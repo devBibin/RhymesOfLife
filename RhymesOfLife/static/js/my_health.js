@@ -21,6 +21,7 @@
         if (paneId === "#pane-wellness") initWellness();
         if (paneId === "#pane-comments") wireCommentsPagination();
         if (paneId === "#pane-exams") initDocumentsTab();
+        if (paneId === "#pane-medications") initMedicationsTab();
       })
       .catch(() => { pane.innerHTML = `<div class="alert alert-danger mb-0">${i18n.failedLoad || "Failed to load."}</div>`; });
   }
@@ -594,6 +595,8 @@
         if (target === "#pane-exams") htmlLoad("#pane-exams", endpoints.exams);
         if (target === "#pane-comments") htmlLoad("#pane-comments", endpoints.recs);
         if (target === "#pane-wellness") htmlLoad("#pane-wellness", endpoints.wellness);
+        if (target === "#pane-medications") htmlLoad("#pane-medications", endpoints.medications);
+
         sessionStorage.setItem("my-health-tab-id", target.substring(1));
       }
       setMobileTitle(target);
@@ -612,4 +615,58 @@
       }, 20);
     }
   });
+  function initMedicationsTab() {
+    const root = document.querySelector("#pane-medications");
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
+
+    const form = root.querySelector("#medication-form");
+    const input = root.querySelector("#medication_description");
+
+    function csrf() {
+      const m = document.cookie.match(/csrftoken=([^;]+)/);
+      return m ? m[1] : "";
+    }
+
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const val = (input?.value || "").trim();
+        if (!val) {
+          input.classList.add("is-invalid");
+          return;
+        }
+        input.classList.remove("is-invalid");
+
+        const fd = new FormData();
+        fd.append("description", val);
+
+        fetch(endpoints.medicationsAdd, {
+          method: "POST",
+          headers: { "X-CSRFToken": csrf(), "X-Requested-With": "XMLHttpRequest" },
+          body: fd,
+          credentials: "same-origin",
+        }).then(() => {
+          const pane = document.querySelector("#pane-medications");
+          if (pane) delete pane.dataset.bound;
+          htmlLoad("#pane-medications", endpoints.medications);
+        });
+      });
+    }
+
+    root.addEventListener("click", (e) => {
+      const btn = e.target.closest(".delete-medication-btn");
+      if (!btn) return;
+
+      fetch(
+        endpoints.medicationsDeletePattern.replace("/0/", `/${btn.dataset.id}/`),
+        {
+          method: "POST",
+          headers: { "X-CSRFToken": csrf(), "X-Requested-With": "XMLHttpRequest" },
+          credentials: "same-origin",
+        }
+      ).then(() => btn.closest(".card")?.remove());
+    });
+  }
+
 })();

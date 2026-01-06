@@ -32,6 +32,13 @@
               <div class="form-text">{% trans "Your account username will be attached to the request." %}</div>
             </div>
 
+            <div class="mb-3">
+              <label for="hr-full-name" class="form-label">{% trans "Full name" %}</label>
+              <input id="hr-full-name"
+                     class="form-control"
+                     name="full_name" type="text" value="{{ values.full_name }}">
+            </div>
+
             {% if has_tg %}
               <div class="mb-3">
                 <label class="form-label">{% trans "Telegram" %}</label>
@@ -61,6 +68,51 @@
               {% if errors.email %}
                 <div class="invalid-feedback d-block">{{ errors.email }}</div>
               {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-phone" class="form-label">{% trans "Phone" %}</label>
+              <input id="hr-phone"
+                     class="form-control"
+                     name="phone" type="text" value="{{ values.phone }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-birth" class="form-label">{% trans "Birth date" %}</label>
+              <input id="hr-birth"
+                     class="form-control{% if errors.birth_date %} is-invalid{% endif %}"
+                     name="birth_date" type="date" value="{{ values.birth_date }}">
+              {% if errors.birth_date %}
+                <div class="invalid-feedback d-block">{{ errors.birth_date }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-city" class="form-label">{% trans "City" %}</label>
+              <input id="hr-city"
+                     class="form-control"
+                     name="city" type="text" value="{{ values.city }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-syndrome" class="form-label">{% trans "Syndrome" %}</label>
+              <input id="hr-syndrome"
+                     class="form-control"
+                     name="syndrome" type="text" value="{{ values.syndrome }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-gen" class="form-label">{% trans "Gen" %}</label>
+              <textarea id="hr-gen"
+                        class="form-control"
+                        name="gen" rows="3">{{ values.gen }}</textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="hr-meds" class="form-label">{% trans "Medications" %}</label>
+              <textarea id="hr-meds"
+                        class="form-control"
+                        name="medications" rows="3">{{ values.medications }}</textarea>
             </div>
 
             <div class="mb-3">

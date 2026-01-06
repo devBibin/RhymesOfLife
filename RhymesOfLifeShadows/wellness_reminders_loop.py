@@ -8,7 +8,7 @@ from orm_connector import settings  # noqa: F401
 
 from django.db import transaction, connection
 from django.utils import timezone
-from django.utils.translation import override
+from django.utils.translation import override, gettext as _
 from django.db.models import Max
 
 from RhymesOfLifeShadows.create_log import create_log
@@ -71,7 +71,7 @@ def mark_sent_db(info: AdditionalUserInfo, title: str, message: str, local_date:
         title=title,
         message=message,
         url="",
-        payload={"kind": "wellness_reminder", "local_date": local_date.isoformat()},
+        payload={"kind": "wellness_reminder", "local_date": local_date.isoformat(), "skip_telegram": True},
         source=Notification.Source.SYSTEM,
         scope=Notification.Scope.PERSONAL,
     )
@@ -90,6 +90,22 @@ def build_title(info):
 def build_message(info):
     with override(getattr(info, "language", None) or "en"):
         return str(WELLNESS_REMINDER_MSG)
+
+
+def build_tracker_url() -> str:
+    base = (getattr(settings, "BASE_URL", "") or "").rstrip("/")
+    if not base:
+        return ""
+    return f"{base}/my-health/"
+
+
+def build_email_body(info, message: str) -> str:
+    url = build_tracker_url()
+    if not url:
+        return message
+    with override(getattr(info, "language", None) or "en"):
+        label = str(_("My health"))
+    return f"{message}\n\n{label}: {url}"
 
 
 def _get_user_timezone(info) -> ZoneInfo | None:
@@ -182,7 +198,7 @@ def loop_once() -> int:
                 via_telegram=via_telegram,
                 via_email=via_email,
                 email_subject=title if via_email else None,
-                email_body=msg if via_email else None,
+                email_body=build_email_body(info, msg) if via_email else None,
             )
 
         success = any([bool(res.get("telegram_sent")), bool(res.get("email_sent")), True])

@@ -5,18 +5,23 @@
 <div class="container py-4">
   <h2 class="mb-4">🧾 {% trans "Patient examinations" %}: {{ patient.first_name }} {{ patient.last_name }}</h2>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">💡 {% trans "Send doctor's recommendation" %}</h5>
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-2">
-          <textarea name="content" class="form-control" rows="3" placeholder="{% trans 'Enter recommendation...' %}" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
-      </form>
+  {% if can_recommend %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">??'? {% trans "Send doctor's recommendation" %}</h5>
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-2">
+            <textarea name="content" class="form-control" rows="3" placeholder="{% trans 'Enter recommendation...' %}" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
+        </form>
+      </div>
     </div>
-  </div>
+  {% else %}
+    <div class="alert alert-warning">{% trans "You don't have permission to send recommendations." %}</div>
+  {% endif %}
+
 
   {% if recommendations %}
     <div class="mb-4">

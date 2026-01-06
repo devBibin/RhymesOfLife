@@ -40,37 +40,45 @@
 
   <ul class="nav nav-pills nav-modern mb-3" id="healthTabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="tab-wellness" data-bs-toggle="tab" data-bs-target="#pane-wellness" type="button" role="tab" aria-controls="pane-wellness" aria-selected="true" aria-label="{% trans 'Wellness' %}" title="{% trans 'Wellness' %}">
+      <button class="nav-link active" id="tab-wellness" data-bs-toggle="tab" data-bs-target="#pane-wellness" type="button" role="tab">
         <i class="bi bi-activity"></i><span class="label">{% trans "Wellness" %}</span>
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="tab-exams" data-bs-toggle="tab" data-bs-target="#pane-exams" type="button" role="tab" aria-controls="pane-exams" aria-selected="false" aria-label="{% trans 'Examinations' %}" title="{% trans 'Examinations' %}">
+      <button class="nav-link" id="tab-exams" data-bs-toggle="tab" data-bs-target="#pane-exams" type="button" role="tab">
         <i class="bi bi-file-earmark-medical"></i><span class="label">{% trans "Examinations" %}</span>
       </button>
     </li>
+
+    <!-- ✅ NEW -->
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="tab-comments" data-bs-toggle="tab" data-bs-target="#pane-comments" type="button" role="tab" aria-controls="pane-comments" aria-selected="false" aria-label="{% trans "Doctor's comments" %}" title="{% trans "Doctor's comments" %}">
+      <button class="nav-link" id="tab-medications" data-bs-toggle="tab" data-bs-target="#pane-medications" type="button" role="tab">
+        <i class="bi bi-capsule"></i><span class="label">{% trans "Medications" %}</span>
+      </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab-comments" data-bs-toggle="tab" data-bs-target="#pane-comments" type="button" role="tab">
         <i class="bi bi-chat-dots"></i><span class="label">{% trans "Doctor's comments" %}</span>
       </button>
     </li>
   </ul>
 
   <div class="tab-content rounded-4 border p-3 shadow-sm bg-white">
-    <div id="pane-wellness" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tab-wellness">
-      <div class="text-center py-5" data-loader>
-        <div class="spinner-border" role="status" aria-hidden="true"></div>
-      </div>
+    <div id="pane-wellness" class="tab-pane fade show active">
+      <div class="text-center py-5" data-loader><div class="spinner-border"></div></div>
     </div>
-    <div id="pane-exams" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-exams">
-      <div class="text-center py-5" data-loader>
-        <div class="spinner-border" role="status" aria-hidden="true"></div>
-      </div>
+    <div id="pane-exams" class="tab-pane fade">
+      <div class="text-center py-5" data-loader><div class="spinner-border"></div></div>
     </div>
-    <div id="pane-comments" class="tab-pane fade" role="tabpanel" aria-labelledby="tab-comments">
-      <div class="text-center py-5" data-loader>
-        <div class="spinner-border" role="status" aria-hidden="true"></div>
-      </div>
+
+    <!-- ✅ NEW -->
+    <div id="pane-medications" class="tab-pane fade">
+      <div class="text-center py-5" data-loader><div class="spinner-border"></div></div>
+    </div>
+
+    <div id="pane-comments" class="tab-pane fade">
+      <div class="text-center py-5" data-loader><div class="spinner-border"></div></div>
     </div>
   </div>
 </div>
@@ -78,40 +86,23 @@
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
 <script>
-  window.MY_HEALTH_CFG = {
-    endpoints: {
-      exams: "{% url 'health_documents_partial' %}",
-      recs: "{% url 'health_recommendations_partial' %}",
-      wellness: "{% url 'health_wellness_partial' %}",
-      apiEntries: "{% url 'wellness_entries_api' %}",
-      apiSettings: "{% url 'wellness_settings_api' %}",
-      examsCreate: "{% url 'my_documents' %}",
-      examApiPattern: "{% url 'exam_detail_api' 0 %}",
-      docDeletePattern: "{% url 'delete_document_api' 0 %}",
-    },
-    i18n: {
-      failedLoad: "{% trans 'Failed to load. Please try again.' %}",
-      wellnessLabel: "{% trans 'Wellness' %}",
-      score: "{% trans 'Score' %}",
-      pasteLink: "{% trans 'Paste link' %}",
-      removeLink: "{% trans 'Remove link' %}",
-      removeFile: "{% trans 'Remove file' %}",
-      pleaseDate: "{% trans 'Please specify the exam date.' %}",
-      failedSave: "{% trans 'Failed to save.' %}",
-      networkError: "{% trans 'Network error.' %}",
-      unableLoad: "{% trans 'Unable to load data.' %}",
-      deleteExamQ: "{% trans 'Delete this exam?' %}",
-      deletionFailed: "{% trans 'Deletion failed.' %}",
-      deleteFileQ: "{% trans 'Delete this file?' %}",
-      unsupportedTypeTpl: "{% blocktrans %}Unsupported file type: %(name)s{% endblocktrans %}",
-      tooLargeTpl: "{% blocktrans %}File is too large (max %(size)s MB): %(name)s{% endblocktrans %}",
-      duplicateFile: "{% trans 'This file is already in the list.' %}",
-      note: "{% trans 'Note' %}",
-      allowedFilesTpl: "{% blocktrans %}Allowed: %(ext)s. Max size: %(size)s{% endblocktrans %}",
-      linkHint: "{% trans 'You can attach external links (e.g., Google Drive, Dropbox, OneDrive).' %}",
-      mobileDefault: "{% trans 'My health' %}"
-    }
-  };
+window.MY_HEALTH_CFG = {
+  endpoints: {
+    exams: "{% url 'health_documents_partial' %}",
+    recs: "{% url 'health_recommendations_partial' %}",
+    wellness: "{% url 'health_wellness_partial' %}",
+
+    medications: "{% url 'health_medications_partial' %}",
+    medicationsAdd: "{% url 'health_medication_add' %}",
+    medicationsDeletePattern: "{% url 'health_medication_delete' 0 %}",
+
+    apiEntries: "{% url 'wellness_entries_api' %}",
+    apiSettings: "{% url 'wellness_settings_api' %}",
+    examsCreate: "{% url 'my_documents' %}",
+    examApiPattern: "{% url 'exam_detail_api' 0 %}",
+    docDeletePattern: "{% url 'delete_document_api' 0 %}",
+  }
+};
 </script>
 
 <script src="{% static 'js/my_health.js' %}"></script>

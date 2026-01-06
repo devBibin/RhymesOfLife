@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.cache import never_cache
 
-from ..models import MedicalExam, MedicalDocument, Recommendation
+from ..models import MedicalExam, MedicalDocument, Recommendation, MedicationEntry
 
 
 @login_required
@@ -59,3 +59,20 @@ def health_recommendations_partial(request):
 @never_cache
 def health_wellness_partial(request):
     return render(request, "base/partials/health_wellness.html")
+
+
+@login_required
+def health_medications_partial(request):
+    user_info = request.user.additional_info
+
+    medications = (
+        MedicationEntry.objects
+        .filter(user_info=user_info)
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "base/partials/health_medications_partial.html",
+        {"medications": medications},
+    )

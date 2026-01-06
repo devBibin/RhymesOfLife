@@ -314,6 +314,9 @@ class Notification(SoftDeleteModel):
         ("RECOMMENDATION", "Recommendation"),
         ("ADMIN_MESSAGE", "AdminMessage"),
         ("SYSTEM_MESSAGE", "SystemMessage"),
+        ("ACCESS_REQUEST", "AccessRequest"),
+        ("ACCESS_GRANTED", "AccessGranted"),
+        ("ACCESS_DENIED", "AccessDenied"),
     )
 
     recipient = models.ForeignKey(AdditionalUserInfo, related_name="notifications", on_delete=models.CASCADE)
@@ -409,6 +412,42 @@ class Recommendation(SoftDeleteModel):
         p = _safe_username(self.patient)
         a = _safe_username(self.author)
         return f"Recommendation to {p} by {a}"
+
+
+class PatientAccessRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending")
+        APPROVED = "approved", _("Approved")
+        DENIED = "denied", _("Denied")
+
+    patient = models.ForeignKey(
+        AdditionalUserInfo,
+        on_delete=models.CASCADE,
+        related_name="access_requests_received",
+        db_index=True,
+    )
+    doctor = models.ForeignKey(
+        AdditionalUserInfo,
+        on_delete=models.CASCADE,
+        related_name="access_requests_sent",
+        db_index=True,
+    )
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.PENDING, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    decided_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ("patient", "doctor")
+        indexes = [
+            models.Index(fields=["patient", "status"]),
+            models.Index(fields=["doctor", "status"]),
+        ]
+        verbose_name = _("Access request")
+        verbose_name_plural = _("Access requests")
+
+    def __str__(self):
+        return f"{_safe_username(self.doctor)} -> {_safe_username(self.patient)} [{self.status}]"
 
 
 def post_upload_to(instance, filename):
@@ -510,12 +549,27 @@ class PostComment(models.Model):
 
 
 class HelpRequest(models.Model):
+    class Status(models.TextChoices):
+        OPEN = "open", _("Open")
+        IN_WORK = "in_work", _("In work")
+        DONE = "done", _("Processed")
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="help_requests"
+    )
     name = models.CharField(_('name'), max_length=200, blank=True)
     email = models.EmailField(_('email'), blank=True)
+    phone = models.CharField(_('phone'), max_length=32, blank=True)
+    birth_date = models.DateField(_('birth date'), null=True, blank=True)
+    city = models.CharField(_('city'), max_length=120, blank=True)
+    syndrome = models.CharField(_('syndrome'), max_length=120, blank=True)
+    gen = models.TextField(_('gen'), blank=True)
+    medications = models.TextField(_('medications'), blank=True)
     telegram = models.CharField(_('telegram'), max_length=100, blank=True)
     message = models.TextField(_('message'))
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
 
+    status = models.CharField(_('status'), max_length=16, choices=Status.choices, default=Status.OPEN, db_index=True)
     is_processed = models.BooleanField(_('processed'), default=False, db_index=True)
     processed_at = models.DateTimeField(_('processed at'), null=True, blank=True)
     processed_by = models.ForeignKey(
@@ -535,16 +589,18 @@ class HelpRequest(models.Model):
         return f"{self.name or self.email or self.pk} - {self.created_at:%Y-%m-%d}"
 
     def mark_processed(self, user):
+        self.status = self.Status.DONE
         self.is_processed = True
         self.processed_at = timezone.now()
         self.processed_by = user
-        self.save(update_fields=['is_processed', 'processed_at', 'processed_by'])
+        self.save(update_fields=['status', 'is_processed', 'processed_at', 'processed_by'])
 
     def mark_unprocessed(self):
+        self.status = self.Status.OPEN
         self.is_processed = False
         self.processed_at = None
         self.processed_by = None
-        self.save(update_fields=['is_processed', 'processed_at', 'processed_by'])
+        self.save(update_fields=['status', 'is_processed', 'processed_at', 'processed_by'])
 
 
 class WellnessSettings(models.Model):
@@ -599,3 +655,35 @@ class WellnessEntry(SoftDeleteModel):
                 name="uniq_wellness_user_date_alive",
             )
         ]
+
+
+class MedicationEntry(SoftDeleteModel):
+    user_info = models.ForeignKey(
+        "AdditionalUserInfo",
+        on_delete=models.CASCADE,
+        related_name="medications",
+        db_index=True,
+        verbose_name=_("User"),
+    )
+
+    description = models.CharField(
+        _("Medication description"),
+        max_length=255,
+        validators=[MaxLengthValidator(255)],
+        help_text=_("Example: Pregabalin 75 mg daily"),
+    )
+
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user_info", "is_deleted"]),
+            models.Index(fields=["user_info", "-created_at"]),
+        ]
+        verbose_name = _("Medication")
+        verbose_name_plural = _("Medications")
+
+    def __str__(self):
+        return f"{_safe_username(self.user_info)}: {self.description[:50]}"

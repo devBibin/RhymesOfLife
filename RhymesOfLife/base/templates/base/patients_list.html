@@ -25,6 +25,9 @@
   }
   .btn-ghost .label{display:none}
   @media (min-width: 992px){ .btn-ghost .label{display:inline;margin-left:.35rem} }
+  .btn-disabled{pointer-events:none;opacity:.55}
+  .badge-wait{background:rgba(var(--bs-warning-rgb),.18);color:var(--bs-warning)}
+  .badge-denied{background:rgba(var(--bs-danger-rgb),.12);color:var(--bs-danger)}
 
   .pagination-docked{
     position:fixed;left:50%;bottom:16px;transform:translateX(-50%);
@@ -74,18 +77,59 @@
           </div>
 
           <div class="ms-auto actions">
-            <a href="{% url 'patient_exams' info.user.id %}"
-               class="btn btn-ghost btn-sm px-3"
-               data-bs-toggle="tooltip" data-bs-title="{% trans 'View examinations' %}">
-              <i class="bi bi-file-earmark-text"></i>
-              <span class="label">{% trans "Exams" %}</span>
-            </a>
-            <a href="{% url 'patient_wellness' info.user.id %}"
-               class="btn btn-ghost btn-ghost-success btn-sm px-3"
-               data-bs-toggle="tooltip" data-bs-title="{% trans 'View wellness' %}">
-              <i class="bi bi-heart-pulse"></i>
-              <span class="label">{% trans "Wellness" %}</span>
-            </a>
+            {% if can_request_access and info.access_status != "approved" %}
+              <span class="btn btn-ghost btn-sm px-3 btn-disabled" data-bs-title="{% trans 'Access required' %}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="label">{% trans "Exams" %}</span>
+              </span>
+              <span class="btn btn-ghost btn-ghost-success btn-sm px-3 btn-disabled" data-bs-title="{% trans 'Access required' %}">
+                <i class="bi bi-heart-pulse"></i>
+                <span class="label">{% trans "Wellness" %}</span>
+              </span>
+              <span class="btn btn-ghost btn-sm px-3 btn-disabled" data-bs-title="{% trans 'Access required' %}">
+                <i class="bi bi-capsule"></i>
+                <span class="label">{% trans "Medications" %}</span>
+              </span>
+              <div class="d-flex align-items-center gap-2">
+                {% if info.access_status == "pending" %}
+                  <span class="badge badge-wait rounded-pill">{% trans "Request sent" %}</span>
+                {% elif info.access_status == "denied" %}
+                  <span class="badge badge-denied rounded-pill">{% trans "Denied" %}</span>
+                {% endif %}
+                {% if info.access_status != "pending" %}
+                  <form method="post" action="{% url 'request_access' info.user.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill">
+                      {% if info.access_status == "denied" %}
+                        {% trans "Request again" %}
+                      {% else %}
+                        {% trans "Request access" %}
+                      {% endif %}
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            {% else %}
+              <a href="{% url 'patient_exams' info.user.id %}"
+                 class="btn btn-ghost btn-sm px-3"
+                 data-bs-toggle="tooltip" data-bs-title="{% trans 'View examinations' %}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span class="label">{% trans "Exams" %}</span>
+              </a>
+              <a href="{% url 'patient_wellness' info.user.id %}"
+                 class="btn btn-ghost btn-ghost-success btn-sm px-3"
+                 data-bs-toggle="tooltip" data-bs-title="{% trans 'View wellness' %}">
+                <i class="bi bi-heart-pulse"></i>
+                <span class="label">{% trans "Wellness" %}</span>
+              </a>
+              <a href="{% url 'patient_medications' info.user.id %}"
+                class="btn btn-ghost btn-sm px-3"
+                data-bs-toggle="tooltip"
+                data-bs-title="{% trans 'View medications' %}">
+                <i class="bi bi-capsule"></i>
+                <span class="label">{% trans "Medications" %}</span>
+              </a>
+            {% endif %}
           </div>
         </li>
       {% endfor %}

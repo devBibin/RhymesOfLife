@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4">
+
+  <div class="mb-4">
+    <h2 class="mb-1">
+      💊 {% trans "Medications" %}
+    </h2>
+    <div class="text-muted">
+      {{ patient.get_full_name|default:patient.username }}
+    </div>
+  </div>
+
+  {% if medications %}
+    <div class="d-grid gap-2">
+      {% for m in medications %}
+        <div class="card card-elevated">
+          <div class="card-body">
+            <div class="fw-semibold">
+              {{ m.description }}
+            </div>
+            <div class="text-muted small mt-1">
+              {% trans "Added on" %}: {{ m.created_at|date:"d.m.Y H:i" }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary">
+      {% trans "The patient has not added any medications." %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

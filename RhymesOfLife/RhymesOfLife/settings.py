@@ -91,6 +91,8 @@ ONBOARDING_EXEMPT_URLNAMES = {
     "consents",
     "profile_edit",
     "set_language",
+    "access_requests",
+    "access_request_decide",
     "admin:index",
 }
 ONBOARDING_EXEMPT_PATHS = set()

@@ -492,6 +492,15 @@
    MOBILE OFFCANVAS
 ========================= */
 @media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .wrapper {
+    overflow-x: hidden;
+  }
+
   .mobile-menu-btn {
     display: flex;
     align-items: center;
@@ -516,14 +525,17 @@
   .nav-container {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
     width: min(92vw, 380px);
     height: 100vh;
     background: color-mix(in srgb, var(--header-bg) 94%, #000 6%);
     flex-direction: column;
     justify-content: flex-start;
     padding: 88px 14px 16px;
-    transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    backface-visibility: hidden;
     overflow-y: auto;
     z-index: var(--mobile-z-index);
     box-shadow: -12px 0 34px rgba(0, 0, 0, 0.28);
@@ -538,7 +550,7 @@
     }
   }
 
-  .nav-container.active { right: 0; }
+  .nav-container.active { transform: translateX(0); }
 
   .nav-menu {
     flex-direction: column;

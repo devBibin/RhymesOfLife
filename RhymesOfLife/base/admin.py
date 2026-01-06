@@ -20,6 +20,7 @@ from .models import (
     PasswordResetCode,
     Recommendation,
     Post, PostImage, PostLike, PostComment, PostReport,
+    PatientAccessRequest,
 )
 
 
@@ -231,12 +232,12 @@ class PasswordResetCodeAdmin(admin.ModelAdmin):
 @admin.register(HelpRequest)
 class HelpRequestAdmin(admin.ModelAdmin):
     actions = ("mark_processed", "mark_unprocessed")
-    list_display = ("__str__", "email", "is_processed", "processed_by", "created_at", "processed_at")
-    list_filter = ("is_processed", "created_at", "processed_at")
-    search_fields = ("email", "name", "message")
+    list_display = ("__str__", "email", "phone", "city", "status", "processed_by", "created_at", "processed_at")
+    list_filter = ("status", "is_processed", "created_at", "processed_at")
+    search_fields = ("email", "name", "phone", "city", "syndrome", "gen", "medications", "message", "user__username")
     readonly_fields = ("created_at", "processed_at", "processed_by")
     date_hierarchy = "created_at"
-    list_select_related = ("processed_by",)
+    list_select_related = ("processed_by", "user")
     list_per_page = 50
 
     @admin.action(description=_("Mark as processed"))
@@ -366,4 +367,15 @@ class RecommendationAdmin(SoftDeleteAdminMixin, admin.ModelAdmin):
     raw_id_fields = ("patient", "author")
     date_hierarchy = "created_at"
     list_select_related = ("patient__user", "author__user")
+    list_per_page = 50
+
+
+@admin.register(PatientAccessRequest)
+class PatientAccessRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "doctor", "patient", "status", "created_at", "decided_at")
+    list_filter = ("status", "created_at", "decided_at")
+    search_fields = ("doctor__user__username", "patient__user__username")
+    raw_id_fields = ("doctor", "patient")
+    date_hierarchy = "created_at"
+    list_select_related = ("doctor__user", "patient__user")
     list_per_page = 50

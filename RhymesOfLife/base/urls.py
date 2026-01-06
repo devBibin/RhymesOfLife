@@ -99,7 +99,23 @@ from .views.health_views import (
     health_documents_partial,
     health_recommendations_partial,
     health_wellness_partial,
+    health_medications_partial,
 )
+
+from .views.medications_views import (
+    medications_page,
+    add_medication,
+    delete_medication,
+)
+from .views.doctors_medications_views import (
+    patient_medications_view,
+)
+from .views.access_requests_views import (
+    request_access_view,
+    access_requests_view,
+    decide_access_request_view,
+)
+
 
 urlpatterns = [
     path("ma/", feed, name="home"),
@@ -189,6 +205,17 @@ urlpatterns = [
     path("my-health/partials/documents/", health_documents_partial, name="health_documents_partial"),
     path("my-health/partials/recommendations/", health_recommendations_partial, name="health_recommendations_partial"),
     path("my-health/partials/wellness/", health_wellness_partial, name="health_wellness_partial"),
+    path("my-health/medications/partial/", health_medications_partial, name="health_medications_partial"),
+
+    #medications urls
+    path("my-health/medications/", medications_page, name="health_medications"),
+    path("my-health/medications/add/", add_medication, name="health_medication_add"),
+    path("my-health/medications/<int:pk>/delete/", delete_medication, name="health_medication_delete"),
+    path("patients/<int:user_id>/medications/", patient_medications_view, name="patient_medications"),
+
+    path("access/request/<int:user_id>/", request_access_view, name="request_access"),
+    path("access/requests/", access_requests_view, name="access_requests"),
+    path("access/requests/<int:request_id>/", decide_access_request_view, name="access_request_decide"),
 
     path("set-language/", set_language, name="set_language"),
 ]

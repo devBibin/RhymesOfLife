@@ -19,7 +19,7 @@
     if (locked === isLocked) return;
 
     if (locked) {
-      const w = getScrollbarWidth();
+      const w = isMobile() ? 0 : getScrollbarWidth();
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = w > 0 ? `${w}px` : '';
       isLocked = true;

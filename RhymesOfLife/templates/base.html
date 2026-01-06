@@ -188,12 +188,20 @@
                       <a class="nav-link text-warning ru-header-text dropdown-toggle" href="#" role="button"
                          data-bs-toggle="dropdown" aria-expanded="false" id="adminDropdown">
                         <i class="bi bi-shield"></i>
-                        <span class="text-truncate-ru">{% trans "Admin" %}</span>
+                        {% if request.user.is_superuser %}
+                          <span class="text-truncate-ru">{% trans "Admin" %}</span>
+                        {% else %}
+                          <span class="text-truncate-ru">{% trans "Doctor" %}</span>
+                        {% endif %}
                         <i class="bi bi-chevron-down mobile-only ms-auto"></i>
                       </a>
                       <div class="dropdown-menu dropdown-menu-end ru-text" aria-labelledby="adminDropdown">
                         <div class="dropdown-header">
-                          <span class="fw-semibold">{% trans "Admin Panel" %}</span>
+                          {% if request.user.is_superuser %}
+                            <span class="fw-semibold">{% trans "Admin Panel" %}</span>
+                          {% else %}
+                            <span class="fw-semibold">{% trans "Doctor Panel" %}</span>
+                          {% endif %}
                         </div>
                         <div class="dropdown-divider"></div>
                         {% if request.user|hasperm:'base.view_patient_list' %}
