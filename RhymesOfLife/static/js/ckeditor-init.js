@@ -1,5 +1,5 @@
 (function () {
-  const _ = (window.gettext) ? window.gettext : (s) => s;
+  const gettext = window.gettext || ((s) => s);
 
   function getCookie(name) {
     const m = document.cookie.match('(?:^|;)\\s*' + name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + '=([^;]*)');
@@ -49,8 +49,8 @@
 
     const lang = el.dataset.language || 'en';
     const uploadUrl = el.dataset.uploadUrl || '';
-    const placeholder = el.dataset.placeholder || _('Start writing…');
-    const requiredMsg = el.dataset.requiredMsg || _('Content is required.');
+    const placeholder = el.dataset.placeholder || gettext('Start writing…');
+    const requiredMsg = el.dataset.requiredMsg || gettext('Content is required.');
     const csrfToken = getCsrfToken();
 
     CKEDITOR.ClassicEditor.create(el, {

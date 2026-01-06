@@ -1,4 +1,5 @@
 (function () {
+  const gettext = window.gettext || ((s) => s);
   const btn = document.getElementById("ban-btn");
   if (!btn) return;
 
@@ -15,13 +16,13 @@
     if (isBanned) {
       btn.classList.remove("btn-danger");
       btn.classList.add("btn-success");
-      btn.textContent = btn.dataset.textUnban || "Unban user";
+      btn.textContent = btn.dataset.textUnban || gettext("Unban user");
       btn.dataset.initialState = "banned";
       if (btn.dataset.msgBanned) alert(btn.dataset.msgBanned);
     } else {
       btn.classList.remove("btn-success");
       btn.classList.add("btn-danger");
-      btn.textContent = btn.dataset.textBan || "Ban user";
+      btn.textContent = btn.dataset.textBan || gettext("Ban user");
       btn.dataset.initialState = "active";
       if (btn.dataset.msgUnbanned) alert(btn.dataset.msgUnbanned);
     }
@@ -46,7 +47,7 @@
     });
     const data = await resp.json().catch(() => ({}));
     if (!resp.ok || data.status === "error") {
-      const msg = data.message || btn.dataset.msgError || "Failed to change status.";
+      const msg = data.message || btn.dataset.msgError || gettext("Failed to change status.");
       throw new Error(msg);
     }
     return data;
@@ -56,7 +57,7 @@
     const isBanned = btn.dataset.initialState === "banned";
     let reason = "";
     if (!isBanned) {
-      const promptText = btn.dataset.promptReason || "Enter ban reason (optional):";
+      const promptText = btn.dataset.promptReason || gettext("Enter ban reason (optional):");
       const r = window.prompt(promptText, "");
       if (r === null) return;
       reason = r.trim();
@@ -67,7 +68,7 @@
       const res = await postToggle(reason);
       updateUI(!!res.is_banned);
     } catch (e) {
-      alert(e.message || btn.dataset.msgError || "Failed to change status.");
+      alert(e.message || btn.dataset.msgError || gettext("Failed to change status."));
     } finally {
       setBusy(false);
     }

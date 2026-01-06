@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const _ = window.gettext ? window.gettext : (s) => s;
+  const gettext = window.gettext || ((s) => s);
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
   const commentsDiv = document.getElementById('comments');
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const p = document.createElement('p');
       p.id = 'no-comments-placeholder';
       p.className = 'rl-empty';
-      p.textContent = _('No comments yet.');
+      p.textContent = gettext('No comments yet.');
       commentsDiv.appendChild(p);
     }
   }
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = btn.closest('[data-comment-id]');
         const id = el?.dataset?.commentId;
         if (!id) return;
-        if (!confirm(_('Delete?'))) return;
+        if (!confirm(gettext('Delete?'))) return;
 
         btn.disabled = true;
         try {
@@ -139,12 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = document.createElement('button');
         saveBtn.className = 'btn btn-sm btn-success';
         saveBtn.type = 'button';
-        saveBtn.innerHTML = `<i class="bi bi-check2" aria-hidden="true"></i><span class="visually-hidden">${escapeHtml(_('Save'))}</span>`;
+        saveBtn.innerHTML = `<i class="bi bi-check2" aria-hidden="true"></i><span class="visually-hidden">${escapeHtml(gettext('Save'))}</span>`;
 
         const cancelBtn = document.createElement('button');
         cancelBtn.className = 'btn btn-sm btn-outline-secondary';
         cancelBtn.type = 'button';
-        cancelBtn.innerHTML = `<i class="bi bi-x" aria-hidden="true"></i><span class="visually-hidden">${escapeHtml(_('Cancel'))}</span>`;
+        cancelBtn.innerHTML = `<i class="bi bi-x" aria-hidden="true"></i><span class="visually-hidden">${escapeHtml(gettext('Cancel'))}</span>`;
 
         if (textP) textP.replaceWith(ta);
 
@@ -231,13 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
               ${d.avatar ? `<img src="${escapeHtml(d.avatar)}" class="rl-comment__avatar" width="34" height="34" alt="">` : ''}
               <div class="d-flex flex-column">
                 <span class="rl-comment__name">${escapeHtml(d.username || '')}</span>
-                <span class="rl-comment__time">${escapeHtml(_('Just now'))}</span>
+                <span class="rl-comment__time">${escapeHtml(gettext('Just now'))}</span>
               </div>
               <div class="rl-comment__actions">
-                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="${escapeHtml(_('Edit'))}">
+                <button class="btn btn-sm btn-outline-secondary edit-comment-btn" type="button" aria-label="${escapeHtml(gettext('Edit'))}">
                   <i class="bi bi-pencil" aria-hidden="true"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="${escapeHtml(_('Delete'))}">
+                <button class="btn btn-sm btn-outline-danger delete-comment-btn" type="button" aria-label="${escapeHtml(gettext('Delete'))}">
                   <i class="bi bi-trash" aria-hidden="true"></i>
                 </button>
               </div>

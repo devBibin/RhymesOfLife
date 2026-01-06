@@ -1,5 +1,7 @@
 // Staff Help Requests JavaScript - Light Theme (Fixed Version)
 document.addEventListener('DOMContentLoaded', function() {
+    const gettext = window.gettext || ((s) => s);
+    const ngettext = window.ngettext || ((singular, plural, count) => (count === 1 ? singular : plural));
     console.log('Staff Help Requests script loaded');
     
     const hrRoot = document.getElementById('hr-root');
@@ -233,15 +235,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Show success message if it was a filter change
                 if (currentFilters.status || currentFilters.q) {
-                    showToast('Filters applied', 'success');
+                    showToast(gettext('Filters applied'), 'success');
                 }
                 
             })
             .catch(error => {
                 console.error('Error loading data:', error);
                 showLoading(false);
-                showError('Failed to load data. Please try again.');
-                showToast('Error loading data', 'danger');
+                showError(gettext('Failed to load data. Please try again.'));
+                showToast(gettext('Error loading data'), 'danger');
             });
     }
     
@@ -283,18 +285,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadData();
                 
                 // Show success message
-                showToast('Status updated successfully', 'success');
+                showToast(gettext('Status updated successfully'), 'success');
                 
                 // Update modal if open
                 updateModalStatus(id, action);
             } else {
-                showToast(data.error || 'Failed to update status', 'danger');
+                showToast(data.error || gettext('Failed to update status'), 'danger');
             }
             row.classList.remove('loading');
         })
         .catch(error => {
             console.error('Error updating status:', error);
-            showToast('Error updating status. Please try again.', 'danger');
+            showToast(gettext('Error updating status. Please try again.'), 'danger');
             row.classList.remove('loading');
         });
     }
@@ -363,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set basic info
         setElementContent('hm-id', data.id);
         setElementContent('hm-created', formatDateTime(data.created));
-        setElementContent('hm-processor', data.processor || 'Not assigned');
+        setElementContent('hm-processor', data.processor || gettext('Not assigned'));
         
         // Set contact info
         setElementContent('hm-username', data.username);
@@ -407,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set medications and message (preserve whitespace)
         const medicationsElement = document.getElementById('hm-medications');
         if (medicationsElement) {
-            medicationsElement.textContent = data.medications || 'Not specified';
+            medicationsElement.textContent = data.medications || gettext('Not specified');
             medicationsElement.style.whiteSpace = 'pre-wrap';
             medicationsElement.style.wordBreak = 'break-word';
             medicationsElement.style.fontSize = '0.9rem';
@@ -415,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const messageElement = document.getElementById('hm-message');
         if (messageElement) {
-            messageElement.textContent = data.message || 'No message provided';
+            messageElement.textContent = data.message || gettext('No message provided');
             messageElement.style.whiteSpace = 'pre-wrap';
             messageElement.style.wordBreak = 'break-word';
         }
@@ -424,16 +426,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusElement = document.getElementById('hm-status');
         if (statusElement) {
             let badgeClass = 'badge bg-secondary';
-            let text = 'Open';
+            let text = gettext('Open');
             let icon = 'bi-clock';
             
             if (data.status === 'done') {
                 badgeClass = 'badge bg-success';
-                text = 'Completed';
+                text = gettext('Completed');
                 icon = 'bi-check-circle-fill';
             } else if (data.status === 'in_work') {
                 badgeClass = 'badge bg-primary';
-                text = 'In Progress';
+                text = gettext('In Progress');
                 icon = 'bi-hourglass-split';
             }
             
@@ -477,16 +479,16 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (action === 'undo') newStatus = 'open';
             
             let badgeClass = 'badge bg-secondary';
-            let text = 'Open';
+            let text = gettext('Open');
             let icon = 'bi-clock';
             
             if (newStatus === 'done') {
                 badgeClass = 'badge bg-success';
-                text = 'Completed';
+                text = gettext('Completed');
                 icon = 'bi-check-circle-fill';
             } else if (newStatus === 'in_work') {
                 badgeClass = 'badge bg-primary';
-                text = 'In Progress';
+                text = gettext('In Progress');
                 icon = 'bi-hourglass-split';
             }
             
@@ -507,7 +509,9 @@ document.addEventListener('DOMContentLoaded', function() {
             count = rows.length;
         }
         
-        const text = count === 0 ? 'No requests' : `${count} request${count !== 1 ? 's' : ''}`;
+        const text = count === 0
+            ? gettext('No requests')
+            : ngettext('%(count)s request', '%(count)s requests', count).replace('%(count)s', String(count));
         
         const countElement = document.getElementById('hr-count-text');
         if (countElement) {
@@ -545,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Show error state
-    function showError(message = 'Failed to load data. Please try again.') {
+    function showError(message = gettext('Failed to load data. Please try again.')) {
         const list = document.getElementById('hr-list');
         if (list) {
             list.innerHTML = `
@@ -554,11 +558,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="mb-3">
                             <i class="bi bi-exclamation-triangle fs-1"></i>
                         </div>
-                        <h5>Error loading data</h5>
+                        <h5>${gettext('Error loading data')}</h5>
                         <p class="small mb-0">${message}</p>
                         <button class="btn btn-sm btn-outline-primary mt-3" onclick="location.reload()">
                             <i class="bi bi-arrow-clockwise me-1"></i>
-                            Reload Page
+                            ${gettext('Reload Page')}
                         </button>
                     </td>
                 </tr>
@@ -600,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="bi ${type === 'success' ? 'bi-check-circle' : type === 'danger' ? 'bi-exclamation-circle' : 'bi-info-circle'} me-2"></i>
                         ${message}
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="${gettext('Close')}"></button>
                 </div>
             </div>
         `;
