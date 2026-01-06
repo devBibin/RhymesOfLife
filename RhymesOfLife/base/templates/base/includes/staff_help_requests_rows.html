@@ -1,7 +1,8 @@
 {% load i18n %}
 {% for r in page_obj.object_list %}
-<tr class="hr-row"
+<tr class="hr-row fade-in"
     data-id="{{ r.id }}"
+    data-status="{{ r.status }}"
     data-created="{{ r.created_at|date:'Y-m-d H:i' }}"
     data-username="{{ r.name|default_if_none:''|escape }}"
     data-telegram="{{ r.telegram|default_if_none:''|escape }}"
@@ -12,72 +13,118 @@
     data-syndrome="{{ r.syndrome|default_if_none:''|escape }}"
     data-gen="{{ r.gen|default_if_none:''|escape }}"
     data-medications="{{ r.medications|default_if_none:''|escape }}"
-    data-status="{{ r.status }}"
     data-processor="{{ r.processed_by.username|default_if_none:''|escape }}"
     data-profile="{% if r.user %}{% url 'public_profile' r.user.username %}{% endif %}"
     data-profile-name="{{ r.user.username|default_if_none:''|escape }}"
     data-message="{{ r.message|escape }}">
-  <td class="hr-nowrap text-muted">{{ r.id }}</td>
-  <td class="hr-nowrap">{{ r.created_at|date:"Y-m-d H:i" }}</td>
-  <td class="hr-truncate" title="{{ r.name|default:'—' }}">{{ r.name|default:"—" }}</td>
-  <td class="hr-truncate">
+  
+  <!-- ID -->
+  <td class="hr-nowrap text-center" data-label="#">
+    <span class="badge bg-light text-dark border">#{{ r.id }}</span>
+  </td>
+  
+  <!-- Created Date -->
+  <td class="hr-nowrap" data-label="{% trans 'Date' %}">
+    <div class="fw-semibold">{{ r.created_at|date:"M d" }}</div>
+    <div class="text-muted small">{{ r.created_at|date:"H:i" }}</div>
+  </td>
+  
+  <!-- Username -->
+  <td class="hr-truncate" data-label="{% trans 'Name' %}" title="{{ r.name|default:'—' }}">
+    <div class="d-flex align-items-center gap-2">
+      {% if r.name %}
+        <span class="fw-medium">{{ r.name|truncatechars:20 }}</span>
+      {% else %}
+        <span class="text-muted">—</span>
+      {% endif %}
+    </div>
+  </td>
+  
+  <!-- Telegram -->
+  <td class="hr-truncate" data-label="Telegram" title="{{ r.telegram|default:'—' }}">
     {% if r.telegram %}
       {% with handle=r.telegram %}
         {% if not handle|slice:":1" == "@" %}{% firstof "@"|add:handle as handle %}{% endif %}
-        <a href="https://t.me/{{ handle|cut:"@" }}" target="_blank" rel="noopener" class="text-decoration-none" title="{{ handle }}">{{ handle }}</a>
+        <a href="https://t.me/{{ handle|cut:"@" }}" target="_blank" rel="noopener" 
+           class="text-decoration-none d-inline-flex align-items-center gap-2 text-primary">
+          <i class="bi bi-telegram"></i>
+          <span>{{ handle|truncatechars:18 }}</span>
+        </a>
       {% endwith %}
     {% else %}
-      —
+      <span class="text-muted d-inline-flex align-items-center gap-2">
+        <i class="bi bi-telegram"></i>
+        <span>—</span>
+      </span>
     {% endif %}
   </td>
-  <td class="hr-truncate d-none d-lg-table-cell">
+  
+  <!-- Email -->
+  <td class="hr-truncate d-none d-lg-table-cell" data-label="{% trans 'Email' %}" title="{{ r.email|default:'—' }}">
     {% if r.email %}
-      <a href="mailto:{{ r.email }}" class="text-decoration-none" title="{{ r.email }}">{{ r.email }}</a>
+      <a href="mailto:{{ r.email }}" class="text-decoration-none d-inline-flex align-items-center gap-2">
+        <i class="bi bi-envelope text-muted"></i>
+        <span>{{ r.email|truncatechars:22 }}</span>
+      </a>
     {% else %}
-      —
+      <span class="text-muted d-inline-flex align-items-center gap-2">
+        <i class="bi bi-envelope"></i>
+        <span>—</span>
+      </span>
     {% endif %}
   </td>
-  <td class="hr-truncate">
+  
+  <!-- Profile -->
+  <td class="hr-truncate" data-label="{% trans 'Profile' %}" title="{{ r.user.username|default:'—' }}">
     {% if r.user %}
-      <a href="{% url 'public_profile' r.user.username %}" class="text-decoration-none">{{ r.user.username }}</a>
+      <a href="{% url 'public_profile' r.user.username %}" 
+         class="text-decoration-none d-inline-flex align-items-center gap-2">
+        <i class="bi bi-person-circle text-success"></i>
+        <span>{{ r.user.username|truncatechars:15 }}</span>
+      </a>
     {% else %}
-      ¢?"
+      <span class="text-muted d-inline-flex align-items-center gap-2">
+        <i class="bi bi-person-circle"></i>
+        <span>—</span>
+      </span>
     {% endif %}
   </td>
-  <td class="hr-nowrap">
+  
+  <!-- Status -->
+  <td class="hr-nowrap" data-label="{% trans 'Status' %}">
     {% if r.status == "done" %}
-      <span class="badge rounded-pill bg-success">{% trans "Processed" %}</span>
+      <span class="badge bg-success d-inline-flex align-items-center gap-2">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>{% trans "Completed" %}</span>
+      </span>
     {% elif r.status == "in_work" %}
-      <span class="badge rounded-pill bg-primary">{% trans "In work" %}</span>
+      <span class="badge bg-primary d-inline-flex align-items-center gap-2">
+        <i class="bi bi-hourglass-split"></i>
+        <span>{% trans "In Progress" %}</span>
+      </span>
     {% else %}
-      <span class="badge rounded-pill bg-secondary">{% trans "Open" %}</span>
+      <span class="badge bg-secondary d-inline-flex align-items-center gap-2">
+        <i class="bi bi-clock"></i>
+        <span>{% trans "Open" %}</span>
+      </span>
     {% endif %}
     {% if r.processed_by %}
-      <div class="small text-muted">{{ r.processed_by.username }}</div>
+      <div class="small text-muted mt-1">
+        <i class="bi bi-person-badge me-1"></i>
+        {{ r.processed_by.username|truncatechars:12 }}
+      </div>
     {% endif %}
   </td>
-  <td class="text-end hr-nowrap hr-actions">
-    {% if r.status == "done" %}
-      <button class="btn btn-sm btn-outline-secondary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
-        {% trans "Undo" %}
-      </button>
-    {% elif r.status == "in_work" %}
-      <button class="btn btn-sm btn-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
-        {% trans "Mark processed" %}
-      </button>
-      <button class="btn btn-sm btn-outline-secondary hr-toggle-btn" data-id="{{ r.id }}" data-action="undo">
-        {% trans "Mark open" %}
-      </button>
-    {% else %}
-      <button class="btn btn-sm btn-outline-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="work">
-        {% trans "Mark in work" %}
-      </button>
-      <button class="btn btn-sm btn-primary hr-toggle-btn" data-id="{{ r.id }}" data-action="process">
-        {% trans "Mark processed" %}
-      </button>
-    {% endif %}
-  </td>
+  
 </tr>
 {% empty %}
-<tr><td colspan="8" class="text-center text-muted py-4">{% trans "Nothing found." %}</td></tr>
+<tr id="hr-empty-row">
+  <td colspan="7" class="text-center text-muted py-5">
+    <div class="mb-4">
+      <i class="bi bi-inbox display-6"></i>
+    </div>
+    <h5 class="text-muted mb-2">{% trans "No requests found" %}</h5>
+    <p class="text-muted small">{% trans "Try adjusting your search or filters" %}</p>
+  </td>
+</tr>
 {% endfor %}

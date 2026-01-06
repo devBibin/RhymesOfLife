@@ -64,6 +64,9 @@ def notify_user_in_telegram(sender, instance: Notification, created, **kwargs):
         return
     try:
         if instance.recipient:
+            payload = getattr(instance, "payload", None) or {}
+            if isinstance(payload, dict) and payload.get("skip_telegram"):
+                return
             send_message_to_userinfo(instance.message or "", instance.recipient)
     except Exception:
         log.exception("Failed to push Telegram notification: id=%s", instance.id)

@@ -3,38 +3,79 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/staff_help_requests.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f8fafc;
+    }
+</style>
 
 <div id="hr-root"
-     class="container-fluid py-4 hr-page"
+     class="container-fluid hr-page"
      data-url-data="{% url 'staff_help_requests_data' %}"
      data-url-api="{% url 'staff_help_requests_api' %}">
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <h1 class="h5 m-0">{% trans "Help requests" %}</h1>
-    <div class="text-muted small" id="hr-counter"></div>
+  
+  <!-- Header Section -->
+  <div class="hr-header d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+    <div>
+      <h1 class="hr-title">{% trans "Help Requests" %}</h1>
+      <p class="hr-subtitle">{% trans "Review and manage user support requests efficiently" %}</p>
+    </div>
+    <div id="hr-counter">
+      <i class="bi bi-list-check"></i>
+      <span id="hr-count-text">{% trans "Loading..." %}</span>
+    </div>
   </div>
 
+  <!-- Main Card -->
   <div class="card hr-card">
-    <div class="card-body">
-      <form id="hr-filter" class="row g-2 mb-3">
-        <div class="col-6 col-md-3">
+    
+    <!-- Filter Section -->
+    <div class="hr-filter-section">
+      <div class="hr-filter-title">
+        <i class="bi bi-funnel"></i>
+        {% trans "Filter & Search" %}
+      </div>
+      
+      <form id="hr-filter" class="row g-3 align-items-end">
+        <div class="col-12 col-md-3">
+          <label for="hr-status" class="form-label small fw-semibold mb-1">{% trans "Status Filter" %}</label>
           <select class="form-select" name="status" id="hr-status">
+            <option value="all">{% trans "All Statuses" %}</option>
             <option value="open">{% trans "Open" %}</option>
-            <option value="in_work">{% trans "In work" %}</option>
-            <option value="processed">{% trans "Processed" %}</option>
-            <option value="all">{% trans "All" %}</option>
+            <option value="in_work">{% trans "In Progress" %}</option>
+            <option value="processed">{% trans "Completed" %}</option>
           </select>
         </div>
-        <div class="col-6 col-md-7">
-          <input class="form-control" type="search" name="q" id="hr-q" placeholder="{% trans 'Search...' %}">
+        <div class="col-12 col-md-7">
+          <label for="hr-q" class="form-label small fw-semibold mb-1">{% trans "Search Requests" %}</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input class="form-control" type="search" name="q" id="hr-q" 
+                   placeholder="{% trans 'Search by name, telegram, email, or message...' %}">
+            <button class="btn btn-outline-secondary" type="button" id="hr-clear-search" title="{% trans 'Clear search' %}">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
         </div>
         <div class="col-12 col-md-2">
-          <button class="btn btn-primary w-100" type="submit">{% trans "Apply" %}</button>
+          <button class="btn btn-primary w-100" type="submit">
+            <i class="bi bi-filter-circle me-1"></i>
+            {% trans "Apply" %}
+          </button>
         </div>
       </form>
+    </div>
 
+    <!-- Table Section -->
+    <div class="hr-table-section">
       <div class="table-responsive">
-        <table class="table table-sm table-hover hr-table">
+        <table class="table hr-table mb-0">
           <colgroup>
             <col class="hr-col-id">
             <col class="hr-col-created">
@@ -43,103 +84,177 @@
             <col class="hr-col-email">
             <col class="hr-col-profile">
             <col class="hr-col-status">
-            <col class="hr-col-actions">
           </colgroup>
-          <thead class="hr-head">
+          <thead>
             <tr>
-              <th class="hr-th">#</th>
-              <th class="hr-th">{% trans "Created" %}</th>
-              <th class="hr-th">{% trans "Username" %}</th>
-              <th class="hr-th">Telegram</th>
-              <th class="hr-th d-none d-lg-table-cell">{% trans "Email" %}</th>
-              <th class="hr-th">{% trans "Profile" %}</th>
-              <th class="hr-th">{% trans "Status" %}</th>
-              <th class="hr-th"></th>
+              <th class="text-center">#</th>
+              <th>{% trans "Date" %}</th>
+              <th>{% trans "Name" %}</th>
+              <th>Telegram</th>
+              <th class="d-none d-lg-table-cell">{% trans "Email" %}</th>
+              <th>{% trans "Profile" %}</th>
+              <th>{% trans "Status" %}</th>
             </tr>
           </thead>
-          <tbody id="hr-list"></tbody>
+          <tbody id="hr-list">
+            <!-- Dynamic content will be loaded here -->
+          </tbody>
         </table>
       </div>
-
-      <div id="hr-pager" class="mt-3"></div>
+      
+      <!-- Loading State -->
+      <div id="hr-loading" class="text-center py-5 d-none">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">{% trans "Loading..." %}</span>
+        </div>
+        <p class="text-muted mb-2">{% trans "Loading help requests..." %}</p>
+        <p class="text-muted small">{% trans "This may take a moment" %}</p>
+      </div>
+      
+      <!-- Empty State -->
+      <div id="hr-empty" class="text-center py-5 d-none">
+        <div class="mb-4">
+          <i class="bi bi-inbox"></i>
+        </div>
+        <h5 class="text-muted mb-2">{% trans "No requests found" %}</h5>
+        <p class="text-muted small mb-4">{% trans "Try adjusting your filters or search criteria" %}</p>
+        <button class="btn btn-outline-primary" id="hr-reset-filters">
+          <i class="bi bi-arrow-clockwise me-1"></i>
+          {% trans "Reset Filters" %}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Pagination Section -->
+    <div class="hr-pagination-section">
+      <div id="hr-pager" class="d-flex justify-content-center"></div>
     </div>
   </div>
 </div>
 
+<!-- Modal for Details -->
 <div class="modal fade" id="hr-modal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{% trans "Help request" %} #<span id="hm-id"></span></h5>
+        <h5 class="modal-title">
+          <i class="bi bi-chat-left-text me-2"></i>
+          {% trans "Request Details" %} #<span id="hm-id"></span>
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
       </div>
       <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-12 col-md-6">
-            <div class="small text-muted">{% trans "Created" %}</div>
-            <div id="hm-created" class="fw-semibold"></div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="small text-muted">{% trans "Status" %}</div>
-            <div id="hm-status"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "Username" %}</div>
-            <div id="hm-username" class="fw-semibold"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">Telegram</div>
-            <div id="hm-telegram"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "Email" %}</div>
-            <div id="hm-email"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "Profile" %}</div>
-            <div id="hm-profile"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "Phone" %}</div>
-            <div id="hm-phone"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "Birth date" %}</div>
-            <div id="hm-birth"></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="small text-muted">{% trans "City" %}</div>
-            <div id="hm-city"></div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="small text-muted">{% trans "Syndrome" %}</div>
-            <div id="hm-syndrome"></div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="small text-muted">{% trans "Gen" %}</div>
-            <div id="hm-gen"></div>
-          </div>
+        <div class="row g-4">
+          
+          <!-- Summary Section -->
           <div class="col-12">
-            <div class="small text-muted mb-1">{% trans "Medications" %}</div>
-            <pre id="hm-medications" class="mb-0" style="white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;"></pre>
+            <div class="d-flex flex-wrap align-items-center gap-4 mb-4 p-3 bg-light rounded">
+              <div>
+                <div class="small text-muted mb-1">{% trans "Created" %}</div>
+                <div id="hm-created" class="fw-semibold"></div>
+              </div>
+              <div>
+                <div class="small text-muted mb-1">{% trans "Status" %}</div>
+                <div id="hm-status"></div>
+              </div>
+              <div>
+                <div class="small text-muted mb-1">{% trans "Assigned to" %}</div>
+                <div id="hm-processor" class="fw-semibold"></div>
+              </div>
+            </div>
           </div>
+
+          <!-- Contact Information -->
           <div class="col-12">
-            <div class="small text-muted mb-1">Message</div>
-            <pre id="hm-message" class="mb-0" style="white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;max-height:50vh;"></pre>
+            <h6 class="border-bottom">{% trans "Contact Information" %}</h6>
+            <div class="row g-3 mt-3">
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Full Name" %}</div>
+                <div id="hm-username" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">Telegram</div>
+                <div id="hm-telegram" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Email Address" %}</div>
+                <div id="hm-email" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Phone Number" %}</div>
+                <div id="hm-phone" class="fw-semibold"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Details -->
+          <div class="col-12">
+            <h6 class="border-bottom">{% trans "User Details" %}</h6>
+            <div class="row g-3 mt-3">
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "User Profile" %}</div>
+                <div id="hm-profile" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Date of Birth" %}</div>
+                <div id="hm-birth" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "City/Location" %}</div>
+                <div id="hm-city" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Syndrome/Condition" %}</div>
+                <div id="hm-syndrome" class="fw-semibold"></div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="small text-muted">{% trans "Genetic Information" %}</div>
+                <div id="hm-gen" class="fw-semibold"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message & Medications -->
+          <div class="col-12">
+            <h6 class="border-bottom">{% trans "Request Details" %}</h6>
+            <div class="mt-3">
+              <div class="small text-muted mb-2">{% trans "Current Medications" %}</div>
+              <div id="hm-medications" class="p-3 bg-light rounded small mb-4"></div>
+              
+              <div class="small text-muted mb-2">{% trans "User's Message" %}</div>
+              <div id="hm-message" class="p-3 bg-light rounded"></div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer justify-content-between">
-        <div>
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
-        </div>
-        <div>
-          <button type="button" id="hm-undo" class="btn btn-outline-secondary d-none">{% trans "Mark open" %}</button>
-          <button type="button" id="hm-work" class="btn btn-outline-primary d-none">{% trans "Mark in work" %}</button>
-          <button type="button" id="hm-process" class="btn btn-primary d-none">{% trans "Mark processed" %}</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>
+          {% trans "Close" %}
+        </button>
+        <div class="d-flex gap-2">
+          <button type="button" id="hm-undo" class="btn btn-outline-warning d-none">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>
+            {% trans "Reopen" %}
+          </button>
+          <button type="button" id="hm-work" class="btn btn-outline-primary d-none">
+            <i class="bi bi-play-circle me-1"></i>
+            {% trans "Start Work" %}
+          </button>
+          <button type="button" id="hm-process" class="btn btn-success d-none">
+            <i class="bi bi-check-circle me-1"></i>
+            {% trans "Mark Complete" %}
+          </button>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Quick Actions Tooltip Template -->
+<div id="hr-tooltip-template" class="d-none">
+  <div class="hr-tooltip">
+    <div class="hr-tooltip-content"></div>
   </div>
 </div>
 
