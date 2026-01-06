@@ -136,14 +136,33 @@
 
     items.slice().reverse().forEach(e => {
       const li = document.createElement("li");
-      li.className = "timeline-item entry-row";
-      const left = document.createElement("div");
-      left.className = "entry-left";
-      left.innerHTML = `<strong>${e.date}</strong> · ${i18n.score || "Score"}: ${e.score}`;
-      const right = document.createElement("div");
-      right.className = "entry-right text-muted entry-note text-break";
-      right.textContent = e.note || "";
-      li.appendChild(left); li.appendChild(right); list.appendChild(li);
+      li.className = "timeline-item entry-item";
+
+      const meta = document.createElement("div");
+      meta.className = "entry-meta";
+
+      const date = document.createElement("div");
+      date.className = "entry-date";
+      date.textContent = e.date || "";
+
+      const score = document.createElement("div");
+      score.className = "entry-score";
+      score.textContent = `${i18n.score || "Score"}: ${e.score}`;
+
+      const note = document.createElement("div");
+      note.className = "entry-note text-break";
+      if (e.note) {
+        note.textContent = e.note;
+      } else {
+        note.textContent = "";
+        note.classList.add("is-empty");
+      }
+
+      meta.appendChild(date);
+      meta.appendChild(score);
+      li.appendChild(meta);
+      li.appendChild(note);
+      list.appendChild(li);
     });
   }
 

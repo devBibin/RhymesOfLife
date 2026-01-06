@@ -295,11 +295,11 @@
   right: -5px;
   background: #DC3545;
   color: white;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 800;
   min-width: 16px;
   height: 16px;
-  border-radius: 50%;
+  border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -308,6 +308,8 @@
   flex: 0 0 auto;
   line-height: 1;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* =========================
@@ -616,8 +618,9 @@
     margin-right: 6px;
     min-width: 18px;
     height: 18px;
-    padding: 0 5px;
+    padding: 0 6px;
     border-width: 1px;
+    font-size: 0.7rem;
   }
 
   .action-buttons {
