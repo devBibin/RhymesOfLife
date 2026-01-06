@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const _ = (window.gettext) ? window.gettext : (s) => s;
+  const gettext = window.gettext || ((s) => s);
 
   const container = document.getElementById('posts-container');
   if (!container) return;

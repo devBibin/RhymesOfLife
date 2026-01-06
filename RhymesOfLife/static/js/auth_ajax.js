@@ -4,7 +4,7 @@
     return m ? decodeURIComponent(m.pop()) : '';
   }
 
-  function t(s) {
+  function gettext(s) {
     try {
       if (typeof window.gettext === 'function') return window.gettext(s);
     } catch (e) {}
@@ -52,7 +52,7 @@
       if (!resp.ok) throw data;
       return data;
     } catch (err) {
-      const msg = (err && (err.error || err.message)) || t('Network error. Please try again.');
+      const msg = (err && (err.error || err.message)) || gettext('Network error. Please try again.');
       return { ok: false, error: msg };
     } finally {
       submitBtn.disabled = false;
@@ -84,7 +84,7 @@
         window.location.href = res.redirect;
         return;
       }
-      showMessage(messages, res.error || t('Unknown error'), 'danger');
+      showMessage(messages, res.error || gettext('Unknown error'), 'danger');
     });
 
     loginForm.addEventListener('submit', async (e) => {
@@ -96,7 +96,7 @@
         window.location.href = res.redirect;
         return;
       }
-      showMessage(messages, res.error || t('Unknown error'), 'danger');
+      showMessage(messages, res.error || gettext('Unknown error'), 'danger');
     });
   }
 
@@ -107,8 +107,8 @@
       const input = targetId ? document.getElementById(targetId) : null;
       if (!input) return;
 
-      const labelShow = btn.getAttribute('data-label-show') || t('Show password');
-      const labelHide = btn.getAttribute('data-label-hide') || t('Hide password');
+      const labelShow = btn.getAttribute('data-label-show') || gettext('Show password');
+      const labelHide = btn.getAttribute('data-label-hide') || gettext('Hide password');
 
       btn.setAttribute('aria-label', labelShow);
       btn.setAttribute('aria-pressed', 'false');

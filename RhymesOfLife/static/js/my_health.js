@@ -1,4 +1,5 @@
 (function () {
+  const gettext = window.gettext || ((s) => s);
   const CFG = window.MY_HEALTH_CFG || {};
   const endpoints = CFG.endpoints || {};
   const i18n = CFG.i18n || {};
@@ -23,7 +24,7 @@
         if (paneId === "#pane-exams") initDocumentsTab();
         if (paneId === "#pane-medications") initMedicationsTab();
       })
-      .catch(() => { pane.innerHTML = `<div class="alert alert-danger mb-0">${i18n.failedLoad || "Failed to load."}</div>`; });
+      .catch(() => { pane.innerHTML = `<div class="alert alert-danger mb-0">${i18n.failedLoad || gettext("Failed to load.")}</div>`; });
   }
 
   function lazyLoadChartJs() {
@@ -93,7 +94,7 @@
       data: {
         labels,
         datasets: [{
-          label: i18n.wellnessLabel || "Wellness",
+          label: i18n.wellnessLabel || gettext("Wellness"),
           data: dataPoints,
           tension: 0.25,
           fill: false,
@@ -110,11 +111,11 @@
             displayColors: false,
             callbacks: {
               title: (ctx) => ctx[0]?.label || "",
-              label: (ctx) => `${i18n.score || "Score"}: ${ctx.raw?.y ?? ctx.parsed.y}`,
+              label: (ctx) => `${i18n.score || gettext("Score")}: ${ctx.raw?.y ?? ctx.parsed.y}`,
               afterBody: (ctx) => {
                 const note = ctx[0]?.raw?.note?.trim();
                 if (!note) return [];
-                const header = `${i18n.note || "Note"}:`;
+                const header = `${i18n.note || gettext("Note")}:`;
                 const lines = wrapNote(note, 60);
                 return [header, ...lines];
               }
@@ -147,7 +148,7 @@
 
       const score = document.createElement("div");
       score.className = "entry-score";
-      score.textContent = `${i18n.score || "Score"}: ${e.score}`;
+      score.textContent = `${i18n.score || gettext("Score")}: ${e.score}`;
 
       const note = document.createElement("div");
       note.className = "entry-note text-break";
@@ -394,7 +395,7 @@
     (function ensureDropHint() {
       const extsText = allowedExts.map(e => "." + e).join(", ");
       const sizeText = formatMB(maxSize);
-      const tpl = i18n.allowedFilesTpl || "Allowed: %(ext)s. Max size: %(size)s";
+      const tpl = i18n.allowedFilesTpl || gettext("Allowed: %(ext)s. Max size: %(size)s");
       const text = tpl.replace("%(ext)s", extsText).replace("%(size)s", sizeText);
       let hint = form.querySelector("#drop-hint");
       if (!hint) {
@@ -415,7 +416,7 @@
         h.className = "form-text mt-1";
         linkList.parentElement.appendChild(h);
       }
-      h.textContent = i18n.linkHint || "You can attach external links (e.g., Google Drive, Dropbox, OneDrive).";
+      h.textContent = i18n.linkHint || gettext("You can attach external links (e.g., Google Drive, Dropbox, OneDrive).");
     })();
 
     let filesToUpload = [];
@@ -424,8 +425,8 @@
       const wrap = document.createElement("div");
       wrap.className = "link-item";
       wrap.innerHTML = `
-        <input type="url" class="form-control ext-link" placeholder="${i18n.pasteLink || "Paste link"}" value="${prefill}">
-        <button type="button" class="btn btn-sm btn-outline-danger remove-link-btn" aria-label="${i18n.removeLink || "Remove link"}">✖</button>
+        <input type="url" class="form-control ext-link" placeholder="${i18n.pasteLink || gettext("Paste link")}" value="${prefill}">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-link-btn" aria-label="${i18n.removeLink || gettext("Remove link")}">✖</button>
       `;
       linkList.appendChild(wrap);
       wrap.querySelector(".remove-link-btn").onclick = () => wrap.remove();
@@ -438,7 +439,7 @@
       div.dataset.name = file.name; div.dataset.size = file.size;
       div.innerHTML = `
         <span class="me-2">📎 <strong>${file.name}</strong></span>
-        <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || "Remove file"}">✖</button>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || gettext("Remove file")}">✖</button>
       `;
       fileList.appendChild(div);
     }
@@ -459,18 +460,18 @@
       Array.from(list).forEach(file => {
         const ext = extOf(file.name);
         if (!allowedExts.includes(ext)) {
-          const tpl = i18n.unsupportedTypeTpl || "Unsupported file type: %(name)s";
+          const tpl = i18n.unsupportedTypeTpl || gettext("Unsupported file type: %(name)s");
           alert(tpl.replace("%(name)s", file.name));
           return;
         }
         if (file.size > maxSize) {
           const mb = Math.ceil(maxSize / (1024 * 1024));
-          const tpl = i18n.tooLargeTpl || "File is too large (max %(size)s MB): %(name)s";
+          const tpl = i18n.tooLargeTpl || gettext("File is too large (max %(size)s MB): %(name)s");
           alert(tpl.replace("%(size)s", String(mb)).replace("%(name)s", file.name));
           return;
         }
         if (filesToUpload.some(f => f.name === file.name && f.size === file.size)) {
-          alert(i18n.duplicateFile || "This file is already in the list.");
+          alert(i18n.duplicateFile || gettext("This file is already in the list."));
           return;
         }
         filesToUpload.push(file);
@@ -489,7 +490,7 @@
 
     if (submitBtn) {
       submitBtn.addEventListener("click", () => {
-        if (!dateInput || !dateInput.value) { alert(i18n.pleaseDate || "Please specify the exam date."); return; }
+        if (!dateInput || !dateInput.value) { alert(i18n.pleaseDate || gettext("Please specify the exam date.")); return; }
 
         const fd = new FormData();
         fd.append("exam_date", dateInput.value);
@@ -518,10 +519,10 @@
             if (fileInput) fileInput.value = "";
             refreshDocumentsPane();
           } else {
-            alert(j.message || i18n.failedSave || "Failed to save.");
+            alert(j.message || i18n.failedSave || gettext("Failed to save."));
           }
         })
-        .catch(() => alert(i18n.networkError || "Network error."));
+        .catch(() => alert(i18n.networkError || gettext("Network error.")));
       });
     }
 
@@ -548,41 +549,41 @@
               div.className = "file-card d-flex justify-content-between align-items-center border p-2 mb-2 rounded";
               div.innerHTML = `
                 <a href="${doc.url}" target="_blank" class="text-decoration-none me-2" rel="noopener noreferrer">📎 <strong>${doc.name}</strong></a>
-                <button class="btn btn-sm btn-outline-danger remove-existing-file-btn" data-id="${doc.id}" aria-label="${i18n.removeFile || "Remove file"}">✖</button>
+                <button class="btn btn-sm btn-outline-danger remove-existing-file-btn" data-id="${doc.id}" aria-label="${i18n.removeFile || gettext("Remove file")}">✖</button>
               `;
               fileList && fileList.appendChild(div);
             });
             form.scrollIntoView({ behavior: "smooth" });
           })
-          .catch(() => alert(i18n.unableLoad || "Unable to load data."));
+          .catch(() => alert(i18n.unableLoad || gettext("Unable to load data.")));
       }
 
       if (delBtn) {
         const id = delBtn.dataset.id;
         if (!id) return;
-        if (!confirm(i18n.deleteExamQ || "Delete this exam?")) return;
+        if (!confirm(i18n.deleteExamQ || gettext("Delete this exam?"))) return;
         fetch(examApi(id), {
           method: "DELETE",
           headers: { "X-CSRFToken": getCsrfToken(), "X-Requested-With": "XMLHttpRequest" },
           credentials: "same-origin"
         })
         .then(r => r.json())
-        .then(j => { if (j.status === "ok") refreshDocumentsPane(); else alert(i18n.deletionFailed || "Deletion failed."); })
-        .catch(() => alert(i18n.networkError || "Network error."));
+        .then(j => { if (j.status === "ok") refreshDocumentsPane(); else alert(i18n.deletionFailed || gettext("Deletion failed.")); })
+        .catch(() => alert(i18n.networkError || gettext("Network error.")));
       }
 
       if (delFileBtn) {
         const id = delFileBtn.dataset.id;
         if (!id) return;
-        if (!confirm(i18n.deleteFileQ || "Delete this file?")) return;
+        if (!confirm(i18n.deleteFileQ || gettext("Delete this file?"))) return;
         fetch(docApi(id), {
           method: "DELETE",
           headers: { "X-CSRFToken": getCsrfToken(), "X-Requested-With": "XMLHttpRequest" },
           credentials: "same-origin"
         })
         .then(r => r.json())
-        .then(j => { if (j.status === "ok") delFileBtn.closest(".file-card")?.remove(); else alert(i18n.deletionFailed || "Deletion failed."); })
-        .catch(() => alert(i18n.networkError || "Network error."));
+        .then(j => { if (j.status === "ok") delFileBtn.closest(".file-card")?.remove(); else alert(i18n.deletionFailed || gettext("Deletion failed.")); })
+        .catch(() => alert(i18n.networkError || gettext("Network error.")));
       }
     });
   }
@@ -596,7 +597,7 @@
   function setMobileTitle(target) {
     const el = document.getElementById("mobile-section-title");
     if (!el) return;
-    const txt = labelForTarget(target) || (i18n.mobileDefault || "My health");
+    const txt = labelForTarget(target) || (i18n.mobileDefault || gettext("My health"));
     el.textContent = txt;
   }
 

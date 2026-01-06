@@ -1,7 +1,7 @@
+const gettext = window.gettext || ((s) => s);
+
 class ArticleEditor {
   constructor(options) {
-    this._ = (window.gettext) ? window.gettext : (s) => s;
-
     this.form    = document.querySelector(options.form);
     this.content = document.querySelector(options.content);
     this.output  = document.querySelector(options.output);
@@ -41,9 +41,9 @@ class ArticleEditor {
     block.dataset.type = 'text';
     block.innerHTML = `
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-sm btn-danger remove-block" aria-label="${this._('Remove block')}">×</button>
+        <button type="button" class="btn btn-sm btn-danger remove-block" aria-label="${gettext('Remove block')}">×</button>
       </div>
-      <textarea class="form-control mb-2" placeholder="${this._('Enter text…')}"></textarea>
+      <textarea class="form-control mb-2" placeholder="${gettext('Enter text…')}"></textarea>
     `;
     this.content.appendChild(block);
   }
@@ -54,10 +54,10 @@ class ArticleEditor {
     block.dataset.type = 'image_with_caption';
     block.innerHTML = `
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-sm btn-danger remove-block" aria-label="${this._('Remove block')}">×</button>
+        <button type="button" class="btn btn-sm btn-danger remove-block" aria-label="${gettext('Remove block')}">×</button>
       </div>
       <input type="file" class="form-control mb-2" accept="image/*">
-      <input type="text" class="form-control" placeholder="${this._('Image caption…')}">
+      <input type="text" class="form-control" placeholder="${gettext('Image caption…')}">
     `;
     this.content.appendChild(block);
   }

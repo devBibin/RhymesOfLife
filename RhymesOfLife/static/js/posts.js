@@ -12,10 +12,7 @@ function getCSRF(scopeEl) {
   return (local && local.value) || getCookie('csrftoken') || '';
 }
 
-function t(s) {
-  if (typeof window.gettext === 'function') return window.gettext(s);
-  return s;
-}
+const gettext = window.gettext || ((s) => s);
 
 function formatDateISOToLocal(iso) {
   try {
@@ -55,7 +52,7 @@ function renderCommentItem(item) {
   img.width = 32;
   img.height = 32;
   img.className = 'rounded-circle me-2';
-  img.alt = 'Avatar';
+  img.alt = gettext('Avatar');
 
   const wrapper = document.createElement('div');
   wrapper.className = 'flex-grow-1';
@@ -80,7 +77,7 @@ function renderCommentItem(item) {
     delBtn.setAttribute('data-comment-delete', '');
     delBtn.setAttribute('data-post', String(item.post));
     delBtn.setAttribute('data-comment', String(item.id));
-    delBtn.setAttribute('aria-label', t('Delete'));
+    delBtn.setAttribute('aria-label', gettext('Delete'));
     delBtn.textContent = '🗑';
     header.appendChild(delBtn);
   }
@@ -142,7 +139,7 @@ function renderPendingComment(text) {
 
   const label = document.createElement('div');
   label.className = 'small fw-semibold';
-  label.textContent = t('Sending...');
+  label.textContent = gettext('Sending...');
 
   wrap.appendChild(label);
   if (text) {
@@ -281,7 +278,7 @@ function initCommentForms() {
         const pid = postId || (err && err.data && err.data.post) || '';
         const refreshed = pid ? await refreshCommentsList(pid) : false;
         if (!refreshed) {
-          const msg = (err && err.data && err.data.error) || t('Failed to add comment. Please try again.');
+          const msg = (err && err.data && err.data.error) || gettext('Failed to add comment. Please try again.');
           console.error(err);
           alert(msg);
         }
@@ -392,7 +389,7 @@ window.initCommentForms = initCommentForms;
       card.remove();
       return;
     }
-    alert(t('Report submitted'));
+    alert(gettext('Report submitted'));
   });
 })();
 
@@ -444,7 +441,7 @@ function initDropzone() {
       rm.type = 'button';
       rm.className = 'remove';
       rm.setAttribute('data-remove-id', String(it.id));
-      rm.setAttribute('aria-label', t('Remove'));
+      rm.setAttribute('aria-label', gettext('Remove'));
       rm.textContent = '×';
       wrap.appendChild(rm);
       col.appendChild(wrap);
@@ -546,7 +543,7 @@ function bindCreateFormAjax() {
     try {
       const data = await ajaxSubmitForm(form, (d) => d);
       document.dispatchEvent(new CustomEvent('post:created', {
-        detail: { approved: !!data.approved, message: data.message || t('Post created') }
+        detail: { approved: !!data.approved, message: data.message || gettext('Post created') }
       }));
       if (data.redirect) {
         window.location.href = data.redirect;
@@ -565,7 +562,7 @@ function bindCreateFormAjax() {
       const errors = (err && err.data && err.data.errors) || [];
       if (alertBox) {
         alertBox.className = 'alert alert-danger';
-        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || t('Error'));
+        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || gettext('Error'));
         alertBox.classList.remove('d-none');
       }
     }
@@ -586,17 +583,17 @@ function bindEditFormAjax() {
       const data = await ajaxSubmitForm(form, (d) => d);
       if (alertBox) {
         alertBox.className = 'alert alert-success';
-        alertBox.textContent = data.message || t('Post updated.');
+        alertBox.textContent = data.message || gettext('Post updated.');
         alertBox.classList.remove('d-none');
       }
       document.dispatchEvent(new CustomEvent('post:updated', {
-        detail: { post_id: data.post_id, message: data.message || t('Post updated.') }
+        detail: { post_id: data.post_id, message: data.message || gettext('Post updated.') }
       }));
     } catch (err) {
       const errors = (err && err.data && err.data.errors) || [];
       if (alertBox) {
         alertBox.className = 'alert alert-danger';
-        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || t('Error'));
+        alertBox.innerHTML = errors.length ? `<ul class="mb-0">${errors.map(e => `<li>${e}</li>`).join('')}</ul>` : (err.text || gettext('Error'));
         alertBox.classList.remove('d-none');
       }
     }
@@ -635,7 +632,7 @@ function bindEditFormAjax() {
       }
     }
     if (action === 'approve' && card) {
-      document.dispatchEvent(new CustomEvent('post:updated', { detail: { message: t('Post approved') } }));
+      document.dispatchEvent(new CustomEvent('post:updated', { detail: { message: gettext('Post approved') } }));
     }
     if (action === 'reject' && card) {
       card.remove();

@@ -1,5 +1,5 @@
 (function () {
-  const _ = window.gettext ? window.gettext : (s) => s;
+  const gettext = window.gettext || ((s) => s);
 
   function csrf() {
     const m = document.cookie.match(/(?:^|;)\s*csrftoken=([^;]+)/);
@@ -9,7 +9,7 @@
   function label(btn, following) {
     const follow = btn.getAttribute('data-label-follow');
     const unfollow = btn.getAttribute('data-label-unfollow');
-    return following ? (unfollow || _('Unfollow')) : (follow || _('Follow'));
+    return following ? (unfollow || gettext('Unfollow')) : (follow || gettext('Follow'));
   }
 
   function setState(btn, following) {
