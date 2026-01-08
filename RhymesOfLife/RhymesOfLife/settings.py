@@ -173,7 +173,7 @@ MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
 MAILGUN_URL = environment.get("MAILGUN_URL")
 MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
 
-DEFAULT_FROM_EMAIL = "Rhymes of Life <admin@igstan.com>"
+DEFAULT_FROM_EMAIL = "Rhymes of Life <noreply@rhymesoflife.com>"
 
 PASSWORD_RESET_CODE_LENGTH = 6
 PASSWORD_RESET_CODE_TTL_MIN = 15
