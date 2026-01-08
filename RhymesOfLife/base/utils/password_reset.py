@@ -65,23 +65,6 @@ def send_code_email(user: User, code: str) -> None:
     }
     html = render_to_string("emails/password_reset_code.html", {"code": code, "ttl": ttl, "user": user})
 
-    mailgun_url = getattr(settings, "MAILGUN_URL", None)
-    mailgun_token = getattr(settings, "MAILGUN_API_TOKEN", None)
-
-    if mailgun_url and mailgun_token:
-        import requests
-        data = {
-            "from": getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(settings, "EMAIL_HOST_USER", None),
-            "to": [user.email],
-            "subject": subject,
-            "text": text,
-            "html": html,
-        }
-        r = requests.post(mailgun_url, auth=("api", mailgun_token), data=data, timeout=15)
-        if r.status_code != 200:
-            raise RuntimeError(f"Mailgun error {r.status_code}: {r.text}")
-        return
-
     from django.core.mail import EmailMultiAlternatives
     from_email = getattr(settings, "EMAIL_HOST_USER", None) or getattr(settings, "DEFAULT_FROM_EMAIL", None)
     msg = EmailMultiAlternatives(subject, text, from_email, [user.email])

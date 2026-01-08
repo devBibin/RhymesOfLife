@@ -1,6 +1,4 @@
 from urllib.parse import urljoin
-
-import requests
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
@@ -12,10 +10,10 @@ from django.utils.translation import gettext as _
 
 class EmailVerificationSender:
     PROVIDERS = {
-        "mailgun": "_send_via_mailgun",
+        "smtp": "_send_via_smtp",
     }
 
-    def __init__(self, provider: str = "mailgun", logger=None):
+    def __init__(self, provider: str = "smtp", logger=None):
         self.provider = provider
         self.logger = logger or self._default_logger()
 
@@ -68,30 +66,18 @@ class EmailVerificationSender:
         method = getattr(self, method_name)
         return method(payload)
 
-    def _send_via_mailgun(self, payload: dict):
-        data = {
-            "from": settings.DEFAULT_FROM_EMAIL,
-            "to": [payload["to"]],
-            "subject": payload["subject"],
-            "text": payload["text"],
-        }
-        if "html" in payload:
-            data["html"] = payload["html"]
-        response = requests.post(
-            settings.MAILGUN_URL,
-            auth=("api", settings.MAILGUN_API_TOKEN),
-            data=data,
-            timeout=15,
+    def _send_via_smtp(self, payload: dict):
+        from django.core.mail import EmailMultiAlternatives
+
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or getattr(settings, "EMAIL_HOST_USER", None)
+        msg = EmailMultiAlternatives(
+            payload["subject"],
+            payload["text"],
+            from_email,
+            [payload["to"]],
         )
-        if response.status_code != 200:
-            self.logger.error(
-                "Mailgun failed for %s: %s - %s",
-                payload["to"],
-                response.status_code,
-                response.text,
-            )
-            raise requests.exceptions.RequestException(
-                f"Mailgun error {response.status_code}: {response.text}"
-            )
+        if "html" in payload:
+            msg.attach_alternative(payload["html"], "text/html")
+        msg.send(fail_silently=False)
         self.logger.info("Verification sent to: %s", payload["to"])
         return True

@@ -16,7 +16,7 @@ def shutdown_handler(signum, frame):
 
 
 def process_verifications():
-    sender = EmailVerificationSender(provider='mailgun', logger=log)
+    sender = EmailVerificationSender(provider="smtp", logger=log)
 
     verifications = AdditionalUserInfo.objects.filter(
         ready_for_verification=True,
