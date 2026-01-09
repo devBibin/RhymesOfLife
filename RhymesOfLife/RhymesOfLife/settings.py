@@ -162,18 +162,33 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+
 EMAIL_HOST_USER = environment["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = environment["EMAIL_HOST_PASSWORD"]
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+DEFAULT_FROM_EMAIL = environment.get(
+    "DEFAULT_FROM_EMAIL",
+    f"Rhymes of Life <{EMAIL_HOST_USER}>",
+)
+
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
 
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
 MAILGUN_URL = environment.get("MAILGUN_URL")
 MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
 
-DEFAULT_FROM_EMAIL = "Rhymes of Life <noreply@rhymesoflife.com>"
+DEFAULT_FROM_EMAIL = environment.get(
+    "DEFAULT_FROM_EMAIL",
+    f"Rhymes of Life <{EMAIL_HOST_USER}>",
+)
+
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 PASSWORD_RESET_CODE_LENGTH = 6
 PASSWORD_RESET_CODE_TTL_MIN = 15
