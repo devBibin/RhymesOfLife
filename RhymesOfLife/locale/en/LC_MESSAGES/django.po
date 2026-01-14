@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 18:12+0000\n"
+"POT-Creation-Date: 2026-01-14 23:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -329,7 +329,7 @@ msgstr ""
 #: base/models.py:553
 #: base/templates/base/includes/staff_help_requests_rows.html:108
 #: base/templates/base/staff_help_requests.html:48
-#: base/views/access_requests_views.py:130
+#: base/views/access_requests_views.py:134
 msgid "Open"
 msgstr ""
 
@@ -413,19 +413,20 @@ msgstr ""
 msgid "Can process help requests"
 msgstr ""
 
-#: base/models.py:608 base/templates/base/partials/health_wellness.html:133
+#: base/models.py:608
 msgid "Never"
 msgstr ""
 
-#: base/models.py:609 base/templates/base/partials/health_wellness.html:134
+#: base/models.py:609 base/templates/base/partials/health_wellness.html:196
 msgid "Every day"
 msgstr ""
 
-#: base/models.py:610 base/templates/base/partials/health_wellness.html:135
+#: base/models.py:610 base/templates/base/partials/health_wellness.html:191
+#: base/templates/base/partials/health_wellness.html:197
 msgid "Every 3 days"
 msgstr ""
 
-#: base/models.py:611 base/templates/base/partials/health_wellness.html:136
+#: base/models.py:611
 msgid "Every 7 days"
 msgstr ""
 
@@ -442,7 +443,7 @@ msgid "Example: Pregabalin 75 mg daily"
 msgstr ""
 
 #: base/models.py:685
-#: base/templates/base/partials/health_medications_partial.html:37
+#: base/templates/base/partials/health_medications_partial.html:23
 msgid "Medication"
 msgstr ""
 
@@ -618,6 +619,7 @@ msgid "Send"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:67
+#: base/templates/base/partials/health_wellness.html:269
 #: base/templates/base/post_create.html:59
 #: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:258
 msgid "Cancel"
@@ -648,10 +650,10 @@ msgid "Log out"
 msgstr ""
 
 #: base/templates/base/comment_items.html:4
-#: base/templates/base/includes/profile_header.html:35
+#: base/templates/base/includes/profile_header.html:47
 #: blog/templates/blog/blog_page.html:216
-#: blog/templates/blog/includes/article_cards.html:44
-#: blog/templates/blog/includes/article_cards.html:112
+#: blog/templates/blog/includes/article_cards.html:45
+#: blog/templates/blog/includes/article_cards.html:114
 msgid "Avatar"
 msgstr ""
 
@@ -662,11 +664,11 @@ msgstr ""
 
 #: base/templates/base/comment_items.html:16
 #: base/templates/base/partials/health_documents.html:192
-#: base/templates/base/partials/health_medications_partial.html:74
+#: base/templates/base/partials/health_medications_partial.html:60
 #: base/templates/base/profile_edit.html:61
 #: blog/templates/blog/blog_page.html:155
 #: blog/templates/blog/blog_page.html:231
-#: blog/templates/blog/edit_article.html:88
+#: blog/templates/blog/edit_article.html:89
 msgid "Delete"
 msgstr ""
 
@@ -793,7 +795,6 @@ msgstr ""
 #: base/templates/base/consents.html:122 base/templates/base/consents.html:306
 #: base/templates/base/consents.html:320 base/templates/base/consents.html:470
 #: base/templates/base/home.html:27
-#: base/templates/base/partials/health_wellness.html:167
 #: base/templates/base/staff_help_requests.html:144
 #: base/templates/base/staff_help_requests.html:233
 #: blog/templates/blog/blog_page.html:251
@@ -1461,7 +1462,7 @@ msgstr ""
 #: base/templates/base/home.html:70 base/templates/base/home.html:111
 #: base/templates/base/home.html:137
 #: base/templates/base/info/auth_combined.html:117
-#: base/templates/base/info/auth_combined.html:237 templates/base.html:279
+#: base/templates/base/info/auth_combined.html:237 templates/base.html:302
 msgid "Sign up"
 msgstr ""
 
@@ -1506,27 +1507,27 @@ msgstr ""
 msgid "Don't have an account?"
 msgstr ""
 
-#: base/templates/base/includes/profile_header.html:40
-#: base/templates/base/includes/profile_header.html:51
+#: base/templates/base/includes/profile_header.html:52
+#: base/templates/base/includes/profile_header.html:63
 #: base/templates/base/profile.html:131
 msgid "Edit profile"
 msgstr ""
 
-#: base/templates/base/includes/profile_header.html:70
+#: base/templates/base/includes/profile_header.html:82
 #, python-format
 msgid "%(n)s post"
 msgid_plural "%(n)s posts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: base/templates/base/includes/profile_header.html:74
+#: base/templates/base/includes/profile_header.html:86
 #, python-format
 msgid "%(n)s follower"
 msgid_plural "%(n)s followers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: base/templates/base/includes/profile_header.html:82
+#: base/templates/base/includes/profile_header.html:94
 #: base/templates/base/profile.html:85
 msgid "No bio yet."
 msgstr ""
@@ -1647,10 +1648,8 @@ msgid "Doctor's comments"
 msgstr ""
 
 #: base/templates/base/notifications.html:4
-#: base/templates/base/notifications.html:9
-#: base/templates/base/partials/health_wellness.html:49
-#: base/templates/base/partials/health_wellness.html:125
-#: templates/base.html:104 templates/base.html:113
+#: base/templates/base/notifications.html:9 templates/base.html:104
+#: templates/base.html:113
 msgid "Notifications"
 msgstr ""
 
@@ -1728,8 +1727,6 @@ msgid ""
 msgstr ""
 
 #: base/templates/base/partials/health_documents.html:166
-#: base/templates/base/partials/health_wellness.html:94
-#: base/templates/base/partials/health_wellness.html:168
 msgid "Save"
 msgstr ""
 
@@ -1754,43 +1751,23 @@ msgstr ""
 msgid "Medications I take"
 msgstr ""
 
-#: base/templates/base/partials/health_medications_partial.html:14
-msgid "Important"
-msgstr ""
-
-#: base/templates/base/partials/health_medications_partial.html:16
-msgid "This information will be visible to your doctor."
-msgstr ""
-
-#: base/templates/base/partials/health_medications_partial.html:17
-msgid "Please list medications you are currently taking."
-msgstr ""
-
-#: base/templates/base/partials/health_medications_partial.html:20
-msgid "Example:"
-msgstr ""
-
-#: base/templates/base/partials/health_medications_partial.html:20
-msgid "Pregabalin 75 mg daily"
-msgstr ""
-
-#: base/templates/base/partials/health_medications_partial.html:27
+#: base/templates/base/partials/health_medications_partial.html:13
 msgid "Add medication"
 msgstr ""
 
-#: base/templates/base/partials/health_medications_partial.html:44
+#: base/templates/base/partials/health_medications_partial.html:30
 msgid "e.g. Pregabalin 75 mg daily"
 msgstr ""
 
-#: base/templates/base/partials/health_medications_partial.html:47
+#: base/templates/base/partials/health_medications_partial.html:33
 msgid "Please enter a medication description."
 msgstr ""
 
-#: base/templates/base/partials/health_medications_partial.html:54
+#: base/templates/base/partials/health_medications_partial.html:40
 msgid "Add"
 msgstr ""
 
-#: base/templates/base/partials/health_medications_partial.html:83
+#: base/templates/base/partials/health_medications_partial.html:69
 msgid "No medications added yet."
 msgstr ""
 
@@ -1826,92 +1803,170 @@ msgstr ""
 msgid "No recommendations yet."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:47
-msgid "My wellness"
+#: base/templates/base/partials/health_wellness.html:7
+msgid "My Wellness Journey"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:56
-msgid "New entry"
+#: base/templates/base/partials/health_wellness.html:11
+msgid "Reminders"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:63
-msgid "Score (1-10)"
+#: base/templates/base/partials/health_wellness.html:19
+msgid "Today's Check-in"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:82
-msgid "Choose a number from 1 (worst) to 10 (best)."
+#: base/templates/base/partials/health_wellness.html:30
+msgid "How are you feeling?"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:60
+msgid "Tough day"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:61
+msgid "Feeling great!"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:66
+msgid "Choose a number from 1 (really struggling) to 10 (feeling amazing)."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:73
+msgid "Add a note (optional)"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:81
+msgid ""
+"What made today special? What are you grateful for? Any challenges you faced?"
 msgstr ""
 
 #: base/templates/base/partials/health_wellness.html:87
-msgid "Comment"
+msgid "Your notes help track patterns and celebrate progress over time."
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:88
-msgid "How do you feel today?"
+#: base/templates/base/partials/health_wellness.html:95
+msgid "Clear"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:89
-msgid "Add a short optional comment to remember the context."
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:105
-msgid "Trend"
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:106
-msgid "Last 90 days"
+#: base/templates/base/partials/health_wellness.html:98
+msgid "Save Today's Entry"
 msgstr ""
 
 #: base/templates/base/partials/health_wellness.html:108
-msgid "Wellness chart"
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:115
-#: base/templates/base/patient_wellness.html:15
-msgid "Entries"
+msgid "Save Entry"
 msgstr ""
 
 #: base/templates/base/partials/health_wellness.html:117
-#: base/templates/base/patient_wellness.html:26
-msgid "No entries yet."
+msgid "Your Wellness Trend"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:119
+#: base/templates/base/partials/health_wellness.html:129
+msgid "Last 90 days"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:125
+msgid "Filter"
 msgstr ""
 
 #: base/templates/base/partials/health_wellness.html:128
-msgid ""
-"Choose how often to receive a reminder if you haven't added a wellness entry "
-"for the selected period. One reminder per day will be sent at the time below."
+msgid "Last 30 days"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:131
-msgid "Reminder frequency"
+#: base/templates/base/partials/health_wellness.html:130
+msgid "Last 6 months"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:138
-msgid "Set to Never to fully disable reminders."
+#: base/templates/base/partials/health_wellness.html:139
+msgid "Wellness trend chart showing your scores over time"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:141
-msgid "Delivery channels"
+#: base/templates/base/partials/health_wellness.html:150
+msgid "Your Wellness Journal"
 msgstr ""
 
-#: base/templates/base/partials/health_wellness.html:144
-msgid "Telegram reminders"
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:148
-msgid "Email reminders"
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:153
-msgid "Hour"
-msgstr ""
-
-#: base/templates/base/partials/health_wellness.html:157
-msgid "Minute"
+#: base/templates/base/partials/health_wellness.html:152
+msgid "entries"
 msgstr ""
 
 #: base/templates/base/partials/health_wellness.html:162
-msgid "Your local time when the daily reminder may be sent."
+msgid "Your wellness journal is empty"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:164
+msgid ""
+"Start by adding your first entry above. Track your daily wellbeing to see "
+"patterns and progress over time."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:177
+msgid "Reminder Settings"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:183
+msgid ""
+"Stay on track with your wellness journey. We'll gently remind you to check "
+"in when needed."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:189
+msgid "Reminder Frequency"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:195
+msgid "Never remind me"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:198
+msgid "Every week"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:199
+msgid "Every 2 weeks"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:203
+msgid "How often would you like to be reminded if you haven't logged an entry?"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:209
+msgid "Notification Channels"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:217
+msgid "Telegram reminders"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:227
+msgid "Email reminders"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:237
+msgid "Preferred Time"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:246
+msgid "hr"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:254
+msgid "min"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:261
+msgid "Daily reminder will be sent at this time (in your local timezone)."
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:272
+msgid "Save Preferences"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:284
+msgid "Success!"
+msgstr ""
+
+#: base/templates/base/partials/health_wellness.html:288
+msgid "Your wellness entry has been saved."
 msgstr ""
 
 #: base/templates/base/patient_exams.html:6
@@ -1954,8 +2009,16 @@ msgstr ""
 msgid "Patient wellness"
 msgstr ""
 
+#: base/templates/base/patient_wellness.html:15
+msgid "Entries"
+msgstr ""
+
 #: base/templates/base/patient_wellness.html:20
 msgid "Score"
+msgstr ""
+
+#: base/templates/base/patient_wellness.html:26
+msgid "No entries yet."
 msgstr ""
 
 #: base/templates/base/patients_list.html:46
@@ -2054,8 +2117,8 @@ msgstr ""
 
 #: base/templates/base/post_cards.html:72
 #: base/templates/base/post_create.html:58
-#: blog/templates/blog/create_article.html:67
-#: blog/templates/blog/edit_article.html:75
+#: blog/templates/blog/create_article.html:68
+#: blog/templates/blog/edit_article.html:76
 msgid "Publish"
 msgstr ""
 
@@ -2542,7 +2605,7 @@ msgid ""
 "leave a short note."
 msgstr ""
 
-#: base/utils/notify.py:94
+#: base/utils/notify.py:96
 msgid "Notification"
 msgstr ""
 
@@ -2550,7 +2613,7 @@ msgstr ""
 msgid "Password reset code"
 msgstr ""
 
-#: base/utils/password_reset.py:63 base/utils/password_reset.py:97
+#: base/utils/password_reset.py:63 base/utils/password_reset.py:80
 #, python-format
 msgid ""
 "Your password reset code is %(code)s. It expires in %(minutes)s minutes."
@@ -2589,24 +2652,28 @@ msgstr ""
 msgid "Invalid action."
 msgstr ""
 
-#: base/views/access_requests_views.py:112
-msgid "Your access request was approved."
+#: base/views/access_requests_views.py:113
+msgid ""
+"Your access request was approved. You can now view the patient's exams and "
+"medical documents."
 msgstr ""
 
-#: base/views/access_requests_views.py:116
-msgid "Your access request was denied."
+#: base/views/access_requests_views.py:119
+msgid ""
+"Your access request was denied. You don't have access to the patient's exams "
+"and medical documents."
 msgstr ""
 
-#: base/views/access_requests_views.py:127
+#: base/views/access_requests_views.py:131
 msgid "Access request update"
 msgstr ""
 
-#: base/views/access_requests_views.py:128
+#: base/views/access_requests_views.py:132
 #, python-format
 msgid "%(patient)s: %(message)s"
 msgstr ""
 
-#: base/views/access_requests_views.py:133
+#: base/views/access_requests_views.py:137
 msgid "Request updated."
 msgstr ""
 
@@ -3069,13 +3136,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: blog/templates/blog/blog_page.html:75
-#: blog/templates/blog/includes/article_cards.html:49
-#: blog/templates/blog/includes/article_cards.html:117
+#: blog/templates/blog/includes/article_cards.html:50
+#: blog/templates/blog/includes/article_cards.html:119
 msgid "Anonymous author"
 msgstr ""
 
 #: blog/templates/blog/blog_page.html:152
-#: blog/templates/blog/edit_article.html:86
+#: blog/templates/blog/edit_article.html:87
 msgid "Delete the article?"
 msgstr ""
 
@@ -3113,15 +3180,8 @@ msgstr ""
 msgid "Start writing…"
 msgstr ""
 
-#: blog/templates/blog/create_article.html:44
-#: blog/templates/blog/edit_article.html:57
-#: blog/templates/blog/includes/article_cards.html:34
-#: blog/templates/blog/includes/article_cards.html:102
-msgid "Tags"
-msgstr ""
-
-#: blog/templates/blog/create_article.html:64
-#: blog/templates/blog/edit_article.html:79
+#: blog/templates/blog/create_article.html:65
+#: blog/templates/blog/edit_article.html:80
 msgid "Save draft"
 msgstr ""
 
@@ -3130,7 +3190,7 @@ msgid "Edit article"
 msgstr ""
 
 #: blog/templates/blog/edit_article.html:9
-#: blog/templates/blog/includes/article_cards.html:96
+#: blog/templates/blog/includes/article_cards.html:97
 msgid "Draft"
 msgstr ""
 
@@ -3236,22 +3296,22 @@ msgstr ""
 msgid "My Profile"
 msgstr ""
 
-#: templates/base.html:268
-msgid "Logout"
-msgstr ""
-
-#: templates/base.html:275
-msgid "Login"
-msgstr ""
-
-#: templates/base.html:289
+#: templates/base.html:269
 msgid "Switch to Russian"
 msgstr ""
 
-#: templates/base.html:295
+#: templates/base.html:275
 msgid "Switch to English"
 msgstr ""
 
-#: templates/base.html:314
+#: templates/base.html:291
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:298
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:317
 msgid "All rights reserved."
 msgstr ""
