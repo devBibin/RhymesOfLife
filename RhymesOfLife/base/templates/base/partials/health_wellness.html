@@ -1,177 +1,291 @@
 {% load static i18n %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/my_health_wellness.css' %}">
 
-<style>
-  .page-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-  .btn-soft{border:1px solid rgba(0,0,0,.08);background:#fff}
-  .btn-soft:hover{border-color:rgba(var(--bs-primary-rgb),.35);color:var(--bs-primary)}
-  .card-elevated{border:0;border-radius:1rem;background:linear-gradient(180deg,#fff,rgba(255,255,255,.96));box-shadow:0 8px 28px rgba(16,24,40,.08)}
-  .card-elevated .card-header{border:0;background:transparent;padding:1rem 1.25rem .25rem}
-  .form-label{font-weight:600}
-
-  .entry-note{white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;line-height:1.45;color:#344054}
-  .entry-note.is-empty{color:var(--bs-secondary-color);font-style:italic}
-
-  /* timeline */
-  .timeline{position:relative;padding-left:1.25rem;margin:0;list-style:none}
-  .timeline:before{content:"";position:absolute;left:.35rem;top:.6rem;bottom:.6rem;width:2px;background:rgba(0,0,0,.06)}
-  .timeline-item{position:relative;padding:.85rem 1rem .85rem 1.25rem;border-radius:14px;border:1px solid rgba(0,0,0,.06);background:#fff}
-  .timeline-item+.timeline-item{margin-top:.7rem}
-  .timeline-item:before{content:"";position:absolute;left:-.05rem;top:1.2rem;width:.6rem;height:.6rem;border-radius:50%;background:rgba(var(--bs-primary-rgb),.9)}
-  .entry-item{display:flex;flex-direction:column;gap:.5rem;min-width:0}
-  .entry-meta{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
-  .entry-date{font-weight:700;color:#101828}
-  .entry-score{display:inline-flex;align-items:center;gap:.35rem;background:rgba(var(--bs-primary-rgb),.12);color:var(--bs-primary);border:1px solid rgba(var(--bs-primary-rgb),.28);padding:.2rem .65rem;border-radius:999px;font-size:.85rem;font-weight:700}
-  .muted{color:var(--bs-secondary-color)}
-
-  .chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
-  .chart-sub{font-size:.925rem;color:var(--bs-secondary-color)}
-
-  /* numeric dropdown */
-  .score-dropdown .btn{
-    border-radius:999px;border:1px solid rgba(0,0,0,.08);
-    background:#fff;font-weight:700;
-    display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;
-  }
-  .score-dropdown .btn:hover{border-color:rgba(var(--bs-primary-rgb),.35);color:var(--bs-primary)}
-  .score-dropdown .dropdown-menu{border-radius:14px;box-shadow:0 10px 30px rgba(16,24,40,.12);min-width:6rem;text-align:center}
-  .score-dropdown .dropdown-item{font-weight:600}
-  .score-dropdown .dropdown-item.active,.score-dropdown .dropdown-item:active{background:rgba(var(--bs-primary-rgb),.12);color:var(--bs-primary)}
-
-  /* layout tweaks */
-  .form-help{font-size:.925rem;color:var(--bs-secondary-color)}
-  @media (max-width:576px){
-    .timeline{padding-left:1rem}
-    .timeline:before{left:.25rem}
-    .timeline-item{padding:.85rem .85rem .85rem 1rem}
-    .entry-score{font-size:.8rem}
-  }
-</style>
-
-<div class="page-head">
-  <h2 class="mb-0">🩺 {% trans "My wellness" %}</h2>
-  <button id="btn-settings" class="btn btn-soft btn-sm">
-    <i class="bi bi-bell me-1"></i>{% trans "Notifications" %}
-  </button>
-</div>
-
-<!-- entry form -->
-<div class="card card-elevated mb-4">
-  <div class="card-header">
-    <h5 class="mb-0">{% trans "New entry" %}</h5>
+<div class="myhealth-wrap">
+  <div class="myhealth-head">
+    <h2 class="myhealth-title">{% trans "My Wellness Journey" %}</h2>
+    
+    <div class="myhealth-actions">
+      <button id="btn-settings" class="btn btn-glass" type="button" aria-label="Notification settings">
+        <i class="bi bi-bell me-1"></i>{% trans "Reminders" %}
+      </button>
+    </div>
   </div>
-  <div class="card-body">
-    <form id="entry-form" class="row g-4" novalidate>
-      {% csrf_token %}
 
-      <div class="col-12 col-lg-5">
-        <label for="score" class="form-label">{% trans "Score (1-10)" %}</label>
-
-        <!-- hidden select for backend -->
-        <select id="score" name="score" class="visually-hidden" aria-hidden="true">
-          {% for _ in ".........."|make_list %}
-            <option value="{{ forloop.counter }}" {% if forloop.counter == 5 %}selected{% endif %}>{{ forloop.counter }}</option>
-          {% endfor %}
-        </select>
-
-        <!-- clean dropdown -->
-        <div class="dropdown score-dropdown mt-1" data-score-dropdown>
-          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="score-dd-btn">
-            <span class="value" id="score-label">5</span>
+  <!-- New Entry Card -->
+  <div class="card card-glass mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">{% trans "Today's Check-in" %}</h5>
+    </div>
+    
+    <div class="card-body">
+      <form id="entry-form" novalidate>
+        {% csrf_token %}
+        
+        <div class="myhealth-grid">
+          <!-- Score Selection -->
+          <div class="score-selector">
+            <label class="form-label">
+              <i class="bi bi-activity"></i> {% trans "How are you feeling?" %}
+            </label>
+            
+            <select id="score" name="score" class="visually-hidden" aria-hidden="true">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5" selected>5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            
+            <div class="score-visual">
+              <div class="score-option" data-value="1">1</div>
+              <div class="score-option" data-value="2">2</div>
+              <div class="score-option" data-value="3">3</div>
+              <div class="score-option" data-value="4">4</div>
+              <div class="score-option" data-value="5">5</div>
+              <div class="score-option" data-value="6">6</div>
+              <div class="score-option" data-value="7">7</div>
+              <div class="score-option" data-value="8">8</div>
+              <div class="score-option" data-value="9">9</div>
+              <div class="score-option" data-value="10">10</div>
+            </div>
+            
+            <div class="score-labels">
+              <span class="score-label-worst">{% trans "Tough day" %}</span>
+              <span class="score-label-best">{% trans "Feeling great!" %}</span>
+            </div>
+            
+            <div class="form-help mt-3">
+              <i class="bi bi-info-circle me-1"></i>
+              {% trans "Choose a number from 1 (really struggling) to 10 (feeling amazing)." %}
+            </div>
+          </div>
+          
+          <!-- Note -->
+          <div>
+            <label for="note" class="form-label">
+              <i class="bi bi-chat-text"></i> {% trans "Add a note (optional)" %}
+            </label>
+            
+            <textarea
+              id="note"
+              name="note"
+              class="form-control myhealth-textarea"
+              rows="4"
+              placeholder="{% trans 'What made today special? What are you grateful for? Any challenges you faced?' %}"
+              aria-label="Daily wellness note"
+            ></textarea>
+            
+            <div class="form-help mt-2">
+              <i class="bi bi-lightbulb me-1"></i>
+              {% trans "Your notes help track patterns and celebrate progress over time." %}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Desktop Save Button -->
+        <div class="myhealth-cta d-none d-md-flex">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('note').value = ''">
+            {% trans "Clear" %}
           </button>
-          <ul class="dropdown-menu" id="score-dd-menu" aria-labelledby="score-dd-btn">
-            {% for _ in ".........."|make_list %}
-              <li><button class="dropdown-item" type="button" data-val="{{ forloop.counter }}">{{ forloop.counter }}</button></li>
-            {% endfor %}
+          <button type="button" id="btn-save" class="btn btn-primary">
+            <i class="bi bi-cloud-arrow-up me-2"></i>{% trans "Save Today's Entry" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mobile Save Bar -->
+  <div class="myhealth-mobile-bar d-md-none">
+    <button type="button" id="btn-save-mobile" class="btn btn-primary">
+      <i class="bi bi-cloud-arrow-up me-2"></i>{% trans "Save Entry" %}
+    </button>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="card card-glass mb-4">
+    <div class="card-body">
+      <div class="myhealth-chart-head">
+        <div>
+          <h5 class="mb-1">{% trans "Your Wellness Trend" %}</h5>
+          <div class="myhealth-chart-sub">
+            <i class="bi bi-calendar-week"></i> {% trans "Last 90 days" %}
+          </div>
+        </div>
+        
+        <div class="dropdown">
+          <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-filter me-1"></i> {% trans "Filter" %}
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" data-days="30">{% trans "Last 30 days" %}</a></li>
+            <li><a class="dropdown-item" href="#" data-days="90">{% trans "Last 90 days" %}</a></li>
+            <li><a class="dropdown-item" href="#" data-days="180">{% trans "Last 6 months" %}</a></li>
           </ul>
-          <div class="form-help mt-2">{% trans "Choose a number from 1 (worst) to 10 (best)." %}</div>
         </div>
       </div>
-
-      <div class="col-12 col-lg-7">
-        <label for="note" class="form-label">{% trans "Comment" %}</label>
-        <textarea id="note" name="note" class="form-control autosize" rows="5" placeholder="{% trans 'How do you feel today?' %}"></textarea>
-        <div class="form-help mt-2">{% trans "Add a short optional comment to remember the context." %}</div>
+      
+      <div class="myhealth-chart-container">
+        <canvas
+          id="chart"
+          class="myhealth-canvas"
+          aria-label="{% trans 'Wellness trend chart showing your scores over time' %}"
+          role="img"
+        ></canvas>
       </div>
+    </div>
+  </div>
 
-      <div class="col-12 text-end">
-        <button type="button" id="btn-save" class="btn btn-primary">
-          <i class="bi bi-save me-1"></i>{% trans "Save" %}
+  <!-- Entries History -->
+  <div class="card card-glass">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">{% trans "Your Wellness Journal" %}</h5>
+        <span class="badge bg-light text-dark">
+          <span id="entries-count">0</span> {% trans "entries" %}
+        </span>
+      </div>
+      
+      <div id="entries-container">
+        <ul id="entries-list" class="timeline"></ul>
+        
+        <!-- Empty State -->
+        <div id="no-entries" class="empty-state d-none">
+          <div class="empty-state-icon"><i class="bi bi-journal-text"></i></div>
+          <h4 class="empty-state-title">{% trans "Your wellness journal is empty" %}</h4>
+          <p class="empty-state-text">
+            {% trans "Start by adding your first entry above. Track your daily wellbeing to see patterns and progress over time." %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal fade modal-glass" id="settingsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans "Reminder Settings" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      
+      <div class="modal-body">
+        <p class="text-muted mb-4">
+          {% trans "Stay on track with your wellness journey. We'll gently remind you to check in when needed." %}
+        </p>
+        
+        <div class="mb-4">
+          <label class="form-label d-flex justify-content-between align-items-center">
+            <span>
+              <i class="bi bi-clock me-2"></i>{% trans "Reminder Frequency" %}
+            </span>
+            <span class="badge bg-light text-dark" id="frequency-badge">{% trans "Every 3 days" %}</span>
+          </label>
+          
+          <select id="rem-interval" class="form-select" aria-label="Reminder frequency">
+            <option value="0">{% trans "Never remind me" %}</option>
+            <option value="1">{% trans "Every day" %}</option>
+            <option value="3" selected>{% trans "Every 3 days" %}</option>
+            <option value="7">{% trans "Every week" %}</option>
+            <option value="14">{% trans "Every 2 weeks" %}</option>
+          </select>
+          
+          <div class="form-text mt-2">
+            {% trans "How often would you like to be reminded if you haven't logged an entry?" %}
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="form-label">
+            <i class="bi bi-broadcast me-2"></i>{% trans "Notification Channels" %}
+          </label>
+          
+          <div class="card bg-light border-0 p-3">
+            <div class="form-check form-switch d-flex align-items-center justify-content-between mb-2">
+              <div>
+                <i class="bi bi-telegram text-primary me-2"></i>
+                <label class="form-check-label" for="tg-enabled">
+                  {% trans "Telegram reminders" %}
+                </label>
+              </div>
+              <input class="form-check-input toggle-switch" type="checkbox" id="tg-enabled" role="switch">
+            </div>
+            
+            <div class="form-check form-switch d-flex align-items-center justify-content-between">
+              <div>
+                <i class="bi bi-envelope text-primary me-2"></i>
+                <label class="form-check-label" for="email-enabled">
+                  {% trans "Email reminders" %}
+                </label>
+              </div>
+              <input class="form-check-input toggle-switch" type="checkbox" id="email-enabled" role="switch">
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="form-label">
+            <i class="bi bi-alarm me-2"></i>{% trans "Preferred Time" %}
+          </label>
+          
+          <div class="row g-3">
+            <div class="col">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                <input type="number" id="rem-hour" class="form-control" 
+                       min="0" max="23" placeholder="20" aria-label="Hour">
+                <span class="input-group-text">{% trans "hr" %}</span>
+              </div>
+            </div>
+            <div class="col">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-clock-history"></i></span>
+                <input type="number" id="rem-min" class="form-control" 
+                       min="0" max="59" placeholder="0" aria-label="Minute">
+                <span class="input-group-text">{% trans "min" %}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-text mt-2">
+            <i class="bi bi-info-circle me-1"></i>
+            {% trans "Daily reminder will be sent at this time (in your local timezone)." %}
+            <span id="rem-tz-label" class="ms-1 fw-medium"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-glass" data-bs-dismiss="modal">
+          {% trans "Cancel" %}
+        </button>
+        <button id="btn-save-settings" class="btn btn-primary">
+          <i class="bi bi-check-circle me-2"></i>{% trans "Save Preferences" %}
         </button>
       </div>
-    </form>
-  </div>
-</div>
-
-<!-- chart -->
-<div class="card card-elevated mb-4">
-  <div class="card-body">
-    <div class="chart-head">
-      <h5 class="mb-0">{% trans "Trend" %}</h5>
-      <div class="chart-sub">{% trans "Last 90 days" %}</div>
     </div>
-    <canvas id="chart" height="120" aria-label="{% trans 'Wellness chart' %}"></canvas>
   </div>
 </div>
 
-<!-- entries -->
-<div class="card card-elevated">
-  <div class="card-body">
-    <h5 class="mb-3">{% trans "Entries" %}</h5>
-    <ul id="entries-list" class="timeline"></ul>
-    <div id="no-entries" class="alert alert-info mb-0 d-none">{% trans "No entries yet." %}</div>
-  </div>
-</div>
-
-<!-- settings modal -->
-<div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header"><h5 class="modal-title">{% trans "Notifications" %}</h5></div>
-      <div class="modal-body">
-        <p class="text-muted small mb-3">
-          {% trans "Choose how often to receive a reminder if you haven't added a wellness entry for the selected period. One reminder per day will be sent at the time below." %}
-        </p>
-        <div class="mb-3">
-          <label for="rem-interval" class="form-label">{% trans "Reminder frequency" %}</label>
-          <select id="rem-interval" class="form-select">
-            <option value="0">{% trans "Never" %}</option>
-            <option value="1">{% trans "Every day" %}</option>
-            <option value="3">{% trans "Every 3 days" %}</option>
-            <option value="7">{% trans "Every 7 days" %}</option>
-          </select>
-          <div class="form-text">{% trans "Set to Never to fully disable reminders." %}</div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">{% trans "Delivery channels" %}</label>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="tg-enabled">
-            <label class="form-check-label" for="tg-enabled">{% trans "Telegram reminders" %}</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="email-enabled">
-            <label class="form-check-label" for="email-enabled">{% trans "Email reminders" %}</label>
-          </div>
-        </div>
-        <div class="row g-2 mb-2">
-          <div class="col">
-            <label for="rem-hour" class="form-label">{% trans "Hour" %}</label>
-            <input type="number" id="rem-hour" class="form-control" min="0" max="23">
-          </div>
-          <div class="col">
-            <label for="rem-min" class="form-label">{% trans "Minute" %}</label>
-            <input type="number" id="rem-min" class="form-control" min="0" max="59">
-          </div>
-        </div>
-        <div class="form-text">
-          {% trans "Your local time when the daily reminder may be sent." %}
-          <span id="rem-tz-label" class="ms-1 text-muted"></span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
-        <button id="btn-save-settings" class="btn btn-primary">{% trans "Save" %}</button>
-      </div>
+<!-- Success Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="success-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-success text-white">
+      <i class="bi bi-check-circle me-2"></i>
+      <strong class="me-auto">{% trans "Success!" %}</strong>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {% trans "Your wellness entry has been saved." %}
     </div>
   </div>
 </div>

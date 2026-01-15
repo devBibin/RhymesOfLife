@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const gettext = window.gettext || ((s) => s);
   const CFG = window.MY_HEALTH_CFG || {};
   const endpoints = CFG.endpoints || {};
@@ -10,6 +10,7 @@
 
   let chart;
   const loaded = {};
+  let currentDaysFilter = 90;
 
   function htmlLoad(paneId, url) {
     const pane = document.querySelector(paneId);
@@ -59,8 +60,8 @@
     return `${y}-${m}-${day}`;
   }
 
-  function fetchEntries() {
-    return fetch(`${endpoints.apiEntries}?days=90`, { headers: { "X-Requested-With": "XMLHttpRequest" }, credentials: "same-origin" })
+  function fetchEntries(days = 90) {
+    return fetch(`${endpoints.apiEntries}?days=${days}`, { headers: { "X-Requested-With": "XMLHttpRequest" }, credentials: "same-origin" })
       .then(r => r.json());
   }
 
@@ -86,7 +87,18 @@
     if (!canvas) return;
     const dataPoints = items.map(i => ({ x: i.date, y: i.score, note: i.note || "" }));
     const labels = items.map(i => i.date);
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const displayWidth = Math.max(1, Math.round(rect.width));
+    const displayHeight = Math.max(1, Math.round(rect.height));
+
+    if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
+      canvas.width = displayWidth * dpr;
+      canvas.height = displayHeight * dpr;
+    }
+
     const ctx = canvas.getContext("2d");
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (chart) chart.destroy();
 
     chart = new Chart(ctx, {
@@ -105,7 +117,20 @@
       },
       options: {
         interaction: { mode: "nearest", intersect: false },
-        scales: { y: { min: 1, max: 11, ticks: { stepSize: 1 } } },
+        scales: {
+          y: {
+            min: 1,
+            max: 11,
+            ticks: {
+              stepSize: 1,
+              callback: (value) => {
+                if (value === 1) return gettext("Tough");
+                if (value === 10) return gettext("Great");
+                return value;
+              }
+            }
+          }
+        },
         plugins: {
           tooltip: {
             displayColors: false,
@@ -132,7 +157,11 @@
     if (!list || !empty) return;
 
     list.innerHTML = "";
-    if (!items || !items.length) { empty.classList.remove("d-none"); return; }
+    if (!items || !items.length) {
+      empty.classList.remove("d-none");
+      updateEntriesCount(0);
+      return;
+    }
     empty.classList.add("d-none");
 
     items.slice().reverse().forEach(e => {
@@ -155,7 +184,7 @@
       if (e.note) {
         note.textContent = e.note;
       } else {
-        note.textContent = "";
+        note.textContent = i18n.noNote || gettext("No additional notes");
         note.classList.add("is-empty");
       }
 
@@ -165,6 +194,13 @@
       li.appendChild(note);
       list.appendChild(li);
     });
+
+    updateEntriesCount(items.length);
+  }
+
+  function updateEntriesCount(count) {
+    const countEl = document.getElementById("entries-count");
+    if (countEl) countEl.textContent = count;
   }
 
   function applyIntervalState() {
@@ -174,11 +210,23 @@
     const minute = document.getElementById("rem-min");
     const tg = document.getElementById("tg-enabled");
     const email = document.getElementById("email-enabled");
+    const badge = document.getElementById("frequency-badge");
     const disabled = parseInt(el.value || "3", 10) === 0;
     if (hour) hour.disabled = disabled;
     if (minute) minute.disabled = disabled;
     if (tg) tg.disabled = disabled;
     if (email) email.disabled = disabled;
+
+    if (badge) {
+      const intervalText = {
+        "0": gettext("Never"),
+        "1": gettext("Every day"),
+        "3": gettext("Every 3 days"),
+        "7": gettext("Every week"),
+        "14": gettext("Every 2 weeks")
+      }[el.value] || gettext("Every 3 days");
+      badge.textContent = intervalText;
+    }
   }
 
   function openSettings() {
@@ -243,6 +291,11 @@
   function saveEntry() {
     const form = document.getElementById("entry-form");
     if (!form) return Promise.resolve();
+    const scoreInput = document.getElementById("score");
+    if (!scoreInput || !scoreInput.value) {
+      alert(i18n.pleaseSelectScore || gettext("Please select a wellness score"));
+      return Promise.reject("No score selected");
+    }
     const fd = new FormData(form);
     fd.append("date", formatLocalDate());
     return fetch(endpoints.apiEntries, {
@@ -276,33 +329,60 @@
   }
 
   function bindWellnessUI() {
-    document.querySelectorAll("#pane-wellness textarea.autosize").forEach(function (ta) {
-      const resize = () => { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; };
+    document.querySelectorAll("#pane-wellness textarea").forEach(function (ta) {
+      const resize = () => {
+        ta.style.height = "auto";
+        ta.style.height = ta.scrollHeight + "px";
+      };
       ta.addEventListener("input", resize);
       resize();
     });
 
-    const select = document.querySelector("#pane-wellness #score");
-    const btn = document.querySelector("#pane-wellness #score-dd-btn");
-    const label = document.querySelector("#pane-wellness #score-label");
-    const menu = document.querySelector("#pane-wellness #score-dd-menu");
+    initScoreSelector();
+    initChartFilter();
+  }
 
-    function apply(val) {
-      if (!select) return;
-      const v = String(Math.max(1, Math.min(10, parseInt(val || "5", 10))));
-      select.value = v;
-      if (label) label.textContent = v;
-      if (btn) btn.blur();
-      if (menu) menu.querySelectorAll(".dropdown-item").forEach(it => it.classList.toggle("active", it.getAttribute("data-val") === v));
-    }
+  function initScoreSelector() {
+    const options = document.querySelectorAll(".score-option");
+    const hiddenSelect = document.getElementById("score");
+    if (!hiddenSelect || !options.length) return;
 
-    if (menu) {
-      menu.querySelectorAll(".dropdown-item").forEach(it => {
-        it.addEventListener("click", function () { apply(this.getAttribute("data-val")); });
+    function apply(value) {
+      const v = String(Math.max(1, Math.min(10, parseInt(value || "5", 10))));
+      hiddenSelect.value = v;
+      options.forEach(opt => {
+        opt.classList.toggle("active", opt.dataset.value === v);
       });
     }
 
-    if (select) apply(select.value || "5");
+    options.forEach(option => {
+      option.addEventListener("click", () => {
+        apply(option.dataset.value);
+      });
+    });
+
+    apply(hiddenSelect.value || "5");
+  }
+
+  function initChartFilter() {
+    document.querySelectorAll("[data-days]").forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        const days = parseInt(item.dataset.days, 10);
+        if (!Number.isFinite(days)) return;
+        currentDaysFilter = days;
+
+        document.querySelectorAll("[data-days]").forEach(i => {
+          i.closest(".dropdown-item")?.classList.remove("active");
+        });
+        item.closest(".dropdown-item")?.classList.add("active");
+
+        fetchEntries(days).then(d => {
+          const items = d.items || [];
+          renderChart(items);
+        });
+      });
+    });
   }
 
   function initWellness() {
@@ -319,20 +399,32 @@
 
       bindWellnessUI();
 
-      fetchEntries().then(d => {
+      fetchEntries(currentDaysFilter).then(d => {
         const items = d.items || [];
         renderChart(items);
         renderList(items);
       });
 
       const btnSave = document.getElementById("btn-save");
+      const btnSaveMobile = document.getElementById("btn-save-mobile");
       const btnSettings = document.getElementById("btn-settings");
       const btnSaveSettings = document.getElementById("btn-save-settings");
 
       if (btnSave && !btnSave.dataset.bound) {
         btnSave.dataset.bound = "1";
         btnSave.addEventListener("click", () => {
-          saveEntry().then(() => fetchEntries().then(d => {
+          saveEntry().then(() => fetchEntries(currentDaysFilter).then(d => {
+            const items = d.items || [];
+            renderChart(items);
+            renderList(items);
+          }));
+        });
+      }
+
+      if (btnSaveMobile && !btnSaveMobile.dataset.bound) {
+        btnSaveMobile.dataset.bound = "1";
+        btnSaveMobile.addEventListener("click", () => {
+          saveEntry().then(() => fetchEntries(currentDaysFilter).then(d => {
             const items = d.items || [];
             renderChart(items);
             renderList(items);
@@ -426,7 +518,7 @@
       wrap.className = "link-item";
       wrap.innerHTML = `
         <input type="url" class="form-control ext-link" placeholder="${i18n.pasteLink || gettext("Paste link")}" value="${prefill}">
-        <button type="button" class="btn btn-sm btn-outline-danger remove-link-btn" aria-label="${i18n.removeLink || gettext("Remove link")}">✖</button>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-link-btn" aria-label="${i18n.removeLink || gettext("Remove link")}">тЬЦ</button>
       `;
       linkList.appendChild(wrap);
       wrap.querySelector(".remove-link-btn").onclick = () => wrap.remove();
@@ -438,8 +530,8 @@
       div.className = "file-card d-flex justify-content-between align-items-center border p-2 mb-2 rounded";
       div.dataset.name = file.name; div.dataset.size = file.size;
       div.innerHTML = `
-        <span class="me-2">📎 <strong>${file.name}</strong></span>
-        <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || gettext("Remove file")}">✖</button>
+        <span class="me-2">ЁЯУО <strong>${file.name}</strong></span>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-file-btn" data-name="${file.name}" data-size="${file.size}" aria-label="${i18n.removeFile || gettext("Remove file")}">тЬЦ</button>
       `;
       fileList.appendChild(div);
     }
@@ -548,8 +640,8 @@
               const div = document.createElement("div");
               div.className = "file-card d-flex justify-content-between align-items-center border p-2 mb-2 rounded";
               div.innerHTML = `
-                <a href="${doc.url}" target="_blank" class="text-decoration-none me-2" rel="noopener noreferrer">📎 <strong>${doc.name}</strong></a>
-                <button class="btn btn-sm btn-outline-danger remove-existing-file-btn" data-id="${doc.id}" aria-label="${i18n.removeFile || gettext("Remove file")}">✖</button>
+                <a href="${doc.url}" target="_blank" class="text-decoration-none me-2" rel="noopener noreferrer">ЁЯУО <strong>${doc.name}</strong></a>
+                <button class="btn btn-sm btn-outline-danger remove-existing-file-btn" data-id="${doc.id}" aria-label="${i18n.removeFile || gettext("Remove file")}">тЬЦ</button>
               `;
               fileList && fileList.appendChild(div);
             });

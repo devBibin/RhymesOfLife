@@ -384,6 +384,12 @@
   height: var(--header-control-height);
 }
 
+.action-top-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .action-btn {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -573,6 +579,7 @@
     padding: 0;
     gap: 10px;
     margin-bottom: 14px;
+    order: 1;
   }
 
   .nav-item {
@@ -626,11 +633,56 @@
   .action-buttons {
     flex-direction: column;
     width: 100%;
-    padding: 14px 0 0;
+    padding: 0 0 12px;
     margin: 0;
     gap: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     height: auto;
+    order: 0;
+  }
+
+  .action-top-row {
+    width: 100%;
+    gap: 10px;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .action-top-row .user-dropdown {
+    flex: 0 1 calc(100% - 90px);
+    display: block;
+  }
+
+  .action-top-row .lang-switcher-form {
+    flex: 0 0 auto;
+  }
+
+  .action-top-row .lang-switcher {
+    width: 80px;
+    height: 48px;
+    min-height: 48px;
+    min-width: 80px;
+    padding: 0 12px;
+    justify-content: center;
+  }
+
+  .action-top-row .user-dropdown .dropdown-toggle {
+    width: 100%;
+    padding: 10px 10px;
+  }
+
+  .action-top-row .user-dropdown .dropdown-menu {
+    width: 100% !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-top: 8px !important;
+  }
+
+  .action-top-row .user-dropdown .ru-overflow-fix {
+    max-width: 120px;
   }
 
   .action-btn,
@@ -652,6 +704,34 @@
   .user-dropdown .dropdown-toggle {
     justify-content: flex-start;
     gap: 10px;
+  }
+
+  .action-top-row .lang-switcher {
+    width: 80px;
+  }
+
+  .action-top-row .lang-switcher .ru-overflow-fix {
+    overflow: visible;
+    text-overflow: unset;
+    max-width: none;
+  }
+
+  .nav-container .action-buttons .dropdown-menu,
+  .nav-container .action-buttons .dropdown-menu-end,
+  .nav-container .action-buttons .dropdown-menu-start,
+  .nav-container .action-buttons .user-dropdown .dropdown-menu {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 8px 0 0 !important;
+    left: auto !important;
+    right: auto !important;
+  }
+
+  .nav-container .action-buttons .user-dropdown {
+    position: static !important;
   }
 
   .logo-main { font-size: 1.1rem; }

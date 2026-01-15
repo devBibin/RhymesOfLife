@@ -69,7 +69,9 @@ def send_notification_multichannel(
     email_body: str | None = None,
 ) -> dict:
     created = None
+    payload = dict(payload or {})
     if via_site:
+        payload["skip_telegram"] = True
         created = Notification.objects.create(
             recipient=recipient,
             sender=sender,
@@ -77,7 +79,7 @@ def send_notification_multichannel(
             title=title,
             message=message,
             url=url,
-            payload=payload or {},
+            payload=payload,
             source=source,
             scope=scope,
         )

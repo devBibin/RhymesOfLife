@@ -30,13 +30,14 @@
 
           <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>
 
-          {% if page.tags.all %}
-            <div class="rl-card__tags" aria-label="{% trans 'Tags' %}">
-              {% for tag in page.tags.all %}
-                <span class="rl-tag">{{ tag.name }}</span>
-              {% endfor %}
-            </div>
-          {% endif %}
+          {# Tags disabled for now #}
+          {# {% if page.tags.all %} #}
+          {#   <div class="rl-card__tags" aria-label="{% trans 'Tags' %}"> #}
+          {#     {% for tag in page.tags.all %} #}
+          {#       <span class="rl-tag">{{ tag.name }}</span> #}
+          {#     {% endfor %} #}
+          {#   </div> #}
+          {# {% endif %} #}
 
           <div class="rl-card__meta">
             <div class="rl-author">
@@ -98,13 +99,14 @@
 
           <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>
 
-          {% if page.tags.all %}
-            <div class="rl-card__tags" aria-label="{% trans 'Tags' %}">
-              {% for tag in page.tags.all %}
-                <span class="rl-tag">{{ tag.name }}</span>
-              {% endfor %}
-            </div>
-          {% endif %}
+          {# Tags disabled for now #}
+          {# {% if page.tags.all %} #}
+          {#   <div class="rl-card__tags" aria-label="{% trans 'Tags' %}"> #}
+          {#     {% for tag in page.tags.all %} #}
+          {#       <span class="rl-tag">{{ tag.name }}</span> #}
+          {#     {% endfor %} #}
+          {#   </div> #}
+          {# {% endif %} #}
 
           <div class="rl-card__meta">
             <div class="rl-author">

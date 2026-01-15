@@ -109,11 +109,15 @@ def decide_access_request_view(request, request_id: int):
 
     if action == "approve":
         req.status = PatientAccessRequest.Status.APPROVED
-        message = _("Your access request was approved.")
+        message = _(
+            "Your access request was approved. You can now view the patient's exams and medical documents."
+        )
         notif_type = "ACCESS_GRANTED"
     else:
         req.status = PatientAccessRequest.Status.DENIED
-        message = _("Your access request was denied.")
+        message = _(
+            "Your access request was denied. You don't have access to the patient's exams and medical documents."
+        )
         notif_type = "ACCESS_DENIED"
 
     req.decided_at = timezone.now()
