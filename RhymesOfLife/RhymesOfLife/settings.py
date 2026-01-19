@@ -163,34 +163,30 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Email (Yandex SMTP)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = "smtp.yandex.ru"
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_USE_TLS = False
+EMAIL_HOST = environment.get("EMAIL_HOST", "smtp.yandex.ru")
+
+# Recommended: 587 + STARTTLS
+EMAIL_PORT = int(environment.get("EMAIL_PORT", 587))
+EMAIL_USE_TLS = bool(environment.get("EMAIL_USE_TLS", True))
+EMAIL_USE_SSL = bool(environment.get("EMAIL_USE_SSL", False))
 
 EMAIL_HOST_USER = environment["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = environment["EMAIL_HOST_PASSWORD"]
 
-DEFAULT_FROM_EMAIL = environment.get(
-    "DEFAULT_FROM_EMAIL",
-    f"Rhymes of Life <{EMAIL_HOST_USER}>",
-)
+DEFAULT_FROM_EMAIL = environment.get("DEFAULT_FROM_EMAIL", f"Rhymes of Life <{EMAIL_HOST_USER}>")
+SERVER_EMAIL = environment.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
 
-SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# Optional timeouts (helps with some providers)
+EMAIL_TIMEOUT = int(environment.get("EMAIL_TIMEOUT", 20))
 
 
+# Legacy Mailgun settings (not used when EMAIL_BACKEND is SMTP)
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
 MAILGUN_URL = environment.get("MAILGUN_URL")
 MAILGUN_MAIL_DOAMIN = environment.get("MAILGUN_MAIL_DOAMIN")
-
-DEFAULT_FROM_EMAIL = environment.get(
-    "DEFAULT_FROM_EMAIL",
-    f"Rhymes of Life <{EMAIL_HOST_USER}>",
-)
-
-SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 PASSWORD_RESET_CODE_LENGTH = 6
 PASSWORD_RESET_CODE_TTL_MIN = 15
