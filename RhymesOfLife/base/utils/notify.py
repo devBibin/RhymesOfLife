@@ -42,6 +42,7 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
         return False
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com")
     try:
+        log.info("email.notify.prepare user_info_id=%s to=%s subject=%s", info.id, email, subject)
         with override(info.language or "en"):
             s = str(subject)
             b = str(body)
@@ -51,7 +52,8 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
             "text": b,
             "from_email": from_email,
         }))
-    except Exception:
+    except Exception as exc:
+        log.error("email.notify.failed user_info_id=%s to=%s error=%s", info.id, email, exc)
         return False
 
 

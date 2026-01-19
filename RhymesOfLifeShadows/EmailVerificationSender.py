@@ -46,6 +46,7 @@ class EmailVerificationSender:
 
     def send_verification(self, info):
         user = info.user
+        self.logger.info("email.verify.prepare user_id=%s email=%s", user.id, user.email)
         verify_link = self.generate_verification_link(info)
 
         subject = _("Email verification")
@@ -70,6 +71,12 @@ class EmailVerificationSender:
         method_name = self.PROVIDERS.get(self.provider)
         if not method_name:
             raise ValueError("Unsupported email provider")
+        self.logger.info(
+            "email.send provider=%s to=%s subject=%s",
+            self.provider,
+            payload.get("to"),
+            payload.get("subject"),
+        )
         return getattr(self, method_name)(payload)
 
     def _send_via_smtp(self, payload: dict):

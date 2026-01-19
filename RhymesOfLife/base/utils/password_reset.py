@@ -67,6 +67,7 @@ def send_code_email(user: User, code: str) -> None:
     html = render_to_string("emails/password_reset_code.html", {"code": code, "ttl": ttl, "user": user})
 
     from_email = getattr(settings, "EMAIL_HOST_USER", None) or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+    log.info("email.password_reset.prepare user_id=%s email=%s", user.id, user.email)
     send_email({
         "to": user.email,
         "subject": subject,

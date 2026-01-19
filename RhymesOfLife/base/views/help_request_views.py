@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -20,6 +21,8 @@ import re
 from ..models import HelpRequest, MedicationEntry, get_syndrome_choices
 from ..utils.decorators import permission_or_staff_required
 from ..utils.email_sender import send_email
+
+log = logging.getLogger(__name__)
 
 TG_RE = re.compile(r"^@?[A-Za-z0-9_]{5,32}$")
 PER_PAGE = 10
@@ -215,13 +218,15 @@ def _send_help_request_copy(item: HelpRequest) -> None:
     body = "\n".join(lines)
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com")
     try:
+        log.info("email.help_request.prepare request_id=%s to=%s", item.id, to_addr)
         send_email({
             "to": to_addr,
             "subject": subject,
             "text": body,
             "from_email": from_email,
         })
-    except Exception:
+    except Exception as exc:
+        log.error("email.help_request.failed request_id=%s to=%s error=%s", item.id, to_addr, exc)
         pass
 
 
