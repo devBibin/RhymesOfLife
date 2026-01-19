@@ -76,7 +76,8 @@ class EmailVerificationSender:
         from django.core.mail import EmailMultiAlternatives
 
         from_email = (
-            getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            payload.get("from_email")
+            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
             or getattr(settings, "EMAIL_HOST_USER", None)
         )
 
@@ -107,7 +108,8 @@ class EmailVerificationSender:
         client = self._postbox_client()
 
         from_email = (
-            getattr(settings, "POSTBOX_FROM_EMAIL", None)
+            payload.get("from_email")
+            or getattr(settings, "POSTBOX_FROM_EMAIL", None)
             or getattr(settings, "DEFAULT_FROM_EMAIL", None)
         )
 
