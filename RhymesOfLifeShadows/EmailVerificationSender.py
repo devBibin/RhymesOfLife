@@ -1,6 +1,7 @@
 from urllib.parse import urljoin
 
 from django.conf import settings
+import boto3
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -95,10 +96,6 @@ class EmailVerificationSender:
         return True
 
     def _postbox_client(self):
-        try:
-            import boto3
-        except ModuleNotFoundError as exc:
-            raise RuntimeError("boto3 is required for postbox_api provider") from exc
         return boto3.client(
             "sesv2",
             region_name=settings.POSTBOX_REGION,
