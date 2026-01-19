@@ -188,6 +188,8 @@ POSTBOX_SECRET_ACCESS_KEY = environment.get("POSTBOX_SECRET_ACCESS_KEY")
 POSTBOX_REGION = environment.get("POSTBOX_REGION", "ru-central1")
 POSTBOX_ENDPOINT = environment.get("POSTBOX_ENDPOINT", "https://postbox.cloud.yandex.net")
 POSTBOX_FROM_EMAIL = environment.get("POSTBOX_FROM_EMAIL")
+EMAIL_PROVIDER = environment.get("EMAIL_PROVIDER", "postbox_api")
+
 
 
 # Legacy Mailgun settings (not used when EMAIL_BACKEND is SMTP)

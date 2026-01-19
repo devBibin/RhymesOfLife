@@ -197,9 +197,11 @@ def _send_help_request_copy(item: HelpRequest) -> None:
     to_addr = "dst@bfastra.ru"
     subject = f"Help request #{item.id}"
     base_url = (getattr(settings, "BASE_URL", "") or "").rstrip("/")
+
     profile_url = ""
     if item.user and base_url:
         profile_url = f"{base_url}/u/{item.user.username}/"
+
     lines = [
         f"Name: {item.name or '-'}",
         f"Email: {item.email or '-'}",
@@ -216,18 +218,21 @@ def _send_help_request_copy(item: HelpRequest) -> None:
         item.message or "-",
     ]
     body = "\n".join(lines)
+
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com")
-    try:
-        log.info("email.help_request.prepare request_id=%s to=%s", item.id, to_addr)
-        send_email({
+
+    log.info("email.help_request.prepare request_id=%s to=%s", item.id, to_addr)
+    ok = send_email(
+        {
             "to": to_addr,
             "subject": subject,
             "text": body,
             "from_email": from_email,
-        })
-    except Exception as exc:
-        log.error("email.help_request.failed request_id=%s to=%s error=%s", item.id, to_addr, exc)
-        pass
+        },
+        logger=log,
+    )
+    if not ok:
+        log.warning("email.help_request.failed request_id=%s to=%s", item.id, to_addr)
 
 
 @login_required
