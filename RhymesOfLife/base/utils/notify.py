@@ -1,10 +1,10 @@
 import logging
 import requests
 from django.conf import settings
-from django.core.mail import send_mail
 from django.utils.translation import gettext as _
 from django.utils.translation import override
 from base.models import Notification, AdditionalUserInfo
+from .email_sender import send_email
 
 log = logging.getLogger(__name__)
 
@@ -45,7 +45,12 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
         with override(info.language or "en"):
             s = str(subject)
             b = str(body)
-        return send_mail(s, b, from_email, [email], fail_silently=True) > 0
+        return bool(send_email({
+            "to": email,
+            "subject": s,
+            "text": b,
+            "from_email": from_email,
+        }))
     except Exception:
         return False
 

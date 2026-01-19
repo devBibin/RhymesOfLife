@@ -1,6 +1,5 @@
 from datetime import datetime
 from django.conf import settings
-from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -20,6 +19,7 @@ import re
 
 from ..models import HelpRequest, MedicationEntry, get_syndrome_choices
 from ..utils.decorators import permission_or_staff_required
+from ..utils.email_sender import send_email
 
 TG_RE = re.compile(r"^@?[A-Za-z0-9_]{5,32}$")
 PER_PAGE = 10
@@ -215,7 +215,12 @@ def _send_help_request_copy(item: HelpRequest) -> None:
     body = "\n".join(lines)
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com")
     try:
-        send_mail(subject, body, from_email, [to_addr], fail_silently=True)
+        send_email({
+            "to": to_addr,
+            "subject": subject,
+            "text": body,
+            "from_email": from_email,
+        })
     except Exception:
         pass
 
