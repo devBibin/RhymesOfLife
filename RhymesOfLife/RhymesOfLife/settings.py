@@ -182,6 +182,13 @@ SERVER_EMAIL = environment.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
 # Optional timeouts (helps with some providers)
 EMAIL_TIMEOUT = int(environment.get("EMAIL_TIMEOUT", 20))
 
+#
+POSTBOX_ACCESS_KEY_ID = environment.get("POSTBOX_ACCESS_KEY_ID")
+POSTBOX_SECRET_ACCESS_KEY = environment.get("POSTBOX_SECRET_ACCESS_KEY")
+POSTBOX_REGION = environment.get("POSTBOX_REGION", "ru-central1")
+POSTBOX_ENDPOINT = environment.get("POSTBOX_ENDPOINT", "https://postbox.cloud.yandex.net")
+POSTBOX_FROM_EMAIL = environment.get("POSTBOX_FROM_EMAIL")
+
 
 # Legacy Mailgun settings (not used when EMAIL_BACKEND is SMTP)
 MAILGUN_API_TOKEN = environment.get("MAILGUN_API_TOKEN")
