@@ -59,22 +59,33 @@ def create_reset_code(user: User, channel: str, ip: Optional[str] = None, ua: Op
 
 
 def send_code_email(user: User, code: str) -> None:
+    if not getattr(user, "email", None):
+        log.warning("email.password_reset.skip user_id=%s reason=no_email", user.id)
+        return
+
     ttl = int(getattr(settings, "PASSWORD_RESET_CODE_TTL_MIN", 15))
     subject = _("Password reset code")
     text = _("Your password reset code is %(code)s. It expires in %(minutes)s minutes.") % {
-        "code": code, "minutes": ttl,
+        "code": code,
+        "minutes": ttl,
     }
     html = render_to_string("emails/password_reset_code.html", {"code": code, "ttl": ttl, "user": user})
 
-    from_email = getattr(settings, "EMAIL_HOST_USER", None) or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "no-reply@example.com"
+
     log.info("email.password_reset.prepare user_id=%s email=%s", user.id, user.email)
-    send_email({
-        "to": user.email,
-        "subject": subject,
-        "text": text,
-        "html": html,
-        "from_email": from_email,
-    })
+    ok = send_email(
+        {
+            "to": user.email,
+            "subject": subject,
+            "text": text,
+            "html": html,
+            "from_email": from_email,
+        },
+        logger=log,
+    )
+    if not ok:
+        log.warning("email.password_reset.failed user_id=%s email=%s", user.id, user.email)
 
 
 def send_code_telegram(user: User, code: str) -> None:
