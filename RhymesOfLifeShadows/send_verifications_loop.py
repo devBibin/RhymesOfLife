@@ -1,9 +1,11 @@
 import time
 import signal
+import traceback
 
-from .EmailVerificationSender import EmailVerificationSender
-from .create_log import create_log
+from orm_connector import settings
+from RhymesOfLifeShadows.EmailVerificationSender import EmailVerificationSender
 from base.models import AdditionalUserInfo
+from RhymesOfLifeShadows.create_log import create_log
 
 log = create_log("verification.log", "EmailSender")
 
