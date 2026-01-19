@@ -1,8 +1,8 @@
 import time
 import signal
 
-from RhymesOfLifeShadows.EmailVerificationSender import EmailVerificationSender
-from RhymesOfLifeShadows.create_log import create_log
+from .EmailVerificationSender import EmailVerificationSender
+from .create_log import create_log
 from base.models import AdditionalUserInfo
 
 log = create_log("verification.log", "EmailSender")
