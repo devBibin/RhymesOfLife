@@ -40,8 +40,6 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
         log.warning("email.notify.skip user_info_id=%s reason=no_email", info.id)
         return False
 
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "no-reply@example.com"
-
     try:
         with override(info.language or "en"):
             s = str(subject)
@@ -54,7 +52,6 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
                     "to": email,
                     "subject": s,
                     "text": b,
-                    "from_email": from_email,
                 },
                 logger=log,
             )
