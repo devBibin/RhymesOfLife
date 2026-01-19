@@ -71,8 +71,6 @@ def send_code_email(user: User, code: str) -> None:
     }
     html = render_to_string("emails/password_reset_code.html", {"code": code, "ttl": ttl, "user": user})
 
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None) or "no-reply@example.com"
-
     log.info("email.password_reset.prepare user_id=%s email=%s", user.id, user.email)
     ok = send_email(
         {
@@ -80,7 +78,6 @@ def send_code_email(user: User, code: str) -> None:
             "subject": subject,
             "text": text,
             "html": html,
-            "from_email": from_email,
         },
         logger=log,
     )

@@ -219,15 +219,12 @@ def _send_help_request_copy(item: HelpRequest) -> None:
     ]
     body = "\n".join(lines)
 
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@example.com")
-
     log.info("email.help_request.prepare request_id=%s to=%s", item.id, to_addr)
     ok = send_email(
         {
             "to": to_addr,
             "subject": subject,
             "text": body,
-            "from_email": from_email,
         },
         logger=log,
     )

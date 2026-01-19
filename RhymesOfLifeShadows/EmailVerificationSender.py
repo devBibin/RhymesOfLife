@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 from urllib.parse import urljoin
 
 from django.conf import settings
-import boto3
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -17,7 +18,7 @@ class EmailVerificationSender:
     }
 
     def __init__(self, provider: str = "postbox_api", logger=None):
-        self.provider = provider
+        self.provider = (provider or "postbox_api").strip().lower()
         self.logger = logger or self._default_logger()
 
     def _default_logger(self):
@@ -46,7 +47,7 @@ class EmailVerificationSender:
 
     def send_verification(self, info):
         user = info.user
-        self.logger.info("email.verify.prepare user_id=%s email=%s", user.id, user.email)
+        self.logger.info("email.verify.prepare user_id=%s email=%s", user.id, getattr(user, "email", None))
         verify_link = self.generate_verification_link(info)
 
         subject = _("Email verification")
@@ -54,10 +55,7 @@ class EmailVerificationSender:
             username=user.username,
             link=verify_link,
         )
-        html = render_to_string(
-            "emails/verify_email.html",
-            {"user": user, "verify_link": verify_link},
-        )
+        html = render_to_string("emails/verify_email.html", {"user": user, "verify_link": verify_link})
 
         payload = {
             "to": user.email,
@@ -71,11 +69,12 @@ class EmailVerificationSender:
         method_name = self.PROVIDERS.get(self.provider)
         if not method_name:
             raise ValueError("Unsupported email provider")
+
         self.logger.info(
             "email.send provider=%s to=%s subject=%s",
             self.provider,
             payload.get("to"),
-            payload.get("subject"),
+            str(payload.get("subject"))[:160] if payload.get("subject") is not None else "",
         )
         return getattr(self, method_name)(payload)
 
@@ -89,26 +88,58 @@ class EmailVerificationSender:
         )
 
         msg = EmailMultiAlternatives(
-            payload["subject"],
-            payload["text"],
+            str(payload.get("subject") or ""),
+            str(payload.get("text") or ""),
             from_email,
-            [payload["to"]],
+            [str(payload.get("to") or "")],
         )
 
         if payload.get("html"):
-            msg.attach_alternative(payload["html"], "text/html")
+            msg.attach_alternative(str(payload["html"]), "text/html")
 
         msg.send(fail_silently=False)
-        self.logger.info("email.sent.smtp to=%s", payload["to"])
+        self.logger.info("email.sent.smtp to=%s", payload.get("to"))
         return True
 
     def _postbox_client(self):
+        try:
+            import boto3
+            from botocore.config import Config
+        except ModuleNotFoundError as exc:
+            raise RuntimeError("boto3 is required for postbox_api provider") from exc
+        access_key = getattr(settings, "POSTBOX_ACCESS_KEY_ID", None)
+        secret_key = getattr(settings, "POSTBOX_SECRET_ACCESS_KEY", None)
+        region = getattr(settings, "POSTBOX_REGION", None) or "ru-central1"
+        endpoint = getattr(settings, "POSTBOX_ENDPOINT", None) or "https://postbox.cloud.yandex.net"
+
+        has_access = bool(access_key)
+        has_secret = bool(secret_key)
+
+        self.logger.info(
+            "postbox.client.config region=%s endpoint=%s has_access_key=%s has_secret_key=%s",
+            region,
+            endpoint,
+            has_access,
+            has_secret,
+        )
+
+        if not has_access or not has_secret:
+            raise RuntimeError("Postbox credentials are missing in settings (POSTBOX_ACCESS_KEY_ID/POSTBOX_SECRET_ACCESS_KEY)")
+
+        cfg = Config(
+            region_name=region,
+            retries={"max_attempts": 5, "mode": "standard"},
+            connect_timeout=10,
+            read_timeout=20,
+        )
+
         return boto3.client(
             "sesv2",
-            region_name=settings.POSTBOX_REGION,
-            endpoint_url=settings.POSTBOX_ENDPOINT,
-            aws_access_key_id=settings.POSTBOX_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.POSTBOX_SECRET_ACCESS_KEY,
+            region_name=region,
+            endpoint_url=endpoint,
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
+            config=cfg,
         )
 
     def _send_via_postbox_api(self, payload: dict):
@@ -119,33 +150,45 @@ class EmailVerificationSender:
             or getattr(settings, "POSTBOX_FROM_EMAIL", None)
             or getattr(settings, "DEFAULT_FROM_EMAIL", None)
         )
-
         if not from_email:
-            raise ValueError("POSTBOX_FROM_EMAIL is not configured")
+            raise RuntimeError("POSTBOX_FROM_EMAIL is not configured (and no from_email provided)")
+
+        to_addr = str(payload.get("to") or "").strip()
+        subject = str(payload.get("subject") or "").strip()
+        text = str(payload.get("text") or "")
+        html = payload.get("html")
+        html = str(html) if html is not None else None
 
         body = {}
-        if payload.get("text"):
-            body["Text"] = {"Data": payload["text"], "Charset": "UTF-8"}
-        if payload.get("html"):
-            body["Html"] = {"Data": payload["html"], "Charset": "UTF-8"}
+        if text.strip():
+            body["Text"] = {"Data": text, "Charset": "UTF-8"}
+        if html and html.strip():
+            body["Html"] = {"Data": html, "Charset": "UTF-8"}
+
+        self.logger.info(
+            "postbox.send.prepare to=%s from=%s subject=%s",
+            to_addr,
+            str(from_email),
+            subject[:160],
+        )
 
         response = client.send_email(
-            FromEmailAddress=from_email,
-            Destination={"ToAddresses": [payload["to"]]},
+            FromEmailAddress=str(from_email),
+            Destination={"ToAddresses": [to_addr]},
             Content={
                 "Simple": {
-                    "Subject": {
-                        "Data": payload["subject"],
-                        "Charset": "UTF-8",
-                    },
+                    "Subject": {"Data": subject, "Charset": "UTF-8"},
                     "Body": body,
                 }
             },
         )
 
-        self.logger.info(
-            "email.sent.postbox_api to=%s message_id=%s",
-            payload["to"],
-            response.get("MessageId"),
-        )
+        msg_id = response.get("MessageId") if isinstance(response, dict) else None
+        req_id = None
+        try:
+            req_id = response.get("ResponseMetadata", {}).get("RequestId")
+        except Exception:
+            req_id = None
+
+        self.logger.info("postbox.send.ok to=%s message_id=%s request_id=%s", to_addr, msg_id or "-", req_id or "-")
         return True
