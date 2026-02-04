@@ -354,3 +354,9 @@ msgstr "Закрыть"
 
 #~ msgid "Success"
 #~ msgstr "Успешно"
+
+msgid "Editing entry for %(date)s"
+msgstr "Редактирование записи от %(date)s"
+
+msgid "Save changes"
+msgstr "Сохранить изменения"

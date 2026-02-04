@@ -179,6 +179,28 @@
       score.className = "entry-score";
       score.textContent = `${i18n.score || gettext("Score")}: ${e.score}`;
 
+      const actions = document.createElement("div");
+      actions.className = "entry-actions";
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "btn btn-sm btn-outline-secondary entry-edit-btn";
+      editBtn.setAttribute("aria-label", i18n.edit || gettext("Edit"));
+      editBtn.setAttribute("title", i18n.edit || gettext("Edit"));
+      editBtn.dataset.id = e.id;
+      editBtn.dataset.date = e.date;
+      editBtn.dataset.score = e.score;
+      editBtn.dataset.note = e.note || "";
+      editBtn.innerHTML = '<i class="bi bi-pencil"></i>';
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "btn btn-sm btn-outline-danger entry-delete-btn";
+      delBtn.setAttribute("aria-label", i18n.delete || gettext("Delete"));
+      delBtn.setAttribute("title", i18n.delete || gettext("Delete"));
+      delBtn.dataset.id = e.id;
+      delBtn.innerHTML = '<i class="bi bi-trash3"></i>';
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+
       const note = document.createElement("div");
       note.className = "entry-note text-break";
       if (e.note) {
@@ -190,6 +212,7 @@
 
       meta.appendChild(date);
       meta.appendChild(score);
+      meta.appendChild(actions);
       li.appendChild(meta);
       li.appendChild(note);
       list.appendChild(li);
@@ -297,7 +320,9 @@
       return Promise.reject("No score selected");
     }
     const fd = new FormData(form);
-    fd.append("date", formatLocalDate());
+    const dateInput = document.getElementById("entry-date");
+    const dateVal = (dateInput && dateInput.value) ? dateInput.value : formatLocalDate();
+    fd.set("date", dateVal);
     return fetch(endpoints.apiEntries, {
       method: "POST",
       headers: { "X-Requested-With": "XMLHttpRequest", "X-CSRFToken": getCsrfToken() },
@@ -340,6 +365,61 @@
 
     initScoreSelector();
     initChartFilter();
+  }
+
+  function setEditState(entry) {
+    const dateInput = document.getElementById("entry-date");
+    const noteInput = document.getElementById("note");
+    const banner = document.getElementById("edit-banner");
+    const bannerText = document.getElementById("edit-banner-text");
+    const btnSave = document.getElementById("btn-save");
+    const btnSaveMobile = document.getElementById("btn-save-mobile");
+    if (!dateInput || !banner) return;
+    if (!entry) {
+      dateInput.value = "";
+      banner.classList.add("d-none");
+      return;
+    }
+    dateInput.value = entry.date || "";
+    if (noteInput) noteInput.value = entry.note || "";
+    if (noteInput) noteInput.dispatchEvent(new Event("input"));
+    if (bannerText) {
+      const tpl = i18n.editingEntry || gettext("Editing entry for %(date)s");
+      bannerText.textContent = tpl.replace("%(date)s", entry.date || "");
+    }
+    banner.classList.remove("d-none");
+    const scoreInput = document.getElementById("score");
+    if (scoreInput) scoreInput.value = String(entry.score || 5);
+    initScoreSelector();
+    if (btnSave) {
+      btnSave.dataset.defaultText = btnSave.dataset.defaultText || btnSave.textContent;
+      btnSave.innerHTML = i18n.saveChanges || gettext("Save changes");
+    }
+    if (btnSaveMobile) {
+      btnSaveMobile.dataset.defaultText = btnSaveMobile.dataset.defaultText || btnSaveMobile.textContent;
+      btnSaveMobile.innerHTML = i18n.saveChanges || gettext("Save changes");
+    }
+    document.getElementById("entry-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function clearEditState() {
+    const banner = document.getElementById("edit-banner");
+    const dateInput = document.getElementById("entry-date");
+    const noteInput = document.getElementById("note");
+    const scoreInput = document.getElementById("score");
+    const btnSave = document.getElementById("btn-save");
+    const btnSaveMobile = document.getElementById("btn-save-mobile");
+    if (dateInput) dateInput.value = "";
+    if (noteInput) noteInput.value = "";
+    if (scoreInput) scoreInput.value = "5";
+    initScoreSelector();
+    if (banner) banner.classList.add("d-none");
+    if (btnSave && btnSave.dataset.defaultText) {
+      btnSave.innerHTML = btnSave.dataset.defaultText;
+    }
+    if (btnSaveMobile && btnSaveMobile.dataset.defaultText) {
+      btnSaveMobile.innerHTML = btnSaveMobile.dataset.defaultText;
+    }
   }
 
   function initScoreSelector() {
@@ -409,6 +489,8 @@
       const btnSaveMobile = document.getElementById("btn-save-mobile");
       const btnSettings = document.getElementById("btn-settings");
       const btnSaveSettings = document.getElementById("btn-save-settings");
+      const btnCancelEdit = document.getElementById("btn-cancel-edit");
+      const entriesList = document.getElementById("entries-list");
 
       if (btnSave && !btnSave.dataset.bound) {
         btnSave.dataset.bound = "1";
@@ -417,6 +499,7 @@
             const items = d.items || [];
             renderChart(items);
             renderList(items);
+            clearEditState();
           }));
         });
       }
@@ -428,6 +511,7 @@
             const items = d.items || [];
             renderChart(items);
             renderList(items);
+            clearEditState();
           }));
         });
       }
@@ -450,6 +534,54 @@
       if (intervalSelect && !intervalSelect.dataset.bound) {
         intervalSelect.dataset.bound = "1";
         intervalSelect.addEventListener("change", applyIntervalState);
+      }
+
+      if (btnCancelEdit && !btnCancelEdit.dataset.bound) {
+        btnCancelEdit.dataset.bound = "1";
+        btnCancelEdit.addEventListener("click", () => {
+          clearEditState();
+        });
+      }
+
+      if (entriesList && !entriesList.dataset.bound) {
+        entriesList.dataset.bound = "1";
+        entriesList.addEventListener("click", (e) => {
+          const editBtn = e.target.closest(".entry-edit-btn");
+          const delBtn = e.target.closest(".entry-delete-btn");
+          if (editBtn) {
+            setEditState({
+              id: editBtn.dataset.id,
+              date: editBtn.dataset.date,
+              score: parseInt(editBtn.dataset.score || "5", 10),
+              note: editBtn.dataset.note || ""
+            });
+            return;
+          }
+          if (delBtn) {
+            const id = delBtn.dataset.id;
+            if (!id) return;
+            if (!confirm(i18n.deleteEntryQ || gettext("Delete this entry?"))) return;
+            fetch(`${endpoints.apiEntries}?id=${encodeURIComponent(id)}`, {
+              method: "DELETE",
+              headers: { "X-CSRFToken": getCsrfToken(), "X-Requested-With": "XMLHttpRequest" },
+              credentials: "same-origin"
+            })
+            .then(r => r.json())
+            .then(j => {
+              if (j.status === "ok") {
+                fetchEntries(currentDaysFilter).then(d => {
+                  const items = d.items || [];
+                  renderChart(items);
+                  renderList(items);
+                  clearEditState();
+                });
+              } else {
+                alert(j.message || i18n.deletionFailed || gettext("Deletion failed."));
+              }
+            })
+            .catch(() => alert(i18n.networkError || gettext("Network error.")));
+          }
+        });
       }
     });
   }

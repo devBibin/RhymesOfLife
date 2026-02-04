@@ -361,6 +361,12 @@
   transition: all 0.2s ease;
 }
 
+.entry-actions {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .entry-score:hover {
   background: var(--mh-accent);
   color: white;
@@ -445,6 +451,10 @@
   .score-visual {
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+
+  .score-labels {
+    display: none;
   }
 
   .score-option {

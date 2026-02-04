@@ -124,3 +124,6 @@ msgstr ""
 #: static/js/post_menu.js:8
 msgid "Link copied"
 msgstr ""
+
+msgid "Editing entry for %(date)s"
+msgstr "Editing entry for %(date)s"
