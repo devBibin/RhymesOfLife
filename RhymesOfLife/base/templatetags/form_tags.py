@@ -80,3 +80,12 @@ def call_method(bound_method, arg):
 @register.filter
 def get_item(d, key):
     return d.get(key, [])
+
+
+@register.filter
+def split_csv(value):
+    try:
+        parts = [p.strip() for p in (value or "").split(",")]
+        return [p for p in parts if p]
+    except Exception:
+        return []

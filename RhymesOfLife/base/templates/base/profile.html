@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static i18n avatar_tags %}
+{% load static i18n avatar_tags form_tags %}
 
 {% block extra_css %}
 <style>
@@ -111,12 +111,15 @@
 
           <div class="col-12 profile-section">
             <strong class="d-block mb-2">{% trans "Syndromes" %}</strong>
-            {% if info.syndromes %}
+            {% if info.syndromes or info.syndromes_other %}
               <div class="badges-flow">
                 {% for code,label in syndrome_choices %}
                   {% if code in info.syndromes %}
                     <span class="badge-cloud">{{ label }}</span>
                   {% endif %}
+                {% endfor %}
+                {% for name in info.syndromes_other|split_csv %}
+                  <span class="badge-cloud">{{ name }}</span>
                 {% endfor %}
               </div>
             {% else %}

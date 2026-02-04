@@ -60,9 +60,14 @@ def _prefill_contact(user):
         bd = getattr(info, "birth_date", None)
         data["birth_date"] = bd.strftime("%Y-%m-%d") if bd else ""
         codes = list(getattr(info, "confirmed_syndromes", []) or getattr(info, "syndromes", []) or [])
-        if codes:
-            label_map = {c: l for c, l in get_syndrome_choices()}
-            data["syndrome"] = ", ".join(label_map.get(c, c) for c in codes)
+        custom = (getattr(info, "syndromes_other", "") or "").strip()
+        if codes or custom:
+            # Cast lazy translations to str before join.
+            label_map = {c: str(l) for c, l in get_syndrome_choices()}
+            labels = [label_map.get(c, str(c)) for c in codes]
+            if custom:
+                labels.append(custom)
+            data["syndrome"] = ", ".join(labels)
         meds = MedicationEntry.objects.filter(user_info=info).order_by("-created_at").values_list("description", flat=True)
         data["medications"] = "\n".join(meds)
     if info and getattr(info, "telegram_account", None):

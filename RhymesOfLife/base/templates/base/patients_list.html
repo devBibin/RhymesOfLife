@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n form_tags %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
@@ -62,13 +62,16 @@
               {{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})
             </div>
             <div class="mt-1">
-              {% if info.confirmed_syndromes %}
+              {% if info.confirmed_syndromes or info.syndromes_other %}
                 {% for code in info.confirmed_syndromes %}
                   {% for c,l in syndrome_choices %}
                     {% if c == code %}
                       <span class="badge badge-soft rounded-pill me-1">{{ l }}</span>
                     {% endif %}
                   {% endfor %}
+                {% endfor %}
+                {% for name in info.syndromes_other|split_csv %}
+                  <span class="badge badge-soft rounded-pill me-1">{{ name }}</span>
                 {% endfor %}
               {% else %}
                 <span class="text-muted small">{% trans "No genetically confirmed syndromes" %}</span>

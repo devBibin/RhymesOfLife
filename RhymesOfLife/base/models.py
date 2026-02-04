@@ -149,6 +149,7 @@ class AdditionalUserInfo(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
     confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
+    syndromes_other = models.CharField(max_length=255, blank=True, default="")
     birth_date = models.DateField(blank=True, null=True)
     about_me = models.TextField(blank=True, validators=[MaxLengthValidator(250)])
     is_verified = models.BooleanField(default=False, db_index=True)
