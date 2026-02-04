@@ -1,5 +1,5 @@
 {% load i18n static %}
-<link rel="stylesheet" href="{% static 'css/new_styles.css' %}
+<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
 <div class="section-head">
   <h2 class="section-title">
@@ -27,8 +27,11 @@
             id="medication_description"
             class="form-control"
             maxlength="255"
-            placeholder="{% trans 'e.g. Pregabalin 75 mg daily' %}"
+            placeholder="{% trans 'e.g. Pregabalin 75 mg' %}"
             required>
+          <div class="form-text text-break">
+            {% trans "Example: Pregabalin 75 mg daily" %}
+          </div>
           <div class="invalid-feedback">
             {% trans "Please enter a medication description." %}
           </div>
