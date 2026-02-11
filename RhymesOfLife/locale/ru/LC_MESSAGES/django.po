@@ -2051,7 +2051,7 @@ msgstr "Отмена"
 
 #: base/templates/base/partials/health_wellness.html:105
 msgid "Clear"
-msgstr "Отчистить"
+msgstr "Очистить"
 
 #: base/templates/base/partials/health_wellness.html:108
 msgid "Save Today's Entry"
