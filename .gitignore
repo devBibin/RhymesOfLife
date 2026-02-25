@@ -177,3 +177,7 @@ media/
 
 #local vscode settings
 .vscode/
+
+RhymesOfLifeShadows/logs/
+staticfiles/
+*.pem
