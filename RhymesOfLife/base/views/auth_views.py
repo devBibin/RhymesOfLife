@@ -7,7 +7,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -37,6 +39,7 @@ except Exception:
 
 log = get_app_logger(__name__)
 seclog = get_security_logger()
+username_validator = ASCIIUsernameValidator()
 
 
 def _apply_user_language(request, user):
@@ -51,6 +54,10 @@ def _validate_signup_input(username: str, email: str, password1: str, password2:
         return _("Please fill in all fields.")
     if password1 != password2:
         return _("Passwords don't match.")
+    try:
+        username_validator(username)
+    except ValidationError as exc:
+        return exc.messages[0]
     if User.objects.filter(username=username).exists():
         return _("A user with that username already exists.")
     if User.objects.filter(email=email).exists():

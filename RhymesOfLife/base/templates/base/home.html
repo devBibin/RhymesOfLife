@@ -90,7 +90,14 @@
                 <input type="hidden" name="form_type" value="signup">
                 <div class="mb-3">
                   <label for="su-username" class="form-label">{% trans "Username" %}</label>
-                  <input type="text" id="su-username" name="username" class="form-control" required value="{{ reg_values.username|default:'' }}">
+                  <input type="text"
+                         id="su-username"
+                         name="username"
+                         class="form-control"
+                         required
+                         value="{{ reg_values.username|default:'' }}"
+                         pattern="[A-Za-z0-9.@+_-]+"
+                         title="{% trans 'Use only English letters, numbers, and @/./+/-/_ characters.' %}">
                 </div>
                 <div class="mb-3">
                   <label for="su-email" class="form-label">{% trans "Email" %}</label>

@@ -3,6 +3,7 @@ from functools import lru_cache
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
@@ -19,6 +20,7 @@ from ..models import TelegramAccount
 from ..views.telegram_views import _get_bot_username
 
 User = get_user_model()
+username_validator = ASCIIUsernameValidator()
 
 MAX_AVATAR_SIZE_BYTES = 10 * 1024 * 1024
 MAX_AVATAR_DIMENSION = 4096
@@ -43,6 +45,20 @@ def _parse_birth_date(day: str | None, month: str | None, year: str | None):
 def _clean_about(text: str | None, limit: int = 500) -> str:
     text = (text or "").strip()
     return text[:limit] if len(text) > limit else text
+
+
+def _profile_edit_context(info, months_list, year_range, day_range, tg_ctx, **extra):
+    ctx = {
+        "info": info,
+        "current_username": getattr(getattr(info, "user", None), "username", ""),
+        "syndrome_choices": syndrome_choices(),
+        "months_list": months_list,
+        "year_range": year_range,
+        "day_range": day_range,
+        **tg_ctx,
+    }
+    ctx.update(extra)
+    return ctx
 
 
 @login_required
@@ -73,6 +89,7 @@ def profile_view(request, username=None):
 @csrf_protect
 @never_cache
 @sensitive_post_parameters(
+    "username",
     "first_name",
     "last_name",
     "email",
@@ -86,6 +103,7 @@ def profile_view(request, username=None):
 )
 def profile_edit_view(request):
     info = request.user.additional_info
+    user = request.user
 
     months_list = list(MONTHS.items())
     today = date.today()
@@ -109,26 +127,59 @@ def profile_edit_view(request):
 
     if request.method == "POST":
         try:
+            new_username = (request.POST.get("username") or "").strip()
             info.first_name = request.POST.get("first_name", "").strip()
             info.last_name = request.POST.get("last_name", "").strip()
             info.about_me = _clean_about(request.POST.get("about_me"))
+            user.username = new_username
 
             new_email = (request.POST.get("email", "") or "").strip().lower()
+
+            try:
+                username_validator(new_username)
+            except ValidationError as exc:
+                return render(
+                    request,
+                    "base/profile_edit.html",
+                    _profile_edit_context(
+                        info,
+                        months_list,
+                        year_range,
+                        day_range,
+                        tg_ctx,
+                        error=exc.messages[0],
+                    ),
+                    status=400,
+                )
+
+            if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                return render(
+                    request,
+                    "base/profile_edit.html",
+                    _profile_edit_context(
+                        info,
+                        months_list,
+                        year_range,
+                        day_range,
+                        tg_ctx,
+                        error=_("A user with that username already exists."),
+                    ),
+                    status=400,
+                )
 
             bd = _parse_birth_date(request.POST.get("day"), request.POST.get("month"), request.POST.get("year"))
             if bd == "invalid":
                 return render(
                     request,
                     "base/profile_edit.html",
-                    {
-                        "info": info,
-                        "syndrome_choices": syndrome_choices(),
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": _("Invalid date of birth."),
-                        **tg_ctx,
-                    },
+                    _profile_edit_context(
+                        info,
+                        months_list,
+                        year_range,
+                        day_range,
+                        tg_ctx,
+                        error=_("Invalid date of birth."),
+                    ),
                     status=400,
                 )
             info.birth_date = bd
@@ -146,20 +197,18 @@ def profile_edit_view(request):
                     return render(
                         request,
                         "base/profile_edit.html",
-                        {
-                            "info": info,
-                            "syndrome_choices": syndrome_choices(),
-                            "months_list": months_list,
-                            "year_range": year_range,
-                            "day_range": day_range,
-                            "error": _("This email is already registered."),
-                            **tg_ctx,
-                        },
+                        _profile_edit_context(
+                            info,
+                            months_list,
+                            year_range,
+                            day_range,
+                            tg_ctx,
+                            error=_("This email is already registered."),
+                        ),
                         status=400,
                     )
-                if request.user.email != new_email:
-                    request.user.email = new_email
-                    request.user.save(update_fields=["email"])
+                if user.email != new_email:
+                    user.email = new_email
                 info.email = new_email
 
             delete_flag = request.POST.get("delete_avatar") == "1"
@@ -182,15 +231,14 @@ def profile_edit_view(request):
                     return render(
                         request,
                         "base/profile_edit.html",
-                        {
-                            "info": info,
-                            "syndrome_choices": syndrome_choices(),
-                            "months_list": months_list,
-                            "year_range": year_range,
-                            "day_range": day_range,
-                            "error": _(err),
-                            **tg_ctx,
-                        },
+                        _profile_edit_context(
+                            info,
+                            months_list,
+                            year_range,
+                            day_range,
+                            tg_ctx,
+                            error=_(err),
+                        ),
                         status=400,
                     )
                 try:
@@ -203,19 +251,19 @@ def profile_edit_view(request):
                 return render(
                     request,
                     "base/profile_edit.html",
-                    {
-                        "info": info,
-                        "syndrome_choices": syndrome_choices(),
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": _("Please fill in first name, last name, email, and date of birth."),
-                        **tg_ctx,
-                    },
+                    _profile_edit_context(
+                        info,
+                        months_list,
+                        year_range,
+                        day_range,
+                        tg_ctx,
+                        error=_("Please fill in username, first name, last name, email, and date of birth."),
+                    ),
                     status=400,
                 )
 
             try:
+                user.full_clean(exclude=["password", "last_login", "date_joined", "first_name", "last_name"])
                 info.full_clean()
             except ValidationError as e:
                 msgs = []
@@ -224,18 +272,18 @@ def profile_edit_view(request):
                 return render(
                     request,
                     "base/profile_edit.html",
-                    {
-                        "info": info,
-                        "syndrome_choices": syndrome_choices(),
-                        "months_list": months_list,
-                        "year_range": year_range,
-                        "day_range": day_range,
-                        "error": "; ".join(msgs) or _("Validation failed."),
-                        **tg_ctx,
-                    },
+                    _profile_edit_context(
+                        info,
+                        months_list,
+                        year_range,
+                        day_range,
+                        tg_ctx,
+                        error="; ".join(msgs) or _("Validation failed."),
+                    ),
                     status=400,
                 )
 
+            user.save(update_fields=["username", "email"])
             info.save()
             messages.success(request, _("Profile has been updated."))
             return redirect("my_profile")
@@ -244,27 +292,19 @@ def profile_edit_view(request):
             return render(
                 request,
                 "base/profile_edit.html",
-                {
-                    "info": info,
-                    "syndrome_choices": syndrome_choices(),
-                    "months_list": months_list,
-                    "year_range": year_range,
-                    "day_range": day_range,
-                    "error": _("Error while saving."),
-                    **tg_ctx,
-                },
+                _profile_edit_context(
+                    info,
+                    months_list,
+                    year_range,
+                    day_range,
+                    tg_ctx,
+                    error=_("Error while saving."),
+                ),
                 status=500,
             )
 
     return render(
         request,
         "base/profile_edit.html",
-        {
-            "info": info,
-            "syndrome_choices": syndrome_choices(),
-            "months_list": months_list,
-            "year_range": year_range,
-            "day_range": day_range,
-            **tg_ctx,
-        },
+        _profile_edit_context(info, months_list, year_range, day_range, tg_ctx),
     )
