@@ -125,7 +125,14 @@
             {% csrf_token %}
             <div class="mb-3">
               <label for="reg-username" class="form-label">{% trans "Username" %}</label>
-              <input type="text" id="reg-username" name="username" class="form-input" required autocomplete="username">
+              <input type="text"
+                     id="reg-username"
+                     name="username"
+                     class="form-input"
+                     required
+                     autocomplete="username"
+                     pattern="[A-Za-z0-9.@+_-]+"
+                     title="{% trans 'Use only English letters, numbers, and @/./+/-/_ characters.' %}">
             </div>
             <div class="mb-3">
               <label for="reg-email" class="form-label">{% trans "Email" %}</label>
