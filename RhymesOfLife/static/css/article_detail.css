@@ -155,6 +155,121 @@
 .richtext {
   font-size: 1.02rem;
   line-height: 1.75;
+  color: var(--bs-body-color, #212529);
+}
+
+.richtext > *:first-child {
+  margin-top: 0;
+}
+
+.richtext > *:last-child {
+  margin-bottom: 0;
+}
+
+.richtext p,
+.richtext ul,
+.richtext ol,
+.richtext blockquote,
+.richtext pre,
+.richtext table,
+.richtext figure {
+  margin: 0 0 1.2rem;
+}
+
+.richtext h1,
+.richtext h2,
+.richtext h3,
+.richtext h4,
+.richtext h5,
+.richtext h6 {
+  margin: 2rem 0 0.9rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--bs-body-color, #212529);
+}
+
+.richtext h2 {
+  font-size: clamp(1.6rem, 2vw, 2rem);
+}
+
+.richtext h3 {
+  font-size: clamp(1.35rem, 1.7vw, 1.7rem);
+}
+
+.richtext h4 {
+  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+}
+
+.richtext ul,
+.richtext ol {
+  padding-left: 1.5rem;
+}
+
+.richtext li + li {
+  margin-top: 0.35rem;
+}
+
+.richtext a {
+  color: var(--bs-primary, #0d6efd);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+.richtext blockquote {
+  padding: 1rem 1.2rem;
+  border-left: 4px solid rgba(13, 110, 253, 0.4);
+  background: rgba(13, 110, 253, 0.05);
+  border-radius: 0 14px 14px 0;
+}
+
+.richtext pre,
+.richtext code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.richtext pre {
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  overflow-x: auto;
+  background: #111827;
+  color: #f8fafc;
+  line-height: 1.6;
+}
+
+.richtext code {
+  background: rgba(15, 23, 42, 0.08);
+  border-radius: 6px;
+  padding: 0.1rem 0.35rem;
+}
+
+.richtext pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.richtext table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.richtext th,
+.richtext td {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.75rem 0.9rem;
+  vertical-align: top;
+}
+
+.richtext th {
+  background: rgba(15, 23, 42, 0.04);
+  font-weight: 700;
+}
+
+.richtext hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .richtext img {

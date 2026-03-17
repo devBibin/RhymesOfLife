@@ -59,7 +59,8 @@
       toolbar: {
         items: [
           'heading', '|',
-          'bold', 'italic', 'link', 'blockQuote', 'codeBlock', 'horizontalLine', '|',
+          'bold', 'italic', 'underline', 'fontColor', 'fontBackgroundColor', 'fontSize', '|',
+          'alignment', 'link', 'blockQuote', 'codeBlock', 'horizontalLine', '|',
           'bulletedList', 'numberedList', '|',
           'insertTable', 'imageUpload', 'mediaEmbed', '|',
           'undo', 'redo'
@@ -100,6 +101,15 @@
         ],
         styles: ['inline', 'block', 'side'],
         upload: { types: ['jpeg', 'jpg', 'png', 'gif', 'webp'] }
+      },
+
+      fontSize: {
+        options: [10, 12, 14, 'default', 18, 20, 24, 28, 32],
+        supportAllValues: false
+      },
+
+      alignment: {
+        options: ['left', 'center', 'right', 'justify']
       },
 
       table: {

@@ -140,7 +140,7 @@
   </div>
 
   <div class="article-body text-break richtext">
-    {{ page.body|richtext }}
+    {{ page.body|safe }}
   </div>
 
   {% if request.user == page.author.user or request.user.is_superuser %}

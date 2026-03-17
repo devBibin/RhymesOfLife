@@ -20,6 +20,7 @@ from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment
 from .constants import PREDEFINED_TAGS
 
 import bleach
+from bleach.css_sanitizer import CSSSanitizer
 
 from base.utils.files import validate_image_upload
 from base.utils.logging import get_app_logger
@@ -36,7 +37,7 @@ ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP", "GIF"}
 
 ALLOWED_TAGS = [
-    "p", "br", "strong", "em", "u", "s", "a", "ul", "ol", "li", "blockquote", "code", "pre", "hr",
+    "p", "br", "strong", "em", "u", "s", "span", "a", "ul", "ol", "li", "blockquote", "code", "pre", "hr",
     "h2", "h3", "h4", "h5", "h6", "figure", "figcaption", "img",
     "table", "thead", "tbody", "tr", "th", "td",
 ]
@@ -49,13 +50,31 @@ ALLOWED_ATTRS = {
     "td": ["colspan", "rowspan", "style"],
 }
 ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
+ALLOWED_CSS_PROPERTIES = [
+    "color",
+    "background-color",
+    "font-size",
+    "font-family",
+    "text-align",
+    "text-decoration",
+    "font-weight",
+    "font-style",
+]
+CSS_SANITIZER = CSSSanitizer(allowed_css_properties=ALLOWED_CSS_PROPERTIES)
 
 
 staff_required = user_passes_test(lambda u: (u.is_staff or u.is_superuser))
 
 
 def _sanitize_html(html: str) -> str:
-    return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, protocols=ALLOWED_PROTOCOLS, strip=True)
+    return bleach.clean(
+        html,
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRS,
+        protocols=ALLOWED_PROTOCOLS,
+        css_sanitizer=CSS_SANITIZER,
+        strip=True,
+    )
 
 
 def _get_or_create_blog_index():

@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-04 13:48+0000\n"
+"POT-Creation-Date: 2026-03-17 17:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -463,8 +463,9 @@ msgid "New user registered"
 msgstr "Зарегистрирован новый пользователь"
 
 #: base/signals.py:32 base/templates/base/help_request.html:30
-#: base/templates/base/home.html:92 base/templates/base/home.html:123
+#: base/templates/base/home.html:92 base/templates/base/home.html:130
 #: base/templates/base/info/auth_combined.html:127
+#: base/templates/base/profile_edit.html:81
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -472,10 +473,11 @@ msgstr "Имя пользователя"
 msgid "User ID"
 msgstr "ID пользователя"
 
-#: base/signals.py:34 base/templates/base/home.html:96
+#: base/signals.py:34 base/templates/base/home.html:103
 #: base/templates/base/includes/staff_help_requests_rows.html:63
-#: base/templates/base/info/auth_combined.html:131
-#: base/templates/base/profile.html:91 base/templates/base/profile_edit.html:91
+#: base/templates/base/info/auth_combined.html:138
+#: base/templates/base/profile.html:91
+#: base/templates/base/profile_edit.html:104
 #: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:94
 msgid "Email"
@@ -684,7 +686,7 @@ msgid "Email verified."
 msgstr "Email подтверждён."
 
 #: base/templates/base/connect_telegram.html:19
-#: base/templates/base/profile_edit.html:180
+#: base/templates/base/profile_edit.html:193
 msgid "Telegram bot is not configured."
 msgstr "Telegram-бот не настроен."
 
@@ -1531,7 +1533,7 @@ msgstr "ФИО"
 
 #: base/templates/base/help_request.html:44
 #: base/templates/base/profile.html:101
-#: base/templates/base/profile_edit.html:172
+#: base/templates/base/profile_edit.html:185
 #: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr "Telegram"
@@ -1634,54 +1636,60 @@ msgid "Learn more"
 msgstr "Узнать больше"
 
 #: base/templates/base/home.html:64
-msgid "Welcome to Rhymes of Life!"
+msgid "Welcome to Rhythms of Life!"
 msgstr "Добро пожаловать в «Ритмы жизни»!"
 
-#: base/templates/base/home.html:70 base/templates/base/home.html:111
-#: base/templates/base/home.html:137
+#: base/templates/base/home.html:70 base/templates/base/home.html:118
+#: base/templates/base/home.html:144
 #: base/templates/base/info/auth_combined.html:117
-#: base/templates/base/info/auth_combined.html:237 templates/base.html:302
+#: base/templates/base/info/auth_combined.html:244 templates/base.html:302
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: base/templates/base/home.html:77 base/templates/base/home.html:134
+#: base/templates/base/home.html:77 base/templates/base/home.html:141
 #: base/templates/base/info/auth_combined.html:116
-#: base/templates/base/info/auth_combined.html:190
-#: base/templates/base/info/auth_combined.html:229
+#: base/templates/base/info/auth_combined.html:197
+#: base/templates/base/info/auth_combined.html:236
 #: blog/templates/blog/blog_page.html:207
 msgid "Log in"
 msgstr "Войти"
 
-#: base/templates/base/home.html:100 base/templates/base/home.html:127
-#: base/templates/base/info/auth_combined.html:136
-#: base/templates/base/info/auth_combined.html:204
+#: base/templates/base/home.html:100
+#: base/templates/base/info/auth_combined.html:135
+#: base/templates/base/profile_edit.html:90
+msgid "Use only English letters, numbers, and @/./+/-/_ characters."
+msgstr "Используйте только английские буквы, цифры и символы @/./+/-/_."
+
+#: base/templates/base/home.html:107 base/templates/base/home.html:134
+#: base/templates/base/info/auth_combined.html:143
+#: base/templates/base/info/auth_combined.html:211
 msgid "Password"
 msgstr "Пароль"
 
-#: base/templates/base/home.html:104
-#: base/templates/base/info/auth_combined.html:161
+#: base/templates/base/home.html:111
+#: base/templates/base/info/auth_combined.html:168
 #: base/templates/base/reset_new.html:30
 msgid "Confirm password"
 msgstr "Подтвердите пароль"
 
-#: base/templates/base/home.html:109 base/templates/base/home.html:132
-#: base/templates/base/info/auth_combined.html:149
-#: base/templates/base/info/auth_combined.html:155
-#: base/templates/base/info/auth_combined.html:174
-#: base/templates/base/info/auth_combined.html:180
-#: base/templates/base/info/auth_combined.html:217
-#: base/templates/base/info/auth_combined.html:223
+#: base/templates/base/home.html:116 base/templates/base/home.html:139
+#: base/templates/base/info/auth_combined.html:156
+#: base/templates/base/info/auth_combined.html:162
+#: base/templates/base/info/auth_combined.html:181
+#: base/templates/base/info/auth_combined.html:187
+#: base/templates/base/info/auth_combined.html:224
+#: base/templates/base/info/auth_combined.html:230
 #: base/templates/base/reset_new.html:36
 msgid "Show password"
 msgstr "Показать пароль"
 
-#: base/templates/base/home.html:135
-#: base/templates/base/info/auth_combined.html:233
+#: base/templates/base/home.html:142
+#: base/templates/base/info/auth_combined.html:240
 msgid "Forgot password?"
 msgstr "Забыли пароль?"
 
-#: base/templates/base/home.html:137
-#: base/templates/base/info/auth_combined.html:237
+#: base/templates/base/home.html:144
+#: base/templates/base/info/auth_combined.html:244
 msgid "Don't have an account?"
 msgstr "Нет аккаунта?"
 
@@ -1791,21 +1799,21 @@ msgstr "Попробуйте изменить поиск или фильтры"
 msgid "Sign in / Sign up"
 msgstr "Вход / Регистрация"
 
-#: base/templates/base/info/auth_combined.html:150
-#: base/templates/base/info/auth_combined.html:175
-#: base/templates/base/info/auth_combined.html:218
+#: base/templates/base/info/auth_combined.html:157
+#: base/templates/base/info/auth_combined.html:182
+#: base/templates/base/info/auth_combined.html:225
 msgid "Hide password"
 msgstr "Скрыть пароль"
 
-#: base/templates/base/info/auth_combined.html:186
+#: base/templates/base/info/auth_combined.html:193
 msgid "Create account"
 msgstr "Создать аккаунт"
 
-#: base/templates/base/info/auth_combined.html:190
+#: base/templates/base/info/auth_combined.html:197
 msgid "Already have an account?"
 msgstr "Уже есть аккаунт?"
 
-#: base/templates/base/info/auth_combined.html:199
+#: base/templates/base/info/auth_combined.html:206
 #: base/templates/base/reset_request.html:28
 msgid "Username or email"
 msgstr "Имя пользователя или email"
@@ -2045,7 +2053,6 @@ msgid "Editing entry"
 msgstr "Редактирование записи"
 
 #: base/templates/base/partials/health_wellness.html:97
-#| msgid "Cancel"
 msgid "Cancel edit"
 msgstr "Отмена"
 
@@ -2425,7 +2432,7 @@ msgid "or drag & drop files here"
 msgstr "или перетащите файлы сюда"
 
 #: base/templates/base/post_edit.html:87
-#: base/templates/base/profile_edit.html:202
+#: base/templates/base/profile_edit.html:215
 msgid "Save changes"
 msgstr "Сохранить изменения"
 
@@ -2434,16 +2441,17 @@ msgid "Previous"
 msgstr "Назад"
 
 #: base/templates/base/profile.html:81
-#: base/templates/base/profile_edit.html:126
+#: base/templates/base/profile_edit.html:139
 msgid "About me"
 msgstr "О себе"
 
-#: base/templates/base/profile.html:96 base/templates/base/profile_edit.html:96
+#: base/templates/base/profile.html:96
+#: base/templates/base/profile_edit.html:109
 msgid "Date of birth"
 msgstr "Дата рождения"
 
 #: base/templates/base/profile.html:104
-#: base/templates/base/profile_edit.html:175
+#: base/templates/base/profile_edit.html:188
 msgid "Linked"
 msgstr "Подключено"
 
@@ -2452,7 +2460,7 @@ msgid "Not linked"
 msgstr "Не подключено"
 
 #: base/templates/base/profile.html:113
-#: base/templates/base/profile_edit.html:133
+#: base/templates/base/profile_edit.html:146
 msgid "Syndromes"
 msgstr "Синдромы"
 
@@ -2508,59 +2516,59 @@ msgstr "Статей пока нет."
 msgid "Upload new"
 msgstr "Загрузить новое"
 
-#: base/templates/base/profile_edit.html:81
+#: base/templates/base/profile_edit.html:94
 msgid "First name"
 msgstr "Имя"
 
-#: base/templates/base/profile_edit.html:86
+#: base/templates/base/profile_edit.html:99
 msgid "Last name"
 msgstr "Фамилия"
 
-#: base/templates/base/profile_edit.html:100
+#: base/templates/base/profile_edit.html:113
 msgid "Day"
 msgstr "День"
 
-#: base/templates/base/profile_edit.html:108
+#: base/templates/base/profile_edit.html:121
 msgid "Month"
 msgstr "Месяц"
 
-#: base/templates/base/profile_edit.html:116
+#: base/templates/base/profile_edit.html:129
 msgid "Year"
 msgstr "Год"
 
-#: base/templates/base/profile_edit.html:127
+#: base/templates/base/profile_edit.html:140
 msgid "A few words about yourself"
 msgstr "Пару слов о себе"
 
-#: base/templates/base/profile_edit.html:128
+#: base/templates/base/profile_edit.html:141
 msgid "Up to 250 characters."
 msgstr "До 250 символов."
 
-#: base/templates/base/profile_edit.html:152
+#: base/templates/base/profile_edit.html:165
 msgid "Genetically confirmed"
 msgstr "Генетически подтверждено"
 
-#: base/templates/base/profile_edit.html:159
+#: base/templates/base/profile_edit.html:172
 msgid "Other syndromes"
 msgstr "Другие синдромы"
 
-#: base/templates/base/profile_edit.html:165
+#: base/templates/base/profile_edit.html:178
 msgid "If your syndrome is not in the list, write it here"
 msgstr "Если вашего синдрома нет в списке, напишите об этом здесь"
 
-#: base/templates/base/profile_edit.html:177
+#: base/templates/base/profile_edit.html:190
 msgid "Unlink Telegram"
 msgstr "Отключить Telegram"
 
-#: base/templates/base/profile_edit.html:183
+#: base/templates/base/profile_edit.html:196
 msgid "Link Telegram"
 msgstr "Подключить Telegram"
 
-#: base/templates/base/profile_edit.html:185
+#: base/templates/base/profile_edit.html:198
 msgid "Activation link is not available."
 msgstr "Ссылка активации недоступна."
 
-#: base/templates/base/profile_edit.html:187
+#: base/templates/base/profile_edit.html:200
 msgid "Generate new link"
 msgstr "Сгенерировать новую ссылку"
 
@@ -2967,7 +2975,7 @@ msgstr "Код истёк или некорректен."
 msgid "Incorrect code."
 msgstr "Неверный код."
 
-#: base/views/auth_reset_views.py:141 base/views/auth_views.py:53
+#: base/views/auth_reset_views.py:141 base/views/auth_views.py:56
 msgid "Passwords don't match."
 msgstr "Пароли не совпадают."
 
@@ -2975,59 +2983,59 @@ msgstr "Пароли не совпадают."
 msgid "Password has been reset. You can sign in now."
 msgstr "Пароль сброшен. Теперь вы можете войти."
 
-#: base/views/auth_views.py:51
+#: base/views/auth_views.py:54
 msgid "Please fill in all fields."
 msgstr "Пожалуйста, заполните все поля."
 
-#: base/views/auth_views.py:55
+#: base/views/auth_views.py:62 base/views/profile_views.py:165
 msgid "A user with that username already exists."
 msgstr "Пользователь с таким именем уже существует."
 
-#: base/views/auth_views.py:57 base/views/profile_views.py:155
+#: base/views/auth_views.py:64 base/views/profile_views.py:206
 msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
-#: base/views/auth_views.py:112
+#: base/views/auth_views.py:119
 msgid "Password is too weak."
 msgstr "Пароль слишком слабый."
 
-#: base/views/auth_views.py:123 base/views/auth_views.py:386
+#: base/views/auth_views.py:130 base/views/auth_views.py:393
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr "Регистрация прошла успешно! Скоро придёт письмо для подтверждения."
 
-#: base/views/auth_views.py:155 base/views/auth_views.py:400
+#: base/views/auth_views.py:162 base/views/auth_views.py:407
 msgid "Invalid username or password."
 msgstr "Неверное имя пользователя или пароль."
 
-#: base/views/auth_views.py:198
+#: base/views/auth_views.py:205
 msgid "A verification email has been sent. Please confirm your account."
 msgstr "Письмо для подтверждения отправлено. Пожалуйста, подтвердите аккаунт."
 
-#: base/views/auth_views.py:222
+#: base/views/auth_views.py:229
 msgid "Email verification failed or token is invalid."
 msgstr "Подтверждение email не удалось или токен недействителен."
 
-#: base/views/auth_views.py:243
+#: base/views/auth_views.py:250
 msgid "Enter phone number."
 msgstr "Введите номер телефона."
 
-#: base/views/auth_views.py:249
+#: base/views/auth_views.py:256
 msgid "Failed to initiate call."
 msgstr "Не удалось инициировать звонок."
 
-#: base/views/auth_views.py:274
+#: base/views/auth_views.py:281
 msgid "No phone number set."
 msgstr "Номер телефона не указан."
 
-#: base/views/auth_views.py:283 base/views/auth_views.py:286
+#: base/views/auth_views.py:290 base/views/auth_views.py:293
 msgid "Provider error"
 msgstr "Ошибка провайдера"
 
-#: base/views/auth_views.py:323
+#: base/views/auth_views.py:330
 msgid "Please accept all items."
 msgstr "Пожалуйста, примите все пункты."
 
-#: base/views/auth_views.py:369
+#: base/views/auth_views.py:376
 msgid "You are already signed in."
 msgstr "Вы уже вошли."
 
@@ -3142,23 +3150,24 @@ msgstr "Описание лекарства обязательно."
 msgid "Medication description is too long."
 msgstr "Описание лекарства слишком длинное."
 
-#: base/views/profile_views.py:129
+#: base/views/profile_views.py:181
 msgid "Invalid date of birth."
 msgstr "Некорректная дата рождения."
 
-#: base/views/profile_views.py:212
-msgid "Please fill in first name, last name, email, and date of birth."
-msgstr "Пожалуйста, заполните имя, фамилию, email и дату рождения."
+#: base/views/profile_views.py:260
+msgid ""
+"Please fill in username, first name, last name, email, and date of birth."
+msgstr "Пожалуйста, заполните имя пользователя, имя, фамилию, адрес электронной почты и дату рождения."
 
-#: base/views/profile_views.py:233
+#: base/views/profile_views.py:281
 msgid "Validation failed."
 msgstr "Проверка не пройдена."
 
-#: base/views/profile_views.py:240
+#: base/views/profile_views.py:288
 msgid "Profile has been updated."
 msgstr "Профиль обновлён."
 
-#: base/views/profile_views.py:253
+#: base/views/profile_views.py:301
 msgid "Error while saving."
 msgstr "Ошибка при сохранении."
 
@@ -3450,36 +3459,36 @@ msgstr "Ничего не найдено."
 msgid "Page navigation"
 msgstr "Навигация по страницам"
 
-#: blog/views.py:128
+#: blog/views.py:147
 msgid "Title and content are required."
 msgstr "Заголовок и содержимое обязательны."
 
-#: blog/views.py:181 blog/views.py:241
+#: blog/views.py:200 blog/views.py:260
 #, python-format
 msgid "System error: %(msg)s"
 msgstr "Системная ошибка: %(msg)s"
 
-#: blog/views.py:264
+#: blog/views.py:283
 msgid "Insufficient permissions."
 msgstr "Недостаточно прав."
 
-#: blog/views.py:301 blog/views.py:390
+#: blog/views.py:320 blog/views.py:409
 msgid "Comment cannot be empty."
 msgstr "Комментарий не может быть пустым."
 
-#: blog/views.py:368
+#: blog/views.py:387
 msgid "You cannot delete someone else's comment."
 msgstr "Вы не можете удалить чужой комментарий."
 
-#: blog/views.py:386
+#: blog/views.py:405
 msgid "You cannot edit someone else's comment."
 msgstr "Вы не можете редактировать чужой комментарий."
 
-#: blog/views.py:406
+#: blog/views.py:425
 msgid "No file uploaded."
 msgstr "Файл не загружен."
 
-#: blog/views.py:430
+#: blog/views.py:449
 msgid "Upload error."
 msgstr "Ошибка загрузки."
 
