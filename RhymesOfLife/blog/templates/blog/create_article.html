@@ -21,7 +21,16 @@
 
     <div class="mb-3">
       <label class="form-label">{% trans "Short description" %}</label>
-      <textarea name="intro" class="form-control" required>{{ intro }}</textarea>
+      <textarea
+        id="article-intro"
+        name="intro"
+        class="form-control"
+        required
+        maxlength="500"
+        rows="4"
+        aria-describedby="article-intro-counter"
+      >{{ intro }}</textarea>
+      <div id="article-intro-counter" class="form-text text-end">0 / 500</div>
     </div>
 
     <div class="mb-3">
@@ -79,6 +88,21 @@
   {% endif %}
 
   <script src="{% static 'js/ckeditor-init.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const input = document.getElementById('article-intro');
+      const counter = document.getElementById('article-intro-counter');
+      if (!input || !counter) return;
+
+      const max = Number(input.getAttribute('maxlength')) || 500;
+      const updateCounter = function () {
+        counter.textContent = `${input.value.length} / ${max}`;
+      };
+
+      input.addEventListener('input', updateCounter);
+      updateCounter();
+    });
+  </script>
 
   <style>.ck-editor__editable_inline{min-height:360px}</style>
 {% endblock %}

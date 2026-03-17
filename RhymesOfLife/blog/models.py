@@ -134,7 +134,7 @@ class BlogPage(Page):
         related_name="articles",
         verbose_name=_("Author"),
     )
-    intro = models.CharField(_("Short description"), max_length=250)
+    intro = models.CharField(_("Short description"), max_length=500)
     main_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
