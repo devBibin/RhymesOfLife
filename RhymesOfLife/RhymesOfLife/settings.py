@@ -181,13 +181,15 @@ SERVER_EMAIL = environment.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
 
 # Optional timeouts (helps with some providers)
 EMAIL_TIMEOUT = int(environment.get("EMAIL_TIMEOUT", 20))
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(environment.get("DATA_UPLOAD_MAX_MEMORY_SIZE", 16 * 1024 * 1024))
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(environment.get("FILE_UPLOAD_MAX_MEMORY_SIZE", 16 * 1024 * 1024))
 
 #
 POSTBOX_ACCESS_KEY_ID = environment.get("POSTBOX_ACCESS_KEY_ID")
 POSTBOX_SECRET_ACCESS_KEY = environment.get("POSTBOX_SECRET_ACCESS_KEY")
 POSTBOX_REGION = environment.get("POSTBOX_REGION", "ru-central1")
 POSTBOX_ENDPOINT = environment.get("POSTBOX_ENDPOINT", "https://postbox.cloud.yandex.net")
-POSTBOX_FROM_EMAIL = environment.get("POSTBOX_FROM_EMAIL")
+POSTBOX_FROM_EMAIL = environment.get("POSTBOX_FROM_EMAIL", DEFAULT_FROM_EMAIL)
 EMAIL_PROVIDER = environment.get("EMAIL_PROVIDER", "postbox_api")
 
 

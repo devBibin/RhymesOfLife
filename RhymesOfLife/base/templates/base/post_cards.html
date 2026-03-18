@@ -1,4 +1,4 @@
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags content_formatters %}
 <div class="row gy-1">
 {% for p in posts %}
   <div class="col-12">
@@ -91,6 +91,10 @@
                 {% endif %}
                 <li><a class="dropdown-item" href="{% url 'post_edit' p.id %}">
                   <i class="bi bi-pencil-square me-2" aria-hidden="true"></i>{% trans "Edit" %}</a></li>
+                <li><a class="dropdown-item text-danger" href="#"
+                       data-action="delete"
+                       data-url="{% url 'post_delete' p.id %}">
+                  <i class="bi bi-trash me-2" aria-hidden="true"></i>{% trans "Delete" %}</a></li>
                 <li><hr class="dropdown-divider"></li>
               {% endif %}
 
@@ -111,7 +115,10 @@
         </div>
 
         {% if p.text %}
-          <p class="mb-3 text-break post-text">{{ p.text|linebreaksbr }}</p>
+          <div class="mb-3 post-text-wrap" data-post-text-wrap>
+            <div class="text-break post-text post-text-content" data-post-text-content>{{ p.text|render_post_content }}</div>
+            <button type="button" class="post-text-toggle" data-post-text-toggle hidden></button>
+          </div>
         {% endif %}
 
         {% with count=p.images.count %}

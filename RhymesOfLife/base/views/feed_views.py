@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_protect
 from base.models import AdditionalUserInfo
 from base.models import Post, PostImage, PostLike, PostComment, PostReport
 from base.utils.files import validate_mixed_upload
+from base.utils.html import sanitize_html, is_empty_html
 from base.utils.moderation import get_moderation_config
 from base.utils.decorators import permission_or_staff_required
 from base.utils.logging import get_app_logger
@@ -164,11 +165,11 @@ def create_post(request):
         return render(request, "base/post_create.html")
 
     me = AdditionalUserInfo.objects.get(user=request.user)
-    text = (request.POST.get("text") or "").strip()
+    text = sanitize_html((request.POST.get("text") or "").strip())
     files = request.FILES.getlist("images")
 
     errors = _validate_images(files)
-    if not text and not files:
+    if is_empty_html(text) and not files:
         errors.append(_("Post must contain text or an image."))
 
     if errors:
@@ -217,7 +218,7 @@ def edit_post(request, post_id: int):
         return HttpResponseForbidden()
 
     if request.method == "POST":
-        text = (request.POST.get("text") or "").strip()
+        text = sanitize_html((request.POST.get("text") or "").strip())
         files = request.FILES.getlist("images")
         remove_ids = request.POST.getlist("remove")
         errors = _validate_images(files)
@@ -295,6 +296,20 @@ def hide_post(request, post_id: int):
         return HttpResponseForbidden()
     post.is_hidden = True
     post.save(update_fields=["is_hidden"])
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"ok": True, "post_id": post.id})
+    return JsonResponse({"ok": True})
+
+
+@login_required
+@require_POST
+def delete_post(request, post_id: int):
+    post = get_object_or_404(Post, pk=post_id, is_deleted=False)
+    me = _me(request)
+    if not me or (post.author_id != me.id and not request.user.is_superuser):
+        return HttpResponseForbidden()
+    post.is_deleted = True
+    post.save(update_fields=["is_deleted"])
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return JsonResponse({"ok": True, "post_id": post.id})
     return JsonResponse({"ok": True})

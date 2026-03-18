@@ -15,6 +15,8 @@
   .count-chip{font-size:.875rem;padding:.25rem .55rem;border-radius:999px;background:rgba(99,102,241,.12);color:#4f46e5;font-weight:600}
   .btn-gradient{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;border:none}
   .btn-gradient:hover{filter:brightness(1.05);color:#fff}
+  [data-autogrow-textarea]{min-height:112px;max-height:240px;resize:none;overflow-y:hidden}
+  .ck-editor__editable_inline{min-height:220px;max-height:320px}
 </style>
 
 <div class="container py-4 compose-wrap">
@@ -32,7 +34,14 @@
 
     <div class="mb-3">
       <label class="form-label fw-semibold">{% trans "Text" %}</label>
-      <textarea name="text" class="form-control" rows="4" placeholder="{% trans 'Write something...' %}">{{ text|default_if_none:'' }}</textarea>
+      <textarea name="text"
+                class="form-control js-ckeditor"
+                rows="4"
+                data-autogrow-textarea
+                data-editor-mode="post"
+                data-disable-uploads="1"
+                data-language="{{ LANGUAGE_CODE|slice:':2' }}"
+                data-placeholder="{% trans 'Write something...' %}">{{ text|default_if_none:'' }}</textarea>
     </div>
 
     <div class="mb-3">
@@ -61,5 +70,13 @@
   </form>
 </div>
 
-<script src="{% static 'js/posts.js' %}"></script>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+  {% if LANGUAGE_CODE|slice:":2" == 'ru' %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/translations/ru.js"></script>
+  {% endif %}
+  <script src="{% static 'js/ckeditor-init.js' %}"></script>
+  <script src="{% static 'js/posts.js' %}"></script>
 {% endblock %}

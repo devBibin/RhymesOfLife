@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, RequestDataTooBig
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -19,10 +19,8 @@ from wagtail.images import get_image_model
 from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment
 from .constants import PREDEFINED_TAGS
 
-import bleach
-from bleach.css_sanitizer import CSSSanitizer
-
 from base.utils.files import validate_image_upload
+from base.utils.html import sanitize_html
 from base.utils.logging import get_app_logger
 
 from PIL import Image as PILImage, ImageFile
@@ -36,45 +34,16 @@ MAX_UPLOAD = int(getattr(settings, "WAGTAILIMAGES_MAX_UPLOAD_SIZE", 10 * 1024 * 
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP", "GIF"}
 
-ALLOWED_TAGS = [
-    "p", "br", "strong", "em", "u", "s", "span", "a", "ul", "ol", "li", "blockquote", "code", "pre", "hr",
-    "h2", "h3", "h4", "h5", "h6", "figure", "figcaption", "img",
-    "table", "thead", "tbody", "tr", "th", "td",
-]
-ALLOWED_ATTRS = {
-    "*": ["class", "style"],
-    "a": ["href", "title", "rel", "target"],
-    "img": ["src", "alt", "width", "height", "loading", "class", "style"],
-    "table": ["border", "style"],
-    "th": ["colspan", "rowspan", "style"],
-    "td": ["colspan", "rowspan", "style"],
-}
-ALLOWED_PROTOCOLS = ["http", "https", "mailto"]
-ALLOWED_CSS_PROPERTIES = [
-    "color",
-    "background-color",
-    "font-size",
-    "font-family",
-    "text-align",
-    "text-decoration",
-    "font-weight",
-    "font-style",
-]
-CSS_SANITIZER = CSSSanitizer(allowed_css_properties=ALLOWED_CSS_PROPERTIES)
-
-
 staff_required = user_passes_test(lambda u: (u.is_staff or u.is_superuser))
 
 
-def _sanitize_html(html: str) -> str:
-    return bleach.clean(
-        html,
-        tags=ALLOWED_TAGS,
-        attributes=ALLOWED_ATTRS,
-        protocols=ALLOWED_PROTOCOLS,
-        css_sanitizer=CSS_SANITIZER,
-        strip=True,
-    )
+def _request_too_large_message() -> str:
+    max_mb = int(getattr(settings, "DATA_UPLOAD_MAX_MEMORY_SIZE", 0) or 0) // (1024 * 1024)
+    if max_mb > 0:
+        return _("The article is too large to upload. Reduce the body size or image size and try again. Current limit: %(size)s MB.") % {
+            "size": max_mb
+        }
+    return _("The article is too large to upload. Reduce the body size or image size and try again.")
 
 
 def _get_or_create_blog_index():
@@ -136,7 +105,7 @@ def create_article_view(request):
         action = request.POST.get("action") or "draft"
         title = request.POST.get("title", "").strip()
         intro = request.POST.get("intro", "").strip()
-        body = _sanitize_html(request.POST.get("body", "").strip())
+        body = sanitize_html(request.POST.get("body", "").strip())
         tags = _filter_tags_to_predefined(request.POST.getlist("tags"))
         main_img_f = request.FILES.get("main_image")
 
@@ -193,6 +162,9 @@ def create_article_view(request):
                     log.info("Article saved as draft: page_id=%s author_id=%s", page.id, request.user.id)
                     return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
+        except RequestDataTooBig:
+            ctx["error"] = _request_too_large_message()
+            log.warning("Create article request too large: user_id=%s", request.user.id)
         except ValidationError as e:
             ctx["error"] = str(e)
             log.warning("Create article validation error: user_id=%s reason=%s", request.user.id, e)
@@ -216,7 +188,7 @@ def edit_article_view(request, page_id):
             action = request.POST.get("action", "publish")
             page.title = request.POST.get("title", page.title).strip()
             page.intro = request.POST.get("intro", page.intro).strip()
-            page.body = _sanitize_html(request.POST.get("body", page.body).strip())
+            page.body = sanitize_html(request.POST.get("body", page.body).strip())
             page.tags.set(_filter_tags_to_predefined(request.POST.getlist("tags")))
 
             if "main_image" in request.FILES:
@@ -253,6 +225,9 @@ def edit_article_view(request, page_id):
                 log.info("Article saved draft: page_id=%s editor_id=%s", page.id, request.user.id)
                 return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
 
+        except RequestDataTooBig:
+            error = _request_too_large_message()
+            log.warning("Edit article request too large: page_id=%s user_id=%s", page.id, request.user.id)
         except ValidationError as e:
             error = str(e)
             log.warning("Edit article validation error: page_id=%s user_id=%s reason=%s", page.id, request.user.id, e)

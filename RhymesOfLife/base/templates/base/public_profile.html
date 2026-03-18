@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n static avatar_tags %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/post_cards.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-4">
   {% include "base/includes/profile_header.html" with profile_user=profile_user info=info posts_count=posts_total followers_count=info.followers_count request=request only %}

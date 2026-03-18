@@ -14,6 +14,130 @@ function getCSRF(scopeEl) {
 
 const gettext = window.gettext || ((s) => s);
 
+let confirmModalPromiseResolve = null;
+let confirmModalBound = false;
+
+function currentLangIsRussian() {
+  return (document.documentElement.lang || '').toLowerCase().startsWith('ru');
+}
+
+function getPostDeleteConfirmCopy() {
+  if (currentLangIsRussian()) {
+    return {
+      title: 'Удалить пост?',
+      message: 'Вы уверены, что хотите удалить этот пост? Его содержимое будет скрыто из ленты.',
+      confirmLabel: 'Удалить',
+      cancelLabel: 'Отмена',
+    };
+  }
+  return {
+    title: 'Delete post?',
+    message: 'Are you sure you want to delete this post? It will be hidden from the feed.',
+    confirmLabel: 'Delete',
+    cancelLabel: 'Cancel',
+  };
+}
+
+function ensureConfirmModal() {
+  let modal = document.getElementById('confirm-action-modal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.id = 'confirm-action-modal';
+  modal.className = 'confirm-action-modal';
+  modal.setAttribute('hidden', '');
+  modal.innerHTML = `
+    <div class="confirm-action-backdrop" data-confirm-close></div>
+    <div class="confirm-action-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-action-title">
+      <div class="confirm-action-header">
+        <h3 class="confirm-action-title" id="confirm-action-title"></h3>
+        <button type="button" class="confirm-action-x" aria-label="${gettext('Cancel')}" data-confirm-close>
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="confirm-action-body">
+        <p class="confirm-action-text mb-0"></p>
+      </div>
+      <div class="confirm-action-footer">
+        <button type="button" class="btn btn-light confirm-action-cancel" data-confirm-cancel>${gettext('Cancel')}</button>
+        <button type="button" class="btn btn-danger confirm-action-submit" data-confirm-accept>${gettext('Delete')}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function bindConfirmModal() {
+  if (confirmModalBound) return;
+  confirmModalBound = true;
+
+  document.addEventListener('click', (e) => {
+    const modal = document.getElementById('confirm-action-modal');
+    if (!modal || modal.hasAttribute('hidden')) return;
+
+    if (e.target.closest('[data-confirm-accept]')) {
+      e.preventDefault();
+      closeConfirmModal(true);
+      return;
+    }
+    if (e.target.closest('[data-confirm-cancel]') || e.target.closest('[data-confirm-close]')) {
+      e.preventDefault();
+      closeConfirmModal(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('confirm-action-modal');
+    if (!modal || modal.hasAttribute('hidden')) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeConfirmModal(false);
+    }
+  });
+}
+
+function closeConfirmModal(confirmed) {
+  const modal = document.getElementById('confirm-action-modal');
+  if (!modal) return;
+  modal.setAttribute('hidden', '');
+  document.body.classList.remove('confirm-modal-open');
+  const resolve = confirmModalPromiseResolve;
+  confirmModalPromiseResolve = null;
+  if (resolve) resolve(confirmed);
+}
+
+function openConfirmModal({ title, message, confirmLabel, cancelLabel, tone } = {}) {
+  bindConfirmModal();
+  const modal = ensureConfirmModal();
+  const titleEl = modal.querySelector('.confirm-action-title');
+  const textEl = modal.querySelector('.confirm-action-text');
+  const acceptBtn = modal.querySelector('[data-confirm-accept]');
+  const cancelBtn = modal.querySelector('[data-confirm-cancel]');
+  const closeBtn = modal.querySelector('.confirm-action-x');
+
+  if (titleEl) titleEl.textContent = title || gettext('Delete');
+  if (textEl) textEl.textContent = message || gettext('Delete?');
+  if (acceptBtn) {
+    acceptBtn.textContent = confirmLabel || gettext('Delete');
+    acceptBtn.classList.toggle('btn-danger', tone !== 'primary');
+    acceptBtn.classList.toggle('btn-primary', tone === 'primary');
+  }
+  if (cancelBtn) cancelBtn.textContent = cancelLabel || gettext('Cancel');
+  if (closeBtn) closeBtn.setAttribute('aria-label', cancelLabel || gettext('Cancel'));
+
+  modal.removeAttribute('hidden');
+  document.body.classList.add('confirm-modal-open');
+
+  setTimeout(() => {
+    acceptBtn?.focus();
+  }, 0);
+
+  return new Promise((resolve) => {
+    confirmModalPromiseResolve = resolve;
+  });
+}
+
 function formatDateISOToLocal(iso) {
   try {
     const d = new Date(iso);
@@ -24,6 +148,70 @@ function formatDateISOToLocal(iso) {
   } catch (_) {
     return iso || '';
   }
+}
+
+function getPostTextToggleCopy(expanded) {
+  if (currentLangIsRussian()) {
+    return expanded ? 'Свернуть' : 'Читать далее';
+  }
+  return expanded ? 'Show less' : 'Read more';
+}
+
+function applyPostTextClampState(wrap) {
+  if (!wrap) return;
+  const content = wrap.querySelector('[data-post-text-content]');
+  const toggle = wrap.querySelector('[data-post-text-toggle]');
+  if (!content || !toggle) return;
+
+  const styles = getComputedStyle(content);
+  const lineHeight = parseFloat(styles.lineHeight || '0');
+  const clampHeight = lineHeight > 0 ? lineHeight * 10 : 0;
+  const shouldClamp = clampHeight > 0 && content.scrollHeight - 1 > clampHeight;
+
+  if (!shouldClamp) {
+    wrap.classList.remove('is-collapsed', 'is-expanded');
+    toggle.hidden = true;
+    return;
+  }
+
+  const expanded = wrap.classList.contains('is-expanded');
+  wrap.classList.toggle('is-collapsed', !expanded);
+  toggle.hidden = false;
+  toggle.textContent = getPostTextToggleCopy(expanded);
+}
+
+function initPostTextClamp(scope = document) {
+  scope.querySelectorAll('[data-post-text-wrap]').forEach((wrap) => {
+    if (!wrap.classList.contains('is-expanded')) {
+      wrap.classList.add('is-collapsed');
+    }
+    applyPostTextClampState(wrap);
+  });
+}
+
+function resizeAutoGrowTextarea(el) {
+  if (!(el instanceof HTMLTextAreaElement)) return;
+  const styles = getComputedStyle(el);
+  const maxHeight = parseFloat(styles.maxHeight || '0');
+  el.style.height = 'auto';
+  const nextHeight = el.scrollHeight;
+  if (maxHeight > 0 && nextHeight > maxHeight) {
+    el.style.height = `${maxHeight}px`;
+    el.style.overflowY = 'auto';
+  } else {
+    el.style.height = `${nextHeight}px`;
+    el.style.overflowY = 'hidden';
+  }
+}
+
+function initAutoGrowTextareas(scope = document) {
+  scope.querySelectorAll('textarea[data-autogrow-textarea]').forEach((el) => {
+    if (el.dataset.autogrowBound !== '1') {
+      el.dataset.autogrowBound = '1';
+      el.addEventListener('input', () => resizeAutoGrowTextarea(el));
+    }
+    resizeAutoGrowTextarea(el);
+  });
 }
 
 function setLikeState(btn, liked, likeCount) {
@@ -328,6 +516,25 @@ window.initCommentForms = initCommentForms;
   });
 })();
 
+(function initPostTextToggleDelegated() {
+  if (document.body.dataset.postTextToggleBound === '1') return;
+  document.body.dataset.postTextToggleBound = '1';
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-post-text-toggle]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const wrap = btn.closest('[data-post-text-wrap]');
+    if (!wrap) return;
+
+    const nextExpanded = !wrap.classList.contains('is-expanded');
+    wrap.classList.toggle('is-expanded', nextExpanded);
+    wrap.classList.toggle('is-collapsed', !nextExpanded);
+    btn.textContent = getPostTextToggleCopy(nextExpanded);
+  });
+})();
+
 (function initCommentDeleteDelegated() {
   document.addEventListener('click', async (e) => {
     const btn = e.target.closest('[data-comment-delete]');
@@ -609,6 +816,17 @@ function bindEditFormAjax() {
     if (!url) return;
     e.preventDefault();
 
+    if (action === 'delete') {
+      const copy = getPostDeleteConfirmCopy();
+      const confirmed = await openConfirmModal({
+        title: copy.title,
+        message: copy.message,
+        confirmLabel: copy.confirmLabel,
+        cancelLabel: copy.cancelLabel,
+      });
+      if (!confirmed) return;
+    }
+
     const csrftoken = getCSRF(document);
     const r = await fetch(url, {
       method: 'POST',
@@ -620,6 +838,9 @@ function bindEditFormAjax() {
     const card = a.closest('.post-card');
 
     if (action === 'hide' && card) {
+      card.remove();
+    }
+    if (action === 'delete' && card) {
       card.remove();
     }
     if (action === 'unhide') {
@@ -641,8 +862,41 @@ function bindEditFormAjax() {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
+  initAutoGrowTextareas();
+  initPostTextClamp();
   initCommentForms();
   initDropzone();
   bindCreateFormAjax();
   bindEditFormAjax();
 });
+
+window.addEventListener('resize', () => {
+  initPostTextClamp();
+  initAutoGrowTextareas();
+});
+
+const postTextObserver = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    mutation.addedNodes.forEach((node) => {
+      if (!(node instanceof HTMLElement)) return;
+      if (node.matches?.('[data-post-text-wrap]')) {
+        initPostTextClamp(node.parentElement || node);
+        return;
+      }
+      if (node.querySelector?.('[data-post-text-wrap]')) {
+        initPostTextClamp(node);
+      }
+      if (node.matches?.('textarea[data-autogrow-textarea]')) {
+        initAutoGrowTextareas(node.parentElement || node);
+        return;
+      }
+      if (node.querySelector?.('textarea[data-autogrow-textarea]')) {
+        initAutoGrowTextareas(node);
+      }
+    });
+  }
+});
+
+if (document.body) {
+  postTextObserver.observe(document.body, { childList: true, subtree: true });
+}

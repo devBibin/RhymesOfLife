@@ -41,6 +41,42 @@
     if (fb) fb.remove();
   }
 
+  function normalizeSoftBreaksForLists(editor) {
+    const model = editor.model;
+    const selection = model.document.selection;
+    const softBreaks = [];
+
+    for (const block of selection.getSelectedBlocks()) {
+      for (const item of model.createRangeIn(block).getItems()) {
+        if (item.is && item.is('element', 'softBreak')) {
+          softBreaks.push(item);
+        }
+      }
+    }
+
+    if (!softBreaks.length) return;
+
+    model.change((writer) => {
+      softBreaks.reverse().forEach((softBreak) => {
+        if (!softBreak.root) return;
+        const after = writer.createPositionAfter(softBreak);
+        writer.split(after);
+        writer.remove(softBreak);
+      });
+    });
+  }
+
+  function bindListNormalization(editor) {
+    ['bulletedList', 'numberedList'].forEach((commandName) => {
+      const command = editor.commands.get(commandName);
+      if (!command || command._softBreakNormalizationBound) return;
+      command._softBreakNormalizationBound = true;
+      command.on('execute', () => {
+        normalizeSoftBreaksForLists(editor);
+      }, { priority: 'high' });
+    });
+  }
+
   function initEditor(el) {
     if (!window.CKEDITOR || !CKEDITOR.ClassicEditor) {
       console.warn('CKEditor super-build not loaded');
@@ -52,19 +88,42 @@
     const placeholder = el.dataset.placeholder || gettext('Start writing…');
     const requiredMsg = el.dataset.requiredMsg || gettext('Content is required.');
     const csrfToken = getCsrfToken();
-
-    CKEDITOR.ClassicEditor.create(el, {
-      language: lang,
-      placeholder: placeholder,
-      toolbar: {
-        items: [
+    const mode = el.dataset.editorMode || 'full';
+    const disableUploads = el.dataset.disableUploads === '1';
+    const toolbarItems = mode === 'post'
+      ? [
+          'bold', 'italic', 'underline', '|',
+          'link', 'blockQuote', '|',
+          'bulletedList', 'numberedList', '|',
+          'undo', 'redo'
+        ]
+      : [
           'heading', '|',
           'bold', 'italic', 'underline', 'fontColor', 'fontBackgroundColor', 'fontSize', '|',
           'alignment', 'link', 'blockQuote', 'codeBlock', 'horizontalLine', '|',
           'bulletedList', 'numberedList', '|',
           'insertTable', 'imageUpload', 'mediaEmbed', '|',
           'undo', 'redo'
-        ]
+        ];
+    const removePlugins = [
+      'CKBox', 'CKFinder', 'EasyImage',
+      'ExportPdf', 'ExportWord', 'AIAssistant', 'WProofreader',
+      'ImportWord', 'MathType',
+      'RealTimeCollaborativeComments', 'RealTimeCollaborativeTrackChanges',
+      'RealTimeCollaborativeRevisionHistory', 'PresenceList', 'Comments',
+      'TrackChanges', 'TrackChangesData', 'RevisionHistory', 'Users',
+      'MultiLevelList', 'Pagination', 'PasteFromOfficeEnhanced', 'CaseChange',
+      'SlashCommand', 'Template', 'FormatPainter', 'DocumentOutline', 'TableOfContents'
+    ];
+    if (disableUploads) {
+      removePlugins.push('ImageUpload', 'ImageUploadEditing', 'ImageUploadUI', 'ImageInsert', 'ImageInsertUI', 'MediaEmbed');
+    }
+
+    CKEDITOR.ClassicEditor.create(el, {
+      language: lang,
+      placeholder: placeholder,
+      toolbar: {
+        items: toolbarItems
       },
 
       htmlSupport: {
@@ -120,24 +179,20 @@
 
       mediaEmbed: { previewsInData: true },
 
-      simpleUpload: {
-        uploadUrl: uploadUrl,
-        headers: { 'X-CSRFToken': csrfToken }
-      },
+      ...(disableUploads ? {} : {
+        simpleUpload: {
+          uploadUrl: uploadUrl,
+          headers: { 'X-CSRFToken': csrfToken }
+        }
+      }),
 
-      removePlugins: [
-        'CKBox', 'CKFinder', 'EasyImage',
-        'ExportPdf', 'ExportWord', 'AIAssistant', 'WProofreader',
-        'ImportWord', 'MathType',
-        'RealTimeCollaborativeComments', 'RealTimeCollaborativeTrackChanges',
-        'RealTimeCollaborativeRevisionHistory', 'PresenceList', 'Comments',
-        'TrackChanges', 'TrackChangesData', 'RevisionHistory', 'Users',
-        'MultiLevelList', 'Pagination', 'PasteFromOfficeEnhanced', 'CaseChange',
-        'SlashCommand', 'Template', 'FormatPainter', 'DocumentOutline', 'TableOfContents'
-      ]
+      removePlugins: removePlugins
     })
       .then(editor => {
+        el.value = editor.getData();
+        bindListNormalization(editor);
         editor.model.document.on('change:data', () => {
+          el.value = editor.getData();
           clearError(el);
         });
 
