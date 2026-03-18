@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
+from django.templatetags.static import static
 from django.views.decorators.http import require_http_methods, require_POST
 from django.utils.timezone import localtime
 from django.views.decorators.csrf import csrf_protect
@@ -353,13 +354,13 @@ def serialize_comment(c, request):
     info = c.author
     user = info.user
     can_delete = (user == request.user) or _can_moderate(request.user)
-    avatar_url = "/static/img/avatar-default.png"
+    avatar_url = static("img/avatar-default.png")
     avatar = getattr(info, "avatar", None)
     if avatar and getattr(avatar, "name", ""):
         try:
             avatar_url = avatar.url
         except ValueError:
-            avatar_url = "/static/img/avatar-default.png"
+            avatar_url = static("img/avatar-default.png")
     return {
         "id": c.id,
         "post": c.post_id,

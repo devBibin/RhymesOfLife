@@ -3,7 +3,7 @@
 /* ========== SED COVER ========== */
 .sed-cover {
   background-color: var(--color-background-cover);
-  background-image: url('/static/images/cover__bg-02.svg');
+  background-image: url('../images/cover__bg-02.svg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 {% extends "base/info/info_base.html" %}
-
+{% load static %}
 {% block title %}Синдром Марфана{% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
         <!-- ========== Mobile ========== -->
         <div class="marfan-cover-mobile">
             <div class="marfan-cover-mobile__image-wrapper">
-                <img src="/static/images/marfan__img-mob.png" alt="Иллюстрация синдрома Марфана"
+                <img src="{% static 'images/marfan__img-mob.png' %}" alt="Иллюстрация синдрома Марфана"
                     class="marfan-cover-mobile__image">
                 <div class="marfan-cover-mobile__title">
                     <h1 class="h1">Синдром Марфана</h1>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="marfan-cover-desktop__image-wrapper">
-                    <img src="/static/images/marfan__img.png" alt="Иллюстрация синдрома Марфана"
+                    <img src="{% static 'images/marfan__img.png' %}" alt="Иллюстрация синдрома Марфана"
                         class="marfan-cover-desktop__image">
                 </div>
             </div>
@@ -74,7 +74,7 @@
             <div class="grid">
                 <header class="section-header grid-item--center">
                     <div class="section-header__icon">
-                        <img src="/static/images/cross__icon-img.png" alt="Иконка признаков" class="icon">
+                        <img src="{% static 'images/cross__icon-img.png' %}" alt="Иконка признаков" class="icon">
                     </div>
                     <h2 class="h2 section-header__title" id="signs-title">Признаки синдрома Марфана</h2>
                 </header>
@@ -151,7 +151,7 @@
             <div class="grid">
                 <header class="section-header grid-item--center">
                     <div class="section-header__icon">
-                        <img src="/static/images/search__icon-img.png" alt="Иконка диагностики" class="icon">
+                        <img src="{% static 'images/search__icon-img.png' %}" alt="Иконка диагностики" class="icon">
                     </div>
                     <h2 class="h2 section-header__title" id="diagnostic-title">Диагностика синдрома Марфана</h2>
                 </header>
@@ -204,7 +204,7 @@
             <div class="grid">
                 <header class="section-header grid-item--center">
                     <div class="section-header__icon">
-                        <img src="/static/images/aid-kit__icon-img.png" alt="Иконка лечения" class="icon">
+                        <img src="{% static 'images/aid-kit__icon-img.png' %}" alt="Иконка лечения" class="icon">
                     </div>
                     <h2 class="h2 section-header__title" id="treatment-title">Как лечится синдром Марфана?</h2>
                 </header>
@@ -243,7 +243,7 @@
             <div class="grid">
                 <header class="section-header grid-item--full section-header--center">
                     <div class="section-header__icon">
-                        <img src="/static/images/attention__icon-img.png" alt="Иконка внимания"
+                        <img src="{% static 'images/attention__icon-img.png' %}" alt="Иконка внимания"
                             class="icon icon--large">
                     </div>
                 </header>

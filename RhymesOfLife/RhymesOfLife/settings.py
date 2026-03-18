@@ -64,9 +64,6 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = "/login/"
 
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-
-
 ONBOARDING_REQUIRE_CONSENTS = True
 ONBOARDING_REQUIRE_PHONE = True
 ONBOARDING_SKIP_FOR_STAFF = True
@@ -158,6 +155,15 @@ STATIC_ROOT = environment.get("STATIC_ROOT", os.path.join(BASE_DIR, "staticfiles
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = environment.get("MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 LOCALE_PATHS = [BASE_DIR / "locale"]
 

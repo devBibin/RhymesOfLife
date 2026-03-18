@@ -1,5 +1,5 @@
 {% extends "base/info/info_base.html" %}
-
+{% load static %}
 {% block title %}Поддержка людей с дисплазиями соединительной ткани{% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
         <div class="cover-desktop">
             <div class="cover-desktop__content">
                 <div class="cover-desktop__image-wrapper">
-                    <img src="/static/images/cover__img.png" alt="Дисплазия соединительной ткани" class="cover-desktop__img" />
+                    <img src="{% static 'images/cover__img.png' %}" alt="Дисплазия соединительной ткани" class="cover-desktop__img" />
                 </div>
                 <div class="cover-desktop__text">
                     <div class="cover-desktop__header">
@@ -67,7 +67,7 @@
         <div class="grid">
             <header class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/about__icon-img.png" alt="" class="icon">
+                    <img src="{% static 'images/about__icon-img.png' %}" alt="" class="icon">
                 </div>
                 <h2 class="h2 section-header__title" id="info-title">О проекте</h2>
             </header>
@@ -111,7 +111,7 @@
         <div class="grid">
             <header class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/folder__icon-img.png" alt="" class="icon">
+                    <img src="{% static 'images/folder__icon-img.png' %}" alt="" class="icon">
                 </div>
                 <h2 class="h2 section-header__title" id="class-title">Классификация</h2>
             </header>
@@ -160,7 +160,7 @@
         <div class="grid">
             <header class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/how__icon-img.png" alt="" class="icon">
+                    <img src="{% static 'images/how__icon-img.png' %}" alt="" class="icon">
                 </div>
                 <h2 class="h2 section-header__title" id="diagnostic-title">Как заподозрить у себя или у своего близкого</h2>
             </header>
@@ -189,7 +189,7 @@
         <div class="grid">
             <header class="section-header grid-item--full section-header--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/attention-w__icon-img.png" alt="" class="icon icon--large">
+                    <img src="{% static 'images/attention-w__icon-img.png' %}" alt="" class="icon icon--large">
                 </div>
             </header>
             <div class="attention__content">
@@ -210,7 +210,7 @@
             <div class="help__text-content">
                 <header class="section-header">
                     <div class="section-header__icon">
-                        <img src="/static/images/heart__icon-img.png" alt="" class="icon">
+                        <img src="{% static 'images/heart__icon-img.png' %}" alt="" class="icon">
                     </div>
                     <h2 class="h2 section-header__title" id="help-title">Чем мы можем помочь</h2>
                 </header>
@@ -236,7 +236,7 @@
             </div>
 
             <div class="help__image-wrapper">
-                <img src="/static/images/help__img.png" alt="Иллюстрация помощи" class="help__image">
+                <img src="{% static 'images/help__img.png' %}" alt="Иллюстрация помощи" class="help__image">
             </div>
         </div>
     </div>

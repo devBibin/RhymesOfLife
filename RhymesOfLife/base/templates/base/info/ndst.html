@@ -1,5 +1,5 @@
 {% extends "base/info/info_base.html" %}
-
+{% load static %}
 {% block title %}Недифференцированная дисплазия соединительной ткани{% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
         <!-- ========== Mobile ========== -->
         <div class="ndst-cover-mobile">
             <div class="ndst-cover-mobile__image-wrapper">
-                <img src="/static/images/ndst__img-mob.png" alt="Иллюстрация дисплазии соединительной ткани"
+                <img src="{% static 'images/ndst__img-mob.png' %}" alt="Иллюстрация дисплазии соединительной ткани"
                     class="ndst-cover-mobile__image">
                 <div class="ndst-cover-mobile__title">
                     <h1 class="h1">Недифференцированная дисплазия соединительной ткани</h1>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="ndst-cover-desktop__image-wrapper">
-                    <img src="/static/images/ndst__img.png" alt="Иллюстрация дисплазии соединительной ткани"
+                    <img src="{% static 'images/ndst__img.png' %}" alt="Иллюстрация дисплазии соединительной ткани"
                         class="ndst-cover-desktop__image">
                 </div>
             </div>
@@ -55,7 +55,7 @@
         <div class="grid">
             <div class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/cross__icon-img.png" alt="Иконка проекта" class="icon">
+                    <img src="{% static 'images/cross__icon-img.png' %}" alt="Иконка проекта" class="icon">
                 </div>
                 <div class="hypermob__header-titile">
                     <h2 class="h2 section-header__title">Гипермобильность</h2>
@@ -93,7 +93,7 @@
         <div class="beiton__content">
             <div class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/how__icon-img.png" alt="Иконка проекта" class="icon">
+                    <img src="{% static 'images/how__icon-img.png' %}" alt="Иконка проекта" class="icon">
                 </div>
                 <div class="beiton__header-title">
                     <h2 class="h2 section-header__title">Как определить гипермобильность суставов</h2>
@@ -125,7 +125,7 @@
                             </p>
                         </div>
                         <div class="beiton__test-image-wrapper">
-                            <img src="/static/images/beiton-test__img-1.png" alt="" class="beiton__test-image">
+                            <img src="{% static 'images/beiton-test__img-1.png' %}" alt="" class="beiton__test-image">
                         </div>
                     </div>
                     <div class="beiton__test-item">
@@ -142,7 +142,7 @@
                             </p>
                         </div>
                         <div class="beiton__test-image-wrapper">
-                            <img src="/static/images/beiton-test__img-2.png" alt="" class="beiton__test-image">
+                            <img src="{% static 'images/beiton-test__img-2.png' %}" alt="" class="beiton__test-image">
                         </div>
                     </div>
                     <div class="beiton__test-item">
@@ -160,7 +160,7 @@
                             </p>
                         </div>
                         <div class="beiton__test-image-wrapper">
-                            <img src="/static/images/beiton-test__img-3.png" alt="" class="beiton__test-image">
+                            <img src="{% static 'images/beiton-test__img-3.png' %}" alt="" class="beiton__test-image">
                         </div>
                     </div>
                     <div class="beiton__test-item">
@@ -176,7 +176,7 @@
                             </p>
                         </div>
                         <div class="beiton__test-image-wrapper">
-                            <img src="/static/images/beiton-test__img-4.png" alt="" class="beiton__test-image">
+                            <img src="{% static 'images/beiton-test__img-4.png' %}" alt="" class="beiton__test-image">
                         </div>
                     </div>
                     <div class="beiton__test-item">
@@ -192,7 +192,7 @@
                             </p>
                         </div>
                         <div class="beiton__test-image-wrapper">
-                            <img src="/static/images/beiton-test__img-5.png" alt="" class="beiton__test-image">
+                            <img src="{% static 'images/beiton-test__img-5.png' %}" alt="" class="beiton__test-image">
                         </div>
                     </div>
                 </div>
@@ -228,7 +228,7 @@
         <div class="grid">
             <div class="section-header grid-item--center">
                 <div class="section-header__icon">
-                    <img src="/static/images/search__icon-img.png" alt="Иконка проекта" class="icon">
+                    <img src="{% static 'images/search__icon-img.png' %}" alt="Иконка проекта" class="icon">
                 </div>
                 <div class="gentest__header-titile">
                     <h2 class="h2 section-header__title">Когда необходимо генетическое тестирование?</h2>

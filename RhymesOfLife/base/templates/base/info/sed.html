@@ -1,5 +1,5 @@
 {% extends "base/info/info_base.html" %}
-
+{% load static %}
 {% block title %}Синдром Элерса-Данло{% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
         <!-- ========== Mobile ========== -->
         <div class="sed-cover-mobile">
             <div class="sed-cover-mobile__image-wrapper">
-                <img src="/static/images/sed__img-mob.png" alt="Иллюстрация дисплазии соединительной ткани"
+                <img src="{% static 'images/sed__img-mob.png' %}" alt="Иллюстрация дисплазии соединительной ткани"
                     class="sed-cover-mobile__image">
                 <div class="sed-cover-mobile__title">
                     <h1 class="h1">Синдром Элерса-Данло</h1>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="sed-cover-desktop__image-wrapper">
-                    <img src="/static/images/sed__img.png" alt="Иллюстрация дисплазии соединительной ткани"
+                    <img src="{% static 'images/sed__img.png' %}" alt="Иллюстрация дисплазии соединительной ткани"
                         class="sed-cover-desktop__image">
                 </div>
             </div>

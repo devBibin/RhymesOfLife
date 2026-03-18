@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const changeBtn    = document.getElementById("change-avatar-btn");
   const deleteBtn    = document.getElementById("delete-avatar-btn");
   const profileForm  = document.getElementById("profile-form");
-  const fallbackSrc  = (avatarImg && avatarImg.dataset.defaultSrc) || "/static/images/default-avatar.png";
+  const fallbackSrc  = (avatarImg && avatarImg.dataset.defaultSrc) || "";
 
   const submitForm = () => { if (profileForm) profileForm.submit(); };
 
@@ -18,7 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation();
       if (avatarMenu) avatarMenu.classList.toggle("show");
     });
-    avatarImg.addEventListener("error", () => { avatarImg.src = fallbackSrc; });
+    avatarImg.addEventListener("error", () => {
+      if (fallbackSrc) avatarImg.src = fallbackSrc;
+    });
   }
 
   document.addEventListener("click", (e) => {
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (deleteInput) deleteInput.value = "1";
       if (avatarMenu) avatarMenu.classList.remove("show");
       if (avatarInput) avatarInput.value = "";
-      if (avatarImg) avatarImg.src = fallbackSrc;
+      if (avatarImg && fallbackSrc) avatarImg.src = fallbackSrc;
       submitForm();
     });
   }
