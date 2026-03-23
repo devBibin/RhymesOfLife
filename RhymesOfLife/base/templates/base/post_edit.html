@@ -1,125 +1,154 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
-{% block title %}{% trans "Edit post" %} — {{ block.super }}{% endblock %}
+{% block title %}{% trans "Edit post" %} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/tiptap.css' %}">
+  <style>
+    .post-compose-page{max-width:980px;margin:0 auto}
+    .post-compose-hero{margin-bottom:1.2rem;padding:1.1rem 1.25rem;border:1px solid rgba(15,23,42,.08);border-radius:24px;background:radial-gradient(circle at top left,rgba(56,189,248,.15),transparent 28%),linear-gradient(135deg,#0f766e,#155e75);color:#fff;box-shadow:0 20px 50px rgba(15,23,42,.12)}
+    .post-compose-hero-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap}
+    .post-compose-hero h1{margin:0 0 .35rem;font-size:clamp(1.55rem,2.3vw,2.2rem);font-weight:700}
+    .post-compose-hero p{margin:0;max-width:640px;color:rgba(255,255,255,.84)}
+    .post-compose-back{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.55rem .9rem;background:rgba(255,255,255,.1);color:#fff;text-decoration:none}
+    .post-compose-back:hover{background:rgba(255,255,255,.16);color:#fff}
+    .post-compose-card{border:1px solid rgba(15,23,42,.08);border-radius:28px;background:linear-gradient(180deg,#fff,rgba(248,250,252,.97));box-shadow:0 18px 60px rgba(15,23,42,.08);padding:1.2rem}
+    .post-panel{border:1px solid rgba(15,23,42,.08);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.96));padding:1rem}
+    .post-panel-title{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem}
+    .post-panel-title strong{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:#64748b}
+    .count-chip{display:inline-flex;align-items:center;gap:.25rem;font-size:.82rem;padding:.38rem .65rem;border-radius:999px;background:rgba(15,118,110,.1);color:#115e59;font-weight:700}
+    .post-field label{display:block;margin-bottom:.55rem;font-weight:700;color:#0f172a}
+    .post-field .form-control{border-radius:16px;border-color:rgba(148,163,184,.35);box-shadow:none}
+    .post-field .form-control:focus{border-color:rgba(13,148,136,.44);box-shadow:0 0 0 4px rgba(20,184,166,.08)}
+    [data-autogrow-textarea]{min-height:112px;max-height:240px;resize:none;overflow-y:hidden}
+    .dz-modern{border:1.5px dashed rgba(13,148,136,.3);border-radius:22px;padding:1.5rem 1rem;text-align:center;background:radial-gradient(circle at top center,rgba(204,251,241,.7),transparent 38%),linear-gradient(180deg,#f8fffd,#fff)}
+    .dz-modern.drag{background:radial-gradient(circle at top center,rgba(153,246,228,.8),transparent 38%),linear-gradient(180deg,#f0fdfa,#fff);border-color:rgba(13,148,136,.45)}
+    .dz-modern i{color:#0f766e}
+    .thumb{position:relative;border-radius:18px;overflow:hidden;background:#e2e8f0;box-shadow:0 12px 28px rgba(15,23,42,.1)}
+    .thumb img{display:block;width:100%;height:170px;object-fit:cover}
+    .thumb .remove{position:absolute;top:8px;right:8px;border:none;border-radius:999px;padding:.4rem .55rem;background:rgba(15,23,42,.66);color:#fff;line-height:1}
+    .existing-note{font-size:.88rem;color:#64748b}
+    .btn-remove-toggle{position:absolute;top:8px;right:8px}
+    .post-actions{display:flex;gap:.75rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:1.1rem}
+    .post-actions-main{display:flex;gap:.75rem;flex-wrap:wrap}
+    .post-actions .btn{border-radius:16px;padding:.82rem 1.15rem;font-weight:700}
+    .post-actions-main .btn{min-width:170px}
+    .post-actions .btn-primary{border:none;background:linear-gradient(135deg,#0f766e,#155e75)}
+    .post-actions .btn-outline-secondary,.post-actions .btn-secondary{border-color:rgba(15,23,42,.16)}
+    @media (max-width:767.98px){.post-compose-hero{padding:1rem;border-radius:20px}.post-compose-card{padding:.8rem;border-radius:22px}.post-panel{padding:.8rem;border-radius:18px}.dz-modern{padding:1.15rem .8rem}.thumb img{height:148px}.post-actions,.post-actions-main{flex-direction:column;align-items:stretch}.post-actions .btn,.post-actions-main .btn,.post-compose-back{width:100%;justify-content:center}}
+  </style>
+{% endblock %}
 
 {% block content %}
-<style>
-  .compose-wrap{max-width:840px;margin:0 auto}
-  .card-modern{border:1px solid rgba(16,24,40,.08);border-radius:16px;box-shadow:0 6px 30px rgba(16,24,40,.06)}
-  .dz-modern{border:2px dashed rgba(99,102,241,.35);border-radius:16px;padding:28px;text-align:center;background:linear-gradient(180deg,#fff,rgba(249,250,251,.6))}
-  .dz-modern.drag{background:linear-gradient(180deg,#eef2ff,#fff)}
-  .thumb{position:relative;border-radius:12px;overflow:hidden}
-  .thumb img{display:block;width:100%;height:160px;object-fit:cover}
-  .thumb .remove{position:absolute;top:6px;right:6px;border:none;border-radius:10px;padding:.25rem .5rem;background:rgba(0,0,0,.55);color:#fff}
-  .meta-row{display:flex;justify-content:space-between;align-items:center}
-  .count-chip{font-size:.875rem;padding:.25rem .55rem;border-radius:999px;background:rgba(99,102,241,.12);color:#4f46e5;font-weight:600}
-  .btn-gradient{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;border:none}
-  .btn-gradient:hover{filter:brightness(1.05);color:#fff}
-  .soft-card{border:1px solid rgba(16,24,40,.06);border-radius:14px;padding:16px;background:linear-gradient(180deg,#fff,rgba(249,250,251,.55))}
-  .note{font-size:.875rem;color:#64748b}
-  .toggle-btn{min-width:120px}
-  [data-autogrow-textarea]{min-height:112px;max-height:240px;resize:none;overflow-y:hidden}
-  .ck-editor__editable_inline{min-height:220px;max-height:320px}
-</style>
-
-<div class="container py-4 compose-wrap">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">{% trans "Edit post" %}</h1>
-    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">{% trans "Back" %}</a>
+<div class="post-compose-page py-4">
+  <div class="post-compose-hero">
+    <div class="post-compose-hero-top">
+      <div>
+        <h1>{% trans "Edit post" %}</h1>
+        <p>{% trans "Edit your post to keep updates clear, relevant and easy to understand." %}</p>
+      </div>
+      <a href="{% url 'home' %}" class="post-compose-back">
+        <i class="bi bi-arrow-left"></i>
+        <span>{% trans "Back" %}</span>
+      </a>
+    </div>
   </div>
 
   <div id="post-edit-alert" class="alert d-none" role="alert"></div>
 
-  <form id="post-edit-form" method="post" enctype="multipart/form-data" class="card-modern p-4">
+  <form id="post-edit-form" method="post" enctype="multipart/form-data" class="post-compose-card">
     {% csrf_token %}
 
-    <div class="mb-3">
-      <label for="post-text" class="form-label fw-semibold">{% trans "Text" %}</label>
-      <textarea id="post-text"
-                name="text"
-                rows="4"
-                class="form-control js-ckeditor"
-                data-autogrow-textarea
-                data-editor-mode="post"
-                data-disable-uploads="1"
-                data-language="{{ LANGUAGE_CODE|slice:':2' }}"
-                data-placeholder="{% trans 'Write something...' %}">{{ post.text }}</textarea>
-    </div>
+    <section class="post-panel mb-3">
+      <div class="post-field">
+        <label for="post-text">{% trans "Post text" %}</label>
+        <textarea id="post-text"
+                  name="text"
+                  rows="4"
+                  class="form-control js-tiptap"
+                  data-autogrow-textarea
+                  data-editor-mode="post"
+                  data-disable-uploads="1"
+                  data-language="{{ LANGUAGE_CODE|slice:':2' }}"
+                  data-placeholder="{% trans 'Write something...' %}">{{ post.text }}</textarea>
+      </div>
+    </section>
 
     {% if post.images.all %}
-    <div class="mb-4 soft-card">
-      <div class="meta-row mb-2">
-        <span class="fw-semibold">{% trans "Current images" %}</span>
-        <span class="note">{% trans "Click × to mark for removal" %}</span>
-      </div>
-      <div class="row g-3" id="existing-images">
-        {% for img in post.images.all %}
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="thumb border">
-            <img src="{{ img.image.url }}" alt="">
-            <button type="button" class="remove btn-light" data-remove-image="{{ img.id }}" aria-label="{% trans 'Remove' %}">×</button>
-            <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
-          </div>
+      <section class="post-panel mb-3">
+        <div class="post-panel-title">
+          <strong>{% trans "Current images" %}</strong>
+          <span class="existing-note">{% trans "Tap the X to mark an image for removal." %}</span>
         </div>
-        {% endfor %}
-      </div>
-    </div>
+
+        <div class="row g-3" id="existing-images">
+          {% for img in post.images.all %}
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="thumb border-0">
+                <img src="{{ img.image.url }}" alt="">
+                <button type="button"
+                        class="remove btn-light btn-remove-toggle"
+                        data-remove-image="{{ img.id }}"
+                        aria-label="{% trans 'Remove' %}">×</button>
+                <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
     {% endif %}
 
-    <div class="mb-3">
-      <div class="meta-row mb-2">
+    <section class="post-panel">
+      <div class="post-panel-title">
         {% with existing_count=post.images.count %}
-        <label class="form-label fw-semibold mb-0">{% trans "Add images" %}</label>
-        <span class="count-chip">
-          <span data-files-count>{{ existing_count }}</span> /
-          <span data-files-max>10</span>
-        </span>
+          <strong>{% trans "Add images" %}</strong>
+          <span class="count-chip"><span data-files-count>{{ existing_count }}</span> / <span data-files-max>10</span></span>
       </div>
 
-      <div id="dropzone" class="dz-modern"
-           data-max="10"
-           data-existing="{{ existing_count }}">
+      <div id="dropzone" class="dz-modern" data-max="10" data-existing="{{ existing_count }}">
         {% endwith %}
-        <div class="mb-1"><i class="bi bi-cloud-upload fs-1"></i></div>
-        <div class="fw-semibold">{% trans "Upload from device" %}</div>
-        <div class="text-muted small mb-3">{% trans "or drag & drop files here" %}</div>
+        <div class="mb-2"><i class="bi bi-cloud-arrow-up fs-1"></i></div>
+        <div class="fw-semibold mb-1">{% trans "Upload from device" %}</div>
+        <div class="text-muted small mb-3">{% trans "Drag photos here or choose them from your gallery." %}</div>
         <input id="images-input" type="file" name="images" accept="image/*" multiple class="d-none">
-        <button type="button" id="pick-files" class="btn btn-outline-primary" data-open-file>
-          <i class="bi bi-images me-1"></i>{% trans "Choose files" %}
+        <button type="button" id="pick-files" class="btn btn-outline-primary dz-action" data-open-file>
+          <i class="bi bi-images me-1"></i>
+          <span>{% trans "Choose files" %}</span>
         </button>
       </div>
 
       <div id="new-files" class="row g-3 mt-2" aria-live="polite"></div>
-    </div>
+    </section>
 
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-gradient px-4">{% trans "Save changes" %}</button>
-      <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+    <div class="post-actions">
+      <div class="post-actions-main">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
+        <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
+      </div>
 
       {% if post.is_hidden %}
-        <button type="button" class="btn btn-secondary ms-auto toggle-btn"
-                data-action="unhide" data-url="{% url 'post_unhide' post.id %}">
+        <button type="button"
+                class="btn btn-secondary"
+                data-action="unhide"
+                data-url="{% url 'post_unhide' post.id %}">
           {% trans "Unhide" %}
         </button>
       {% else %}
-        <button type="button" class="btn btn-outline-secondary ms-auto toggle-btn"
-                data-action="hide" data-url="{% url 'post_hide' post.id %}">
+        <button type="button"
+                class="btn btn-outline-secondary"
+                data-action="hide"
+                data-url="{% url 'post_hide' post.id %}">
           {% trans "Hide" %}
         </button>
       {% endif %}
     </div>
   </form>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
-  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
-  {% if LANGUAGE_CODE|slice:":2" == 'ru' %}
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/translations/ru.js"></script>
-  {% endif %}
-  <script src="{% static 'js/ckeditor-init.js' %}"></script>
+  <script type="module" src="{% static 'js/tiptap-init.js' %}"></script>
   <script src="{% static 'js/post_editor.js' %}"></script>
   <script src="{% static 'js/posts.js' %}"></script>
 {% endblock %}

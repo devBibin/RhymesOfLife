@@ -1,75 +1,90 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
-{% block title %}{% trans "New article" %} — {{ block.super }}{% endblock %}
+{% block title %}{% trans "New article" %} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/tiptap.css' %}">
+  <style>
+    .article-editor-page{max-width:1100px;margin:0 auto}
+    .article-editor-hero{margin-bottom:1.25rem;padding:1.2rem 1.35rem;border:1px solid rgba(15,23,42,.08);border-radius:24px;background:radial-gradient(circle at top left,rgba(45,212,191,.14),transparent 28%),linear-gradient(135deg,#0f766e,#164e63);color:#fff;box-shadow:0 20px 55px rgba(15,23,42,.12)}
+    .article-editor-hero h1{margin:0 0 .35rem;font-size:clamp(1.7rem,2.7vw,2.5rem);font-weight:700}
+    .article-editor-hero p{margin:0;max-width:760px;color:rgba(255,255,255,.84)}
+    .article-editor-card{border:1px solid rgba(15,23,42,.08);border-radius:28px;background:linear-gradient(180deg,#fff,rgba(248,250,252,.96));box-shadow:0 18px 60px rgba(15,23,42,.08);padding:1.35rem}
+    .article-editor-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.8fr);gap:1rem;margin-bottom:1rem}
+    .article-panel{border:1px solid rgba(15,23,42,.08);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,252,.96));padding:1rem}
+    .article-panel-title{display:block;margin-bottom:.55rem;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b}
+    .article-field{margin-bottom:1rem}
+    .article-field:last-child{margin-bottom:0}
+    .article-field label{display:block;margin-bottom:.45rem;font-weight:700;color:#0f172a}
+    .article-field .form-control{border-radius:16px;border-color:rgba(148,163,184,.35);padding:.8rem .95rem;box-shadow:none}
+    .article-field .form-control:focus{border-color:rgba(13,148,136,.44);box-shadow:0 0 0 4px rgba(20,184,166,.08)}
+    .article-help{font-size:.92rem;color:#475569}
+    .article-actions{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:flex-end;margin-top:1.2rem}
+    .article-actions .btn{min-width:180px;border-radius:16px;padding:.8rem 1.1rem;font-weight:700}
+    .article-actions .btn-primary{border:none;background:linear-gradient(135deg,#0f766e,#0f766e 38%,#155e75)}
+    .article-actions .btn-outline-secondary{border-color:rgba(15,23,42,.16)}
+    @media (max-width:991.98px){.article-editor-grid{grid-template-columns:1fr}.article-editor-card{padding:1rem}.article-actions .btn{min-width:unset;flex:1 1 220px}}
+    @media (max-width:767.98px){.article-editor-hero{padding:1rem;border-radius:20px}.article-editor-card{padding:.8rem;border-radius:22px}.article-panel{padding:.8rem;border-radius:18px}.article-actions{flex-direction:column}.article-actions .btn{width:100%}}
+  </style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h1>{% trans "New article" %}</h1>
+<div class="article-editor-page mt-4">
+  <div class="article-editor-hero">
+    <h1>{% trans "New article" %}</h1>
+    <p>{% trans "Write detailed and useful articles to share knowledge, research and practical recommendations." %}</p>
+  </div>
 
   {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
   {% endif %}
 
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" class="article-editor-card">
     {% csrf_token %}
 
-    <div class="mb-3">
-      <label class="form-label">{% trans "Title" %}</label>
-      <input name="title" class="form-control" required value="{{ title }}">
+    <div class="article-editor-grid">
+      <div class="article-panel">
+        <div class="article-field">
+          <label>{% trans "Title" %}</label>
+          <input name="title" class="form-control form-control-lg" required value="{{ title }}">
+        </div>
+
+        <div class="article-field">
+          <label>{% trans "Short description" %}</label>
+          <textarea id="article-intro"
+                    name="intro"
+                    class="form-control"
+                    required
+                    maxlength="500"
+                    rows="5"
+                    aria-describedby="article-intro-counter">{{ intro }}</textarea>
+          <div id="article-intro-counter" class="form-text text-end">0 / 500</div>
+        </div>
+      </div>
+
+      <aside class="article-panel">
+        <span class="article-panel-title">{% trans "Cover" %}</span>
+        <div class="article-field">
+          <label>{% trans "Main image" %}</label>
+          <input type="file" name="main_image" class="form-control" accept="image/*">
+        </div>
+        <p class="article-help mb-0">{% trans "Use a clear horizontal image so the article looks strong in previews and lists." %}</p>
+      </aside>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">{% trans "Short description" %}</label>
-      <textarea
-        id="article-intro"
-        name="intro"
-        class="form-control"
-        required
-        maxlength="500"
-        rows="4"
-        aria-describedby="article-intro-counter"
-      >{{ intro }}</textarea>
-      <div id="article-intro-counter" class="form-text text-end">0 / 500</div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">{% trans "Main image" %}</label>
-      <input type="file" name="main_image" class="form-control" accept="image/*">
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">{% trans "Article content" %}</label>
+    <div class="article-panel">
+      <label class="article-panel-title mb-3">{% trans "Article content" %}</label>
       <textarea id="body"
                 name="body"
-                class="form-control js-ckeditor"
+                class="form-control js-tiptap"
                 rows="12"
                 data-language="{{ LANGUAGE_CODE|slice:':2' }}"
                 data-upload-url="{% url 'ck5_upload' %}"
-                data-placeholder="{% trans 'Start writing…' %}">{{ body }}</textarea>
+                data-placeholder="{% trans 'Start writing...' %}">{{ body }}</textarea>
     </div>
 
-    {# Tags disabled for now #}
-    {# <div class="mb-3"> #}
-    {#   <label class="form-label">{% trans "Tags" %}</label> #}
-    {#   <div class="row row-cols-2 row-cols-md-3 g-2"> #}
-    {#     {% for tag in all_tags %} #}
-    {#       <div class="form-check"> #}
-    {#         <input class="form-check-input" #}
-    {#                type="checkbox" #}
-    {#                name="tags" #}
-    {#                id="tag-{{ forloop.counter }}" #}
-    {#                value="{{ tag }}" #}
-    {#                {% if tag in selected_tags %}checked{% endif %}> #}
-    {#         <label class="form-check-label" for="tag-{{ forloop.counter }}"> #}
-    {#           {{ tag }} #}
-    {#         </label> #}
-    {#       </div> #}
-    {#     {% endfor %} #}
-    {#   </div> #}
-    {# </div> #}
-
-    <div class="d-flex gap-2">
+    <div class="article-actions">
       <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
         {% trans "Save draft" %}
       </button>
@@ -82,12 +97,7 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
-  {% if LANGUAGE_CODE|slice:":2" == 'ru' %}
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/translations/ru.js"></script>
-  {% endif %}
-
-  <script src="{% static 'js/ckeditor-init.js' %}"></script>
+  <script type="module" src="{% static 'js/tiptap-init.js' %}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const input = document.getElementById('article-intro');
@@ -103,6 +113,4 @@
       updateCounter();
     });
   </script>
-
-  <style>.ck-editor__editable_inline{min-height:360px}</style>
 {% endblock %}

@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-17 17:08+0000\n"
+"POT-Creation-Date: 2026-03-23 15:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,9 +234,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: base/models.py:465 base/models.py:538
-#: base/templates/base/post_create.html:34
-#: base/templates/base/post_edit.html:36 blog/models.py:263
+#: base/models.py:465 base/models.py:538 blog/models.py:263
 msgid "Text"
 msgstr ""
 
@@ -583,8 +581,8 @@ msgid "System message"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:46
-#: blog/templates/blog/create_article.html:18
-#: blog/templates/blog/edit_article.html:21
+#: blog/templates/blog/create_article.html:49
+#: blog/templates/blog/edit_article.html:59
 msgid "Title"
 msgstr ""
 
@@ -616,15 +614,16 @@ msgstr ""
 
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:17
-#: base/templates/base/post_cards.html:162
+#: base/templates/base/post_cards.html:169
 #: blog/templates/blog/blog_page.html:202
 msgid "Send"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:67
 #: base/templates/base/partials/health_wellness.html:279
-#: base/templates/base/post_create.html:59
-#: base/templates/base/post_edit.html:88 blog/templates/blog/blog_page.html:258
+#: base/templates/base/post_create.html:95
+#: base/templates/base/post_edit.html:126
+#: blog/templates/blog/blog_page.html:258
 msgid "Cancel"
 msgstr ""
 
@@ -668,10 +667,11 @@ msgstr ""
 #: base/templates/base/comment_items.html:16
 #: base/templates/base/partials/health_documents.html:192
 #: base/templates/base/partials/health_medications_partial.html:63
+#: base/templates/base/post_cards.html:97
 #: base/templates/base/profile_edit.html:61
 #: blog/templates/blog/blog_page.html:155
 #: blog/templates/blog/blog_page.html:231
-#: blog/templates/blog/edit_article.html:89
+#: blog/templates/blog/edit_article.html:122
 msgid "Delete"
 msgstr ""
 
@@ -1332,7 +1332,8 @@ msgid "Pending approval"
 msgstr ""
 
 #: base/templates/base/feed.html:43 base/templates/base/feed.html:44
-#: base/templates/base/feed.html:92 base/templates/base/post_create.html:3
+#: base/templates/base/feed.html:92 base/templates/base/post_create.html:4
+#: base/templates/base/post_create.html:45
 msgid "New post"
 msgstr ""
 
@@ -1790,8 +1791,8 @@ msgstr ""
 #: base/templates/base/patients_list.html:146
 #: base/templates/base/patients_list.html:147
 #: base/templates/base/patients_list.html:152
-#: base/templates/base/post_create.html:24
-#: base/templates/base/post_edit.html:27
+#: base/templates/base/post_create.html:50
+#: base/templates/base/post_edit.html:53
 msgid "Back"
 msgstr ""
 
@@ -2133,9 +2134,9 @@ msgid "More actions"
 msgstr ""
 
 #: base/templates/base/post_cards.html:72
-#: base/templates/base/post_create.html:58
-#: blog/templates/blog/create_article.html:68
-#: blog/templates/blog/edit_article.html:76
+#: base/templates/base/post_create.html:96
+#: blog/templates/blog/create_article.html:92
+#: blog/templates/blog/edit_article.html:114
 msgid "Publish"
 msgstr ""
 
@@ -2144,91 +2145,106 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
-#: base/templates/base/post_cards.html:85 base/templates/base/post_edit.html:93
+#: base/templates/base/post_cards.html:85
+#: base/templates/base/post_edit.html:135
 msgid "Unhide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:90 base/templates/base/post_edit.html:98
+#: base/templates/base/post_cards.html:90
+#: base/templates/base/post_edit.html:142
 msgid "Hide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:98
+#: base/templates/base/post_cards.html:102
 msgid "Copy link"
 msgstr ""
 
-#: base/templates/base/post_cards.html:105
+#: base/templates/base/post_cards.html:109
 msgid "Report"
 msgstr ""
 
-#: base/templates/base/post_cards.html:146
+#: base/templates/base/post_cards.html:153
 #: blog/templates/blog/blog_page.html:179
 msgid "Log in to like"
 msgstr ""
 
-#: base/templates/base/post_cards.html:161
+#: base/templates/base/post_cards.html:168
 msgid "Write a comment..."
 msgstr ""
 
-#: base/templates/base/post_cards.html:179
+#: base/templates/base/post_cards.html:186
 msgid "Show more"
 msgstr ""
 
-#: base/templates/base/post_cards.html:187
+#: base/templates/base/post_cards.html:194
 #: base/templates/base/profile_content_fragment.html:105
 msgid "No posts yet."
 msgstr ""
 
-#: base/templates/base/post_create.html:35
-#: base/templates/base/post_edit.html:37
+#: base/templates/base/post_create.html:46
+msgid "Share news, updates and short thoughts with the community."
+msgstr ""
+
+#: base/templates/base/post_create.html:62
+#: base/templates/base/post_edit.html:65
+msgid "Post text"
+msgstr ""
+
+#: base/templates/base/post_create.html:70
+#: base/templates/base/post_edit.html:74
 msgid "Write something..."
 msgstr ""
 
-#: base/templates/base/post_create.html:40
+#: base/templates/base/post_create.html:76
 msgid "Images"
 msgstr ""
 
-#: base/templates/base/post_create.html:46
-msgid "Add photo"
+#: base/templates/base/post_create.html:82
+msgid "Add photos"
 msgstr ""
 
-#: base/templates/base/post_create.html:47
-msgid "Drag & drop or click to upload"
+#: base/templates/base/post_create.html:83
+msgid "Drag files here or open the picker from your device."
 msgstr ""
 
-#: base/templates/base/post_create.html:50
-#: base/templates/base/post_edit.html:79
+#: base/templates/base/post_create.html:87
+#: base/templates/base/post_edit.html:117
 msgid "Choose files"
 msgstr ""
 
-#: base/templates/base/post_edit.html:4 base/templates/base/post_edit.html:26
+#: base/templates/base/post_edit.html:4 base/templates/base/post_edit.html:48
 msgid "Edit post"
 msgstr ""
 
-#: base/templates/base/post_edit.html:43
+#: base/templates/base/post_edit.html:49
+msgid "Edit your post to keep updates clear, relevant and easy to understand."
+msgstr ""
+
+#: base/templates/base/post_edit.html:81
 msgid "Current images"
 msgstr ""
 
-#: base/templates/base/post_edit.html:44
-msgid "Click × to mark for removal"
+#: base/templates/base/post_edit.html:82
+msgid "Tap the X to mark an image for removal."
 msgstr ""
 
-#: base/templates/base/post_edit.html:51
+#: base/templates/base/post_edit.html:93
 msgid "Remove"
 msgstr ""
 
-#: base/templates/base/post_edit.html:63
+#: base/templates/base/post_edit.html:105
 msgid "Add images"
 msgstr ""
 
-#: base/templates/base/post_edit.html:75
+#: base/templates/base/post_edit.html:112
 msgid "Upload from device"
 msgstr ""
 
-#: base/templates/base/post_edit.html:76
-msgid "or drag & drop files here"
+#: base/templates/base/post_edit.html:113
+msgid "Drag photos here or choose them from your gallery."
 msgstr ""
 
-#: base/templates/base/post_edit.html:87
+#: base/templates/base/post_edit.html:127
 #: base/templates/base/profile_edit.html:215
 msgid "Save changes"
 msgstr ""
@@ -2869,32 +2885,32 @@ msgstr ""
 msgid "Failed to update the exam."
 msgstr ""
 
-#: base/views/feed_views.py:37
+#: base/views/feed_views.py:39
 msgid "Too many images."
 msgstr ""
 
-#: base/views/feed_views.py:48
+#: base/views/feed_views.py:50
 #, python-format
 msgid "%(msg)s"
 msgstr ""
 
-#: base/views/feed_views.py:172
+#: base/views/feed_views.py:174
 msgid "Post must contain text or an image."
 msgstr ""
 
-#: base/views/feed_views.py:197
+#: base/views/feed_views.py:199
 msgid "Your post is under review. It will appear after approval."
 msgstr ""
 
-#: base/views/feed_views.py:197
+#: base/views/feed_views.py:199
 msgid "Post published."
 msgstr ""
 
-#: base/views/feed_views.py:252
+#: base/views/feed_views.py:254
 msgid "Post updated."
 msgstr ""
 
-#: base/views/feed_views.py:266
+#: base/views/feed_views.py:268
 msgid "You cannot report your own post."
 msgstr ""
 
@@ -3056,18 +3072,18 @@ msgstr ""
 msgid "Publication date"
 msgstr ""
 
-#: blog/models.py:137 blog/templates/blog/create_article.html:23
-#: blog/templates/blog/edit_article.html:26
+#: blog/models.py:137 blog/templates/blog/create_article.html:54
+#: blog/templates/blog/edit_article.html:64
 msgid "Short description"
 msgstr ""
 
-#: blog/models.py:144 blog/templates/blog/create_article.html:28
-#: blog/templates/blog/edit_article.html:31
+#: blog/models.py:144 blog/templates/blog/create_article.html:69
+#: blog/templates/blog/edit_article.html:79
 msgid "Main image"
 msgstr ""
 
-#: blog/models.py:146 blog/templates/blog/create_article.html:33
-#: blog/templates/blog/edit_article.html:46
+#: blog/models.py:146 blog/templates/blog/create_article.html:77
+#: blog/templates/blog/edit_article.html:101
 msgid "Article content"
 msgstr ""
 
@@ -3109,7 +3125,7 @@ msgstr ""
 
 #: blog/templates/blog/blog_index_page.html:15
 #: blog/templates/blog/create_article.html:4
-#: blog/templates/blog/create_article.html:8
+#: blog/templates/blog/create_article.html:35
 msgid "New article"
 msgstr ""
 
@@ -3169,7 +3185,7 @@ msgid "Anonymous author"
 msgstr ""
 
 #: blog/templates/blog/blog_page.html:152
-#: blog/templates/blog/edit_article.html:87
+#: blog/templates/blog/edit_article.html:130
 msgid "Delete the article?"
 msgstr ""
 
@@ -3202,31 +3218,58 @@ msgstr ""
 msgid "Write a short reason..."
 msgstr ""
 
-#: blog/templates/blog/create_article.html:40
-#: blog/templates/blog/edit_article.html:53
-msgid "Start writing…"
+#: blog/templates/blog/create_article.html:36
+msgid ""
+"Write detailed and useful articles to share knowledge, research and "
+"practical recommendations."
 msgstr ""
 
-#: blog/templates/blog/create_article.html:65
-#: blog/templates/blog/edit_article.html:80
+#: blog/templates/blog/create_article.html:67
+#: blog/templates/blog/edit_article.html:77
+msgid "Cover"
+msgstr ""
+
+#: blog/templates/blog/create_article.html:72
+msgid ""
+"Use a clear horizontal image so the article looks strong in previews and "
+"lists."
+msgstr ""
+
+#: blog/templates/blog/create_article.html:84
+#: blog/templates/blog/edit_article.html:108
+msgid "Start writing..."
+msgstr ""
+
+#: blog/templates/blog/create_article.html:89
+#: blog/templates/blog/edit_article.html:118
 msgid "Save draft"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:7
+#: blog/templates/blog/edit_article.html:4
+#: blog/templates/blog/edit_article.html:41
 msgid "Edit article"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:9
+#: blog/templates/blog/edit_article.html:43
 #: blog/templates/blog/includes/article_cards.html:97
 msgid "Draft"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:36
+#: blog/templates/blog/edit_article.html:46
+msgid ""
+"Update the article to keep the material accurate, useful and easy to read."
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:86
 msgid "Current image"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:39
+#: blog/templates/blog/edit_article.html:90
 msgid "Remove image"
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:95
+msgid "Use a strong cover image to improve previews and article cards."
 msgstr ""
 
 #: blog/templates/blog/includes/article_list_fragment.html:7
@@ -3237,36 +3280,49 @@ msgstr ""
 msgid "Page navigation"
 msgstr ""
 
-#: blog/views.py:147
+#: blog/views.py:43
+#, python-format
+msgid ""
+"The article is too large to upload. Reduce the body size or image size and "
+"try again. Current limit: %(size)s MB."
+msgstr ""
+
+#: blog/views.py:46
+msgid ""
+"The article is too large to upload. Reduce the body size or image size and "
+"try again."
+msgstr ""
+
+#: blog/views.py:116
 msgid "Title and content are required."
 msgstr ""
 
-#: blog/views.py:200 blog/views.py:260
+#: blog/views.py:172 blog/views.py:235
 #, python-format
 msgid "System error: %(msg)s"
 msgstr ""
 
-#: blog/views.py:283
+#: blog/views.py:258
 msgid "Insufficient permissions."
 msgstr ""
 
-#: blog/views.py:320 blog/views.py:409
+#: blog/views.py:295 blog/views.py:384
 msgid "Comment cannot be empty."
 msgstr ""
 
-#: blog/views.py:387
+#: blog/views.py:362
 msgid "You cannot delete someone else's comment."
 msgstr ""
 
-#: blog/views.py:405
+#: blog/views.py:380
 msgid "You cannot edit someone else's comment."
 msgstr ""
 
-#: blog/views.py:425
+#: blog/views.py:400
 msgid "No file uploaded."
 msgstr ""
 
-#: blog/views.py:449
+#: blog/views.py:424
 msgid "Upload error."
 msgstr ""
 
