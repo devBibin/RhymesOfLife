@@ -5,20 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   const sortButtons      = document.querySelectorAll('[data-sort]');
+  const filterButtons    = document.querySelectorAll('[data-filter]');
   const searchForm       = document.getElementById('search-form');
   const searchInput      = document.getElementById('search-input');
   const currentSortInput = document.getElementById('current-sort');
+  const currentFilterInput = document.getElementById('current-filter');
 
   const ajaxBase = container.dataset.api;
   const pagePath = location.pathname;
   let reqSeq = 0;
   let reqAbort = null;
 
-  function buildQuery({ sort, query, page }) {
+  function buildQuery({ sort, query, page, filter }) {
     const params = new URLSearchParams();
     if (sort)  params.set('sort', sort);
     if (query) params.set('q', query);
     if (page)  params.set('page', page);
+    if (filter) params.set('filter', filter);
     return params.toString();
   }
   function buildApiUrl(opts) {
@@ -38,9 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function activateFilterButton(value) {
+    filterButtons.forEach((b) => {
+      const isActive = (b.getAttribute('data-filter') || '') === (value || '');
+      b.classList.toggle('is-active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
   function currentOpts(extra = {}) {
     return {
       sort:  currentSortInput?.value || 'date',
+      filter: currentFilterInput?.value || '',
       query: searchInput?.value?.trim() || '',
       ...extra,
     };
@@ -65,16 +77,35 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!data?.html) return;
       container.innerHTML = data.html;
       if (currentSortInput && opts.sort) currentSortInput.value = opts.sort;
+      if (currentFilterInput && Object.prototype.hasOwnProperty.call(opts, 'filter')) {
+        currentFilterInput.value = opts.filter || '';
+      }
       if (searchInput && Object.prototype.hasOwnProperty.call(opts, 'query')) {
         searchInput.value = opts.query || '';
       }
       if (pushState) history.pushState(opts, '', buildDisplayUrl(opts));
       attachPagination();
       activateSortButton(opts.sort || 'date');
+      activateFilterButton(opts.filter || '');
+      return true;
     } catch (e) {
       if (e?.name === 'AbortError') return;
     }
+    return false;
   }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const filter = btn.getAttribute('data-filter') || '';
+      if (currentFilterInput) currentFilterInput.value = filter;
+      activateFilterButton(filter);
+      const ok = await loadFragment(currentOpts({ page: 1, filter }));
+      if (!ok && btn.href) {
+        window.location.href = btn.href;
+      }
+    });
+  });
 
   sortButtons.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -119,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(location.search);
     const opts = state || {
       sort: params.get('sort') || 'date',
+      filter: params.get('filter') || '',
       query: params.get('q') || '',
       page: params.get('page') || '1',
     };
@@ -126,5 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   activateSortButton(currentSortInput?.value || 'date');
+  activateFilterButton(currentFilterInput?.value || '');
   attachPagination();
 });

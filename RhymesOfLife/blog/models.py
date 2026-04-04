@@ -24,6 +24,14 @@ from base.models import AdditionalUserInfo
 User = get_user_model()
 
 
+def user_can_manage_articles(user):
+    if not getattr(user, "is_authenticated", False):
+        return False
+    if user.is_staff or user.is_superuser:
+        return True
+    return user.groups.filter(name__in=["doctor", "external_doctor"]).exists()
+
+
 def _safe_username(aui):
     try:
         if not aui:
@@ -43,9 +51,7 @@ class BlogIndexPage(Page):
         FieldPanel("intro"),
     ]
 
-    def get_context(self, request):
-        context = super().get_context(request)
-
+    def _base_context_queryset(self, request):
         base_live = (
             BlogPage.objects.live()
             .descendant_of(self)
@@ -61,35 +67,46 @@ class BlogIndexPage(Page):
         else:
             mine = BlogPage.objects.none()
 
-        f = request.GET.get("filter", "popular")
-        q = request.GET.get("q", "").strip()
+        current_filter = request.GET.get("filter", "").strip()
+        sort = request.GET.get("sort", "date").strip()
+        query = request.GET.get("q", "").strip()
 
-        if f == "popular":
-            qs = published.order_by("-likes_count")
-        elif f == "mine":
-            qs = mine.order_by("-latest_revision_created_at")
-        elif f == "subscriptions" and request.user.is_authenticated:
+        if current_filter == "mine" and request.user.is_authenticated:
+            qs = mine
+        elif current_filter == "subscriptions" and request.user.is_authenticated:
             f_ids = (
                 request.user.additional_info.following
                 .filter(is_active=True)
                 .values_list("following_id", flat=True)
             )
-            qs = published.filter(author__in=f_ids).order_by("-first_published_at")
-        elif f == "doctors":
-            qs = published.filter(author__user__is_staff=True).order_by("-first_published_at")
-        elif f == "pending" and request.user.is_staff:
-            qs = base_live.filter(is_approved=False, is_rejected=False).order_by("-first_published_at")
+            qs = published.filter(author__in=f_ids)
+        elif current_filter == "doctors":
+            qs = published.filter(author__user__is_staff=True)
+        elif current_filter == "pending" and request.user.is_staff:
+            qs = base_live.filter(is_approved=False, is_rejected=False)
         else:
-            f = "popular"
-            qs = published.order_by("-likes_count")
+            current_filter = ""
+            qs = published
 
-        if q:
+        if query:
             qs = qs.filter(
-                Q(title__icontains=q)
-                | Q(tags__name__icontains=q)
-                | Q(author__first_name__icontains=q)
-                | Q(author__last_name__icontains=q)
+                Q(title__icontains=query)
+                | Q(tags__name__icontains=query)
+                | Q(author__first_name__icontains=query)
+                | Q(author__last_name__icontains=query)
             ).distinct()
+
+        if sort == "popular":
+            qs = qs.order_by("-likes_count", "-date", "-first_published_at")
+        else:
+            sort = "date"
+            qs = qs.order_by("-date", "-first_published_at", "-latest_revision_created_at")
+
+        return qs, current_filter, sort, query
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        qs, current_filter, sort, query = self._base_context_queryset(request)
 
         paginator = Paginator(qs, self.posts_per_page)
         page_num = request.GET.get("page")
@@ -98,8 +115,10 @@ class BlogIndexPage(Page):
         context.update(
             {
                 "posts": page_obj,
-                "current_filter": f,
-                "query": q,
+                "current_filter": current_filter,
+                "sort": sort,
+                "query": query,
+                "can_manage_articles": user_can_manage_articles(request.user),
             }
         )
         return context

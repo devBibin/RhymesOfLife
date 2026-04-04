@@ -73,6 +73,7 @@ class EnforceOnboardingMiddleware:
     def _default_exempt_names():
         return {
             "home_public",
+            "auth_combined",
             "login",
             "logout",
             "register",
@@ -87,6 +88,8 @@ class EnforceOnboardingMiddleware:
             "profile_edit",
             "consents",
             "set_language",
+            "ajax_article_search",
+            "wagtail_serve",
             "javascript-catalog",
             "admin:jsi18n",
             "admin:index",

@@ -68,6 +68,9 @@
                             </ul>
                         </li>
                         <li class="nav__item">
+                            <a href="/articles/" class="nav__link">Статьи</a>
+                        </li>
+                        <li class="nav__item">
                             {% if request.user.is_authenticated %}
                                 <a href="{% url 'home' %}" class="btn-help">Вернуться в сообщество</a>
                             {% else %}
@@ -101,6 +104,9 @@
                                     Элерса-Данло</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/articles/" class="nav__link">Статьи</a>
                     </li>
                     <li class="nav__item">
                         {% if request.user.is_authenticated %}

@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _, activate
 from django.views.decorators.http import require_http_methods, require_GET
 from django.contrib.auth.decorators import login_required
@@ -23,9 +24,16 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.urls import reverse
+from urllib.parse import urlencode
+
+from blog.models import BlogIndexPage, BlogPage
 
 from ..models import AdditionalUserInfo, PasswordResetCode
 from ..utils.logging import get_app_logger, get_security_logger
+from ..utils.onboarding import (
+    store_post_onboarding_redirect,
+    resolve_post_onboarding_redirect,
+)
 from ..utils.phone_calls import (
     initiate_zvonok_verification,
     poll_zvonok_status,
@@ -40,6 +48,17 @@ except Exception:
 log = get_app_logger(__name__)
 seclog = get_security_logger()
 username_validator = ASCIIUsernameValidator()
+
+
+def _safe_next_url(request, default: str | None = None) -> str | None:
+    next_url = request.POST.get("next") or request.GET.get("next")
+    if next_url and url_has_allowed_host_and_scheme(
+        url=next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return next_url
+    return default
 
 
 def _apply_user_language(request, user):
@@ -97,12 +116,14 @@ class EmailOrUsernameAuthenticationForm(AuthenticationForm):
 @never_cache
 @sensitive_post_parameters("username", "email", "password1", "password2")
 def register_view(request):
+    next_url = _safe_next_url(request)
+    store_post_onboarding_redirect(request, next_url)
     if request.user.is_authenticated:
         if is_ajax(request):
-            return JsonResponse({"ok": True, "redirect": reverse("home")})
-        return redirect("home")
+            return JsonResponse({"ok": True, "redirect": next_url or reverse("home")})
+        return redirect(next_url or "home")
 
-    context = {"values": {}, "initial_tab": "register"}
+    context = {"values": {}, "initial_tab": "register", "next_value": next_url or ""}
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         email = request.POST.get("email", "").strip().lower()
@@ -125,10 +146,13 @@ def register_view(request):
             return render(request, "base/info/auth_combined.html", context)
 
         _create_user_with_profile(username, email, password1)
+        verify_redirect = reverse("verify_prompt")
+        if next_url:
+            verify_redirect = f"{verify_redirect}?{urlencode({'next': next_url})}"
         if is_ajax(request):
-            return JsonResponse({"ok": True, "redirect": reverse("verify_prompt")})
+            return JsonResponse({"ok": True, "redirect": verify_redirect})
         messages.success(request, _("Registration was successful! A confirmation email will arrive shortly."))
-        return redirect("verify_prompt")
+        return redirect(verify_redirect)
 
     return render(request, "base/info/auth_combined.html", context)
 
@@ -138,10 +162,12 @@ def register_view(request):
 @never_cache
 @sensitive_post_parameters("username", "password")
 def login_view(request):
+    next_url = _safe_next_url(request, reverse("home"))
+    store_post_onboarding_redirect(request, next_url)
     if request.user.is_authenticated:
         if is_ajax(request):
-            return JsonResponse({"ok": True, "redirect": reverse("home")})
-        return redirect("home")
+            return JsonResponse({"ok": True, "redirect": next_url})
+        return redirect(next_url)
 
     if request.method == "POST":
         form = EmailOrUsernameAuthenticationForm(data=request.POST)
@@ -150,7 +176,7 @@ def login_view(request):
             login(request, user)
             lang = _apply_user_language(request, user)
             seclog.info("Login success: user_id=%s username=%s", user.id, user.username)
-            target = reverse("home")
+            target = next_url
             if is_ajax(request):
                 resp = JsonResponse({"ok": True, "redirect": target})
                 resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
@@ -163,18 +189,19 @@ def login_view(request):
         if is_ajax(request):
             return JsonResponse({"ok": False, "error": str(error)}, status=400)
         messages.error(request, error)
-        return render(request, "base/info/auth_combined.html", {"initial_tab": "login"})
+        return render(request, "base/info/auth_combined.html", {"initial_tab": "login", "next_value": next_url or ""})
 
-    return render(request, "base/info/auth_combined.html", {"initial_tab": "login"})
+    return render(request, "base/info/auth_combined.html", {"initial_tab": "login", "next_value": next_url or ""})
 
 
 @require_http_methods(["GET"])
 @never_cache
 def auth_combined_view(request):
+    store_post_onboarding_redirect(request, _safe_next_url(request))
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect(_safe_next_url(request, reverse("home")))
     initial = request.GET.get("tab", "register")
-    return render(request, "base/info/auth_combined.html", {"initial_tab": initial})
+    return render(request, "base/info/auth_combined.html", {"initial_tab": initial, "next_value": _safe_next_url(request, "") or ""})
 
 
 @require_http_methods(["POST"])
@@ -189,6 +216,7 @@ def logout_view(request):
 @require_http_methods(["GET"])
 @never_cache
 def verify_prompt_view(request):
+    store_post_onboarding_redirect(request, _safe_next_url(request))
     return render(request, "base/verify_prompt.html")
 
 
@@ -209,6 +237,7 @@ def request_verification_view(request):
 @require_http_methods(["GET"])
 @never_cache
 def verify_email_view(request, uidb64, token):
+    store_post_onboarding_redirect(request, _safe_next_url(request))
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = get_object_or_404(User, pk=uid)
@@ -223,7 +252,7 @@ def verify_email_view(request, uidb64, token):
         login(request, user)
         lang = _apply_user_language(request, user)
         seclog.info("Email verified: user_id=%s", user.id)
-        response = redirect("connect_telegram")
+        response = redirect(resolve_post_onboarding_redirect(request, default=reverse("connect_telegram")))
         response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, samesite="Lax")
         return response
     messages.error(request, _("Email verification failed or token is invalid."))
@@ -239,10 +268,7 @@ def verify_email_view(request, uidb64, token):
 def phone_enter_view(request):
     info = request.user.additional_info
     if info.phone_verified:
-        consents_ok = info.tos_accepted and info.privacy_accepted and info.data_processing_accepted
-        if not consents_ok:
-            return redirect("consents")
-        return redirect("home")
+        return redirect(resolve_post_onboarding_redirect(request, consume=True))
     context = {}
     if request.method == "POST":
         phone = request.POST.get("phone", "").strip()
@@ -281,7 +307,7 @@ def phone_status_api(request):
         return JsonResponse({"status": "error", "message": str(_("No phone number set."))}, status=400)
 
     if info.phone_verified:
-        return JsonResponse({"status": "done", "next": "/consents/"})
+        return JsonResponse({"status": "done", "next": resolve_post_onboarding_redirect(request, consume=True)})
 
     try:
         api = poll_zvonok_status(info.phone)
@@ -295,7 +321,7 @@ def phone_status_api(request):
     if api.get("verified"):
         info.phone_verified = True
         info.save(update_fields=["phone_verified"])
-        return JsonResponse({"status": "success", "next": "/consents/"})
+        return JsonResponse({"status": "success", "next": resolve_post_onboarding_redirect(request, consume=True)})
 
     return JsonResponse({
         "status": "pending",
@@ -333,7 +359,7 @@ def consents_view(request):
         info.data_processing_accepted = True
         info.consents_accepted_at = timezone.now()
         info.save(update_fields=["tos_accepted", "privacy_accepted", "data_processing_accepted", "consents_accepted_at"])
-        return redirect("profile_edit")
+        return redirect(resolve_post_onboarding_redirect(request, consume=True))
     return render(request, "base/consents.html")
 
 
@@ -343,6 +369,16 @@ def consents_view(request):
 def home_public_view(request):
     is_authed = request.user.is_authenticated
     user = request.user if is_authed else None
+    landing_articles = BlogPage.objects.none()
+
+    blog_index = BlogIndexPage.objects.first()
+    if blog_index:
+        landing_articles = (
+            BlogPage.objects.live()
+            .descendant_of(blog_index)
+            .filter(is_deleted=False, is_approved=True)
+            .order_by("-first_published_at", "-date")[:3]
+        )
 
     def has_consents(i):
         return i.tos_accepted and i.privacy_accepted and i.data_processing_accepted
@@ -370,6 +406,7 @@ def home_public_view(request):
         "active_tab": "signup",
         "reg_values": {},
         "login_values": {},
+        "landing_articles": landing_articles,
     }
     if request.method == "POST":
         if is_authed:

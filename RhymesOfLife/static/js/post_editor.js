@@ -8,11 +8,13 @@
     const id = btn.getAttribute('data-remove-image');
     const checkbox = document.getElementById(`rm-${id}`);
     if (!checkbox) return;
+    const slot = btn.closest('[data-existing-image-slot]');
 
-    const active = btn.classList.toggle('btn-danger');
-    btn.classList.toggle('btn-light', !active);
-    checkbox.checked = active;
+    checkbox.checked = true;
+    if (slot) {
+      slot.classList.add('is-hidden');
+    }
 
-    document.dispatchEvent(new CustomEvent('existing:toggle', { detail: { active } }));
+    document.dispatchEvent(new CustomEvent('existing:toggle', { detail: { active: true } }));
   });
 })();

@@ -108,6 +108,7 @@
          data-login-url="{% url 'login' %}"
          data-register-url="{% url 'register' %}"
          data-reset-url="{% url 'password_reset_request' %}"
+         data-next="{{ next_value }}"
          data-initial-tab="{{ initial_tab|default:'register' }}">
   <div class="container">
     <div class="form-grid">
@@ -190,6 +191,7 @@
             </div>
 
             <input type="hidden" name="ajax" value="1">
+            <input type="hidden" name="next" value="{{ next_value }}">
             <button type="submit" class="btn form-btn">{% trans "Create account" %}</button>
 
             <div class="form-links">
@@ -233,6 +235,7 @@
             </div>
 
             <input type="hidden" name="ajax" value="1">
+            <input type="hidden" name="next" value="{{ next_value }}">
             <button type="submit" class="btn form-btn">{% trans "Log in" %}</button>
 
             <div class="form-links">

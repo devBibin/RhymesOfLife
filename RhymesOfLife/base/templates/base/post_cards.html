@@ -149,8 +149,8 @@
               <span class="js-like-count">{{ p.likes_count }}</span>
             </button>
           {% else %}
-            <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="btn btn-outline-secondary btn-sm me-3">
-              {% trans "Log in to like" %}
+            <a id="like-login-link" href="{% url 'auth_combined' %}?tab=register&next={{ request.get_full_path|urlencode }}" class="btn btn-outline-secondary btn-sm me-3">
+              Зарегистрируйтесь, чтобы лайкать и комментировать
             </a>
           {% endif %}
 
@@ -161,15 +161,21 @@
         </div>
 
         <div class="mt-3">
-          <form action="{% url 'post_comment_add' p.id %}" method="post"
-                class="d-flex align-items-center gap-2" data-comment-form
-                data-post-id="{{ p.id }}">
-            {% csrf_token %}
-            <input type="text" name="text" class="form-control" placeholder="{% trans 'Write a comment...' %}">
-            <button type="submit" class="btn btn-primary btn-sm btn-icon" aria-label="{% trans 'Send' %}">
-              <i class="bi bi-send-fill" aria-hidden="true"></i>
-            </button>
-          </form>
+          {% if request.user.is_authenticated %}
+            <form action="{% url 'post_comment_add' p.id %}" method="post"
+                  class="d-flex align-items-center gap-2" data-comment-form
+                  data-post-id="{{ p.id }}">
+              {% csrf_token %}
+              <input type="text" name="text" class="form-control" placeholder="{% trans 'Write a comment...' %}">
+              <button type="submit" class="btn btn-primary btn-sm btn-icon" aria-label="{% trans 'Send' %}">
+                <i class="bi bi-send-fill" aria-hidden="true"></i>
+              </button>
+            </form>
+          {% else %}
+            <div class="alert alert-info mb-0">
+              <a href="{% url 'auth_combined' %}?tab=register&next={{ request.get_full_path|urlencode }}" class="alert-link">Зарегистрируйтесь</a>, чтобы лайкать и оставлять комментарии.
+            </div>
+          {% endif %}
 
           <ul class="list-unstyled mt-3" id="comments-{{ p.id }}">
             {% include "base/comment_items.html" with comments=p.visible_comments|slice:":3" %}

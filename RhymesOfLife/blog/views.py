@@ -13,10 +13,10 @@ from django.db import transaction
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage
 
-from wagtail.models import Page
+from wagtail.models import Page, Site
 from wagtail.images import get_image_model
 
-from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment
+from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment, user_can_manage_articles
 from .constants import PREDEFINED_TAGS
 
 from base.utils.files import validate_image_upload
@@ -34,6 +34,7 @@ MAX_UPLOAD = int(getattr(settings, "WAGTAILIMAGES_MAX_UPLOAD_SIZE", 10 * 1024 * 
 ALLOWED_IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP", "GIF"}
 
+article_author_required = user_passes_test(user_can_manage_articles)
 staff_required = user_passes_test(lambda u: (u.is_staff or u.is_superuser))
 
 
@@ -96,13 +97,42 @@ def _filter_tags_to_predefined(tags):
     return [t for t in tags if t in allowed]
 
 
+def _article_public_url(page, request=None) -> str:
+    try:
+        url = page.get_url(request=request) if request else page.get_url()
+        if url:
+            return url
+    except Exception:
+        pass
+
+    try:
+        site = Site.find_for_request(request) if request else Site.objects.filter(is_default_site=True).first()
+        if site and getattr(page, "url_path", None):
+            root_path = getattr(site.root_page, "url_path", "") or ""
+            page_path = page.url_path
+            if root_path and page_path.startswith(root_path):
+                relative = page_path[len(root_path):].strip("/")
+                return f"/articles/{relative}/" if relative else "/articles/"
+    except Exception:
+        pass
+
+    url = getattr(page, "url", None)
+    if url:
+        return url
+    return f"/articles/{page.slug}/"
+
+
+def _my_articles_url() -> str:
+    return "/articles/?filter=mine"
+
+
 @login_required
-@staff_required
+@article_author_required
 @require_http_methods(["GET", "POST"])
 def create_article_view(request):
     ctx = {"all_tags": PREDEFINED_TAGS}
     if request.method == "POST":
-        action = request.POST.get("action") or "draft"
+        action = request.POST.get("action") or "publish"
         title = request.POST.get("title", "").strip()
         intro = request.POST.get("intro", "").strip()
         body = sanitize_html(request.POST.get("body", "").strip())
@@ -148,6 +178,13 @@ def create_article_view(request):
                     main_image=main_image,
                     body=body,
                 )
+                if action == "publish":
+                    page.is_approved = True
+                    page.approved_at = timezone.now()
+                    page.approved_by = request.user
+                    page.is_rejected = False
+                    page.rejected_at = None
+                    page.rejected_by = None
                 parent.add_child(instance=page)
                 if tags:
                     page.tags.add(*tags)
@@ -155,12 +192,12 @@ def create_article_view(request):
                 if action == "publish":
                     rev.publish()
                     log.info("Article published: page_id=%s author_id=%s", page.id, request.user.id)
-                    return redirect(page.url)
+                    return redirect(_my_articles_url())
                 else:
                     if page.live:
                         page.unpublish()
                     log.info("Article saved as draft: page_id=%s author_id=%s", page.id, request.user.id)
-                    return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
+                    return redirect(_my_articles_url())
 
         except RequestDataTooBig:
             ctx["error"] = _request_too_large_message()
@@ -176,7 +213,7 @@ def create_article_view(request):
 
 
 @login_required
-@staff_required
+@article_author_required
 @require_http_methods(["GET", "POST"])
 def edit_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
@@ -190,6 +227,13 @@ def edit_article_view(request, page_id):
             page.intro = request.POST.get("intro", page.intro).strip()
             page.body = sanitize_html(request.POST.get("body", page.body).strip())
             page.tags.set(_filter_tags_to_predefined(request.POST.getlist("tags")))
+            if action == "publish":
+                page.is_approved = True
+                page.approved_at = timezone.now()
+                page.approved_by = request.user
+                page.is_rejected = False
+                page.rejected_at = None
+                page.rejected_by = None
 
             if "main_image" in request.FILES:
                 f = request.FILES["main_image"]
@@ -220,10 +264,10 @@ def edit_article_view(request, page_id):
             if action == "publish":
                 rev.publish()
                 log.info("Article republished: page_id=%s editor_id=%s", page.id, request.user.id)
-                return redirect(page.url)
+                return redirect(_my_articles_url())
             else:
                 log.info("Article saved draft: page_id=%s editor_id=%s", page.id, request.user.id)
-                return redirect(f"{reverse('edit_article', args=[page.id])}?edit=1")
+                return redirect(_my_articles_url())
 
         except RequestDataTooBig:
             error = _request_too_large_message()
@@ -250,7 +294,7 @@ def edit_article_view(request, page_id):
 
 
 @login_required
-@staff_required
+@article_author_required
 @require_POST
 def delete_article_view(request, page_id):
     page = get_object_or_404(BlogPage, id=page_id).specific
@@ -316,29 +360,13 @@ def comment_article_view(request, page_id):
 def ajax_article_search(request):
     query = request.GET.get("q", "").strip()
     sort = request.GET.get("sort", "date").strip()
+    current_filter = request.GET.get("filter", "").strip()
     page_num = request.GET.get("page", "1")
     blog_index = BlogIndexPage.objects.first()
 
     results = BlogPage.objects.none()
     if blog_index:
-        results = (
-            BlogPage.objects.live()
-            .descendant_of(blog_index)
-            .filter(is_deleted=False, is_approved=True)
-        )
-
-    if query:
-        results = results.filter(
-            Q(title__icontains=query)
-            | Q(tags__name__icontains=query)
-            | Q(author__first_name__icontains=query)
-            | Q(author__last_name__icontains=query)
-        ).distinct()
-
-    if sort == "popular":
-        results = results.order_by("-likes_count", "-date")
-    else:
-        results = results.order_by("-date", "-likes_count")
+        results, current_filter, sort, query = blog_index._base_context_queryset(request)
 
     paginator = Paginator(results, 10)
     try:
@@ -348,7 +376,7 @@ def ajax_article_search(request):
 
     html = render_to_string(
         "blog/includes/article_list_fragment.html",
-        {"posts": page_obj, "sort": sort, "query": query},
+        {"posts": page_obj, "sort": sort, "query": query, "current_filter": current_filter},
         request=request,
     )
     return JsonResponse({"html": html})
@@ -392,7 +420,7 @@ def edit_comment_view(request, comment_id):
 
 
 @login_required
-@staff_required
+@article_author_required
 @require_POST
 def ckeditor5_upload(request):
     f = request.FILES.get("upload")
@@ -433,7 +461,7 @@ def approve_article_view(request, page_id):
     page.approved_at = timezone.now()
     page.approved_by = request.user
     page.save(update_fields=["is_approved", "approved_at", "approved_by"])
-    return redirect(page.url)
+    return redirect(_article_public_url(page, request))
 
 
 @login_required

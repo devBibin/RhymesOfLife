@@ -10,7 +10,7 @@
       <h1 class="rl-page__title">{% trans "Articles" %}</h1>
     </div>
 
-    {% if request.user.is_staff %}
+    {% if can_manage_articles %}
       <a href="{% url 'create_article' %}" class="btn btn-primary btn-sm">
         <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>{% trans "New article" %}
       </a>
@@ -36,6 +36,26 @@
     </div>
 
     <input type="hidden" id="current-sort" name="sort" value="{{ sort|default:'date' }}">
+    <input type="hidden" id="current-filter" name="filter" value="{{ current_filter }}">
+
+    {% if can_manage_articles %}
+      <div class="rl-segmented" role="tablist" aria-label="{% trans 'Article scope' %}">
+        <a
+          href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}"
+          class="rl-segmented__item {% if not current_filter %}is-active{% endif %}"
+          data-filter=""
+          aria-pressed="{% if not current_filter %}true{% else %}false{% endif %}">
+          {% trans "All articles" %}
+        </a>
+        <a
+          href="?filter=mine{% if query %}&q={{ query|urlencode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+          class="rl-segmented__item {% if current_filter == 'mine' %}is-active{% endif %}"
+          data-filter="mine"
+          aria-pressed="{% if current_filter == 'mine' %}true{% else %}false{% endif %}">
+          {% trans "My articles" %}
+        </a>
+      </div>
+    {% endif %}
 
     <div class="rl-segmented" role="tablist" aria-label="{% trans 'Sort' %}">
       <button

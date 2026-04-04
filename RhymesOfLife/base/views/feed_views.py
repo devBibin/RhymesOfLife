@@ -251,9 +251,15 @@ def edit_post(request, post_id: int):
             html = _render_single_post_card(
                 request, post, liked_ids=liked_ids, following_user_ids=following_user_ids
             )
-            return JsonResponse({"ok": True, "html": html, "post_id": post.id, "message": _("Post updated.")})
+            return JsonResponse({
+                "ok": True,
+                "html": html,
+                "post_id": post.id,
+                "message": _("Post updated."),
+                "redirect": reverse("home"),
+            })
 
-        return render(request, "base/post_edit.html", {"post": post})
+        return redirect("home")
 
     return render(request, "base/post_edit.html", {"post": post})
 

@@ -174,9 +174,9 @@
           </button>
         {% endwith %}
       {% else %}
-        <a id="like-login-link" href="{% url 'account_login' %}?next={{ request.path }}" class="rl-chip text-decoration-none">
+        <a id="like-login-link" href="{% url 'auth_combined' %}?tab=register&next={{ request.get_full_path|urlencode }}" class="rl-chip text-decoration-none">
           <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
-          {% trans "Log in to like" %}
+          Зарегистрируйтесь, чтобы лайкать и комментировать
         </a>
       {% endif %}
 
@@ -202,9 +202,9 @@
           <i class="bi bi-send me-1" aria-hidden="true"></i>{% trans "Send" %}
         </button>
       </form>
-    {% else %}
+      {% else %}
       <div class="alert alert-info mb-3">
-        <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">{% trans "Log in" %}</a>, {% trans "to leave a comment" %}.
+        <a href="{% url 'auth_combined' %}?tab=register&next={{ request.get_full_path|urlencode }}" class="alert-link">Зарегистрируйтесь</a>, чтобы лайкать и оставлять комментарии.
       </div>
     {% endif %}
 

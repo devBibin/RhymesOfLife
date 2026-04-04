@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_http_methods
 
 from ..models import AdditionalUserInfo, TelegramAccount
+from ..utils.onboarding import resolve_post_onboarding_redirect
 
 API = "https://api.telegram.org/bot{token}/{method}"
 
@@ -138,7 +139,7 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         acc.refresh_from_db()
         if acc.telegram_verified and user_info.phone_verified:
-            return redirect("consents")
+            return redirect(resolve_post_onboarding_redirect(request, consume=True))
         return render(
             request,
             "base/connect_telegram.html",

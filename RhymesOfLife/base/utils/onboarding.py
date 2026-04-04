@@ -2,6 +2,9 @@ from __future__ import annotations
 from typing import Iterable
 from django.conf import settings
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
+
+POST_ONBOARDING_REDIRECT_SESSION_KEY = "post_onboarding_redirect"
 
 
 def _required_profile_fields() -> Iterable[str]:
@@ -50,3 +53,28 @@ def next_onboarding_url(request) -> str | None:
     if not is_profile_complete(info):
         return reverse("profile_edit")
     return None
+
+
+def store_post_onboarding_redirect(request, next_url: str | None) -> None:
+    if not next_url:
+        return
+    if url_has_allowed_host_and_scheme(
+        url=next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        request.session[POST_ONBOARDING_REDIRECT_SESSION_KEY] = next_url
+
+
+def get_post_onboarding_redirect(request, default: str | None = None, consume: bool = False) -> str | None:
+    value = request.session.get(POST_ONBOARDING_REDIRECT_SESSION_KEY) or default
+    if consume and POST_ONBOARDING_REDIRECT_SESSION_KEY in request.session:
+        request.session.pop(POST_ONBOARDING_REDIRECT_SESSION_KEY, None)
+    return value
+
+
+def resolve_post_onboarding_redirect(request, default: str | None = None, consume: bool = False) -> str:
+    pending = next_onboarding_url(request)
+    if pending:
+        return pending
+    return get_post_onboarding_redirect(request, default=default or reverse("home"), consume=consume) or reverse("home")

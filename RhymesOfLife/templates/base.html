@@ -83,8 +83,7 @@
                   </li>
 
                   <li class="nav-item">
-                    {% blog_index_url as blog_url %}
-                    <a class="nav-link ru-header-text" href="{{ blog_url }}">
+                    <a class="nav-link ru-header-text" href="/articles/">
                       <i class="bi bi-journal-text"></i>
                       <span class="text-truncate-ru">{% trans "Articles" %}</span>
                     </a>
@@ -260,25 +259,27 @@
                   </div>
                 {% endif %}
 
-                <form action="{% url 'set_language' %}" method="post" class="d-inline lang-switcher-form">
-                  {% csrf_token %}
-                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                  {% with code=LANGUAGE_CODE|slice:":2" %}
-                    {% if code == "en" %}
-                      <input type="hidden" name="language" value="ru">
-                      <button type="submit" class="lang-switcher ru-header-text" title="{% trans 'Switch to Russian' %}">
-                        <i class="bi bi-translate me-1"></i>
-                        <span class="ru-overflow-fix">RU</span>
-                      </button>
-                    {% else %}
-                      <input type="hidden" name="language" value="en">
-                      <button type="submit" class="lang-switcher ru-header-text" title="{% trans 'Switch to English' %}">
-                        <i class="bi bi-translate me-1"></i>
-                        <span class="ru-overflow-fix">EN</span>
-                      </button>
-                    {% endif %}
-                  {% endwith %}
-                </form>
+                {% if request.user.is_authenticated %}
+                  <form action="{% url 'set_language' %}" method="post" class="d-inline lang-switcher-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    {% with code=LANGUAGE_CODE|slice:":2" %}
+                      {% if code == "en" %}
+                        <input type="hidden" name="language" value="ru">
+                        <button type="submit" class="lang-switcher ru-header-text" title="{% trans 'Switch to Russian' %}">
+                          <i class="bi bi-translate me-1"></i>
+                          <span class="ru-overflow-fix">RU</span>
+                        </button>
+                      {% else %}
+                        <input type="hidden" name="language" value="en">
+                        <button type="submit" class="lang-switcher ru-header-text" title="{% trans 'Switch to English' %}">
+                          <i class="bi bi-translate me-1"></i>
+                          <span class="ru-overflow-fix">EN</span>
+                        </button>
+                      {% endif %}
+                    {% endwith %}
+                  </form>
+                {% endif %}
               </div>
 
               {% if request.user.is_authenticated %}
@@ -297,7 +298,7 @@
                   <i class="bi bi-box-arrow-in-right"></i>
                   <span class="ru-overflow-fix">{% trans "Login" %}</span>
                 </a>
-                <a href="{% url 'signup' %}" class="action-btn action-btn-sm ru-header-text">
+                <a href="{% url 'register' %}" class="action-btn action-btn-sm ru-header-text">
                   <i class="bi bi-person-plus"></i>
                   <span class="ru-overflow-fix">{% trans "Sign up" %}</span>
                 </a>

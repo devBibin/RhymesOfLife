@@ -788,6 +788,10 @@ function bindEditFormAjax() {
     e.preventDefault();
     try {
       const data = await ajaxSubmitForm(form, (d) => d);
+      if (data.redirect) {
+        window.location.href = data.redirect;
+        return;
+      }
       if (alertBox) {
         alertBox.className = 'alert alert-success';
         alertBox.textContent = data.message || gettext('Post updated.');

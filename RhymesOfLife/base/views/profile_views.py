@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.validators import ASCIIUsernameValidator
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from django.shortcuts import redirect, render
 from django.utils.dates import MONTHS
 from django.utils.translation import gettext as _
@@ -16,6 +17,7 @@ from django.views.decorators.http import require_http_methods
 
 from ..models import get_syndrome_choices
 from ..utils.files import validate_image_upload
+from ..utils.onboarding import resolve_post_onboarding_redirect
 from ..models import TelegramAccount
 from ..views.telegram_views import _get_bot_username
 
@@ -286,7 +288,7 @@ def profile_edit_view(request):
             user.save(update_fields=["username", "email"])
             info.save()
             messages.success(request, _("Profile has been updated."))
-            return redirect("my_profile")
+            return redirect(resolve_post_onboarding_redirect(request, default=reverse("my_profile"), consume=True))
 
         except Exception:
             return render(

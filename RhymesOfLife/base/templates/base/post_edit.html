@@ -28,6 +28,7 @@
     .thumb{position:relative;border-radius:18px;overflow:hidden;background:#e2e8f0;box-shadow:0 12px 28px rgba(15,23,42,.1)}
     .thumb img{display:block;width:100%;height:170px;object-fit:cover}
     .thumb .remove{position:absolute;top:8px;right:8px;border:none;border-radius:999px;padding:.4rem .55rem;background:rgba(15,23,42,.66);color:#fff;line-height:1}
+    .existing-image-slot.is-hidden{display:none}
     .existing-note{font-size:.88rem;color:#64748b}
     .btn-remove-toggle{position:absolute;top:8px;right:8px}
     .post-actions{display:flex;gap:.75rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:1.1rem}
@@ -84,13 +85,14 @@
 
         <div class="row g-3" id="existing-images">
           {% for img in post.images.all %}
-            <div class="col-6 col-md-4 col-lg-3">
-              <div class="thumb border-0">
+            <div class="col-6 col-md-4 col-lg-3 existing-image-slot" data-existing-image-slot>
+              <div class="thumb border-0" data-existing-image-card data-remove-label="{% trans 'Will be removed' %}">
                 <img src="{{ img.image.url }}" alt="">
                 <button type="button"
                         class="remove btn-light btn-remove-toggle"
                         data-remove-image="{{ img.id }}"
-                        aria-label="{% trans 'Remove' %}">×</button>
+                        aria-label="{% trans 'Remove' %}"
+                        onclick="document.getElementById('rm-{{ img.id }}').checked = true; this.closest('[data-existing-image-slot]').classList.add('is-hidden'); document.dispatchEvent(new CustomEvent('existing:toggle', { detail: { active: true } })); return false;">&times;</button>
                 <input type="checkbox" class="d-none" name="remove" value="{{ img.id }}" id="rm-{{ img.id }}">
               </div>
             </div>
@@ -126,22 +128,6 @@
         <a href="{% url 'home' %}" class="btn btn-outline-secondary">{% trans "Cancel" %}</a>
         <button type="submit" class="btn btn-primary">{% trans "Save changes" %}</button>
       </div>
-
-      {% if post.is_hidden %}
-        <button type="button"
-                class="btn btn-secondary"
-                data-action="unhide"
-                data-url="{% url 'post_unhide' post.id %}">
-          {% trans "Unhide" %}
-        </button>
-      {% else %}
-        <button type="button"
-                class="btn btn-outline-secondary"
-                data-action="hide"
-                data-url="{% url 'post_hide' post.id %}">
-          {% trans "Hide" %}
-        </button>
-      {% endif %}
     </div>
   </form>
 </div>

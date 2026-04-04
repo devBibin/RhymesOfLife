@@ -32,26 +32,26 @@ def public_profile_view(request, username: str):
     user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
     info = getattr(user, "additional_info", None)
 
-    can_see_articles = bool(user.is_staff or user.is_superuser)
-
     tab_param = request.GET.get("tab")
-    tab = tab_param if tab_param in ("articles", "posts") else ("articles" if can_see_articles else "posts")
-    if not can_see_articles:
-        tab = "posts"
+    tab = tab_param if tab_param in ("articles", "posts") else None
 
     ap = _to_int(request.GET.get("apage"), 1)
     pp = _to_int(request.GET.get("ppage"), 1)
 
     articles_qs = BlogPage.objects.none()
-    if can_see_articles:
-        root = BlogIndexPage.objects.first()
-        if root:
-            articles_qs = (
-                BlogPage.objects.live()
-                .descendant_of(root)
-                .filter(is_deleted=False, author=info, is_approved=True)
-                .order_by("-date", "-first_published_at")
-            )
+    root = BlogIndexPage.objects.first()
+    if root:
+        articles_qs = (
+            BlogPage.objects.live()
+            .descendant_of(root)
+            .filter(is_deleted=False, author=info, is_approved=True)
+            .order_by("-date", "-first_published_at")
+        )
+    can_see_articles = articles_qs.exists()
+    if tab is None:
+        tab = "articles" if can_see_articles else "posts"
+    if tab == "articles" and not can_see_articles:
+        tab = "posts"
 
     base_posts = (
         Post.objects

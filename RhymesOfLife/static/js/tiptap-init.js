@@ -66,6 +66,19 @@ function isEmptyHtml(html) {
   return !text && !hasMedia;
 }
 
+function decodeInitialEditorContent(raw) {
+  const value = raw || '';
+  const hasHtmlTags = /<\/?[a-z][^>]*>/i.test(value);
+  const hasEscapedHtml = /&lt;\/?[a-z][\s\S]*?&gt;/i.test(value);
+  if (hasHtmlTags || !hasEscapedHtml) {
+    return value;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
 function showErrorBelowEditor(wrapper, message) {
   let fb = wrapper.querySelector('.tiptap-invalid-feedback');
   if (!fb) {
@@ -384,6 +397,8 @@ function initEditor(textarea) {
   textarea.insertAdjacentElement('afterend', wrapper);
   textarea.classList.add('d-none');
 
+  const initialContent = decodeInitialEditorContent(textarea.value || '');
+
   const editor = new Editor({
     element: editorEl,
     extensions: [
@@ -421,7 +436,7 @@ function initEditor(textarea) {
       ]),
       ...(disableUploads ? [] : [Image]),
     ],
-    content: textarea.value || '',
+    content: initialContent,
     editorProps: {
       attributes: {
         class: 'tiptap-content form-control',
@@ -438,6 +453,8 @@ function initEditor(textarea) {
     uploadUrl: disableUploads ? '' : uploadUrl,
     csrfToken,
   });
+
+  textarea.value = initialContent;
 
   wrapper.appendChild(toolbar);
   wrapper.appendChild(editorEl);
