@@ -55,7 +55,7 @@ class BlogIndexPage(Page):
         base_live = (
             BlogPage.objects.live()
             .descendant_of(self)
-            .filter(is_deleted=False)
+            .filter(is_deleted=False, is_hidden=False)
         )
         published = base_live.filter(is_approved=True)
 
@@ -166,6 +166,7 @@ class BlogPage(Page):
 
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     is_deleted = models.BooleanField(_("Soft-deleted"), default=False)
+    is_hidden = models.BooleanField(_("Hidden by author"), default=False, db_index=True)
     likes_count = models.PositiveIntegerField(_("Likes count"), default=0)
     comments_count = models.PositiveIntegerField(_("Comments count"), default=0)
 
@@ -190,6 +191,7 @@ class BlogPage(Page):
         FieldPanel("main_image"),
         FieldPanel("body"),
         FieldPanel("tags"),
+        FieldPanel("is_hidden"),
         FieldPanel("is_approved"),
         FieldPanel("is_rejected"),
     ]
@@ -203,6 +205,13 @@ class BlogPage(Page):
         request.LANGUAGE_CODE = translation.get_language()
 
         if self.is_draft:
+            if request.user.is_authenticated and self.author and self.author.user == request.user:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
+            if request.user.is_staff:
+                return TemplateResponse(request, self.get_template(request), {"page": self})
+            raise Http404
+
+        if self.is_hidden:
             if request.user.is_authenticated and self.author and self.author.user == request.user:
                 return TemplateResponse(request, self.get_template(request), {"page": self})
             if request.user.is_staff:

@@ -45,6 +45,12 @@
     {% endif %}
   {% endif %}
 
+  {% if page.is_hidden and request.user.is_authenticated and page.author and request.user == page.author.user %}
+    <div class="alert alert-secondary">
+      {% trans "This article is hidden from other users and is only visible to you and administrators." %}
+    </div>
+  {% endif %}
+
   <div class="article-meta rl-article__meta mb-3">
     {% if page.author %}
       <div class="rl-meta__author">
@@ -116,19 +122,19 @@
   </div>
 
   {% if page.main_image %}
-    {% image page.main_image fill-640x360 format-webp as hero_640 %}
-    {% image page.main_image fill-1024x576 format-webp as hero_1024 %}
-    {% image page.main_image fill-1280x720 format-webp as hero_1280 %}
+    {% image page.main_image width-640 format-webp as hero_640 %}
+    {% image page.main_image width-1024 format-webp as hero_1024 %}
+    {% image page.main_image width-1280 format-webp as hero_1280 %}
     <div class="article-main-image mb-4 rl-hero">
       <img
         src="{{ hero_1280.url }}"
         width="{{ hero_1280.width }}"
         height="{{ hero_1280.height }}"
         alt="{{ page.title }}"
-        class="w-100 h-100"
+        class="rl-hero__image"
+        data-zoomable-image
         loading="lazy"
         decoding="async"
-        style="display:block;object-fit:cover;aspect-ratio:16/9;"
         srcset="{{ hero_640.url }} 640w, {{ hero_1024.url }} 1024w, {{ hero_1280.url }} 1280w"
         sizes="(max-width:576px) 100vw, (max-width:992px) 90vw, 860px"
       >
@@ -148,6 +154,21 @@
       <a href="{% url 'edit_article' page.id %}" class="btn btn-outline-primary">
         <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>{% trans "Edit" %}
       </a>
+      {% if page.is_hidden %}
+        <form action="{% url 'unhide_article' page.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-secondary">
+            <i class="bi bi-eye me-1" aria-hidden="true"></i>{% trans "Show" %}
+          </button>
+        </form>
+      {% else %}
+        <form action="{% url 'hide_article' page.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-secondary">
+            <i class="bi bi-eye-slash me-1" aria-hidden="true"></i>{% trans "Hide" %}
+          </button>
+        </form>
+      {% endif %}
       <form action="{% url 'delete_article' page.id %}" method="post"
             onsubmit="return confirm('{% trans 'Delete the article?' %}');">
         {% csrf_token %}
@@ -261,10 +282,61 @@
     </form>
   </div>
 </div>
+
+<div class="modal fade" id="articleImageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body p-0 position-relative text-center">
+        <button type="button"
+                class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                data-bs-dismiss="modal"
+                aria-label="{% trans 'Close' %}"></button>
+        <img id="articleImageModalImg"
+             src=""
+             alt=""
+             class="img-fluid rounded-4 shadow-lg"
+             style="max-height:90vh;width:auto;">
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
 
 {% block extra_js %}
   {% csrf_token %}
   <script src="{% static 'js/article_detail.js' %}"></script>
   <script src="{% static 'js/follow_toggle.js' %}"></script>
+  <script>
+    (function () {
+      function bindArticleImageZoom() {
+        const modalEl = document.getElementById('articleImageModal');
+        const modalImg = document.getElementById('articleImageModalImg');
+        if (!modalEl || !modalImg || typeof bootstrap === 'undefined') return;
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+        document.querySelectorAll('.article-main-image img, .article-body img').forEach((img) => {
+          img.style.cursor = 'zoom-in';
+          img.addEventListener('click', function () {
+            const src = this.currentSrc || this.src;
+            if (!src) return;
+            modalImg.src = src;
+            modalImg.alt = this.alt || '';
+            modal.show();
+          });
+        });
+
+        modalEl.addEventListener('hidden.bs.modal', function () {
+          modalImg.removeAttribute('src');
+          modalImg.alt = '';
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindArticleImageZoom);
+      } else {
+        bindArticleImageZoom();
+      }
+    })();
+  </script>
 {% endblock extra_js %}

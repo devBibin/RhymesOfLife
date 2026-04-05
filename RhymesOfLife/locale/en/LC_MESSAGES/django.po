@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-04 19:44+0000\n"
+"POT-Creation-Date: 2026-04-05 10:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,39 +234,39 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: base/models.py:465 base/models.py:538 blog/models.py:282
+#: base/models.py:465 base/models.py:538 blog/models.py:291
 msgid "Text"
 msgstr ""
 
-#: base/models.py:466
+#: base/models.py:466 blog/models.py:169
 msgid "Hidden by author"
 msgstr ""
 
-#: base/models.py:467 base/models.py:541 blog/models.py:168 blog/models.py:285
+#: base/models.py:467 base/models.py:541 blog/models.py:168 blog/models.py:294
 msgid "Soft-deleted"
 msgstr ""
 
-#: base/models.py:469 blog/models.py:172
+#: base/models.py:469 blog/models.py:173
 msgid "Approved by admin"
 msgstr ""
 
-#: base/models.py:470 blog/models.py:173
+#: base/models.py:470 blog/models.py:174
 msgid "Approved at"
 msgstr ""
 
-#: base/models.py:472 blog/models.py:176
+#: base/models.py:472 blog/models.py:177
 msgid "Approved by"
 msgstr ""
 
-#: base/models.py:475 blog/models.py:169
+#: base/models.py:475 blog/models.py:170
 msgid "Likes count"
 msgstr ""
 
-#: base/models.py:476 blog/models.py:170
+#: base/models.py:476 blog/models.py:171
 msgid "Comments count"
 msgstr ""
 
-#: base/models.py:478 base/models.py:539 base/models.py:677 blog/models.py:283
+#: base/models.py:478 base/models.py:539 base/models.py:677 blog/models.py:292
 msgid "Created at"
 msgstr ""
 
@@ -312,7 +312,7 @@ msgstr ""
 msgid "Post likes"
 msgstr ""
 
-#: base/models.py:540 blog/models.py:284
+#: base/models.py:540 blog/models.py:293
 msgid "Edited at"
 msgstr ""
 
@@ -615,7 +615,7 @@ msgstr ""
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:17
 #: base/templates/base/post_cards.html:170
-#: blog/templates/blog/blog_page.html:202
+#: blog/templates/blog/blog_page.html:223
 msgid "Send"
 msgstr ""
 
@@ -623,7 +623,7 @@ msgstr ""
 #: base/templates/base/partials/health_wellness.html:279
 #: base/templates/base/post_create.html:95
 #: base/templates/base/post_edit.html:128
-#: blog/templates/blog/blog_page.html:258
+#: blog/templates/blog/blog_page.html:279
 msgid "Cancel"
 msgstr ""
 
@@ -653,14 +653,14 @@ msgstr ""
 
 #: base/templates/base/comment_items.html:4
 #: base/templates/base/includes/profile_header.html:47
-#: blog/templates/blog/blog_page.html:216
-#: blog/templates/blog/includes/article_cards.html:45
-#: blog/templates/blog/includes/article_cards.html:114
+#: blog/templates/blog/blog_page.html:237
+#: blog/templates/blog/includes/article_cards.html:50
+#: blog/templates/blog/includes/article_cards.html:124
 msgid "Avatar"
 msgstr ""
 
 #: base/templates/base/comment_items.html:9
-#: blog/templates/blog/blog_page.html:222
+#: blog/templates/blog/blog_page.html:243
 msgid "edited"
 msgstr ""
 
@@ -669,9 +669,9 @@ msgstr ""
 #: base/templates/base/partials/health_medications_partial.html:63
 #: base/templates/base/post_cards.html:97
 #: base/templates/base/profile_edit.html:61
-#: blog/templates/blog/blog_page.html:155
-#: blog/templates/blog/blog_page.html:231
-#: blog/templates/blog/edit_article.html:122
+#: blog/templates/blog/blog_page.html:176
+#: blog/templates/blog/blog_page.html:252
+#: blog/templates/blog/edit_article.html:127
 msgid "Delete"
 msgstr ""
 
@@ -800,7 +800,8 @@ msgstr ""
 #: base/templates/base/home.html:27
 #: base/templates/base/staff_help_requests.html:144
 #: base/templates/base/staff_help_requests.html:233
-#: blog/templates/blog/blog_page.html:251
+#: blog/templates/blog/blog_page.html:272
+#: blog/templates/blog/blog_page.html:293
 msgid "Close"
 msgstr ""
 
@@ -1741,8 +1742,8 @@ msgstr ""
 
 #: base/templates/base/partials/health_documents.html:189
 #: base/templates/base/post_cards.html:93
-#: blog/templates/blog/blog_page.html:149
-#: blog/templates/blog/blog_page.html:228
+#: blog/templates/blog/blog_page.html:155
+#: blog/templates/blog/blog_page.html:249
 msgid "Edit"
 msgstr ""
 
@@ -2105,22 +2106,24 @@ msgstr ""
 
 #: base/templates/base/post_cards.html:26
 #: base/templates/base/post_cards.html:38
-#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:92
-#: blog/templates/blog/blog_page.html:107
-#: blog/templates/blog/blog_page.html:112
+#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:98
+#: blog/templates/blog/blog_page.html:113
+#: blog/templates/blog/blog_page.html:118
 msgid "Follow"
 msgstr ""
 
 #: base/templates/base/post_cards.html:27
 #: base/templates/base/post_cards.html:30
-#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:93
-#: blog/templates/blog/blog_page.html:97 blog/templates/blog/blog_page.html:108
+#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:99
+#: blog/templates/blog/blog_page.html:103
+#: blog/templates/blog/blog_page.html:114
 msgid "Unfollow"
 msgstr ""
 
 #: base/templates/base/post_cards.html:29
-#: base/templates/base/post_cards.html:41 blog/templates/blog/blog_page.html:95
-#: blog/templates/blog/blog_page.html:110
+#: base/templates/base/post_cards.html:41
+#: blog/templates/blog/blog_page.html:101
+#: blog/templates/blog/blog_page.html:116
 msgid "Toggle follow"
 msgstr ""
 
@@ -2140,7 +2143,7 @@ msgid "Publish"
 msgstr ""
 
 #: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:36
-#: blog/templates/blog/blog_page.html:259
+#: blog/templates/blog/blog_page.html:280
 msgid "Reject"
 msgstr ""
 
@@ -2149,6 +2152,8 @@ msgid "Unhide"
 msgstr ""
 
 #: base/templates/base/post_cards.html:90
+#: blog/templates/blog/blog_page.html:168
+#: blog/templates/blog/edit_article.html:125
 msgid "Hide"
 msgstr ""
 
@@ -3083,31 +3088,31 @@ msgstr ""
 msgid "Article content"
 msgstr ""
 
-#: blog/models.py:179
+#: blog/models.py:180
 msgid "Rejected by admin"
 msgstr ""
 
-#: blog/models.py:180
+#: blog/models.py:181
 msgid "Rejected at"
 msgstr ""
 
-#: blog/models.py:183
+#: blog/models.py:184
 msgid "Rejected by"
 msgstr ""
 
-#: blog/models.py:272
+#: blog/models.py:281
 msgid "Article like"
 msgstr ""
 
-#: blog/models.py:273
+#: blog/models.py:282
 msgid "Article likes"
 msgstr ""
 
-#: blog/models.py:289
+#: blog/models.py:298
 msgid "Article comment"
 msgstr ""
 
-#: blog/models.py:290
+#: blog/models.py:299
 msgid "Article comments"
 msgstr ""
 
@@ -3167,11 +3172,17 @@ msgid ""
 "yet."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:56
-msgid "Author avatar"
+#: blog/templates/blog/blog_page.html:50
+msgid ""
+"This article is hidden from other users and is only visible to you and "
+"administrators."
 msgstr ""
 
 #: blog/templates/blog/blog_page.html:62
+msgid "Author avatar"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:68
 #, python-format
 msgid ""
 "\n"
@@ -3186,39 +3197,44 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: blog/templates/blog/blog_page.html:75
-#: blog/templates/blog/includes/article_cards.html:50
-#: blog/templates/blog/includes/article_cards.html:119
+#: blog/templates/blog/blog_page.html:81
+#: blog/templates/blog/includes/article_cards.html:55
+#: blog/templates/blog/includes/article_cards.html:129
 msgid "Anonymous author"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:152
-#: blog/templates/blog/edit_article.html:130
-msgid "Delete the article?"
+#: blog/templates/blog/blog_page.html:161
+#: blog/templates/blog/edit_article.html:123
+msgid "Show"
 msgstr ""
 
 #: blog/templates/blog/blog_page.html:173
+#: blog/templates/blog/edit_article.html:149
+msgid "Delete the article?"
+msgstr ""
+
+#: blog/templates/blog/blog_page.html:194
 msgid "Likes"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:183
-#: blog/templates/blog/blog_page.html:193
+#: blog/templates/blog/blog_page.html:204
+#: blog/templates/blog/blog_page.html:214
 msgid "Comments"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:199
+#: blog/templates/blog/blog_page.html:220
 msgid "Leave a comment..."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:250
+#: blog/templates/blog/blog_page.html:271
 msgid "Reject publication"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:254
+#: blog/templates/blog/blog_page.html:275
 msgid "Reason (optional)"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:255
+#: blog/templates/blog/blog_page.html:276
 msgid "Write a short reason..."
 msgstr ""
 
@@ -3255,7 +3271,7 @@ msgid "Edit article"
 msgstr ""
 
 #: blog/templates/blog/edit_article.html:43
-#: blog/templates/blog/includes/article_cards.html:97
+#: blog/templates/blog/includes/article_cards.html:106
 msgid "Draft"
 msgstr ""
 
@@ -3274,6 +3290,11 @@ msgstr ""
 
 #: blog/templates/blog/edit_article.html:95
 msgid "Use a strong cover image to improve previews and article cards."
+msgstr ""
+
+#: blog/templates/blog/includes/article_cards.html:31
+#: blog/templates/blog/includes/article_cards.html:104
+msgid "Hidden"
 msgstr ""
 
 #: blog/templates/blog/includes/article_list_fragment.html:7
@@ -3297,36 +3318,36 @@ msgid ""
 "try again."
 msgstr ""
 
-#: blog/views.py:146
+#: blog/views.py:153
 msgid "Title and content are required."
 msgstr ""
 
-#: blog/views.py:209 blog/views.py:279
+#: blog/views.py:216 blog/views.py:286
 #, python-format
 msgid "System error: %(msg)s"
 msgstr ""
 
-#: blog/views.py:302
+#: blog/views.py:309 blog/views.py:327 blog/views.py:339
 msgid "Insufficient permissions."
 msgstr ""
 
-#: blog/views.py:339 blog/views.py:412
+#: blog/views.py:370 blog/views.py:443
 msgid "Comment cannot be empty."
 msgstr ""
 
-#: blog/views.py:390
+#: blog/views.py:421
 msgid "You cannot delete someone else's comment."
 msgstr ""
 
-#: blog/views.py:408
+#: blog/views.py:439
 msgid "You cannot edit someone else's comment."
 msgstr ""
 
-#: blog/views.py:428
+#: blog/views.py:459
 msgid "No file uploaded."
 msgstr ""
 
-#: blog/views.py:452
+#: blog/views.py:483
 msgid "Upload error."
 msgstr ""
 

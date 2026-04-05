@@ -5,8 +5,8 @@
     <article class="rl-card js-clickable-card" data-href="{{ href|default:'#' }}">
       <a class="rl-card__link" href="{{ href|default:'#' }}" aria-label="{{ page.title }}">
         {% if page.main_image %}
-          {% image page.main_image fill-960x600 format-webp as img_960 %}
-          {% image page.main_image fill-640x400 format-webp as img_640 %}
+          {% image page.main_image width-960 format-webp as img_960 %}
+          {% image page.main_image width-640 format-webp as img_640 %}
           <div class="rl-card__media">
             <img
               src="{{ img_960.url }}"
@@ -25,7 +25,12 @@
 
         <div class="rl-card__body">
           <div>
-            <h2 class="rl-card__title">{{ page.title }}</h2>
+            <div class="d-flex align-items-start justify-content-between gap-2">
+              <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
+              {% if page.is_hidden %}
+                <span class="badge bg-secondary">{% trans "Hidden" %}</span>
+              {% endif %}
+            </div>
           </div>
 
           <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>
@@ -73,8 +78,8 @@
     <article class="rl-card js-clickable-card" data-href="{{ href }}">
       <a class="rl-card__link" href="{{ href }}" aria-label="{{ page.title }}">
         {% if page.main_image %}
-          {% image page.main_image fill-960x600 format-webp as img_960 %}
-          {% image page.main_image fill-640x400 format-webp as img_640 %}
+          {% image page.main_image width-960 format-webp as img_960 %}
+          {% image page.main_image width-640 format-webp as img_640 %}
           <div class="rl-card__media">
             <img
               src="{{ img_960.url }}"
@@ -94,7 +99,12 @@
         <div class="rl-card__body">
           <div class="d-flex align-items-start justify-content-between gap-2">
             <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
-            <span class="badge bg-secondary">{% trans "Draft" %}</span>
+            <div class="d-flex gap-2 flex-wrap justify-content-end">
+              {% if page.is_hidden %}
+                <span class="badge bg-secondary">{% trans "Hidden" %}</span>
+              {% endif %}
+              <span class="badge bg-secondary">{% trans "Draft" %}</span>
+            </div>
           </div>
 
           <p class="rl-card__intro">{{ page.intro|truncatechars:150 }}</p>

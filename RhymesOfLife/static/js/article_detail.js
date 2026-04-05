@@ -5,6 +5,74 @@ document.addEventListener('DOMContentLoaded', () => {
   const commentsDiv = document.getElementById('comments');
   const commentForm = document.getElementById('comment-form');
 
+  function ensureLightbox() {
+    let root = document.getElementById('article-image-lightbox');
+    if (root) return root;
+
+    root = document.createElement('div');
+    root.id = 'article-image-lightbox';
+    root.className = 'rl-image-lightbox';
+    root.hidden = true;
+    root.innerHTML = `
+      <div class="rl-image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="rl-image-lightbox__dialog" role="dialog" aria-modal="true" aria-label="${gettext('Image preview')}">
+        <button type="button" class="rl-image-lightbox__close" data-lightbox-close aria-label="${gettext('Close')}">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+        <img class="rl-image-lightbox__img" alt="">
+      </div>
+    `;
+    document.body.appendChild(root);
+    return root;
+  }
+
+  const lightbox = ensureLightbox();
+  const lightboxImg = lightbox.querySelector('.rl-image-lightbox__img');
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImg.removeAttribute('src');
+    lightboxImg.alt = '';
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  function openLightbox(img) {
+    const src = img.currentSrc || img.src;
+    if (!src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = img.alt || '';
+    lightbox.hidden = false;
+    document.body.classList.add('overflow-hidden');
+  }
+
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('img[data-zoomable-image], .article-body img, .rl-hero img');
+    if (!img) return;
+    if (!document.contains(img)) return;
+    e.preventDefault();
+    openLightbox(img);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const active = document.activeElement;
+    if ((e.key === 'Enter' || e.key === ' ') && active?.matches?.('img[data-zoomable-image]')) {
+      e.preventDefault();
+      openLightbox(active);
+    }
+  });
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target.closest('[data-lightbox-close]')) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !lightbox.hidden) {
+      closeLightbox();
+    }
+  });
+
   function jsonHeaders(extra = {}) {
     return {
       'X-Requested-With': 'XMLHttpRequest',

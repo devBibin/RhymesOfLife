@@ -119,8 +119,27 @@
           </button>
         {% endif %}
       </div>
+      {% if page.is_hidden %}
+        <button type="submit" form="unhide-article-form" class="btn btn-outline-secondary">{% trans "Show" %}</button>
+      {% else %}
+        <button type="submit" form="hide-article-form" class="btn btn-outline-secondary">{% trans "Hide" %}</button>
+      {% endif %}
       <button type="submit" form="delete-article-form" class="btn btn-outline-danger">{% trans "Delete" %}</button>
     </div>
+  </form>
+
+  <form id="hide-article-form"
+        action="{% url 'hide_article' page.id %}"
+        method="post"
+        class="d-none">
+    {% csrf_token %}
+  </form>
+
+  <form id="unhide-article-form"
+        action="{% url 'unhide_article' page.id %}"
+        method="post"
+        class="d-none">
+    {% csrf_token %}
   </form>
 
   <form id="delete-article-form"

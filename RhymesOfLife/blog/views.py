@@ -126,6 +126,13 @@ def _my_articles_url() -> str:
     return "/articles/?filter=mine"
 
 
+def _save_article_visibility(page, *, hidden: bool) -> None:
+    page.is_hidden = hidden
+    revision = page.save_revision()
+    if page.live:
+        revision.publish()
+
+
 @login_required
 @article_author_required
 @require_http_methods(["GET", "POST"])
@@ -309,6 +316,30 @@ def delete_article_view(request, page_id):
         page.delete()
         log.info("Article hard-deleted: page_id=%s user_id=%s", pid, request.user.id)
     return redirect("/articles/")
+
+
+@login_required
+@article_author_required
+@require_POST
+def hide_article_view(request, page_id):
+    page = get_object_or_404(BlogPage, id=page_id).specific
+    if not page.is_editable_by(request.user):
+        return HttpResponseForbidden(_("Insufficient permissions."))
+    _save_article_visibility(page, hidden=True)
+    log.info("Article hidden: page_id=%s user_id=%s", page.id, request.user.id)
+    return redirect(_my_articles_url())
+
+
+@login_required
+@article_author_required
+@require_POST
+def unhide_article_view(request, page_id):
+    page = get_object_or_404(BlogPage, id=page_id).specific
+    if not page.is_editable_by(request.user):
+        return HttpResponseForbidden(_("Insufficient permissions."))
+    _save_article_visibility(page, hidden=False)
+    log.info("Article unhidden: page_id=%s user_id=%s", page.id, request.user.id)
+    return redirect(_my_articles_url())
 
 
 @login_required

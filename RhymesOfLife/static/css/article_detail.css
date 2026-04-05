@@ -3,10 +3,32 @@
 }
 
 .rl-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  min-height: min(60vh, 560px);
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(0, 0, 0, 0.03);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.55), transparent 32%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.02));
+}
+
+.article-main-image.rl-hero {
+  aspect-ratio: auto;
+}
+
+.article-main-image .rl-hero__image {
+  display: block;
+  max-width: 100%;
+  max-height: min(56vh, 520px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
 }
 
 .rl-article__title {
@@ -278,9 +300,84 @@
   border-radius: 14px;
 }
 
+.rl-hero img,
+.richtext img {
+  cursor: zoom-in;
+}
+
+.rl-image-lightbox[hidden] {
+  display: none !important;
+}
+
+.rl-image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.rl-image-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(4px);
+}
+
+.rl-image-lightbox__dialog {
+  position: relative;
+  z-index: 1;
+  max-width: min(1200px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rl-image-lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  background: #fff;
+}
+
+.rl-image-lightbox__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.rl-image-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
 @media (max-width: 576px) {
   .rl-article {
     max-width: 100%;
+  }
+  .rl-hero {
+    min-height: 260px;
+    padding: 12px;
+  }
+  .rl-hero__image {
+    max-height: 42vh;
   }
   .rl-chip {
     width: 100%;

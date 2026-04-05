@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-04 19:44+0000\n"
+"POT-Creation-Date: 2026-04-05 10:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,39 +236,39 @@ msgstr "Запросы доступа"
 msgid "Author"
 msgstr "Автор"
 
-#: base/models.py:465 base/models.py:538 blog/models.py:282
+#: base/models.py:465 base/models.py:538 blog/models.py:291
 msgid "Text"
 msgstr "Текст"
 
-#: base/models.py:466
+#: base/models.py:466 blog/models.py:169
 msgid "Hidden by author"
 msgstr "Скрыто автором"
 
-#: base/models.py:467 base/models.py:541 blog/models.py:168 blog/models.py:285
+#: base/models.py:467 base/models.py:541 blog/models.py:168 blog/models.py:294
 msgid "Soft-deleted"
 msgstr "Помечено как удалённое"
 
-#: base/models.py:469 blog/models.py:172
+#: base/models.py:469 blog/models.py:173
 msgid "Approved by admin"
 msgstr "Одобрено администратором"
 
-#: base/models.py:470 blog/models.py:173
+#: base/models.py:470 blog/models.py:174
 msgid "Approved at"
 msgstr "Дата одобрения"
 
-#: base/models.py:472 blog/models.py:176
+#: base/models.py:472 blog/models.py:177
 msgid "Approved by"
 msgstr "Одобрено пользователем"
 
-#: base/models.py:475 blog/models.py:169
+#: base/models.py:475 blog/models.py:170
 msgid "Likes count"
 msgstr "Количество лайков"
 
-#: base/models.py:476 blog/models.py:170
+#: base/models.py:476 blog/models.py:171
 msgid "Comments count"
 msgstr "Количество комментариев"
 
-#: base/models.py:478 base/models.py:539 base/models.py:677 blog/models.py:283
+#: base/models.py:478 base/models.py:539 base/models.py:677 blog/models.py:292
 msgid "Created at"
 msgstr "Дата создания"
 
@@ -314,7 +314,7 @@ msgstr "Лайк публикации"
 msgid "Post likes"
 msgstr "Лайки публикации"
 
-#: base/models.py:540 blog/models.py:284
+#: base/models.py:540 blog/models.py:293
 msgid "Edited at"
 msgstr "Дата редактирования"
 
@@ -617,7 +617,7 @@ msgstr "Подробнее"
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/patient_exams.html:17
 #: base/templates/base/post_cards.html:170
-#: blog/templates/blog/blog_page.html:202
+#: blog/templates/blog/blog_page.html:223
 msgid "Send"
 msgstr "Отправить"
 
@@ -625,7 +625,7 @@ msgstr "Отправить"
 #: base/templates/base/partials/health_wellness.html:279
 #: base/templates/base/post_create.html:95
 #: base/templates/base/post_edit.html:128
-#: blog/templates/blog/blog_page.html:258
+#: blog/templates/blog/blog_page.html:279
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -655,14 +655,14 @@ msgstr "Выйти"
 
 #: base/templates/base/comment_items.html:4
 #: base/templates/base/includes/profile_header.html:47
-#: blog/templates/blog/blog_page.html:216
-#: blog/templates/blog/includes/article_cards.html:45
-#: blog/templates/blog/includes/article_cards.html:114
+#: blog/templates/blog/blog_page.html:237
+#: blog/templates/blog/includes/article_cards.html:50
+#: blog/templates/blog/includes/article_cards.html:124
 msgid "Avatar"
 msgstr "Аватар"
 
 #: base/templates/base/comment_items.html:9
-#: blog/templates/blog/blog_page.html:222
+#: blog/templates/blog/blog_page.html:243
 msgid "edited"
 msgstr "изменено"
 
@@ -671,9 +671,9 @@ msgstr "изменено"
 #: base/templates/base/partials/health_medications_partial.html:63
 #: base/templates/base/post_cards.html:97
 #: base/templates/base/profile_edit.html:61
-#: blog/templates/blog/blog_page.html:155
-#: blog/templates/blog/blog_page.html:231
-#: blog/templates/blog/edit_article.html:122
+#: blog/templates/blog/blog_page.html:176
+#: blog/templates/blog/blog_page.html:252
+#: blog/templates/blog/edit_article.html:127
 msgid "Delete"
 msgstr "Удалить"
 
@@ -806,7 +806,8 @@ msgstr "Продолжить"
 #: base/templates/base/home.html:27
 #: base/templates/base/staff_help_requests.html:144
 #: base/templates/base/staff_help_requests.html:233
-#: blog/templates/blog/blog_page.html:251
+#: blog/templates/blog/blog_page.html:272
+#: blog/templates/blog/blog_page.html:293
 msgid "Close"
 msgstr "Закрыть"
 
@@ -1932,8 +1933,8 @@ msgstr "Сохранить"
 
 #: base/templates/base/partials/health_documents.html:189
 #: base/templates/base/post_cards.html:93
-#: blog/templates/blog/blog_page.html:149
-#: blog/templates/blog/blog_page.html:228
+#: blog/templates/blog/blog_page.html:155
+#: blog/templates/blog/blog_page.html:249
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -2308,22 +2309,24 @@ msgstr "Аватар пользователя"
 
 #: base/templates/base/post_cards.html:26
 #: base/templates/base/post_cards.html:38
-#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:92
-#: blog/templates/blog/blog_page.html:107
-#: blog/templates/blog/blog_page.html:112
+#: base/templates/base/post_cards.html:42 blog/templates/blog/blog_page.html:98
+#: blog/templates/blog/blog_page.html:113
+#: blog/templates/blog/blog_page.html:118
 msgid "Follow"
 msgstr "Подписаться"
 
 #: base/templates/base/post_cards.html:27
 #: base/templates/base/post_cards.html:30
-#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:93
-#: blog/templates/blog/blog_page.html:97 blog/templates/blog/blog_page.html:108
+#: base/templates/base/post_cards.html:39 blog/templates/blog/blog_page.html:99
+#: blog/templates/blog/blog_page.html:103
+#: blog/templates/blog/blog_page.html:114
 msgid "Unfollow"
 msgstr "Отписаться"
 
 #: base/templates/base/post_cards.html:29
-#: base/templates/base/post_cards.html:41 blog/templates/blog/blog_page.html:95
-#: blog/templates/blog/blog_page.html:110
+#: base/templates/base/post_cards.html:41
+#: blog/templates/blog/blog_page.html:101
+#: blog/templates/blog/blog_page.html:116
 msgid "Toggle follow"
 msgstr "Переключить подписку"
 
@@ -2343,7 +2346,7 @@ msgid "Publish"
 msgstr "Опубликовать"
 
 #: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:36
-#: blog/templates/blog/blog_page.html:259
+#: blog/templates/blog/blog_page.html:280
 msgid "Reject"
 msgstr "Отклонить"
 
@@ -2352,6 +2355,8 @@ msgid "Unhide"
 msgstr "Показать"
 
 #: base/templates/base/post_cards.html:90
+#: blog/templates/blog/blog_page.html:168
+#: blog/templates/blog/edit_article.html:125
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -2413,7 +2418,9 @@ msgstr "Редактировать публикацию"
 
 #: base/templates/base/post_edit.html:50
 msgid "Edit your post to keep updates clear, relevant and easy to understand."
-msgstr "Отредактируйте свой пост, чтобы обновления были ясными, актуальными и легко понятными."
+msgstr ""
+"Отредактируйте свой пост, чтобы обновления были ясными, актуальными и легко "
+"понятными."
 
 #: base/templates/base/post_edit.html:82
 msgid "Current images"
@@ -3297,31 +3304,31 @@ msgstr "Главное изображение"
 msgid "Article content"
 msgstr "Содержимое статьи"
 
-#: blog/models.py:179
+#: blog/models.py:180
 msgid "Rejected by admin"
 msgstr "Отклонено администратором"
 
-#: blog/models.py:180
+#: blog/models.py:181
 msgid "Rejected at"
 msgstr "Отклонено"
 
-#: blog/models.py:183
+#: blog/models.py:184
 msgid "Rejected by"
 msgstr "Отклонил(а)"
 
-#: blog/models.py:272
+#: blog/models.py:281
 msgid "Article like"
 msgstr "Лайк статьи"
 
-#: blog/models.py:273
+#: blog/models.py:282
 msgid "Article likes"
 msgstr "Лайки статей"
 
-#: blog/models.py:289
+#: blog/models.py:298
 msgid "Article comment"
 msgstr "Комментарий к статье"
 
-#: blog/models.py:290
+#: blog/models.py:299
 msgid "Article comments"
 msgstr "Комментарии к статьям"
 
@@ -3344,17 +3351,14 @@ msgid "Search by title, author or tags"
 msgstr "Поиск по названию, автору или тегам"
 
 #: blog/templates/blog/blog_index_page.html:42
-#| msgid "Article content"
 msgid "Article scope"
 msgstr "Тематика статьи"
 
 #: blog/templates/blog/blog_index_page.html:48
-#| msgid "Articles"
 msgid "All articles"
 msgstr "Все статьи"
 
 #: blog/templates/blog/blog_index_page.html:55
-#| msgid "Articles"
 msgid "My articles"
 msgstr "Мои статьи"
 
@@ -3386,11 +3390,19 @@ msgstr ""
 "Ваша статья ожидает одобрения администратора и пока не видна другим "
 "пользователям."
 
-#: blog/templates/blog/blog_page.html:56
+#: blog/templates/blog/blog_page.html:50
+#, fuzzy
+#| msgid "This article has been rejected by an administrator."
+msgid ""
+"This article is hidden from other users and is only visible to you and "
+"administrators."
+msgstr "Эта статья была отклонена администратором."
+
+#: blog/templates/blog/blog_page.html:62
 msgid "Author avatar"
 msgstr "Аватар автора"
 
-#: blog/templates/blog/blog_page.html:62
+#: blog/templates/blog/blog_page.html:68
 #, python-format
 msgid ""
 "\n"
@@ -3413,39 +3425,46 @@ msgstr[1] ""
 "id=\"%(page.author.user.id)s\">%(n)s</span> подписчика\n"
 "            "
 
-#: blog/templates/blog/blog_page.html:75
-#: blog/templates/blog/includes/article_cards.html:50
-#: blog/templates/blog/includes/article_cards.html:119
+#: blog/templates/blog/blog_page.html:81
+#: blog/templates/blog/includes/article_cards.html:55
+#: blog/templates/blog/includes/article_cards.html:129
 msgid "Anonymous author"
 msgstr "Анонимный автор"
 
-#: blog/templates/blog/blog_page.html:152
-#: blog/templates/blog/edit_article.html:130
+#: blog/templates/blog/blog_page.html:161
+#: blog/templates/blog/edit_article.html:123
+#, fuzzy
+#| msgid "Show more"
+msgid "Show"
+msgstr "Показать ещё"
+
+#: blog/templates/blog/blog_page.html:173
+#: blog/templates/blog/edit_article.html:149
 msgid "Delete the article?"
 msgstr "Удалить статью?"
 
-#: blog/templates/blog/blog_page.html:173
+#: blog/templates/blog/blog_page.html:194
 msgid "Likes"
 msgstr "Лайки"
 
-#: blog/templates/blog/blog_page.html:183
-#: blog/templates/blog/blog_page.html:193
+#: blog/templates/blog/blog_page.html:204
+#: blog/templates/blog/blog_page.html:214
 msgid "Comments"
 msgstr "Комментарии"
 
-#: blog/templates/blog/blog_page.html:199
+#: blog/templates/blog/blog_page.html:220
 msgid "Leave a comment..."
 msgstr "Оставьте комментарий..."
 
-#: blog/templates/blog/blog_page.html:250
+#: blog/templates/blog/blog_page.html:271
 msgid "Reject publication"
 msgstr "Отклонить публикацию"
 
-#: blog/templates/blog/blog_page.html:254
+#: blog/templates/blog/blog_page.html:275
 msgid "Reason (optional)"
 msgstr "Причина (необязательно)"
 
-#: blog/templates/blog/blog_page.html:255
+#: blog/templates/blog/blog_page.html:276
 msgid "Write a short reason..."
 msgstr "Напишите краткую причину..."
 
@@ -3486,7 +3505,7 @@ msgid "Edit article"
 msgstr "Редактировать статью"
 
 #: blog/templates/blog/edit_article.html:43
-#: blog/templates/blog/includes/article_cards.html:97
+#: blog/templates/blog/includes/article_cards.html:106
 msgid "Draft"
 msgstr "Черновик"
 
@@ -3496,12 +3515,10 @@ msgid ""
 msgstr ""
 
 #: blog/templates/blog/edit_article.html:86
-#| msgid "Current images"
 msgid "Current image"
 msgstr "Текущие изображения"
 
 #: blog/templates/blog/edit_article.html:90
-#| msgid "Remove"
 msgid "Remove image"
 msgstr "Удалить"
 
@@ -3511,13 +3528,16 @@ msgstr ""
 "Используйте качественную обложку — так статья будет лучше выглядеть в превью "
 "и карточках."
 
+#: blog/templates/blog/includes/article_cards.html:31
+#: blog/templates/blog/includes/article_cards.html:104
+msgid "Hidden"
+msgstr "Скрыта"
+
 #: blog/templates/blog/includes/article_list_fragment.html:7
-#| msgid "Not found."
 msgid "Nothing found."
 msgstr "Не найдено."
 
 #: blog/templates/blog/includes/article_list_fragment.html:12
-#| msgid "Pagination"
 msgid "Page navigation"
 msgstr "Пагинация"
 
@@ -3538,36 +3558,36 @@ msgstr ""
 "Статья слишком большая для загрузки. Уменьшите размер текста или изображений "
 "и попробуйте снова."
 
-#: blog/views.py:146
+#: blog/views.py:153
 msgid "Title and content are required."
 msgstr "Заголовок и содержимое обязательны."
 
-#: blog/views.py:209 blog/views.py:279
+#: blog/views.py:216 blog/views.py:286
 #, python-format
 msgid "System error: %(msg)s"
 msgstr "Системная ошибка: %(msg)s"
 
-#: blog/views.py:302
+#: blog/views.py:309 blog/views.py:327 blog/views.py:339
 msgid "Insufficient permissions."
 msgstr "Недостаточно прав."
 
-#: blog/views.py:339 blog/views.py:412
+#: blog/views.py:370 blog/views.py:443
 msgid "Comment cannot be empty."
 msgstr "Комментарий не может быть пустым."
 
-#: blog/views.py:390
+#: blog/views.py:421
 msgid "You cannot delete someone else's comment."
 msgstr "Вы не можете удалить чужой комментарий."
 
-#: blog/views.py:408
+#: blog/views.py:439
 msgid "You cannot edit someone else's comment."
 msgstr "Вы не можете редактировать чужой комментарий."
 
-#: blog/views.py:428
+#: blog/views.py:459
 msgid "No file uploaded."
 msgstr "Файл не загружен."
 
-#: blog/views.py:452
+#: blog/views.py:483
 msgid "Upload error."
 msgstr "Ошибка загрузки."
 
