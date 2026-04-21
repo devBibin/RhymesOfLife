@@ -1,38 +1,35 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load static i18n %}
 
 {% block content %}
-<div class="container py-4">
+<link rel="stylesheet" href="{% static 'css/doctor_patient.css' %}">
 
-  <div class="mb-4">
-    <h2 class="mb-1">
-      💊 {% trans "Medications" %}
-    </h2>
-    <div class="text-muted">
-      {{ patient.get_full_name|default:patient.username }}
-    </div>
-  </div>
+<div class="container py-4 doctor-page">
+  {% include "base/includes/doctor_patient_header.html" %}
 
-  {% if medications %}
-    <div class="d-grid gap-2">
-      {% for m in medications %}
-        <div class="card card-elevated">
-          <div class="card-body">
-            <div class="fw-semibold">
-              {{ m.description }}
-            </div>
-            <div class="text-muted small mt-1">
-              {% trans "Added on" %}: {{ m.created_at|date:"d.m.Y H:i" }}
-            </div>
+  <div class="doctor-layout">
+    <section class="doctor-panel">
+      <div class="doctor-panel__body">
+        <h2 class="doctor-panel__title">{% trans "Medications" %}</h2>
+
+        {% if medications %}
+          <div class="doctor-list">
+            {% for m in medications %}
+              <article class="doctor-item">
+                <div class="fw-semibold">{{ m.description }}</div>
+                <div class="text-muted small mt-1">
+                  {% trans "Added on" %}: {{ m.created_at|date:"d.m.Y H:i" }}
+                </div>
+              </article>
+            {% endfor %}
           </div>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-secondary">
-      {% trans "The patient has not added any medications." %}
-    </div>
-  {% endif %}
+        {% else %}
+          <div class="doctor-empty">{% trans "The patient has not added any medications." %}</div>
+        {% endif %}
+      </div>
+    </section>
 
+    {% include "base/includes/doctor_recommendations_panel.html" %}
+  </div>
 </div>
 {% endblock %}

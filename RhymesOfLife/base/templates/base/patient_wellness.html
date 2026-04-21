@@ -2,43 +2,67 @@
 {% load static i18n %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
-<div class="container py-4">
-  <h2 class="mb-4">🩺 {% trans "Patient wellness" %}: {{ patient.get_full_name|default:patient.username }}</h2>
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <canvas id="chart" height="120"></canvas>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h5 class="mb-3">{% trans "Entries" %}</h5>
-      {% if entries %}
-        <ul class="list-group">
-          {% for e in entries %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <div><strong>{{ e.date }}</strong> · {% trans "Score" %}: {{ e.score }}</div>
-              <div class="text-muted">{{ e.note }}</div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <div class="alert alert-info mb-0">{% trans "No entries yet." %}</div>
-      {% endif %}
-    </div>
+<link rel="stylesheet" href="{% static 'css/doctor_patient.css' %}">
+
+<div class="container py-4 doctor-page">
+  {% include "base/includes/doctor_patient_header.html" %}
+
+  <div class="doctor-layout">
+    <section class="doctor-panel">
+      <div class="doctor-panel__body">
+        <h2 class="doctor-panel__title">{% trans "Patient wellness" %}</h2>
+
+        <div class="doctor-item mb-3">
+          <canvas id="chart" height="120"></canvas>
+        </div>
+
+        <h3 class="doctor-panel__title">{% trans "Entries" %}</h3>
+        {% if entries %}
+          <div class="doctor-list">
+            {% for e in entries %}
+              <article class="doctor-item d-flex justify-content-between gap-3 flex-wrap">
+                <div>
+                  <strong>{{ e.date }}</strong>
+                  <span class="text-muted">· {% trans "Score" %}: {{ e.score }}</span>
+                </div>
+                {% if e.note %}
+                  <div class="text-muted">{{ e.note }}</div>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="doctor-empty">{% trans "No entries yet." %}</div>
+        {% endif %}
+      </div>
+    </section>
+
+    {% include "base/includes/doctor_recommendations_panel.html" %}
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 const data = {{ entries|safe }};
-const labels = data.map(i => i.date);
-const values = data.map(i => i.score);
-const ctx = document.getElementById("chart").getContext("2d");
-new Chart(ctx, {
-  type: "line",
-  data: { labels, datasets: [{ label: "{{ _('Wellness') }}", data: values, tension: 0.25, fill: false }] },
-  options: { scales: { y: { min: 1, max: 10, ticks: { stepSize: 1 } } } }
-});
+const chartEl = document.getElementById("chart");
+if (chartEl) {
+  const labels = data.map(i => i.date);
+  const values = data.map(i => i.score);
+  new Chart(chartEl.getContext("2d"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "{{ _('Wellness') }}",
+        data: values,
+        tension: 0.25,
+        fill: true,
+        borderColor: "#0d6efd",
+        backgroundColor: "rgba(13,110,253,.10)"
+      }]
+    },
+    options: { scales: { y: { min: 1, max: 10, ticks: { stepSize: 1 } } } }
+  });
+}
 </script>
 {% endblock %}

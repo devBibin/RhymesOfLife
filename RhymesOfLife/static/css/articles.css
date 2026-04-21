@@ -10,7 +10,7 @@
 }
 
 .rl-page {
-  max-width: 980px;
+  max-width: 920px;
 }
 
 .rl-page__head {
@@ -88,12 +88,15 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
+  justify-items: stretch;
 }
 
 @media (min-width: 992px) {
   .rl-articles {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+    max-width: 880px;
+    margin-inline: auto;
   }
 }
 
@@ -103,6 +106,8 @@
   background: var(--rl-surface);
   overflow: hidden;
   transition: transform var(--rl-transition), box-shadow var(--rl-transition), border-color var(--rl-transition);
+  font-family: "Roboto", var(--bs-body-font-family, Arial, sans-serif);
+  text-align: left;
 }
 
 .rl-card:hover {
@@ -117,6 +122,13 @@
   display: block;
 }
 
+@media (min-width: 992px) {
+  .rl-card__link {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
 .rl-card__media {
   display: flex;
   align-items: center;
@@ -126,6 +138,15 @@
   background:
     radial-gradient(circle at top left, rgba(255,255,255,.72), transparent 34%),
     linear-gradient(135deg, rgba(15,23,42,.08), rgba(15,23,42,.02));
+}
+
+@media (min-width: 992px) {
+  .rl-card__media {
+    flex: 0 0 38%;
+    aspect-ratio: auto;
+    min-height: 230px;
+    padding: 0;
+  }
 }
 
 .rl-card__media img {
@@ -139,6 +160,16 @@
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
 }
 
+@media (min-width: 992px) {
+  .rl-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
 .rl-card__body {
   padding: 14px 14px 12px;
   display: flex;
@@ -147,17 +178,28 @@
   min-height: 160px;
 }
 
+@media (min-width: 992px) {
+  .rl-card__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 230px;
+    padding: 18px 22px;
+    justify-content: flex-start;
+  }
+}
+
 .rl-card__title {
-  font-size: 1.05rem;
-  line-height: 1.2;
+  font-size: 1.2rem;
+  line-height: 1.6;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .rl-card__intro {
   margin: 0;
   color: var(--bs-secondary-color, #6c757d);
-  font-size: 0.92rem;
+  font-size: 1.10rem;
+  line-height: 1.6;
 }
 
 .rl-card__tags {
@@ -192,6 +234,12 @@
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   padding-top: 10px;
   margin-top: 2px;
+}
+
+@media (min-width: 992px) {
+  .rl-card__meta {
+    margin-top: auto;
+  }
 }
 
 .rl-author {

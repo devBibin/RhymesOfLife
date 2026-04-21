@@ -5,8 +5,12 @@
 <link rel="stylesheet" href="{% static 'css/new_styles.css' %}">
 
 <style>
-  .search-bar-sticky{position:sticky;top:0;z-index:1;background:rgba(255,255,255,.8);backdrop-filter:blur(8px)}
-  .patient-item{gap:1rem}
+  .patients-page{max-width:1120px}
+  .search-bar-sticky{position:sticky;top:0;z-index:1;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border:1px solid rgba(16,24,40,.08);border-radius:18px;box-shadow:0 10px 30px rgba(16,24,40,.07)}
+  .patients-title{display:flex;align-items:center;gap:.7rem;margin:0}
+  .patients-title i{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:14px;background:rgba(var(--bs-primary-rgb),.10);color:var(--bs-primary)}
+  .patients-list{display:grid;gap:.75rem}
+  .patient-item{gap:1rem;border:1px solid rgba(16,24,40,.08)!important;border-radius:16px!important;box-shadow:0 10px 26px rgba(16,24,40,.06);padding:1rem 1.1rem}
   .patient-item .meta{min-width:0}
   .actions{display:flex;gap:.5rem;flex-shrink:0}
   .btn-ghost{
@@ -38,12 +42,21 @@
   }
   .pagination-docked .page-link{border:0;border-radius:9999px}
   .badge-soft{background:rgba(var(--bs-success-rgb),.12);color:var(--bs-success)}
+  .patient-syndromes{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}
+  @media (max-width: 768px){
+    .patient-item{align-items:flex-start!important;flex-direction:column}
+    .actions{width:100%;flex-wrap:wrap}
+    .actions .btn{flex:1 1 auto}
+  }
 </style>
 
-<div class="container py-4">
+<div class="container py-4 patients-page">
 
-  <div class="search-bar-sticky py-3 mb-3">
-    <h2 class="mb-3">👨‍⚕️ {% trans "Search patients" %}</h2>
+  <div class="search-bar-sticky p-3 p-md-4 mb-3">
+    <h1 class="patients-title h3 mb-3">
+      <i class="bi bi-people-fill" aria-hidden="true"></i>
+      {% trans "Search patients" %}
+    </h1>
     <form method="get" class="d-flex gap-2">
       <input type="text" name="q" value="{{ query }}" class="form-control"
              placeholder="{% trans 'Enter first or last name...' %}">
@@ -54,27 +67,32 @@
   </div>
 
   {% if patients %}
-    <ul class="list-group mb-5">
+    <ul class="list-unstyled patients-list mb-5">
       {% for info in patients %}
-        <li class="list-group-item d-flex align-items-center patient-item">
+        <li class="d-flex align-items-center patient-item bg-white">
           <div class="meta">
             <div class="fw-medium text-truncate">
               {{ info.first_name }} {{ info.last_name }} ({{ info.user.username }})
             </div>
-            <div class="mt-1">
-              {% if info.confirmed_syndromes or info.syndromes_other %}
-                {% for code in info.confirmed_syndromes %}
-                  {% for c,l in syndrome_choices %}
-                    {% if c == code %}
-                      <span class="badge badge-soft rounded-pill me-1">{{ l }}</span>
+            <div class="patient-syndromes">
+              {% if info.syndrome_status_rows or info.syndromes_other %}
+                {% for row in info.syndrome_status_rows %}
+                  <span class="badge badge-soft rounded-pill me-1">
+                    {{ row.label }}
+                    {% if status_genetic_confirmed in row.statuses %}
+                      · подтвержден генетически
+                    {% elif status_doctor_confirmed in row.statuses %}
+                      · установлен врачом
+                    {% elif status_doctor_unconfirmed in row.statuses %}
+                      · не подтвержден врачом
                     {% endif %}
-                  {% endfor %}
+                  </span>
                 {% endfor %}
                 {% for name in info.syndromes_other|split_csv %}
                   <span class="badge badge-soft rounded-pill me-1">{{ name }}</span>
                 {% endfor %}
               {% else %}
-                <span class="text-muted small">{% trans "No genetically confirmed syndromes" %}</span>
+                <span class="text-muted small">Синдромы не указаны</span>
               {% endif %}
             </div>
           </div>
@@ -113,19 +131,19 @@
                 {% endif %}
               </div>
             {% else %}
-              <a href="{% url 'patient_exams' info.user.id %}"
+              <a href="{% url 'patient_exams' info.user.id %}?next={{ request.get_full_path|urlencode }}"
                  class="btn btn-ghost btn-sm px-3"
                  data-bs-toggle="tooltip" data-bs-title="{% trans 'View examinations' %}">
                 <i class="bi bi-file-earmark-text"></i>
                 <span class="label">{% trans "Exams" %}</span>
               </a>
-              <a href="{% url 'patient_wellness' info.user.id %}"
+              <a href="{% url 'patient_wellness' info.user.id %}?next={{ request.get_full_path|urlencode }}"
                  class="btn btn-ghost btn-ghost-success btn-sm px-3"
                  data-bs-toggle="tooltip" data-bs-title="{% trans 'View wellness' %}">
                 <i class="bi bi-heart-pulse"></i>
                 <span class="label">{% trans "Wellness" %}</span>
               </a>
-              <a href="{% url 'patient_medications' info.user.id %}"
+              <a href="{% url 'patient_medications' info.user.id %}?next={{ request.get_full_path|urlencode }}"
                 class="btn btn-ghost btn-sm px-3"
                 data-bs-toggle="tooltip"
                 data-bs-title="{% trans 'View medications' %}">

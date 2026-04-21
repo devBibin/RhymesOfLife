@@ -29,8 +29,7 @@ class RegisterForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = AdditionalUserInfo
-        fields = ['avatar','first_name', 'last_name', 'syndrome', 'birth_date']
+        fields = ['avatar', 'first_name', 'last_name', 'birth_date']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),
-            'syndrome': forms.Textarea(attrs={'rows': 3}),
         }

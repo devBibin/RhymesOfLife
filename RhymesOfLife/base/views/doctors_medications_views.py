@@ -7,6 +7,7 @@ from django.views.decorators.http import require_http_methods
 
 from ..models import MedicationEntry
 from ..utils.access import has_patient_access
+from .doctors_views import patient_doctor_context
 
 User = get_user_model()
 
@@ -28,11 +29,6 @@ def patient_medications_view(request, user_id: int):
         .order_by("-created_at")
     )
 
-    return render(
-        request,
-        "base/patient_medications.html",
-        {
-            "patient": patient_user,
-            "medications": medications,
-        },
-    )
+    ctx = patient_doctor_context(request, patient_user, "medications")
+    ctx.update({"medications": medications})
+    return render(request, "base/patient_medications.html", ctx)

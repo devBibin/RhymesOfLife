@@ -113,9 +113,18 @@
             <strong class="d-block mb-2">{% trans "Syndromes" %}</strong>
             {% if info.syndromes or info.syndromes_other %}
               <div class="badges-flow">
-                {% for code,label in syndrome_choices %}
-                  {% if code in info.syndromes %}
-                    <span class="badge-cloud">{{ label }}</span>
+                {% for row in syndrome_status_rows %}
+                  {% if row.statuses %}
+                    <span class="badge-cloud">
+                      {{ row.label }}
+                      {% if status_genetic_confirmed in row.statuses %}
+                        · подтвержден генетически
+                      {% elif status_doctor_confirmed in row.statuses %}
+                        · установлен врачом
+                      {% elif status_doctor_unconfirmed in row.statuses %}
+                        · не подтвержден врачом
+                      {% endif %}
+                    </span>
                   {% endif %}
                 {% endfor %}
                 {% for name in info.syndromes_other|split_csv %}

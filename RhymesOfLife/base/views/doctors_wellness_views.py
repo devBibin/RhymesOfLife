@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 from ..models import WellnessEntry
 from ..utils.access import has_patient_access
 from ..utils.logging import get_app_logger
+from .doctors_views import patient_doctor_context
 
 User = get_user_model()
 log = get_app_logger(__name__)
@@ -28,8 +29,6 @@ def patient_wellness_view(request, user_id: int):
     entries = list(reversed(entries_qs))
     data = [{"date": e.date.strftime("%Y-%m-%d"), "score": e.score, "note": e.note} for e in entries]
 
-    return render(
-        request,
-        "base/patient_wellness.html",
-        {"patient": patient_user, "entries": data},
-    )
+    ctx = patient_doctor_context(request, patient_user, "wellness")
+    ctx.update({"entries": data})
+    return render(request, "base/patient_wellness.html", ctx)

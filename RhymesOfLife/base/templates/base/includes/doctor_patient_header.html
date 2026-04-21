@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<div class="doctor-hero">
+  <div class="doctor-hero__top">
+    <div>
+      <a href="{{ back_url }}" class="doctor-back">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        {% trans "Back to patients" %}
+      </a>
+      <h1 class="doctor-title">
+        {{ patient.get_full_name|default:patient.username }}
+      </h1>
+      <div class="doctor-subtitle">{% trans "Patient card" %}</div>
+    </div>
+  </div>
+
+  <nav class="doctor-tabs" aria-label="{% trans 'Patient sections' %}">
+    <a class="doctor-tab {% if active_tab == 'exams' %}is-active{% endif %}" href="{% url 'patient_exams' patient.id %}">
+      <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+      {% trans "Exams" %}
+    </a>
+    <a class="doctor-tab {% if active_tab == 'wellness' %}is-active{% endif %}" href="{% url 'patient_wellness' patient.id %}">
+      <i class="bi bi-heart-pulse" aria-hidden="true"></i>
+      {% trans "Wellness" %}
+    </a>
+    <a class="doctor-tab {% if active_tab == 'medications' %}is-active{% endif %}" href="{% url 'patient_medications' patient.id %}">
+      <i class="bi bi-capsule" aria-hidden="true"></i>
+      {% trans "Medications" %}
+    </a>
+  </nav>
+</div>

@@ -39,6 +39,7 @@ from .views.documents_views import (
 from .views.doctors_views import (
     patients_list_view,
     patient_exams_view,
+    add_patient_recommendation_view,
 )
 from .views.social_views import (
     follow_view,
@@ -154,6 +155,7 @@ urlpatterns = [
 
     path("patients/", patients_list_view, name="patients_list"),
     path("patients/<int:user_id>/", patient_exams_view, name="patient_exams"),
+    path("patients/<int:user_id>/recommendations/add/", add_patient_recommendation_view, name="patient_recommendation_add"),
 
     path("notifications/", notifications_view, name="notifications"),
     path("follow/<int:user_id>/", follow_view, name="follow_user"),

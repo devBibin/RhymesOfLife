@@ -29,6 +29,11 @@
   .avatar-menu .dropdown-item{padding:.6rem .9rem}
   .fieldset{border:1px solid rgba(16,24,40,.06);border-radius:.75rem;padding:1rem}
   .legend{font-weight:600;margin-bottom:.5rem}
+  .syndrome-grid{display:grid;grid-template-columns:1fr;gap:.75rem}
+  .syndrome-card{border:1px solid rgba(16,24,40,.10);border-radius:.75rem;padding:.85rem;height:100%}
+  .syndrome-title{font-weight:600;margin-bottom:.6rem}
+  .syndrome-options{display:grid;gap:.35rem}
+  @media (min-width:768px){.syndrome-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .btn-action{border-radius:.75rem}
   .btn-primary{box-shadow:0 6px 16px rgba(var(--bs-primary-rgb),.25)}
   .toolbar{display:flex;gap:.75rem;justify-content:flex-end;align-items:center;flex-wrap:wrap}
@@ -144,26 +149,46 @@
         <div class="col-12">
           <div class="fieldset">
             <div class="legend">{% trans "Syndromes" %}</div>
-            <div class="row gy-2">
-              {% for code,label in syndrome_choices %}
-                <div class="col-12 col-md-6">
-                  <div class="border rounded p-2 h-100">
+            <div class="syndrome-grid">
+              {% for row in syndrome_status_rows %}
+                <div class="syndrome-card">
+                  <div class="syndrome-title content-safe">{{ row.label }}</div>
+                  <div class="syndrome-options">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="syndromes" value="{{ code }}" id="s-{{ code }}"
-                             {% if info.syndromes and code in info.syndromes %}checked{% endif %}>
-                      <label class="form-check-label content-safe" for="s-{{ code }}">{{ label }}</label>
-                    </div>
-                    <div class="form-check mt-1">
-                      <input class="form-check-input"
+                      <input class="form-check-input syndrome-status-check"
                              type="checkbox"
-                             name="confirmed_syndromes"
-                             value="{{ code }}"
-                             id="sync-{{ code }}"
-                             data-main="#s-{{ code }}"
-                             {% if info.confirmed_syndromes and code in info.confirmed_syndromes %}checked{% endif %}
-                             {% if not info.syndromes or code not in info.syndromes %}disabled{% endif %}>
-                      <label class="form-check-label" for="sync-{{ code }}">{% trans "Genetically confirmed" %}</label>
+                             name="syndrome_status_{{ row.code }}"
+                             value="{{ status_doctor_confirmed }}"
+                             id="s-{{ row.code }}-doctor"
+                             data-syndrome="{{ row.code }}"
+                             data-status="{{ status_doctor_confirmed }}"
+                             {% if status_doctor_confirmed in row.statuses %}checked{% endif %}>
+                      <label class="form-check-label" for="s-{{ row.code }}-doctor">установлен врачом</label>
                     </div>
+                    <div class="form-check">
+                      <input class="form-check-input syndrome-status-check"
+                             type="checkbox"
+                             name="syndrome_status_{{ row.code }}"
+                             value="{{ status_doctor_unconfirmed }}"
+                             id="s-{{ row.code }}-unconfirmed"
+                             data-syndrome="{{ row.code }}"
+                             data-status="{{ status_doctor_unconfirmed }}"
+                             {% if status_doctor_unconfirmed in row.statuses %}checked{% endif %}>
+                      <label class="form-check-label" for="s-{{ row.code }}-unconfirmed">не подтвержден врачом</label>
+                    </div>
+                    {% if row.allow_genetic %}
+                      <div class="form-check">
+                        <input class="form-check-input syndrome-status-check"
+                               type="checkbox"
+                               name="syndrome_status_{{ row.code }}"
+                               value="{{ status_genetic_confirmed }}"
+                               id="s-{{ row.code }}-genetic"
+                               data-syndrome="{{ row.code }}"
+                               data-status="{{ status_genetic_confirmed }}"
+                               {% if status_genetic_confirmed in row.statuses %}checked{% endif %}>
+                        <label class="form-check-label" for="s-{{ row.code }}-genetic">подтвержден генетически</label>
+                      </div>
+                    {% endif %}
                   </div>
                 </div>
               {% endfor %}
@@ -227,14 +252,23 @@
 (function(){
   if(window.__profileEditBound)return;window.__profileEditBound=true;
 
-  document.querySelectorAll('input[name="confirmed_syndromes"]').forEach(function(c){
-    var m=document.querySelector(c.getAttribute('data-main'));
-    var sync=function(){
-      var on=!!(m&&m.checked);
-      c.disabled=!on;
-      if(!on)c.checked=false;
-    };
-    if(m){m.addEventListener('change',sync);sync();}else{c.disabled=true;c.checked=false;}
+  document.querySelectorAll('.syndrome-status-check').forEach(function(input){
+    input.addEventListener('change',function(){
+      if(!input.checked)return;
+      var syndrome=input.getAttribute('data-syndrome');
+      var status=input.getAttribute('data-status');
+      var opposite=status==='{{ status_doctor_confirmed }}'
+        ? '{{ status_doctor_unconfirmed }}'
+        : (status==='{{ status_doctor_unconfirmed }}' ? '{{ status_doctor_confirmed }}' : '{{ status_doctor_unconfirmed }}');
+      document.querySelectorAll('.syndrome-status-check[data-syndrome="'+syndrome+'"][data-status="'+opposite+'"]').forEach(function(peer){
+        peer.checked=false;
+      });
+      if(status==='{{ status_doctor_unconfirmed }}'){
+        document.querySelectorAll('.syndrome-status-check[data-syndrome="'+syndrome+'"][data-status="{{ status_genetic_confirmed }}"]').forEach(function(peer){
+          peer.checked=false;
+        });
+      }
+    });
   });
 
   var avatarImg=document.getElementById('avatar-img');

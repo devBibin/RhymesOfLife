@@ -77,17 +77,48 @@ class Config(models.Model):
         return default
 
 
+SYNDROME_STATUS_DOCTOR_CONFIRMED = "doctor_confirmed"
+SYNDROME_STATUS_DOCTOR_UNCONFIRMED = "doctor_unconfirmed"
+SYNDROME_STATUS_GENETIC_CONFIRMED = "genetically_confirmed"
+
+SYNDROME_STATUS_CHOICES = [
+    (SYNDROME_STATUS_DOCTOR_CONFIRMED, _("Established by a doctor")),
+    (SYNDROME_STATUS_DOCTOR_UNCONFIRMED, _("Not confirmed by a doctor")),
+    (SYNDROME_STATUS_GENETIC_CONFIRMED, _("Genetically confirmed")),
+]
+
+SYNDROMES_WITH_GENETIC_CONFIRMATION = {
+    "ehlers_danlos",
+    "marfan",
+    "loeys_dietz",
+    "stickler",
+    "beals",
+    "shprintzen_goldberg",
+}
+
 _DEFAULT_SYNDROME_CHOICES = [
-    ["ndct", _("Undifferentiated connective tissue dysplasia")],
-    ["ehlers_danlos", _("Ehlers–Danlos syndrome")],
-    ["marfan", _("Marfan syndrome")],
+    ["joint_hypermobility", _("Синдром гипермобильности суставов")],
+    ["ndct", _("Недифференцированная дисплазия соединительной ткани")],
+    ["ehlers_danlos", _("Синдром Элерса-Данлоса")],
+    ["marfan", _("Синдром Марфана")],
+    ["loeys_dietz", _("Синдром Лойса-Дитца")],
+    ["stickler", _("Синдром Стиклера")],
+    ["beals", _("Синдром Билса")],
+    ["shprintzen_goldberg", _("Синдром Шпринтцена-Гольдберга")],
 ]
 
 
 def get_syndrome_choices():
     raw = Config.get_list("SYNDROME_CHOICES", default=_DEFAULT_SYNDROME_CHOICES)
-    choices = [(c[0], c[1]) for c in raw if isinstance(c, (list, tuple)) and len(c) == 2]
-    return choices or [(c[0], c[1]) for c in _DEFAULT_SYNDROME_CHOICES]
+    default_choices = [(c[0], c[1]) for c in _DEFAULT_SYNDROME_CHOICES]
+    default_codes = {code for code, _label in default_choices}
+    choices = list(default_choices)
+    choices.extend(
+        (c[0], c[1])
+        for c in raw
+        if isinstance(c, (list, tuple)) and len(c) == 2 and c[0] not in default_codes
+    )
+    return choices or default_choices
 
 
 def _validate_syndromes(value_list):
@@ -95,6 +126,54 @@ def _validate_syndromes(value_list):
     invalid = [v for v in (value_list or []) if v not in allowed]
     if invalid:
         raise ValidationError(_("Invalid syndrome codes: %(codes)s"), params={"codes": ", ".join(invalid)})
+
+
+def _validate_syndrome_statuses(status_map):
+    allowed_codes = {c for c, _ in get_syndrome_choices()}
+    allowed_statuses = {c for c, _ in SYNDROME_STATUS_CHOICES}
+    invalid_codes = []
+    invalid_statuses = []
+    invalid_genetic = []
+    conflicting_statuses = []
+
+    if not isinstance(status_map or {}, dict):
+        raise ValidationError(_("Syndrome statuses must be an object."))
+
+    for code, statuses in (status_map or {}).items():
+        if code not in allowed_codes:
+            invalid_codes.append(code)
+            continue
+        if not isinstance(statuses, list):
+            invalid_statuses.append(code)
+            continue
+        for status in statuses:
+            if status not in allowed_statuses:
+                invalid_statuses.append(f"{code}:{status}")
+            if status == SYNDROME_STATUS_GENETIC_CONFIRMED and code not in SYNDROMES_WITH_GENETIC_CONFIRMATION:
+                invalid_genetic.append(code)
+        if (
+            SYNDROME_STATUS_DOCTOR_UNCONFIRMED in statuses
+            and (
+                SYNDROME_STATUS_DOCTOR_CONFIRMED in statuses
+                or SYNDROME_STATUS_GENETIC_CONFIRMED in statuses
+            )
+        ):
+            conflicting_statuses.append(code)
+
+    if invalid_codes:
+        raise ValidationError(_("Invalid syndrome codes: %(codes)s"), params={"codes": ", ".join(invalid_codes)})
+    if invalid_statuses:
+        raise ValidationError(_("Invalid syndrome status values: %(codes)s"), params={"codes": ", ".join(invalid_statuses)})
+    if invalid_genetic:
+        raise ValidationError(
+            _("Genetic confirmation is not available for these syndrome codes: %(codes)s"),
+            params={"codes": ", ".join(invalid_genetic)},
+        )
+    if conflicting_statuses:
+        raise ValidationError(
+            _("Conflicting syndrome status values: %(codes)s"),
+            params={"codes": ", ".join(conflicting_statuses)},
+        )
 
 
 class SoftDeleteQuerySet(models.QuerySet):
@@ -147,8 +226,9 @@ class AdditionalUserInfo(models.Model):
     last_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     email = models.EmailField(blank=True, null=True, default=None)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
-    syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
-    confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=6, blank=True, default=list)
+    syndromes = ArrayField(base_field=models.CharField(max_length=32), size=8, blank=True, default=list)
+    confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=8, blank=True, default=list)
+    syndrome_statuses = models.JSONField(blank=True, default=dict)
     syndromes_other = models.CharField(max_length=255, blank=True, default="")
     birth_date = models.DateField(blank=True, null=True)
     about_me = models.TextField(blank=True, validators=[MaxLengthValidator(250)])
@@ -187,6 +267,7 @@ class AdditionalUserInfo(models.Model):
         super().clean()
         _validate_syndromes(self.syndromes)
         _validate_syndromes(self.confirmed_syndromes)
+        _validate_syndrome_statuses(self.syndrome_statuses)
         if any(v not in (self.syndromes or []) for v in (self.confirmed_syndromes or [])):
             raise ValidationError({"confirmed_syndromes": _("Confirmed codes must be a subset of syndromes.")})
 

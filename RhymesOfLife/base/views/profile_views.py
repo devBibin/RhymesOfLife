@@ -15,7 +15,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods
 
-from ..models import get_syndrome_choices
+from ..models import (
+    SYNDROME_STATUS_CHOICES,
+    SYNDROME_STATUS_DOCTOR_CONFIRMED,
+    SYNDROME_STATUS_DOCTOR_UNCONFIRMED,
+    SYNDROME_STATUS_GENETIC_CONFIRMED,
+    SYNDROMES_WITH_GENETIC_CONFIRMATION,
+    get_syndrome_choices,
+)
 from ..utils.files import validate_image_upload
 from ..utils.onboarding import resolve_post_onboarding_redirect
 from ..models import TelegramAccount
@@ -33,6 +40,28 @@ ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP"}
 @lru_cache(maxsize=1)
 def syndrome_choices():
     return [(c, n) for c, n in get_syndrome_choices()]
+
+
+def _syndrome_status_rows(info):
+    status_map = getattr(info, "syndrome_statuses", None) or {}
+    legacy_selected = set(getattr(info, "syndromes", None) or [])
+    legacy_genetic = set(getattr(info, "confirmed_syndromes", None) or [])
+    rows = []
+
+    for code, label in syndrome_choices():
+        statuses = list(status_map.get(code) or [])
+        if not statuses:
+            if code in legacy_genetic:
+                statuses = [SYNDROME_STATUS_GENETIC_CONFIRMED]
+            elif code in legacy_selected:
+                statuses = [SYNDROME_STATUS_DOCTOR_UNCONFIRMED]
+        rows.append({
+            "code": code,
+            "label": label,
+            "statuses": statuses,
+            "allow_genetic": code in SYNDROMES_WITH_GENETIC_CONFIRMATION,
+        })
+    return rows
 
 
 def _parse_birth_date(day: str | None, month: str | None, year: str | None):
@@ -54,6 +83,11 @@ def _profile_edit_context(info, months_list, year_range, day_range, tg_ctx, **ex
         "info": info,
         "current_username": getattr(getattr(info, "user", None), "username", ""),
         "syndrome_choices": syndrome_choices(),
+        "syndrome_status_rows": _syndrome_status_rows(info),
+        "syndrome_status_choices": SYNDROME_STATUS_CHOICES,
+        "status_doctor_confirmed": SYNDROME_STATUS_DOCTOR_CONFIRMED,
+        "status_doctor_unconfirmed": SYNDROME_STATUS_DOCTOR_UNCONFIRMED,
+        "status_genetic_confirmed": SYNDROME_STATUS_GENETIC_CONFIRMED,
         "months_list": months_list,
         "year_range": year_range,
         "day_range": day_range,
@@ -80,6 +114,10 @@ def profile_view(request, username=None):
             "info": info,
             "editable": True,
             "syndrome_choices": syndrome_choices(),
+            "syndrome_status_rows": _syndrome_status_rows(info),
+            "status_doctor_confirmed": SYNDROME_STATUS_DOCTOR_CONFIRMED,
+            "status_doctor_unconfirmed": SYNDROME_STATUS_DOCTOR_UNCONFIRMED,
+            "status_genetic_confirmed": SYNDROME_STATUS_GENETIC_CONFIRMED,
             "tg_is_verified": bool(getattr(acc, "telegram_verified", False)),
             "tg_username": getattr(acc, "username", None),
         },
@@ -101,6 +139,7 @@ def profile_view(request, username=None):
     "about_me",
     "syndromes",
     "confirmed_syndromes",
+    "syndrome_status",
     "syndromes_other",
 )
 def profile_edit_view(request):
@@ -186,11 +225,34 @@ def profile_edit_view(request):
                 )
             info.birth_date = bd
 
-            selected = request.POST.getlist("syndromes")
-            confirmed = request.POST.getlist("confirmed_syndromes")
-            confirmed = [c for c in confirmed if c in selected]
+            allowed_statuses = {code for code, _label in SYNDROME_STATUS_CHOICES}
+            selected = []
+            confirmed = []
+            syndrome_statuses = {}
+            for code, _label in syndrome_choices():
+                values = []
+                for status in request.POST.getlist(f"syndrome_status_{code}"):
+                    if status not in allowed_statuses:
+                        continue
+                    if status == SYNDROME_STATUS_GENETIC_CONFIRMED and code not in SYNDROMES_WITH_GENETIC_CONFIRMATION:
+                        continue
+                    if status not in values:
+                        values.append(status)
+
+                if SYNDROME_STATUS_DOCTOR_CONFIRMED in values and SYNDROME_STATUS_DOCTOR_UNCONFIRMED in values:
+                    values = [v for v in values if v != SYNDROME_STATUS_DOCTOR_UNCONFIRMED]
+                if SYNDROME_STATUS_GENETIC_CONFIRMED in values and SYNDROME_STATUS_DOCTOR_UNCONFIRMED in values:
+                    values = [v for v in values if v != SYNDROME_STATUS_DOCTOR_UNCONFIRMED]
+
+                if values:
+                    selected.append(code)
+                    syndrome_statuses[code] = values
+                if SYNDROME_STATUS_GENETIC_CONFIRMED in values:
+                    confirmed.append(code)
+
             info.syndromes = selected
             info.confirmed_syndromes = confirmed
+            info.syndrome_statuses = syndrome_statuses
             info.syndromes_other = (request.POST.get("syndromes_other") or "").strip()[:255]
 
             if new_email:

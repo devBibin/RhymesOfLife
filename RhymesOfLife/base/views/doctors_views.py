@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
 from django.db.models import Q
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
@@ -12,6 +14,9 @@ from ..models import (
     AdditionalUserInfo,
     Notification,
     Recommendation,
+    SYNDROME_STATUS_DOCTOR_CONFIRMED,
+    SYNDROME_STATUS_DOCTOR_UNCONFIRMED,
+    SYNDROME_STATUS_GENETIC_CONFIRMED,
     get_syndrome_choices,
 )
 from ..utils.logging import get_app_logger
@@ -21,6 +26,60 @@ from ..utils.access import get_access_status_map, has_patient_access, is_externa
 User = get_user_model()
 PAGE_SIZE = 10
 log = get_app_logger(__name__)
+
+
+def _syndrome_status_rows(info, syndrome_choices):
+    status_map = getattr(info, "syndrome_statuses", None) or {}
+    legacy_selected = set(getattr(info, "syndromes", None) or [])
+    legacy_genetic = set(getattr(info, "confirmed_syndromes", None) or [])
+    rows = []
+
+    for code, label in syndrome_choices:
+        statuses = list(status_map.get(code) or [])
+        if not statuses:
+            if code in legacy_genetic:
+                statuses = [SYNDROME_STATUS_GENETIC_CONFIRMED]
+            elif code in legacy_selected:
+                statuses = [SYNDROME_STATUS_DOCTOR_UNCONFIRMED]
+        if statuses:
+            rows.append({
+                "code": code,
+                "label": label,
+                "statuses": statuses,
+            })
+    return rows
+
+
+def doctor_can_recommend(user, patient_info):
+    return (
+        user.is_superuser
+        or user.is_staff
+        or user.has_perm("base.write_recommendations")
+        or has_patient_access(user, patient_info)
+    )
+
+
+def get_patient_recommendations(patient_info):
+    return (
+        Recommendation.objects.filter(patient=patient_info)
+        .select_related("author__user")
+        .order_by("-created_at")
+    )
+
+
+def patient_doctor_context(request, patient_user, active_tab):
+    patient_info = patient_user.additional_info
+    back_url = request.GET.get("next") or reverse("patients_list")
+    if not url_has_allowed_host_and_scheme(back_url, allowed_hosts={request.get_host()}):
+        back_url = reverse("patients_list")
+    return {
+        "patient": patient_user,
+        "patient_info": patient_info,
+        "active_tab": active_tab,
+        "back_url": back_url,
+        "can_recommend": doctor_can_recommend(request.user, patient_info),
+        "recommendations": get_patient_recommendations(patient_info),
+    }
 
 
 @login_required
@@ -68,6 +127,10 @@ def patients_list_view(request):
         for info in page_obj.object_list:
             info.access_status = access_map.get(info.id)
 
+    syndrome_choices = get_syndrome_choices()
+    for info in page_obj.object_list:
+        info.syndrome_status_rows = _syndrome_status_rows(info, syndrome_choices)
+
     return render(
         request,
         "base/patients_list.html",
@@ -75,7 +138,10 @@ def patients_list_view(request):
             "patients": page_obj.object_list,
             "page_obj": page_obj,
             "query": query,
-            "syndrome_choices": get_syndrome_choices(),
+            "syndrome_choices": syndrome_choices,
+            "status_doctor_confirmed": SYNDROME_STATUS_DOCTOR_CONFIRMED,
+            "status_doctor_unconfirmed": SYNDROME_STATUS_DOCTOR_UNCONFIRMED,
+            "status_genetic_confirmed": SYNDROME_STATUS_GENETIC_CONFIRMED,
             "can_request_access": can_request_access,
             "access_map": access_map,
         },
@@ -83,7 +149,7 @@ def patients_list_view(request):
 
 
 @login_required
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET"])
 def patient_exams_view(request, user_id: int):
     patient_user = get_object_or_404(User, id=user_id)
     patient_info = patient_user.additional_info
@@ -93,60 +159,51 @@ def patient_exams_view(request, user_id: int):
 
     exams_qs = patient_info.medical_exams.prefetch_related("documents")
 
-    if request.method == "POST":
-        if not (
-            request.user.is_superuser
-            or request.user.is_staff
-            or request.user.has_perm("base.write_recommendations")
-            or has_patient_access(request.user, patient_info)
-        ):
-            messages.error(request, _("You don't have permission to perform this action."))
-            return redirect("patient_exams", user_id=user_id)
-
-        content = (request.POST.get("content") or "").strip()
-        if not content:
-            messages.error(request, _("Recommendation cannot be empty."))
-            return redirect("patient_exams", user_id=user_id)
-
-        author_info = request.user.additional_info
-        with transaction.atomic():
-            Recommendation.objects.create(
-                patient=patient_info,
-                author=author_info,
-                content=content,
-            )
-            Notification.objects.create(
-                recipient=patient_info,
-                sender=author_info,
-                notification_type="RECOMMENDATION",
-                message=_("Doctor %(docname)s wrote: %(text)s")
-                % {
-                    "docname": request.user.get_full_name() or request.user.username,
-                    "text": content,
-                },
-            )
-        messages.success(request, _("Recommendation added and the patient has been notified."))
-        return redirect("patient_exams", user_id=user_id)
-
-    recommendations = (
-        Recommendation.objects.filter(patient=patient_info)
-        .select_related("author__user")
-        .order_by("-created_at")
-    )
-    can_recommend = (
-        request.user.is_superuser
-        or request.user.is_staff
-        or request.user.has_perm("base.write_recommendations")
-        or has_patient_access(request.user, patient_info)
-    )
-
+    ctx = patient_doctor_context(request, patient_user, "exams")
+    ctx.update({
+        "exams": exams_qs,
+    })
     return render(
         request,
         "base/patient_exams.html",
-        {
-            "patient": patient_user,
-            "exams": exams_qs,
-            "recommendations": recommendations,
-            "can_recommend": can_recommend,
-        },
+        ctx,
     )
+
+
+@login_required
+@require_http_methods(["POST"])
+def add_patient_recommendation_view(request, user_id: int):
+    patient_user = get_object_or_404(User, id=user_id)
+    patient_info = patient_user.additional_info
+    next_url = request.POST.get("next") or request.META.get("HTTP_REFERER") or reverse("patient_exams", args=[user_id])
+    if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        next_url = reverse("patient_exams", args=[user_id])
+
+    if not doctor_can_recommend(request.user, patient_info):
+        messages.error(request, _("You don't have permission to send recommendations."))
+        return redirect(next_url)
+
+    content = (request.POST.get("content") or "").strip()
+    if not content:
+        messages.error(request, _("Recommendation cannot be empty."))
+        return redirect(next_url)
+
+    author_info = request.user.additional_info
+    with transaction.atomic():
+        Recommendation.objects.create(
+            patient=patient_info,
+            author=author_info,
+            content=content,
+        )
+        Notification.objects.create(
+            recipient=patient_info,
+            sender=author_info,
+            notification_type="RECOMMENDATION",
+            message=_("Doctor %(docname)s wrote: %(text)s")
+            % {
+                "docname": request.user.get_full_name() or request.user.username,
+                "text": content,
+            },
+        )
+    messages.success(request, _("Recommendation added and the patient has been notified."))
+    return redirect(next_url)
