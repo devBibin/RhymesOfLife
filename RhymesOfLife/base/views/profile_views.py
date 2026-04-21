@@ -78,10 +78,22 @@ def _clean_about(text: str | None, limit: int = 500) -> str:
     return text[:limit] if len(text) > limit else text
 
 
+def _clean_required_profile_text(text: str | None) -> str:
+    text = (text or "").strip()
+    return "" if text.lower() in {"none", "null"} else text
+
+
 def _profile_edit_context(info, months_list, year_range, day_range, tg_ctx, **extra):
+    profile_needs_completion = not (
+        _clean_required_profile_text(getattr(info, "first_name", None))
+        and _clean_required_profile_text(getattr(info, "last_name", None))
+        and _clean_required_profile_text(getattr(info, "email", None))
+        and getattr(info, "birth_date", None)
+    )
     ctx = {
         "info": info,
         "current_username": getattr(getattr(info, "user", None), "username", ""),
+        "profile_needs_completion": profile_needs_completion,
         "syndrome_choices": syndrome_choices(),
         "syndrome_status_rows": _syndrome_status_rows(info),
         "syndrome_status_choices": SYNDROME_STATUS_CHOICES,
@@ -169,12 +181,12 @@ def profile_edit_view(request):
     if request.method == "POST":
         try:
             new_username = (request.POST.get("username") or "").strip()
-            info.first_name = request.POST.get("first_name", "").strip()
-            info.last_name = request.POST.get("last_name", "").strip()
+            info.first_name = _clean_required_profile_text(request.POST.get("first_name"))
+            info.last_name = _clean_required_profile_text(request.POST.get("last_name"))
             info.about_me = _clean_about(request.POST.get("about_me"))
             user.username = new_username
 
-            new_email = (request.POST.get("email", "") or "").strip().lower()
+            new_email = _clean_required_profile_text(request.POST.get("email")).lower()
 
             try:
                 username_validator(new_username)
