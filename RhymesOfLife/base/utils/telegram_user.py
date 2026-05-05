@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import requests
 from django.conf import settings
 
 from .logging import get_app_logger
+from .telegram import send_bot_message
 
 log = get_app_logger(__name__)
-_API = "https://api.telegram.org/bot{token}/{method}"
 
 
 def _enabled() -> bool:
@@ -32,14 +31,11 @@ def send_message_to_userinfo(text: str, userinfo) -> None:
     chat_id = _resolve_chat_id(userinfo)
     if not chat_id:
         return
-    url = _API.format(token=settings.TELEGRAM_BOT_TOKEN_USERS, method="sendMessage")
-    payload = {"chat_id": chat_id, "text": text, "disable_web_page_preview": True}
-    try:
-        r = requests.post(url, json=payload, timeout=7)
-        if r.status_code != 200:
-            log.warning(
-                "Telegram user sendMessage failed: chat_id=%s status=%s body=%s",
-                chat_id, r.status_code, r.text,
-            )
-    except Exception:
-        log.exception("Telegram user sendMessage exception: chat_id=%s", chat_id)
+    ok = send_bot_message(
+        token=settings.TELEGRAM_BOT_TOKEN_USERS,
+        chat_id=chat_id,
+        text=text,
+        logger=log,
+    )
+    if not ok:
+        log.warning("Telegram user sendMessage failed: chat_id=%s", chat_id)

@@ -1,3 +1,6 @@
+import html
+import re
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
@@ -10,6 +13,8 @@ from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext as _g
 from django.utils.encoding import force_str
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
@@ -22,6 +27,8 @@ from taggit.models import TaggedItemBase
 from base.models import AdditionalUserInfo
 
 User = get_user_model()
+ARTICLE_INTRO_MAX_LENGTH = 500
+ARTICLE_CARD_PREVIEW_MAX_LENGTH = 280
 
 
 def user_can_manage_articles(user):
@@ -187,7 +194,6 @@ class BlogPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("date"),
         FieldPanel("author"),
-        FieldPanel("intro"),
         FieldPanel("main_image"),
         FieldPanel("body"),
         FieldPanel("tags"),
@@ -242,7 +248,6 @@ class BlogPage(Page):
     def get_editor_config(self):
         return {
             "title": self.title,
-            "intro": self.intro,
             "tags": ", ".join(self.tags.names()),
             "body": self.body.get_prep_value(),
             "main_image_id": self.main_image.id if self.main_image else None,
@@ -269,6 +274,22 @@ class BlogPage(Page):
     @property
     def is_pending(self):
         return self.live and not self.is_deleted and not self.is_approved and not self.is_rejected
+
+    @staticmethod
+    def _plain_text_from_body(body: str) -> str:
+        text = strip_tags(body or "")
+        text = html.unescape(text)
+        return re.sub(r"\s+", " ", text).strip()
+
+    def build_intro_from_body(self, max_length: int = ARTICLE_INTRO_MAX_LENGTH) -> str:
+        plain_text = self._plain_text_from_body(self.body)
+        if not plain_text:
+            return ""
+        return Truncator(plain_text).chars(max_length)
+
+    @property
+    def preview_text(self) -> str:
+        return self.build_intro_from_body(ARTICLE_CARD_PREVIEW_MAX_LENGTH)
 
 
 class ArticleLike(models.Model):

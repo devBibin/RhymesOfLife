@@ -4,7 +4,6 @@ import json
 import uuid
 from dataclasses import dataclass
 
-import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -21,20 +20,23 @@ from django.views.decorators.http import require_http_methods
 
 from ..models import AdditionalUserInfo, TelegramAccount
 from ..utils.onboarding import resolve_post_onboarding_redirect
-
-API = "https://api.telegram.org/bot{token}/{method}"
+from ..utils.telegram import get_bot_username, send_bot_message
 
 
 def _api_send(method: str, payload: dict) -> None:
     token = getattr(settings, "TELEGRAM_BOT_TOKEN_USERS", "")
     if not token:
         return
-    try:
-        r = requests.post(API.format(token=token, method=method), json=payload, timeout=7)
-        if r.status_code != 200:
-            pass
-    except Exception:
-        pass
+    if method != "sendMessage":
+        return
+    send_bot_message(
+        token=token,
+        chat_id=payload["chat_id"],
+        text=payload["text"],
+        parse_mode=payload.get("parse_mode"),
+        disable_web_page_preview=payload.get("disable_web_page_preview", True),
+        reply_markup=payload.get("reply_markup"),
+    )
 
 
 def _send_text(chat_id: int, text: str) -> None:
@@ -61,16 +63,10 @@ def _get_bot_username() -> str | None:
     token = getattr(settings, "TELEGRAM_BOT_TOKEN_USERS", "")
     if not token:
         return None
-    try:
-        r = requests.get(API.format(token=token, method="getMe"), timeout=7)
-        if r.status_code == 200:
-            data = r.json() or {}
-            name = ((data.get("result") or {}).get("username") or "") if isinstance(data, dict) else ""
-            if name:
-                cache.set("tg_bot_username", name, 24 * 60 * 60)
-                return name
-    except Exception:
-        pass
+    name = get_bot_username(token)
+    if name:
+        cache.set("tg_bot_username", name, 24 * 60 * 60)
+        return name
     return None
 
 

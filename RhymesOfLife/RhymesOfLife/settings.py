@@ -4,8 +4,15 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-with open(BASE_DIR / "../environment.json") as f:
-    environment = json.loads(f.read())
+environment = {}
+env_path = BASE_DIR / "../environment.json"
+if env_path.exists():
+    with open(env_path, encoding="utf-8") as f:
+        environment = json.loads(f.read())
+
+
+def env_value(key, default=None):
+    return os.environ.get(key, environment.get(key, default))
 
 SECRET_KEY = environment["SECRET_KEY"]
 DEBUG = environment["DEBUG"]
@@ -211,7 +218,7 @@ PASSWORD_RESET_MAX_ATTEMPTS = 5
 PASSWORD_RESET_RATE_LIMIT_PER_IP_MIN = 10
 PASSWORD_RESET_RATE_LIMIT_PER_USER_MIN = 10
 
-BASE_URL = environment.get("BASE_URL")
+BASE_URL = env_value("BASE_URL")
 
 SITE_ID = 1
 
@@ -241,15 +248,16 @@ EMAIL_VERIFICATION_EXEMPT_URLNAMES = {
 }
 EMAIL_VERIFICATION_EXEMPT_PATHS = set()
 
-TELEGRAM_BOT_TOKEN_ADMIN = environment.get("TELEGRAM_BOT_TOKEN_ADMIN")
-_raw_chat_ids = environment.get("TELEGRAM_STAFF_CHAT_IDS", [])
+TELEGRAM_BOT_TOKEN_ADMIN = env_value("TELEGRAM_BOT_TOKEN_ADMIN")
+_raw_chat_ids = env_value("TELEGRAM_STAFF_CHAT_IDS", [])
 if isinstance(_raw_chat_ids, str):
     TELEGRAM_STAFF_CHAT_IDS = [int(x) for x in _raw_chat_ids.split(",") if x.strip().lstrip("-").isdigit()]
 else:
     TELEGRAM_STAFF_CHAT_IDS = [int(x) for x in _raw_chat_ids if str(x).lstrip("-").isdigit()]
 
-TELEGRAM_BOT_TOKEN_USERS = environment.get("TELEGRAM_BOT_TOKEN_USERS", "")
-TELEGRAM_BOT_USERNAME = environment.get("TELEGRAM_BOT_USERNAME", "")
+TELEGRAM_BOT_TOKEN_USERS = env_value("TELEGRAM_BOT_TOKEN_USERS", "")
+TELEGRAM_BOT_USERNAME = env_value("TELEGRAM_BOT_USERNAME", "")
+TELEGRAM_PROXY_URL = env_value("TELEGRAM_PROXY_URL", "")
 
 
 SECURE_PROXY_SSL_HEADER = tuple(environment.get("SECURE_PROXY_SSL_HEADER", ())) or None

@@ -1,10 +1,10 @@
 import logging
-import requests
 from django.conf import settings
 from django.utils.translation import gettext as _
 from django.utils.translation import override
 from base.models import Notification, AdditionalUserInfo
 from .email_sender import send_email
+from .telegram import send_bot_message
 
 log = logging.getLogger(__name__)
 
@@ -14,24 +14,18 @@ def _send_telegram(chat_id: int | str, text: str, *, button_text: str | None = N
     if not token:
         log.error("telegram.send.error reason=token_missing")
         return False
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": text,
-        "parse_mode": "HTML",
-        "disable_web_page_preview": False,
-    }
+    reply_markup = None
     if button_url:
-        payload["reply_markup"] = {"inline_keyboard": [[{"text": button_text or _("Details"), "url": button_url}]]}
-    try:
-        r = requests.post(url, json=payload, timeout=10)
-        if r.ok:
-            return True
-        log.warning("telegram.send.failed status=%s body=%s", r.status_code, r.text[:500])
-        return False
-    except requests.RequestException as e:
-        log.error("telegram.send.error error=%s", e)
-        return False
+        reply_markup = {"inline_keyboard": [[{"text": button_text or _("Details"), "url": button_url}]]}
+    return send_bot_message(
+        token=token,
+        chat_id=chat_id,
+        text=text,
+        parse_mode="HTML",
+        disable_web_page_preview=False,
+        reply_markup=reply_markup,
+        logger=log,
+    )
 
 
 def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> bool:

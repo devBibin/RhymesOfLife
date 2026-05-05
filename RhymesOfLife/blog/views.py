@@ -16,7 +16,14 @@ from django.core.paginator import Paginator, EmptyPage
 from wagtail.models import Page, Site
 from wagtail.images import get_image_model
 
-from .models import BlogPage, BlogIndexPage, ArticleLike, ArticleComment, user_can_manage_articles
+from .models import (
+    BlogPage,
+    BlogIndexPage,
+    ArticleLike,
+    ArticleComment,
+    ARTICLE_INTRO_MAX_LENGTH,
+    user_can_manage_articles,
+)
 from .constants import PREDEFINED_TAGS
 
 from base.utils.files import validate_image_upload
@@ -133,6 +140,11 @@ def _save_article_visibility(page, *, hidden: bool) -> None:
         revision.publish()
 
 
+def _build_article_intro(body: str) -> str:
+    probe = BlogPage(body=body)
+    return probe.build_intro_from_body(ARTICLE_INTRO_MAX_LENGTH)
+
+
 @login_required
 @article_author_required
 @require_http_methods(["GET", "POST"])
@@ -141,12 +153,12 @@ def create_article_view(request):
     if request.method == "POST":
         action = request.POST.get("action") or "publish"
         title = request.POST.get("title", "").strip()
-        intro = request.POST.get("intro", "").strip()
         body = sanitize_html(request.POST.get("body", "").strip())
+        intro = _build_article_intro(body)
         tags = _filter_tags_to_predefined(request.POST.getlist("tags"))
         main_img_f = request.FILES.get("main_image")
 
-        ctx.update({"title": title, "intro": intro, "body": body, "selected_tags": tags})
+        ctx.update({"title": title, "body": body, "selected_tags": tags})
 
         try:
             if not title or not body:
@@ -231,8 +243,8 @@ def edit_article_view(request, page_id):
         try:
             action = request.POST.get("action", "publish")
             page.title = request.POST.get("title", page.title).strip()
-            page.intro = request.POST.get("intro", page.intro).strip()
             page.body = sanitize_html(request.POST.get("body", page.body).strip())
+            page.intro = _build_article_intro(page.body)
             page.tags.set(_filter_tags_to_predefined(request.POST.getlist("tags")))
             if action == "publish":
                 page.is_approved = True

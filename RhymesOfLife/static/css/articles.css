@@ -176,6 +176,7 @@
   flex-direction: column;
   gap: 10px;
   min-height: 160px;
+  min-width: 0;
 }
 
 @media (min-width: 992px) {
@@ -193,6 +194,8 @@
   line-height: 1.6;
   margin: 0;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .rl-card__intro {
@@ -200,6 +203,8 @@
   color: var(--bs-secondary-color, #6c757d);
   font-size: 1.10rem;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .rl-card__tags {

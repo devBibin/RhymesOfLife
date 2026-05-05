@@ -3,13 +3,14 @@ import sys
 import json
 import time
 import signal
-import logging
 import traceback
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlsplit
 
 import requests
 import telebot
+from telebot import apihelper
 
 try:
     from RhymesOfLifeShadows.create_log import create_log
@@ -30,6 +31,7 @@ log = create_log("telegram_poller.log", "TelegramPoller")
 
 try:
     import gettext
+
     LOCALE_DIR = PROJECT_ROOT / "locale"
     trans = gettext.translation("django", localedir=str(LOCALE_DIR), fallback=True)
     _ = trans.gettext
@@ -54,8 +56,8 @@ BASE_URL = (
     or env.get("TG_BASE_URL", "")
     or env.get("BASE_URL", "")
 ).strip()
-
 FORWARD_URL_ENV = os.environ.get("TG_FORWARD_URL")
+PROXY_URL = (os.environ.get("TELEGRAM_PROXY_URL") or env.get("TELEGRAM_PROXY_URL", "")).strip()
 
 
 def _mask_secret(s: str, head: int = 6, tail: int = 4) -> str:
@@ -63,7 +65,17 @@ def _mask_secret(s: str, head: int = 6, tail: int = 4) -> str:
         return ""
     if len(s) <= head + tail:
         return s
-    return f"{s[:head]}…{s[-tail:]}"
+    return f"{s[:head]}...{s[-tail:]}"
+
+
+def _mask_proxy_url(proxy_url: str) -> str:
+    if not proxy_url:
+        return "direct"
+    parts = urlsplit(proxy_url)
+    hostname = parts.hostname or ""
+    port = f":{parts.port}" if parts.port else ""
+    auth = f"{parts.username}:***@" if parts.username else ""
+    return f"{parts.scheme}://{auth}{hostname}{port}"
 
 
 def _extract_token_from_endpoint(url: str) -> Optional[str]:
@@ -100,6 +112,13 @@ DEFAULT_ENDPOINT = _build_default_endpoint()
 ENDPOINT = FORWARD_URL_ENV or DEFAULT_ENDPOINT
 
 session = requests.Session()
+
+if PROXY_URL:
+    apihelper.proxy = {
+        "http": PROXY_URL,
+        "https": PROXY_URL,
+    }
+    log.info(_("Telegram proxy enabled for poller: %s"), _mask_proxy_url(PROXY_URL))
 
 
 def _forward_update(update: dict) -> tuple[int, str]:
@@ -167,11 +186,12 @@ if __name__ == "__main__":
     try:
         me = bot.get_me()
         ep_token = _extract_token_from_endpoint(ENDPOINT)
-        token_mismatch = (ep_token is not None and ep_token != TOKEN)
+        token_mismatch = ep_token is not None and ep_token != TOKEN
         log.info(_("Starting Telegram poller"))
         log.info(_("Bot: @%s (id=%s)"), getattr(me, "username", "?"), getattr(me, "id", "?"))
         log.info(_("Endpoint: %s"), ENDPOINT)
         log.info(_("Token: %s"), _mask_secret(TOKEN))
+        log.info(_("Proxy: %s"), _mask_proxy_url(PROXY_URL))
         if token_mismatch:
             log.error(_("Endpoint token (%s) != bot token (%s). Fix TG_FORWARD_URL or TOKEN!"), _mask_secret(ep_token or ""), _mask_secret(TOKEN))
         backoff = 3

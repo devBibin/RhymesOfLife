@@ -2,7 +2,7 @@
 {% load wagtailcore_tags wagtailimages_tags static i18n form_tags avatar_tags %}
 
 {% block title %}{{ page.title }}{% endblock %}
-{% block meta_description %}{{ page.intro }}{% endblock %}
+{% block meta_description %}{{ page.build_intro_from_body }}{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
@@ -141,9 +141,13 @@
     </div>
   {% endif %}
 
-  <div class="article-intro lead mb-4 text-break">
-    {{ page.intro }}
-  </div>
+  {% with article_intro=page.build_intro_from_body %}
+    {% if article_intro %}
+      <div class="article-intro lead mb-4 text-break">
+        {{ article_intro }}
+      </div>
+    {% endif %}
+  {% endwith %}
 
   <div class="article-body text-break richtext">
     {{ page.body|safe }}

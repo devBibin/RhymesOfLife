@@ -50,17 +50,7 @@
           <input name="title" class="form-control form-control-lg" required value="{{ title }}">
         </div>
 
-        <div class="article-field">
-          <label>{% trans "Short description" %}</label>
-          <textarea id="article-intro"
-                    name="intro"
-                    class="form-control"
-                    required
-                    maxlength="500"
-                    rows="5"
-                    aria-describedby="article-intro-counter">{{ intro }}</textarea>
-          <div id="article-intro-counter" class="form-text text-end">0 / 500</div>
-        </div>
+        <p class="article-help mb-0">{% trans "The preview text will be generated automatically from the beginning of the article." %}</p>
       </div>
 
       <aside class="article-panel">
@@ -98,19 +88,4 @@
 
 {% block extra_js %}
   <script type="module" src="{% static 'js/tiptap-init.js' %}"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const input = document.getElementById('article-intro');
-      const counter = document.getElementById('article-intro-counter');
-      if (!input || !counter) return;
-
-      const max = Number(input.getAttribute('maxlength')) || 500;
-      const updateCounter = function () {
-        counter.textContent = `${input.value.length} / ${max}`;
-      };
-
-      input.addEventListener('input', updateCounter);
-      updateCounter();
-    });
-  </script>
 {% endblock %}
