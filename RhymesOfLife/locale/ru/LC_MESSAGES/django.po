@@ -3567,7 +3567,7 @@ msgstr "Черновик"
 #: blog/templates/blog/edit_article.html:46
 msgid ""
 "Update the article to keep the material accurate, useful and easy to read."
-msgstr ""
+msgstr "Обновите статью, чтобы материал был точным, полезным и легким для чтения."
 
 #: blog/templates/blog/edit_article.html:86
 msgid "Current image"

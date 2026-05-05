@@ -17,6 +17,68 @@ import TableCell from 'https://esm.sh/@tiptap/extension-table-cell@2.26.4';
 
 const gettext = window.gettext || ((s) => s);
 
+const TIPTAP_I18N = {
+  ru: {
+    'Upload error.': 'Ошибка загрузки.',
+    'Font': 'Шрифт',
+    'Default': 'По умолчанию',
+    'Font family': 'Семейство шрифта',
+    'Size': 'Размер',
+    'Font size': 'Размер шрифта',
+    'Text color': 'Цвет текста',
+    'Highlight color': 'Цвет выделения',
+    'Style': 'Стиль',
+    'Bold': 'Жирный',
+    'Italic': 'Курсив',
+    'Underline': 'Подчёркнутый',
+    'Strike': 'Зачёркнутый',
+    'Quote': 'Цитата',
+    'Code block': 'Блок кода',
+    'Clear formatting': 'Очистить форматирование',
+    'Paragraph': 'Абзац',
+    'Heading 2': 'Заголовок 2',
+    'Heading 3': 'Заголовок 3',
+    'Text style': 'Стиль текста',
+    'Bulleted list': 'Маркированный список',
+    'Numbered list': 'Нумерованный список',
+    'Align left': 'Выровнять по левому краю',
+    'Align center': 'Выровнять по центру',
+    'Align right': 'Выровнять по правому краю',
+    'Justify': 'Выровнять по ширине',
+    'Insert': 'Вставка',
+    'Add link': 'Добавить ссылку',
+    'Upload image': 'Загрузить изображение',
+    'Insert table': 'Вставить таблицу',
+    'Horizontal line': 'Горизонтальная линия',
+    'Table': 'Таблица',
+    'Add row after': 'Добавить строку ниже',
+    'Add column after': 'Добавить столбец справа',
+    'Delete row': 'Удалить строку',
+    'Delete column': 'Удалить столбец',
+    'Merge cells': 'Объединить ячейки',
+    'Split cell': 'Разделить ячейку',
+    'History': 'История',
+    'Undo': 'Отменить',
+    'Redo': 'Повторить',
+    'Enter URL': 'Введите ссылку',
+    'Start writing...': 'Начните писать...',
+    'Content is required.': 'Необходимо ввести содержимое.',
+    'C': 'Ц',
+    'J': 'Ш',
+  },
+};
+
+function makeTranslator(language) {
+  const code = (language || document.documentElement.lang || '').toLowerCase().slice(0, 2);
+  const dict = TIPTAP_I18N[code];
+  return (value) => {
+    if (dict && dict[value]) {
+      return dict[value];
+    }
+    return gettext(value);
+  };
+}
+
 const FontSize = Extension.create({
   name: 'fontSize',
 
@@ -175,6 +237,7 @@ async function uploadImage(file, uploadUrl, csrfToken) {
 }
 
 function buildToolbar(editor, options) {
+  const t = options.t || gettext;
   const toolbar = document.createElement('div');
   toolbar.className = 'tiptap-ribbon';
   const syncHandlers = [];
@@ -195,15 +258,15 @@ function buildToolbar(editor, options) {
     return el;
   };
 
-  const fontGroup = createGroup(gettext('Font'));
+  const fontGroup = createGroup(t('Font'));
   const fontFamilySelect = createSelect([
-    { value: '', label: gettext('Default') },
+    { value: '', label: t('Default') },
     { value: 'Georgia', label: 'Georgia' },
     { value: 'Arial', label: 'Arial' },
     { value: '"Trebuchet MS"', label: 'Trebuchet MS' },
     { value: '"Times New Roman"', label: 'Times New Roman' },
     { value: 'Verdana', label: 'Verdana' },
-  ], gettext('Font family'), (e) => {
+  ], t('Font family'), (e) => {
     const value = e.target.value;
     if (!value) {
       chain().unsetFontFamily().run();
@@ -214,7 +277,7 @@ function buildToolbar(editor, options) {
     syncToolbarState();
   });
   const fontSizeSelect = createSelect([
-    { value: '', label: gettext('Size') },
+    { value: '', label: t('Size') },
     { value: '12px', label: '12' },
     { value: '14px', label: '14' },
     { value: '16px', label: '16' },
@@ -223,7 +286,7 @@ function buildToolbar(editor, options) {
     { value: '24px', label: '24' },
     { value: '28px', label: '28' },
     { value: '32px', label: '32' },
-  ], gettext('Font size'), (e) => {
+  ], t('Font size'), (e) => {
     const value = e.target.value;
     if (!value) {
       chain().unsetFontSize().run();
@@ -233,11 +296,11 @@ function buildToolbar(editor, options) {
     chain().setFontSize(value).run();
     syncToolbarState();
   });
-  const textColor = createColorInput(gettext('Text color'), (e) => {
+  const textColor = createColorInput(t('Text color'), (e) => {
     chain().setColor(e.target.value).run();
     syncToolbarState();
   });
-  const highlightColor = createColorInput(gettext('Highlight color'), (e) => {
+  const highlightColor = createColorInput(t('Highlight color'), (e) => {
     chain().setHighlight({ color: e.target.value }).run();
     syncToolbarState();
   });
@@ -257,24 +320,24 @@ function buildToolbar(editor, options) {
   }
   toolbar.appendChild(fontGroup.group);
 
-  const styleGroup = createGroup(gettext('Style'));
+  const styleGroup = createGroup(t('Style'));
   [
-    ['bi-type-bold', gettext('Bold'), () => chain().toggleBold().run(), '', () => editor.isActive('bold')],
-    ['bi-type-italic', gettext('Italic'), () => chain().toggleItalic().run(), '', () => editor.isActive('italic')],
-    ['bi-type-underline', gettext('Underline'), () => chain().toggleUnderline().run(), '', () => editor.isActive('underline')],
-    ['bi-type-strikethrough', gettext('Strike'), () => chain().toggleStrike().run(), '', () => editor.isActive('strike')],
-    ['bi-blockquote-left', gettext('Quote'), () => chain().toggleBlockquote().run(), '', () => editor.isActive('blockquote')],
-    ['bi-code-slash', gettext('Code block'), () => chain().toggleCodeBlock().run(), '', () => editor.isActive('codeBlock')],
-    ['bi-eraser', gettext('Clear formatting'), () => chain().unsetAllMarks().clearNodes().run()],
+    ['bi-type-bold', t('Bold'), () => chain().toggleBold().run(), '', () => editor.isActive('bold')],
+    ['bi-type-italic', t('Italic'), () => chain().toggleItalic().run(), '', () => editor.isActive('italic')],
+    ['bi-type-underline', t('Underline'), () => chain().toggleUnderline().run(), '', () => editor.isActive('underline')],
+    ['bi-type-strikethrough', t('Strike'), () => chain().toggleStrike().run(), '', () => editor.isActive('strike')],
+    ['bi-blockquote-left', t('Quote'), () => chain().toggleBlockquote().run(), '', () => editor.isActive('blockquote')],
+    ['bi-code-slash', t('Code block'), () => chain().toggleCodeBlock().run(), '', () => editor.isActive('codeBlock')],
+    ['bi-eraser', t('Clear formatting'), () => chain().unsetAllMarks().clearNodes().run()],
   ].forEach(([iconClass, title, onClick, textLabel, isActive]) => styleGroup.body.appendChild(makeButton(iconClass, title, onClick, textLabel || '', isActive)));
   toolbar.appendChild(styleGroup.group);
 
-  const paragraphGroup = createGroup(gettext('Paragraph'));
+  const paragraphGroup = createGroup(t('Paragraph'));
   const formatSelect = createSelect([
-    { value: 'paragraph', label: gettext('Paragraph') },
-    { value: 'h2', label: gettext('Heading 2') },
-    { value: 'h3', label: gettext('Heading 3') },
-  ], gettext('Text style'), (e) => {
+    { value: 'paragraph', label: t('Paragraph') },
+    { value: 'h2', label: t('Heading 2') },
+    { value: 'h3', label: t('Heading 3') },
+  ], t('Text style'), (e) => {
     const value = e.target.value;
     if (value === 'paragraph') {
       chain().setParagraph().run();
@@ -295,42 +358,42 @@ function buildToolbar(editor, options) {
   });
   paragraphGroup.body.appendChild(formatSelect);
   [
-    ['bi-list-ul', gettext('Bulleted list'), () => chain().toggleBulletList().run(), '', () => editor.isActive('bulletList')],
-    ['bi-list-ol', gettext('Numbered list'), () => chain().toggleOrderedList().run(), '', () => editor.isActive('orderedList')],
-    ['bi-justify-left', gettext('Align left'), () => chain().setTextAlign('left').run(), '', () => editor.isActive({ textAlign: 'left' })],
-    ['bi-justify', gettext('Align center'), () => chain().setTextAlign('center').run(), gettext('C'), () => editor.isActive({ textAlign: 'center' })],
-    ['bi-justify-right', gettext('Align right'), () => chain().setTextAlign('right').run(), '', () => editor.isActive({ textAlign: 'right' })],
+    ['bi-list-ul', t('Bulleted list'), () => chain().toggleBulletList().run(), '', () => editor.isActive('bulletList')],
+    ['bi-list-ol', t('Numbered list'), () => chain().toggleOrderedList().run(), '', () => editor.isActive('orderedList')],
+    ['bi-justify-left', t('Align left'), () => chain().setTextAlign('left').run(), '', () => editor.isActive({ textAlign: 'left' })],
+    ['bi-justify', t('Align center'), () => chain().setTextAlign('center').run(), t('C'), () => editor.isActive({ textAlign: 'center' })],
+    ['bi-justify-right', t('Align right'), () => chain().setTextAlign('right').run(), '', () => editor.isActive({ textAlign: 'right' })],
   ].forEach(([iconClass, title, onClick, textLabel, isActive]) => paragraphGroup.body.appendChild(makeButton(iconClass, title, onClick, textLabel || '', isActive)));
   if (mode !== 'post') {
-    paragraphGroup.body.appendChild(makeButton('bi-justify', gettext('Justify'), () => chain().setTextAlign('justify').run(), gettext('J'), () => editor.isActive({ textAlign: 'justify' })));
+    paragraphGroup.body.appendChild(makeButton('bi-justify', t('Justify'), () => chain().setTextAlign('justify').run(), t('J'), () => editor.isActive({ textAlign: 'justify' })));
   }
   toolbar.appendChild(paragraphGroup.group);
 
-  const insertGroup = createGroup(gettext('Insert'));
-  insertGroup.body.appendChild(makeButton('bi-link-45deg', gettext('Add link'), () => setLink(editor), '', () => editor.isActive('link')));
+  const insertGroup = createGroup(t('Insert'));
+  insertGroup.body.appendChild(makeButton('bi-link-45deg', t('Add link'), () => setLink(editor, t), '', () => editor.isActive('link')));
   if (mode !== 'post') {
-    insertGroup.body.appendChild(makeButton('bi-image', gettext('Upload image'), () => openImagePicker(editor, options)));
-    insertGroup.body.appendChild(makeButton('bi-table', gettext('Insert table'), () => chain().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), '', () => editor.isActive('table')));
-    insertGroup.body.appendChild(makeButton('bi-dash', gettext('Horizontal line'), () => chain().setHorizontalRule().run()));
+    insertGroup.body.appendChild(makeButton('bi-image', t('Upload image'), () => openImagePicker(editor, options)));
+    insertGroup.body.appendChild(makeButton('bi-table', t('Insert table'), () => chain().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), '', () => editor.isActive('table')));
+    insertGroup.body.appendChild(makeButton('bi-dash', t('Horizontal line'), () => chain().setHorizontalRule().run()));
   }
   toolbar.appendChild(insertGroup.group);
 
   if (mode !== 'post') {
-    const tableGroup = createGroup(gettext('Table'));
+    const tableGroup = createGroup(t('Table'));
     [
-      ['bi-plus-square', gettext('Add row after'), () => chain().addRowAfter().run(), gettext('R')],
-      ['bi-plus-square', gettext('Add column after'), () => chain().addColumnAfter().run(), gettext('C')],
-      ['bi-dash-square', gettext('Delete row'), () => chain().deleteRow().run(), gettext('R')],
-      ['bi-dash-square', gettext('Delete column'), () => chain().deleteColumn().run(), gettext('C')],
-      ['bi-intersect', gettext('Merge cells'), () => chain().mergeCells().run()],
-      ['bi-border-all', gettext('Split cell'), () => chain().splitCell().run()],
+      ['bi-plus-square', t('Add row after'), () => chain().addRowAfter().run(), 'R'],
+      ['bi-plus-square', t('Add column after'), () => chain().addColumnAfter().run(), 'C'],
+      ['bi-dash-square', t('Delete row'), () => chain().deleteRow().run(), 'R'],
+      ['bi-dash-square', t('Delete column'), () => chain().deleteColumn().run(), 'C'],
+      ['bi-intersect', t('Merge cells'), () => chain().mergeCells().run()],
+      ['bi-border-all', t('Split cell'), () => chain().splitCell().run()],
     ].forEach(([iconClass, title, onClick, textLabel]) => tableGroup.body.appendChild(makeButton(iconClass, title, onClick, textLabel || '', () => editor.isActive('table'))));
     toolbar.appendChild(tableGroup.group);
   }
 
-  const historyGroup = createGroup(gettext('History'));
-  historyGroup.body.appendChild(makeButton('bi-arrow-counterclockwise', gettext('Undo'), () => chain().undo().run()));
-  historyGroup.body.appendChild(makeButton('bi-arrow-clockwise', gettext('Redo'), () => chain().redo().run()));
+  const historyGroup = createGroup(t('History'));
+  historyGroup.body.appendChild(makeButton('bi-arrow-counterclockwise', t('Undo'), () => chain().undo().run()));
+  historyGroup.body.appendChild(makeButton('bi-arrow-clockwise', t('Redo'), () => chain().redo().run()));
   toolbar.appendChild(historyGroup.group);
 
   editor.on('selectionUpdate', syncToolbarState);
@@ -342,9 +405,9 @@ function buildToolbar(editor, options) {
   return toolbar;
 }
 
-function setLink(editor) {
+function setLink(editor, t = gettext) {
   const previousUrl = editor.getAttributes('link').href || '';
-  const url = window.prompt(gettext('Enter URL'), previousUrl);
+  const url = window.prompt(t('Enter URL'), previousUrl);
   if (url === null) return;
 
   const value = url.trim();
@@ -374,16 +437,17 @@ function openImagePicker(editor, options) {
       const url = await uploadImage(file, options.uploadUrl, options.csrfToken);
       editor.chain().focus().setImage({ src: url, alt: file.name }).run();
     } catch (error) {
-      window.alert(error.message || gettext('Upload error.'));
+      window.alert(error.message || options.t('Upload error.'));
     }
   });
   input.click();
 }
 
 function initEditor(textarea) {
+  const t = makeTranslator(textarea.dataset.language);
   const mode = textarea.dataset.editorMode || 'full';
-  const placeholder = textarea.dataset.placeholder || gettext('Start writing...');
-  const requiredMsg = textarea.dataset.requiredMsg || gettext('Content is required.');
+  const placeholder = textarea.dataset.placeholder || t('Start writing...');
+  const requiredMsg = textarea.dataset.requiredMsg || t('Content is required.');
   const uploadUrl = textarea.dataset.uploadUrl || '';
   const disableUploads = textarea.dataset.disableUploads === '1';
   const csrfToken = getCsrfToken();
@@ -450,6 +514,7 @@ function initEditor(textarea) {
 
   const toolbar = buildToolbar(editor, {
     mode,
+    t,
     uploadUrl: disableUploads ? '' : uploadUrl,
     csrfToken,
   });
