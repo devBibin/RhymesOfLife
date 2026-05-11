@@ -5,11 +5,6 @@ import Underline from 'https://esm.sh/@tiptap/extension-underline@2.26.4';
 import Link from 'https://esm.sh/@tiptap/extension-link@2.26.4';
 import Image from 'https://esm.sh/@tiptap/extension-image@2.26.4';
 import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.26.4';
-import { Extension } from 'https://esm.sh/@tiptap/core@2.26.4';
-import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.26.4';
-import Color from 'https://esm.sh/@tiptap/extension-color@2.26.4';
-import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.26.4';
-import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.26.4';
 import Table from 'https://esm.sh/@tiptap/extension-table@2.26.4';
 import TableRow from 'https://esm.sh/@tiptap/extension-table-row@2.26.4';
 import TableHeader from 'https://esm.sh/@tiptap/extension-table-header@2.26.4';
@@ -79,37 +74,6 @@ function makeTranslator(language) {
   };
 }
 
-const FontSize = Extension.create({
-  name: 'fontSize',
-
-  addGlobalAttributes() {
-    return [
-      {
-        types: ['textStyle'],
-        attributes: {
-          fontSize: {
-            default: null,
-            parseHTML: (element) => element.style.fontSize || null,
-            renderHTML: (attributes) => {
-              if (!attributes.fontSize) {
-                return {};
-              }
-              return { style: `font-size: ${attributes.fontSize}` };
-            },
-          },
-        },
-      },
-    ];
-  },
-
-  addCommands() {
-    return {
-      setFontSize: (fontSize) => ({ chain }) => chain().setMark('textStyle', { fontSize }).run(),
-      unsetFontSize: () => ({ chain }) => chain().setMark('textStyle', { fontSize: null }).removeEmptyTextStyle().run(),
-    };
-  },
-});
-
 function getCookie(name) {
   const m = document.cookie.match('(?:^|;)\\s*' + name.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + '=([^;]*)');
   return m ? decodeURIComponent(m[1]) : null;
@@ -139,6 +103,31 @@ function decodeInitialEditorContent(raw) {
   const textarea = document.createElement('textarea');
   textarea.innerHTML = value;
   return textarea.value;
+}
+
+function normalizeEditorHtml(raw) {
+  if (!raw) return '';
+
+  const div = document.createElement('div');
+  div.innerHTML = raw;
+
+  div.querySelectorAll('[style]').forEach((node) => {
+    node.style.removeProperty('font-family');
+    node.style.removeProperty('color');
+    node.style.removeProperty('font-size');
+    node.style.removeProperty('background-color');
+    if (!node.getAttribute('style') || !node.getAttribute('style').trim()) {
+      node.removeAttribute('style');
+    }
+  });
+
+  div.querySelectorAll('span').forEach((node) => {
+    if (node.attributes.length === 0) {
+      node.replaceWith(...node.childNodes);
+    }
+  });
+
+  return div.innerHTML;
 }
 
 function showErrorBelowEditor(wrapper, message) {
@@ -258,80 +247,6 @@ function buildToolbar(editor, options) {
     return el;
   };
 
-  const fontGroup = createGroup(t('Font'));
-  const fontFamilySelect = createSelect([
-    { value: '', label: t('Default') },
-    { value: 'Georgia', label: 'Georgia' },
-    { value: 'Arial', label: 'Arial' },
-    { value: '"Trebuchet MS"', label: 'Trebuchet MS' },
-    { value: '"Times New Roman"', label: 'Times New Roman' },
-    { value: 'Verdana', label: 'Verdana' },
-  ], t('Font family'), (e) => {
-    const value = e.target.value;
-    if (!value) {
-      chain().unsetFontFamily().run();
-      syncToolbarState();
-      return;
-    }
-    chain().setFontFamily(value).run();
-    syncToolbarState();
-  });
-  const fontSizeSelect = createSelect([
-    { value: '', label: t('Size') },
-    { value: '12px', label: '12' },
-    { value: '14px', label: '14' },
-    { value: '16px', label: '16' },
-    { value: '18px', label: '18' },
-    { value: '20px', label: '20' },
-    { value: '24px', label: '24' },
-    { value: '28px', label: '28' },
-    { value: '32px', label: '32' },
-  ], t('Font size'), (e) => {
-    const value = e.target.value;
-    if (!value) {
-      chain().unsetFontSize().run();
-      syncToolbarState();
-      return;
-    }
-    chain().setFontSize(value).run();
-    syncToolbarState();
-  });
-  const textColor = createColorInput(t('Text color'), (e) => {
-    chain().setColor(e.target.value).run();
-    syncToolbarState();
-  });
-  const highlightColor = createColorInput(t('Highlight color'), (e) => {
-    chain().setHighlight({ color: e.target.value }).run();
-    syncToolbarState();
-  });
-  registerSync(() => {
-    fontFamilySelect.value = editor.getAttributes('textStyle').fontFamily || '';
-    fontSizeSelect.value = editor.getAttributes('textStyle').fontSize || '';
-    textColor.value = editor.getAttributes('textStyle').color || '#111827';
-    if (mode !== 'post') {
-      highlightColor.value = editor.getAttributes('highlight').color || '#fff59d';
-    }
-  });
-  fontGroup.body.appendChild(fontFamilySelect);
-  fontGroup.body.appendChild(fontSizeSelect);
-  fontGroup.body.appendChild(textColor);
-  if (mode !== 'post') {
-    fontGroup.body.appendChild(highlightColor);
-  }
-  toolbar.appendChild(fontGroup.group);
-
-  const styleGroup = createGroup(t('Style'));
-  [
-    ['bi-type-bold', t('Bold'), () => chain().toggleBold().run(), '', () => editor.isActive('bold')],
-    ['bi-type-italic', t('Italic'), () => chain().toggleItalic().run(), '', () => editor.isActive('italic')],
-    ['bi-type-underline', t('Underline'), () => chain().toggleUnderline().run(), '', () => editor.isActive('underline')],
-    ['bi-type-strikethrough', t('Strike'), () => chain().toggleStrike().run(), '', () => editor.isActive('strike')],
-    ['bi-blockquote-left', t('Quote'), () => chain().toggleBlockquote().run(), '', () => editor.isActive('blockquote')],
-    ['bi-code-slash', t('Code block'), () => chain().toggleCodeBlock().run(), '', () => editor.isActive('codeBlock')],
-    ['bi-eraser', t('Clear formatting'), () => chain().unsetAllMarks().clearNodes().run()],
-  ].forEach(([iconClass, title, onClick, textLabel, isActive]) => styleGroup.body.appendChild(makeButton(iconClass, title, onClick, textLabel || '', isActive)));
-  toolbar.appendChild(styleGroup.group);
-
   const paragraphGroup = createGroup(t('Paragraph'));
   const formatSelect = createSelect([
     { value: 'paragraph', label: t('Paragraph') },
@@ -360,6 +275,9 @@ function buildToolbar(editor, options) {
   [
     ['bi-list-ul', t('Bulleted list'), () => chain().toggleBulletList().run(), '', () => editor.isActive('bulletList')],
     ['bi-list-ol', t('Numbered list'), () => chain().toggleOrderedList().run(), '', () => editor.isActive('orderedList')],
+    ['bi-type-bold', t('Bold'), () => chain().toggleBold().run(), '', () => editor.isActive('bold')],
+    ['bi-type-italic', t('Italic'), () => chain().toggleItalic().run(), '', () => editor.isActive('italic')],
+    ['bi-type-underline', t('Underline'), () => chain().toggleUnderline().run(), '', () => editor.isActive('underline')],
     ['bi-justify-left', t('Align left'), () => chain().setTextAlign('left').run(), '', () => editor.isActive({ textAlign: 'left' })],
     ['bi-justify', t('Align center'), () => chain().setTextAlign('center').run(), t('C'), () => editor.isActive({ textAlign: 'center' })],
     ['bi-justify-right', t('Align right'), () => chain().setTextAlign('right').run(), '', () => editor.isActive({ textAlign: 'right' })],
@@ -461,7 +379,7 @@ function initEditor(textarea) {
   textarea.insertAdjacentElement('afterend', wrapper);
   textarea.classList.add('d-none');
 
-  const initialContent = decodeInitialEditorContent(textarea.value || '');
+  const initialContent = normalizeEditorHtml(decodeInitialEditorContent(textarea.value || ''));
 
   const editor = new Editor({
     element: editorEl,
@@ -473,11 +391,6 @@ function initEditor(textarea) {
         placeholder,
       }),
       Underline,
-      TextStyle,
-      Color,
-      Highlight.configure({ multicolor: true }),
-      FontFamily,
-      FontSize,
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -507,7 +420,7 @@ function initEditor(textarea) {
       },
     },
     onUpdate: ({ editor: current }) => {
-      textarea.value = current.getHTML();
+      textarea.value = normalizeEditorHtml(current.getHTML());
       clearError(wrapper);
     },
   });
@@ -527,7 +440,7 @@ function initEditor(textarea) {
   const form = textarea.closest('form');
   if (form) {
     form.addEventListener('submit', (e) => {
-      textarea.value = editor.getHTML();
+      textarea.value = normalizeEditorHtml(editor.getHTML());
       if (isEmptyHtml(textarea.value)) {
         e.preventDefault();
         showErrorBelowEditor(wrapper, requiredMsg);

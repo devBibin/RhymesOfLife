@@ -99,6 +99,8 @@
   border: 0;
   box-shadow: none;
   padding: 0.5rem 0.25rem;
+  color: #000;
+  font-family: "Roboto", var(--bs-body-font-family, Arial, sans-serif);
 }
 
 .tiptap-shell-post .tiptap-content {
@@ -124,15 +126,30 @@
 .tiptap-content h3 {
   margin-top: 1rem;
   margin-bottom: 0.75rem;
+  color: #000;
+  font-family: "Roboto", var(--bs-body-font-family, Arial, sans-serif);
 }
 
 .tiptap-content p,
+.tiptap-content li,
 .tiptap-content ul,
 .tiptap-content ol,
 .tiptap-content blockquote,
 .tiptap-content pre,
 .tiptap-content table {
   margin-bottom: 0.75rem;
+}
+
+.tiptap-content p,
+.tiptap-content li,
+.tiptap-content ul,
+.tiptap-content ol,
+.tiptap-content blockquote,
+.tiptap-content th,
+.tiptap-content td,
+.tiptap-content a {
+  color: #000;
+  font-family: "Roboto", var(--bs-body-font-family, Arial, sans-serif);
 }
 
 .tiptap-content blockquote {

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import lru_cache
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
@@ -15,7 +17,7 @@ from django.utils.timezone import localtime
 from django.views.decorators.csrf import csrf_protect
 
 from base.models import AdditionalUserInfo
-from base.models import Post, PostImage, PostLike, PostComment, PostReport
+from base.models import Post, PostImage, PostLike, PostComment, PostReport, get_syndrome_choices
 from base.utils.files import validate_mixed_upload
 from base.utils.html import sanitize_html, is_empty_html
 from base.utils.moderation import get_moderation_config
@@ -68,10 +70,47 @@ def _can_moderate(user):
     return user.is_staff or user.has_perm("base.moderate_posts")
 
 
+@lru_cache(maxsize=1)
+def _syndrome_label_map():
+    return {code: str(label) for code, label in get_syndrome_choices()}
+
+
+def _public_syndrome_names(info: AdditionalUserInfo | None) -> list[str]:
+    if not info or not getattr(info, "show_syndromes_in_posts", False):
+        return []
+
+    label_map = _syndrome_label_map()
+    names = []
+    seen = set()
+
+    for code in getattr(info, "syndromes", None) or []:
+        label = (label_map.get(code) or "").strip()
+        if label and label not in seen:
+            names.append(label)
+            seen.add(label)
+
+    raw_other = (getattr(info, "syndromes_other", "") or "").split(",")
+    for item in raw_other:
+        label = item.strip()
+        if label and label not in seen:
+            names.append(label)
+            seen.add(label)
+
+    return names
+
+
+def _decorate_posts_for_display(posts):
+    for post in posts or []:
+        author = getattr(post, "author", None)
+        if author is not None:
+            author.public_syndrome_names = _public_syndrome_names(author)
+    return posts
+
+
 def _feed_queryset(request):
     f = request.GET.get("filter", "mine" if request.user.is_authenticated else "latest")
 
-    base = Post.objects.filter(is_deleted=False)
+    base = Post.objects.filter(is_deleted=False).select_related("author__user")
     public_base = base.filter(is_hidden=False, is_hidden_by_reports=False, is_approved=True)
 
     if f == "mine" and request.user.is_authenticated:
@@ -96,6 +135,7 @@ def _render_post_list_fragment(request, context):
 
 
 def _render_single_post_card(request, post, liked_ids=None, following_user_ids=None, current_filter="latest"):
+    _decorate_posts_for_display([post])
     ctx = {
         "posts": [post],
         "liked_ids": liked_ids or [],
@@ -115,6 +155,7 @@ def feed(request):
     f, qs = _feed_queryset(request)
     paginator = Paginator(qs, 10)
     page_obj = paginator.get_page(request.GET.get("page"))
+    _decorate_posts_for_display(page_obj.object_list)
 
     liked_ids = []
     following_user_ids = set()

@@ -220,6 +220,10 @@ class SoftDeleteModel(models.Model):
 
 
 class AdditionalUserInfo(models.Model):
+    class DataProcessingConsentType(models.TextChoices):
+        USER = "user", _("User")
+        EXPERT = "expert", _("Expert")
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="additional_info")
     language = models.CharField(max_length=10, choices=settings.LANGUAGES, default="ru")
     first_name = models.CharField(max_length=128, blank=True, null=True, default=None)
@@ -230,6 +234,7 @@ class AdditionalUserInfo(models.Model):
     confirmed_syndromes = ArrayField(base_field=models.CharField(max_length=32), size=8, blank=True, default=list)
     syndrome_statuses = models.JSONField(blank=True, default=dict)
     syndromes_other = models.CharField(max_length=255, blank=True, default="")
+    show_syndromes_in_posts = models.BooleanField(default=False)
     birth_date = models.DateField(blank=True, null=True)
     about_me = models.TextField(blank=True, validators=[MaxLengthValidator(250)])
     is_verified = models.BooleanField(default=False, db_index=True)
@@ -240,6 +245,12 @@ class AdditionalUserInfo(models.Model):
     tos_accepted = models.BooleanField(default=False)
     privacy_accepted = models.BooleanField(default=False)
     data_processing_accepted = models.BooleanField(default=False)
+    data_processing_consent_type = models.CharField(
+        max_length=16,
+        choices=DataProcessingConsentType.choices,
+        blank=True,
+        default="",
+    )
     consents_accepted_at = models.DateTimeField(null=True, blank=True)
     censorship_enabled = models.BooleanField(default=False, db_index=True, verbose_name=_("Pre-moderation enabled"))
     is_banned = models.BooleanField(default=False, db_index=True, verbose_name=_("Banned"))

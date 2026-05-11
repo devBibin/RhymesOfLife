@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 from blog.models import BlogIndexPage, BlogPage
 from base.models import Post, PostLike
 from ..models import get_syndrome_choices
+from .feed_views import _decorate_posts_for_display
 
 User = get_user_model()
 
@@ -69,6 +70,7 @@ def public_profile_view(request, username: str):
 
     articles = Paginator(articles_qs, 10).get_page(ap) if can_see_articles else None
     posts = Paginator(posts_qs, 10).get_page(pp)
+    _decorate_posts_for_display(posts.object_list)
 
     liked_ids = []
     following_user_ids = []

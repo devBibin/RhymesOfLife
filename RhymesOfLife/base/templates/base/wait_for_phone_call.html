@@ -17,11 +17,11 @@
 
     {% if call_number %}
     <small class="text-muted d-block mb-3">
-        Call will be dropped automatically. Call from the same number you entered.
+        {% trans "Call will be dropped automatically. Call from the same number you entered." %}
     </small>
     {% else %}
     <small class="text-muted d-block mb-3">
-        We will call your number automatically. Just answer the call.
+        {% trans "We will call your number automatically. Just answer the call." %}
     </small>
     {% endif %}
 

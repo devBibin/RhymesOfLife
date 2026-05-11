@@ -269,9 +269,10 @@ def phone_enter_view(request):
     info = request.user.additional_info
     if info.phone_verified:
         return redirect(resolve_post_onboarding_redirect(request, consume=True))
-    context = {}
+    context = {"phone_value": "+7"}
     if request.method == "POST":
         phone = request.POST.get("phone", "").strip()
+        context["phone_value"] = phone or "+7"
         if not phone:
             context["error"] = _("Enter phone number.")
             return render(request, "base/enter_phone_number.html", context)
@@ -351,16 +352,42 @@ def consents_view(request):
     if request.method == "POST":
         t = bool(request.POST.get("tos"))
         p = bool(request.POST.get("privacy"))
-        d = bool(request.POST.get("data"))
-        if not (t and p and d):
-            return render(request, "base/consents.html", {"error": _("Please accept all items.")})
+        consent_type = (request.POST.get("data_processing_type") or "").strip()
+        if not (t and p and consent_type in {"user", "expert"}):
+            return render(
+                request,
+                "base/consents.html",
+                {
+                    "error": _("Please accept all items."),
+                    "tos_checked": t,
+                    "privacy_checked": p,
+                    "selected_consent_type": consent_type,
+                },
+            )
         info.tos_accepted = True
         info.privacy_accepted = True
         info.data_processing_accepted = True
+        info.data_processing_consent_type = consent_type
         info.consents_accepted_at = timezone.now()
-        info.save(update_fields=["tos_accepted", "privacy_accepted", "data_processing_accepted", "consents_accepted_at"])
+        info.save(
+            update_fields=[
+                "tos_accepted",
+                "privacy_accepted",
+                "data_processing_accepted",
+                "data_processing_consent_type",
+                "consents_accepted_at",
+            ]
+        )
         return redirect(resolve_post_onboarding_redirect(request, consume=True))
-    return render(request, "base/consents.html")
+    return render(
+        request,
+        "base/consents.html",
+        {
+            "tos_checked": bool(getattr(info, "tos_accepted", False)),
+            "privacy_checked": bool(getattr(info, "privacy_accepted", False)),
+            "selected_consent_type": getattr(info, "data_processing_consent_type", ""),
+        },
+    )
 
 
 @require_http_methods(["GET", "POST"])

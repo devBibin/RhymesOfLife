@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-21 15:43+0000\n"
+"POT-Creation-Date: 2026-05-11 01:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,304 +201,308 @@ msgstr ""
 msgid "Conflicting syndrome status values: %(codes)s"
 msgstr ""
 
-#: base/models.py:244
+#: base/models.py:224 base/models.py:759 base/signals.py:54
+msgid "User"
+msgstr ""
+
+#: base/models.py:225
+msgid "Expert"
+msgstr ""
+
+#: base/models.py:255
 msgid "Pre-moderation enabled"
 msgstr ""
 
-#: base/models.py:245 templates/base.html:73
+#: base/models.py:256 templates/base.html:73
 msgid "Banned"
 msgstr ""
 
-#: base/models.py:246
+#: base/models.py:257
 msgid "Ban reason"
 msgstr ""
 
-#: base/models.py:247
+#: base/models.py:258
 msgid "Banned at"
 msgstr ""
 
-#: base/models.py:250
+#: base/models.py:261
 msgid "Banned by"
 msgstr ""
 
-#: base/models.py:263
+#: base/models.py:274
 msgid "Can view patient list"
 msgstr ""
 
-#: base/models.py:272
+#: base/models.py:283
 msgid "Confirmed codes must be a subset of syndromes."
 msgstr ""
 
-#: base/models.py:353
+#: base/models.py:364
 msgid "Can view patient exams"
 msgstr ""
 
-#: base/models.py:354
+#: base/models.py:365
 msgid "Can create and edit patient exams"
 msgstr ""
 
-#: base/models.py:373
+#: base/models.py:384
 msgid "Either a file or an external link is required."
 msgstr ""
 
-#: base/models.py:426
+#: base/models.py:437
 msgid "Can send notifications"
 msgstr ""
 
-#: base/models.py:466
+#: base/models.py:477
 msgid "Can comment exams"
 msgstr ""
 
-#: base/models.py:467
+#: base/models.py:478
 msgid "Can moderate exam comments"
 msgstr ""
 
-#: base/models.py:489
+#: base/models.py:500
 msgid "Can view recommendations"
 msgstr ""
 
-#: base/models.py:490
+#: base/models.py:501
 msgid "Can write recommendations"
 msgstr ""
 
-#: base/models.py:501
+#: base/models.py:512
 msgid "Pending"
 msgstr ""
 
-#: base/models.py:502
+#: base/models.py:513
 msgid "Approved"
 msgstr ""
 
-#: base/models.py:503 base/templates/base/patients_list.html:118
+#: base/models.py:514 base/templates/base/patients_list.html:118
 msgid "Denied"
 msgstr ""
 
-#: base/models.py:528 base/views/access_requests_views.py:72
+#: base/models.py:539 base/views/access_requests_views.py:72
 msgid "Access request"
 msgstr ""
 
-#: base/models.py:529 base/templates/base/access_requests.html:4
+#: base/models.py:540 base/templates/base/access_requests.html:4
 #: base/templates/base/access_requests.html:8
 msgid "Access requests"
 msgstr ""
 
-#: base/models.py:544 blog/models.py:154
+#: base/models.py:555 blog/models.py:161
 msgid "Author"
 msgstr ""
 
-#: base/models.py:546 base/models.py:619 blog/models.py:291
+#: base/models.py:557 base/models.py:630 blog/models.py:312
 msgid "Text"
 msgstr ""
 
-#: base/models.py:547 blog/models.py:169
+#: base/models.py:558 blog/models.py:176
 msgid "Hidden by author"
 msgstr ""
 
-#: base/models.py:548 base/models.py:622 blog/models.py:168 blog/models.py:294
+#: base/models.py:559 base/models.py:633 blog/models.py:175 blog/models.py:315
 msgid "Soft-deleted"
 msgstr ""
 
-#: base/models.py:550 blog/models.py:173
+#: base/models.py:561 blog/models.py:180
 msgid "Approved by admin"
 msgstr ""
 
-#: base/models.py:551 blog/models.py:174
+#: base/models.py:562 blog/models.py:181
 msgid "Approved at"
 msgstr ""
 
-#: base/models.py:553 blog/models.py:177
+#: base/models.py:564 blog/models.py:184
 msgid "Approved by"
 msgstr ""
 
-#: base/models.py:556 blog/models.py:170
+#: base/models.py:567 blog/models.py:177
 msgid "Likes count"
 msgstr ""
 
-#: base/models.py:557 blog/models.py:171
+#: base/models.py:568 blog/models.py:178
 msgid "Comments count"
 msgstr ""
 
-#: base/models.py:559 base/models.py:620 base/models.py:758 blog/models.py:292
+#: base/models.py:570 base/models.py:631 base/models.py:769 blog/models.py:313
 msgid "Created at"
 msgstr ""
 
-#: base/models.py:560 base/models.py:759
+#: base/models.py:571 base/models.py:770
 msgid "Updated at"
 msgstr ""
 
-#: base/models.py:562 base/templates/base/post_cards.html:55
+#: base/models.py:573 base/templates/base/post_cards.html:55
 msgid "Hidden by reports"
 msgstr ""
 
-#: base/models.py:563
+#: base/models.py:574
 msgid "Reports count"
 msgstr ""
 
-#: base/models.py:567 base/models.py:592
+#: base/models.py:578 base/models.py:603
 msgid "Post"
 msgstr ""
 
-#: base/models.py:568 base/templates/base/feed.html:15
+#: base/models.py:579 base/templates/base/feed.html:15
 #: base/templates/base/feed.html:39
 #: base/templates/base/profile_content_fragment.html:44
 msgid "Posts"
 msgstr ""
 
-#: base/models.py:593
+#: base/models.py:604
 msgid "Image"
 msgstr ""
 
-#: base/models.py:597
+#: base/models.py:608
 msgid "Post image"
 msgstr ""
 
-#: base/models.py:598
+#: base/models.py:609
 msgid "Post images"
 msgstr ""
 
-#: base/models.py:609
+#: base/models.py:620
 msgid "Post like"
 msgstr ""
 
-#: base/models.py:610
+#: base/models.py:621
 msgid "Post likes"
 msgstr ""
 
-#: base/models.py:621 blog/models.py:293
+#: base/models.py:632 blog/models.py:314
 msgid "Edited at"
 msgstr ""
 
-#: base/models.py:626
+#: base/models.py:637
 msgid "Post comment"
 msgstr ""
 
-#: base/models.py:627
+#: base/models.py:638
 msgid "Post comments"
 msgstr ""
 
-#: base/models.py:635
+#: base/models.py:646
 #: base/templates/base/includes/staff_help_requests_rows.html:108
 #: base/templates/base/staff_help_requests.html:48
 #: base/views/access_requests_views.py:134
 msgid "Open"
 msgstr ""
 
-#: base/models.py:636
+#: base/models.py:647
 msgid "In work"
 msgstr ""
 
-#: base/models.py:637
+#: base/models.py:648
 msgid "Processed"
 msgstr ""
 
-#: base/models.py:642
+#: base/models.py:653
 msgid "name"
 msgstr ""
 
-#: base/models.py:643
+#: base/models.py:654
 msgid "email"
 msgstr ""
 
-#: base/models.py:644
+#: base/models.py:655
 msgid "phone"
 msgstr ""
 
-#: base/models.py:645
+#: base/models.py:656
 msgid "birth date"
 msgstr ""
 
-#: base/models.py:646
+#: base/models.py:657
 msgid "city"
 msgstr ""
 
-#: base/models.py:647
+#: base/models.py:658
 msgid "syndrome"
 msgstr ""
 
-#: base/models.py:648
+#: base/models.py:659
 msgid "gen"
 msgstr ""
 
-#: base/models.py:649
+#: base/models.py:660
 msgid "medications"
 msgstr ""
 
-#: base/models.py:650
+#: base/models.py:661
 msgid "telegram"
 msgstr ""
 
-#: base/models.py:651
+#: base/models.py:662
 msgid "message"
 msgstr ""
 
-#: base/models.py:652
+#: base/models.py:663
 msgid "created at"
 msgstr ""
 
-#: base/models.py:654
+#: base/models.py:665
 msgid "status"
 msgstr ""
 
-#: base/models.py:655
+#: base/models.py:666
 msgid "processed"
 msgstr ""
 
-#: base/models.py:656
+#: base/models.py:667
 msgid "processed at"
 msgstr ""
 
-#: base/models.py:662
+#: base/models.py:673
 msgid "help request"
 msgstr ""
 
-#: base/models.py:663
+#: base/models.py:674
 msgid "help requests"
 msgstr ""
 
-#: base/models.py:666
+#: base/models.py:677
 msgid "Can view help requests"
 msgstr ""
 
-#: base/models.py:667
+#: base/models.py:678
 msgid "Can process help requests"
 msgstr ""
 
-#: base/models.py:690
+#: base/models.py:701
 msgid "Never"
 msgstr ""
 
-#: base/models.py:691 base/templates/base/partials/health_wellness.html:206
+#: base/models.py:702 base/templates/base/partials/health_wellness.html:206
 msgid "Every day"
 msgstr ""
 
-#: base/models.py:692 base/templates/base/partials/health_wellness.html:201
+#: base/models.py:703 base/templates/base/partials/health_wellness.html:201
 #: base/templates/base/partials/health_wellness.html:207
 msgid "Every 3 days"
 msgstr ""
 
-#: base/models.py:693
+#: base/models.py:704
 msgid "Every 7 days"
 msgstr ""
 
-#: base/models.py:748 base/signals.py:54
-msgid "User"
-msgstr ""
-
-#: base/models.py:752
+#: base/models.py:763
 msgid "Medication description"
 msgstr ""
 
-#: base/models.py:755
+#: base/models.py:766
 #: base/templates/base/partials/health_medications_partial.html:33
 msgid "Example: Pregabalin 75 mg daily"
 msgstr ""
 
-#: base/models.py:767
+#: base/models.py:778
 #: base/templates/base/partials/health_medications_partial.html:23
 msgid "Medication"
 msgstr ""
 
-#: base/models.py:768 base/templates/base/help_request.html:112
+#: base/models.py:779 base/templates/base/help_request.html:112
 #: base/templates/base/includes/doctor_patient_header.html:28
 #: base/templates/base/my_health.html:56
 #: base/templates/base/patient_medications.html:13
@@ -514,7 +518,7 @@ msgstr ""
 #: base/signals.py:32 base/templates/base/help_request.html:30
 #: base/templates/base/home.html:92 base/templates/base/home.html:130
 #: base/templates/base/info/auth_combined.html:128
-#: base/templates/base/profile_edit.html:86
+#: base/templates/base/profile_edit.html:95
 msgid "Username"
 msgstr ""
 
@@ -526,7 +530,7 @@ msgstr ""
 #: base/templates/base/includes/staff_help_requests_rows.html:63
 #: base/templates/base/info/auth_combined.html:139
 #: base/templates/base/profile.html:91
-#: base/templates/base/profile_edit.html:109
+#: base/templates/base/profile_edit.html:118
 #: base/templates/base/reset_request.html:44
 #: base/templates/base/staff_help_requests.html:94
 msgid "Email"
@@ -660,15 +664,15 @@ msgid "Button text (optional)"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:62
-#: base/templates/base/notifications.html:31 base/utils/notify.py:25
+#: base/templates/base/notifications.html:31 base/utils/notify.py:19
 #: templates/base.html:156
 msgid "Details"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:66
 #: base/templates/base/includes/doctor_recommendations_panel.html:14
-#: base/templates/base/post_cards.html:170
-#: blog/templates/blog/blog_page.html:223
+#: base/templates/base/post_cards.html:177
+#: blog/templates/blog/blog_page.html:227
 msgid "Send"
 msgstr ""
 
@@ -676,7 +680,7 @@ msgstr ""
 #: base/templates/base/partials/health_wellness.html:279
 #: base/templates/base/post_create.html:95
 #: base/templates/base/post_edit.html:128
-#: blog/templates/blog/blog_page.html:279
+#: blog/templates/blog/blog_page.html:283
 msgid "Cancel"
 msgstr ""
 
@@ -706,25 +710,25 @@ msgstr ""
 
 #: base/templates/base/comment_items.html:4
 #: base/templates/base/includes/profile_header.html:47
-#: blog/templates/blog/blog_page.html:237
+#: blog/templates/blog/blog_page.html:241
 #: blog/templates/blog/includes/article_cards.html:50
 #: blog/templates/blog/includes/article_cards.html:124
 msgid "Avatar"
 msgstr ""
 
 #: base/templates/base/comment_items.html:9
-#: blog/templates/blog/blog_page.html:243
+#: blog/templates/blog/blog_page.html:247
 msgid "edited"
 msgstr ""
 
 #: base/templates/base/comment_items.html:16
 #: base/templates/base/partials/health_documents.html:192
 #: base/templates/base/partials/health_medications_partial.html:63
-#: base/templates/base/post_cards.html:97
-#: base/templates/base/profile_edit.html:66
-#: blog/templates/blog/blog_page.html:176
-#: blog/templates/blog/blog_page.html:252
-#: blog/templates/blog/edit_article.html:127
+#: base/templates/base/post_cards.html:104
+#: base/templates/base/profile_edit.html:67
+#: blog/templates/blog/blog_page.html:180
+#: blog/templates/blog/blog_page.html:256
+#: blog/templates/blog/edit_article.html:117
 msgid "Delete"
 msgstr ""
 
@@ -737,7 +741,7 @@ msgid "Email verified."
 msgstr ""
 
 #: base/templates/base/connect_telegram.html:19
-#: base/templates/base/profile_edit.html:218
+#: base/templates/base/profile_edit.html:241
 msgid "Telegram bot is not configured."
 msgstr ""
 
@@ -798,89 +802,77 @@ msgstr ""
 msgid "Agreements"
 msgstr ""
 
-#: base/templates/base/consents.html:11
-msgid "Please read the following documents and confirm:"
-msgstr ""
-
-#: base/templates/base/consents.html:14 base/templates/base/consents.html:68
-msgid "Terms of Service"
-msgstr ""
-
-#: base/templates/base/consents.html:17 base/templates/base/consents.html:96
-msgid "Privacy Policy"
-msgstr ""
-
-#: base/templates/base/consents.html:21
-msgid "Consent to personal data processing (Patient)"
-msgstr ""
-
-#: base/templates/base/consents.html:26
-msgid "Consent to personal data processing (Expert/Doctor)"
-msgstr ""
-
-#: base/templates/base/consents.html:37
-msgid "I agree with Terms of Service"
-msgstr ""
-
-#: base/templates/base/consents.html:38 base/templates/base/consents.html:45
-msgid "read"
-msgstr ""
-
-#: base/templates/base/consents.html:44
-msgid "I agree with Privacy Policy"
-msgstr ""
-
-#: base/templates/base/consents.html:51
-msgid "I consent to personal data processing"
-msgstr ""
-
-#: base/templates/base/consents.html:52
-msgid "patient version"
-msgstr ""
-
-#: base/templates/base/consents.html:54
-msgid "expert version"
-msgstr ""
-
-#: base/templates/base/consents.html:58
+#: base/templates/base/consents.html:68 base/templates/base/consents.html:98
 msgid "Continue"
 msgstr ""
 
-#: base/templates/base/consents.html:69 base/templates/base/consents.html:85
-#: base/templates/base/consents.html:97 base/templates/base/consents.html:108
-#: base/templates/base/consents.html:122 base/templates/base/consents.html:306
-#: base/templates/base/consents.html:320 base/templates/base/consents.html:470
+#: base/templates/base/consents.html:77
+msgid "I agree with Terms of Service"
+msgstr ""
+
+#: base/templates/base/consents.html:78 base/templates/base/consents.html:85
+msgid "read"
+msgstr ""
+
+#: base/templates/base/consents.html:84
+msgid "I agree with Privacy Policy"
+msgstr ""
+
+#: base/templates/base/consents.html:91
+msgid "I consent to personal data processing"
+msgstr ""
+
+#: base/templates/base/consents.html:92
+msgid "patient version"
+msgstr ""
+
+#: base/templates/base/consents.html:94
+msgid "expert version"
+msgstr ""
+
+#: base/templates/base/consents.html:109
+msgid "Terms of Service"
+msgstr ""
+
+#: base/templates/base/consents.html:110 base/templates/base/consents.html:126
+#: base/templates/base/consents.html:138 base/templates/base/consents.html:149
+#: base/templates/base/consents.html:163 base/templates/base/consents.html:347
+#: base/templates/base/consents.html:361 base/templates/base/consents.html:511
 #: base/templates/base/home.html:27
 #: base/templates/base/staff_help_requests.html:144
 #: base/templates/base/staff_help_requests.html:233
-#: blog/templates/blog/blog_page.html:272
-#: blog/templates/blog/blog_page.html:293
+#: blog/templates/blog/blog_page.html:276
+#: blog/templates/blog/blog_page.html:297
 msgid "Close"
 msgstr ""
 
-#: base/templates/base/consents.html:73
+#: base/templates/base/consents.html:114
 msgid ""
 "These Terms of Service govern your use of the site and services. Please "
 "review them carefully before continuing."
 msgstr ""
 
-#: base/templates/base/consents.html:78
+#: base/templates/base/consents.html:119
 msgid ""
 "By accessing or using the site, you agree to be bound by these Terms. The "
 "Operator may update these Terms from time to time."
 msgstr ""
 
-#: base/templates/base/consents.html:101
+#: base/templates/base/consents.html:137
+msgid "Privacy Policy"
+msgstr ""
+
+#: base/templates/base/consents.html:142
 msgid ""
 "This Privacy Policy describes how we collect, use, and protect your personal "
 "data. Please read it carefully."
 msgstr ""
 
-#: base/templates/base/consents.html:120
+#: base/templates/base/consents.html:161
 msgid "Consent to Personal Data Processing (Patient)"
 msgstr ""
 
-#: base/templates/base/consents.html:126
+#: base/templates/base/consents.html:167
 msgid ""
 "Acting freely, of my own will and in my own interest, and confirming my "
 "legal capacity, I hereby give and confirm my consent to the processing of my "
@@ -889,88 +881,88 @@ msgid ""
 "following conditions:"
 msgstr ""
 
-#: base/templates/base/consents.html:133
+#: base/templates/base/consents.html:174
 msgid "PROVIDING INFORMATION BY THE USER"
 msgstr ""
 
-#: base/templates/base/consents.html:135
+#: base/templates/base/consents.html:176
 msgid ""
 "In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal "
 "Data”, consent is given to the processing of the following personal data of "
 "the User:"
 msgstr ""
 
-#: base/templates/base/consents.html:141 base/templates/base/consents.html:339
+#: base/templates/base/consents.html:182 base/templates/base/consents.html:380
 msgid "last name, first name, middle name (if any);"
 msgstr ""
 
-#: base/templates/base/consents.html:142
+#: base/templates/base/consents.html:183
 msgid "date of birth;"
 msgstr ""
 
-#: base/templates/base/consents.html:143
+#: base/templates/base/consents.html:184
 msgid "telephone number(s) (landline, mobile);"
 msgstr ""
 
-#: base/templates/base/consents.html:144 base/templates/base/consents.html:348
+#: base/templates/base/consents.html:185 base/templates/base/consents.html:389
 msgid "email address;"
 msgstr ""
 
-#: base/templates/base/consents.html:145
+#: base/templates/base/consents.html:186
 msgid ""
 "health-related information necessary for the Operator to perform actions in "
 "the User’s interests;"
 msgstr ""
 
-#: base/templates/base/consents.html:146
+#: base/templates/base/consents.html:187
 msgid ""
 "additional information provided by the User at their own discretion, "
 "including biometric personal data (photos and/or videos, audio recordings)."
 msgstr ""
 
-#: base/templates/base/consents.html:150
+#: base/templates/base/consents.html:191
 msgid ""
 "The User consents to the transfer of their personal data, including data "
 "constituting medical confidentiality, to the extent necessary for the "
 "Operator to act in the User’s interests."
 msgstr ""
 
-#: base/templates/base/consents.html:156
+#: base/templates/base/consents.html:197
 msgid ""
 "The Operator uses the personal data provided by the User for the following "
 "purposes:"
 msgstr ""
 
-#: base/templates/base/consents.html:158
+#: base/templates/base/consents.html:199
 msgid ""
 "informing the User by email, phone calls and messaging about opportunities "
 "to participate in studies, new publications, or other information consistent "
 "with the Operator’s statutory purposes;"
 msgstr ""
 
-#: base/templates/base/consents.html:159
+#: base/templates/base/consents.html:200
 msgid ""
 "including the User’s information in the Register of patients with hereditary "
 "connective tissue dysplasia (CTD);"
 msgstr ""
 
-#: base/templates/base/consents.html:160
+#: base/templates/base/consents.html:201
 msgid ""
 "enabling the User to take tests on the Site, and storing and analyzing test "
 "results;"
 msgstr ""
 
-#: base/templates/base/consents.html:161
+#: base/templates/base/consents.html:202
 msgid ""
 "providing the User with informational consultations related to the "
 "Operator’s statutory activities;"
 msgstr ""
 
-#: base/templates/base/consents.html:162
+#: base/templates/base/consents.html:203
 msgid "enabling registration on the “Rhythms of Life” project website."
 msgstr ""
 
-#: base/templates/base/consents.html:166
+#: base/templates/base/consents.html:207
 msgid ""
 "The User gives consent to the Operator to process personal data when filling "
 "out the “Registration” form on the “Rhythms of Life” project website (the "
@@ -978,46 +970,46 @@ msgid ""
 "and information provided by the User."
 msgstr ""
 
-#: base/templates/base/consents.html:174
+#: base/templates/base/consents.html:215
 msgid ""
 "The User consents to the processing of personal data for the purpose of "
 "allowing the User to enter information about themselves while taking tests "
 "on the Operator’s Site."
 msgstr ""
 
-#: base/templates/base/consents.html:181
+#: base/templates/base/consents.html:222
 msgid ""
 "The User consents to the processing of personal data upon adding their "
 "information to the Register of patients with hereditary CTD. The Register "
 "includes all personal data of the User, including:"
 msgstr ""
 
-#: base/templates/base/consents.html:187
+#: base/templates/base/consents.html:228
 msgid ""
 "health-related information provided when filling in the “Registration” form "
 "on the project website;"
 msgstr ""
 
-#: base/templates/base/consents.html:188
+#: base/templates/base/consents.html:229
 msgid ""
 "information provided while taking tests on the project website, test results "
 "and their analysis;"
 msgstr ""
 
-#: base/templates/base/consents.html:189
+#: base/templates/base/consents.html:230
 msgid ""
 "information necessary for the provision of informational services by the "
 "Operator, including data constituting medical confidentiality."
 msgstr ""
 
-#: base/templates/base/consents.html:193
+#: base/templates/base/consents.html:234
 msgid ""
 "The User consents to the transfer of all the above personal data to third "
 "parties responsible for processing and storing data during the formation of "
 "the Register."
 msgstr ""
 
-#: base/templates/base/consents.html:200
+#: base/templates/base/consents.html:241
 msgid ""
 "During processing, the Operator may perform: collection, recording, "
 "systematization, accumulation, storage, updating (clarification, "
@@ -1025,26 +1017,26 @@ msgid ""
 "destruction."
 msgstr ""
 
-#: base/templates/base/consents.html:207
+#: base/templates/base/consents.html:248
 msgid ""
 "Personal data are processed until the purposes of processing are achieved or "
 "until the withdrawal of this Consent."
 msgstr ""
 
-#: base/templates/base/consents.html:214
+#: base/templates/base/consents.html:255
 msgid ""
 "When processing the User’s personal data, the Operator is guided by Federal "
 "Law “On Personal Data” and the Operator’s internal regulations."
 msgstr ""
 
-#: base/templates/base/consents.html:221
+#: base/templates/base/consents.html:262
 msgid ""
 "All communications by the User regarding personal data processing are made "
 "as an official request to the Operator, as stipulated by the Operator’s "
 "Personal Data Policy for Site users."
 msgstr ""
 
-#: base/templates/base/consents.html:228
+#: base/templates/base/consents.html:269
 msgid ""
 "The User may request clarification, blocking, or destruction of personal "
 "data if the data are incomplete, outdated, inaccurate, unlawfully obtained, "
@@ -1052,79 +1044,79 @@ msgid ""
 "protect their rights."
 msgstr ""
 
-#: base/templates/base/consents.html:236
+#: base/templates/base/consents.html:277
 msgid ""
 "If inaccuracies are identified, the User may notify the Operator at: "
 "info@bfastra.ru to update the data."
 msgstr ""
 
-#: base/templates/base/consents.html:242
+#: base/templates/base/consents.html:283
 msgid ""
 "The User may withdraw their consent at any time by emailing: info@bfastra.ru "
 "with the note “Withdrawal of consent to personal data processing”."
 msgstr ""
 
-#: base/templates/base/consents.html:249
+#: base/templates/base/consents.html:290
 msgid ""
 "Upon receipt of a written withdrawal, the Operator ceases processing within "
 "5 (five) days from the date of receipt."
 msgstr ""
 
-#: base/templates/base/consents.html:256
+#: base/templates/base/consents.html:297
 msgid ""
 "The period of personal data processing is determined by achieving the "
 "purposes for which the data were collected, unless another period is "
 "provided by contract or applicable law."
 msgstr ""
 
-#: base/templates/base/consents.html:262 base/templates/base/consents.html:430
+#: base/templates/base/consents.html:303 base/templates/base/consents.html:471
 msgid "ORGANIZATION OF PROVISION, PROCESSING AND TRANSFER OF PERSONAL DATA"
 msgstr ""
 
-#: base/templates/base/consents.html:265
+#: base/templates/base/consents.html:306
 msgid ""
 "Personal data obtained from the User are transferred for inclusion in the "
 "CTD Register and for analysis."
 msgstr ""
 
-#: base/templates/base/consents.html:271
+#: base/templates/base/consents.html:312
 msgid ""
 "The Operator ensures protection against unauthorized (including accidental) "
 "access to personal data, including detecting and recording such access."
 msgstr ""
 
-#: base/templates/base/consents.html:278
+#: base/templates/base/consents.html:319
 msgid ""
 "The Operator takes necessary and sufficient organizational and technical "
 "measures to protect personal data and performs internal control for "
 "compliance with applicable laws and requirements."
 msgstr ""
 
-#: base/templates/base/consents.html:285
+#: base/templates/base/consents.html:326
 msgid ""
 "Disclosure of Users’ personal data to third parties (tax, law enforcement "
 "and other state authorities) is not deemed a breach if required by "
 "applicable law."
 msgstr ""
 
-#: base/templates/base/consents.html:292
+#: base/templates/base/consents.html:333
 msgid ""
 "The Operator is not responsible for information posted by the User on the "
 "Site in a publicly accessible form."
 msgstr ""
 
-#: base/templates/base/consents.html:298
+#: base/templates/base/consents.html:339
 msgid ""
 "All details on processing of Users’ personal data on the Site are set out in "
 "the Personal Data Policy (https://doc.bfastra.ru/docs/polozhenie_o_pdn.pdf). "
 "This consent is given both with and without the use of automation tools."
 msgstr ""
 
-#: base/templates/base/consents.html:318
+#: base/templates/base/consents.html:359
 msgid "Consent to Personal Data Processing (Expert/Doctor)"
 msgstr ""
 
-#: base/templates/base/consents.html:324
+#: base/templates/base/consents.html:365
 msgid ""
 "Acting freely, of my own will and in my own interest, and confirming my "
 "legal capacity, I hereby give and confirm my consent to the processing of my "
@@ -1133,68 +1125,68 @@ msgid ""
 "following conditions."
 msgstr ""
 
-#: base/templates/base/consents.html:331
+#: base/templates/base/consents.html:372
 msgid "PROVIDING INFORMATION BY THE EXPERT"
 msgstr ""
 
-#: base/templates/base/consents.html:333
+#: base/templates/base/consents.html:374
 msgid ""
 "In accordance with Federal Law No. 152-FZ of 27 July 2007 “On Personal "
 "Data”, consent is given to the processing of the following personal data of "
 "the Expert:"
 msgstr ""
 
-#: base/templates/base/consents.html:340
+#: base/templates/base/consents.html:381
 msgid "date and place of birth;"
 msgstr ""
 
-#: base/templates/base/consents.html:341
+#: base/templates/base/consents.html:382
 msgid "citizenship;"
 msgstr ""
 
-#: base/templates/base/consents.html:342
+#: base/templates/base/consents.html:383
 msgid "information on knowledge of foreign languages;"
 msgstr ""
 
-#: base/templates/base/consents.html:343
+#: base/templates/base/consents.html:384
 msgid ""
 "education (name of educational institution, year of graduation, education "
 "document, qualification, specialty);"
 msgstr ""
 
-#: base/templates/base/consents.html:344
+#: base/templates/base/consents.html:385
 msgid "profession; length of service;"
 msgstr ""
 
-#: base/templates/base/consents.html:345
+#: base/templates/base/consents.html:386
 msgid "passport details (number, date of issue, issuing authority);"
 msgstr ""
 
-#: base/templates/base/consents.html:346
+#: base/templates/base/consents.html:387
 msgid ""
 "residential address (as per passport, actual address), date of registration "
 "at the place of residence;"
 msgstr ""
 
-#: base/templates/base/consents.html:347
+#: base/templates/base/consents.html:388
 msgid "telephone number(s) (home, mobile);"
 msgstr ""
 
-#: base/templates/base/consents.html:349
+#: base/templates/base/consents.html:390
 msgid ""
 "information on attestation/certification, advanced training, professional "
 "retraining;"
 msgstr ""
 
-#: base/templates/base/consents.html:350
+#: base/templates/base/consents.html:391
 msgid "information on awards (commendations), honorary titles;"
 msgstr ""
 
-#: base/templates/base/consents.html:351
+#: base/templates/base/consents.html:392
 msgid "information on taxpayer identification number;"
 msgstr ""
 
-#: base/templates/base/consents.html:352
+#: base/templates/base/consents.html:393
 msgid ""
 "additional information voluntarily provided by the Expert (e.g., "
 "nationality, stays abroad, membership in public organizations or elective "
@@ -1202,44 +1194,44 @@ msgid ""
 "recordings);"
 msgstr ""
 
-#: base/templates/base/consents.html:355
+#: base/templates/base/consents.html:396
 msgid ""
 "The Operator uses the personal data provided by the Expert for the following "
 "purposes:"
 msgstr ""
 
-#: base/templates/base/consents.html:357
+#: base/templates/base/consents.html:398
 msgid ""
 "concluding an agreement on the Expert’s participation in the “Rhythms of "
 "Life” project;"
 msgstr ""
 
-#: base/templates/base/consents.html:358
+#: base/templates/base/consents.html:399
 msgid ""
 "informing the Expert by email, phone calls and messaging about opportunities "
 "to participate in studies, new publications, or other information consistent "
 "with the Operator’s statutory purposes;"
 msgstr ""
 
-#: base/templates/base/consents.html:359
+#: base/templates/base/consents.html:400
 msgid ""
 "publishing information about the Expert on the “Rhythms of Life” project "
 "website;"
 msgstr ""
 
-#: base/templates/base/consents.html:360
+#: base/templates/base/consents.html:401
 msgid ""
 "providing the possibility to render informational services to Users of the "
 "“Rhythms of Life” project website;"
 msgstr ""
 
-#: base/templates/base/consents.html:361
+#: base/templates/base/consents.html:402
 msgid ""
 "providing the possibility to register on the “Rhythms of Life” project "
 "website."
 msgstr ""
 
-#: base/templates/base/consents.html:365
+#: base/templates/base/consents.html:406
 msgid ""
 "The Expert authorizes the Operator, during the processing of personal data, "
 "to perform the following actions (operations): collection, recording, "
@@ -1248,19 +1240,19 @@ msgid ""
 "destruction."
 msgstr ""
 
-#: base/templates/base/consents.html:373
+#: base/templates/base/consents.html:414
 msgid ""
 "Personal data are processed until the purposes of processing are achieved or "
 "until the withdrawal of this Consent to personal data processing."
 msgstr ""
 
-#: base/templates/base/consents.html:380
+#: base/templates/base/consents.html:421
 msgid ""
 "When processing the Expert’s personal data, the Operator is guided by the "
 "Federal Law “On Personal Data” and the Operator’s internal regulations."
 msgstr ""
 
-#: base/templates/base/consents.html:387
+#: base/templates/base/consents.html:428
 msgid ""
 "All communications with the Operator regarding the processing of personal "
 "data are made as an official request to the Operator in the manner provided "
@@ -1268,7 +1260,7 @@ msgid ""
 "personal data of the Site’s users."
 msgstr ""
 
-#: base/templates/base/consents.html:395
+#: base/templates/base/consents.html:436
 msgid ""
 "The Expert may request clarification, blocking or destruction of their "
 "personal data if the data are incomplete, outdated, inaccurate, unlawfully "
@@ -1276,41 +1268,41 @@ msgid ""
 "the measures provided by law to protect their rights."
 msgstr ""
 
-#: base/templates/base/consents.html:403
+#: base/templates/base/consents.html:444
 msgid ""
 "If inaccuracies are identified in personal data, the Expert may send a "
 "notification to the Operator to update the data at: info@bfastra.ru."
 msgstr ""
 
-#: base/templates/base/consents.html:410
+#: base/templates/base/consents.html:451
 msgid ""
 "The Expert may withdraw their consent to personal data processing at any "
 "time by sending a notification to the Operator by email at: info@bfastra.ru "
 "with the note “Withdrawal of consent to personal data processing”."
 msgstr ""
 
-#: base/templates/base/consents.html:417
+#: base/templates/base/consents.html:458
 msgid ""
 "Upon receipt of a written statement withdrawing this consent, the Operator "
 "ceases processing of personal data within 5 (five) days from the date of "
 "receipt of such withdrawal."
 msgstr ""
 
-#: base/templates/base/consents.html:424
+#: base/templates/base/consents.html:465
 msgid ""
 "The period of personal data processing is determined by achieving the "
 "purposes for which the personal data were collected, unless another period "
 "is provided by contract or by applicable law."
 msgstr ""
 
-#: base/templates/base/consents.html:433
+#: base/templates/base/consents.html:474
 msgid ""
 "The Operator ensures the security of personal data against unauthorized "
 "(including accidental) access, including the detection and recording of such "
 "access."
 msgstr ""
 
-#: base/templates/base/consents.html:440
+#: base/templates/base/consents.html:481
 msgid ""
 "The Operator takes necessary and sufficient organizational and technical "
 "measures to protect personal data. The Operator carries out internal control "
@@ -1319,20 +1311,20 @@ msgid ""
 "personal data processing policy and local acts."
 msgstr ""
 
-#: base/templates/base/consents.html:449
+#: base/templates/base/consents.html:490
 msgid ""
 "Disclosure of Users’ personal data to third parties (tax, law enforcement "
 "and other state authorities) shall not be deemed a breach if required by "
 "applicable law."
 msgstr ""
 
-#: base/templates/base/consents.html:456
+#: base/templates/base/consents.html:497
 msgid ""
 "The Operator is not liable for information provided by a User on the Site in "
 "a publicly accessible form."
 msgstr ""
 
-#: base/templates/base/consents.html:462
+#: base/templates/base/consents.html:503
 msgid ""
 "All information on the processing of Users’ personal data on the Site is set "
 "out in the Personal Data Policy (https://doc.bfastra.ru/docs/"
@@ -1353,11 +1345,11 @@ msgstr ""
 msgid "Your phone number"
 msgstr ""
 
-#: base/templates/base/enter_phone_number.html:23
+#: base/templates/base/enter_phone_number.html:24
 msgid "Use international format like +7 999 123-45-67."
 msgstr ""
 
-#: base/templates/base/enter_phone_number.html:25
+#: base/templates/base/enter_phone_number.html:26
 msgid "Get code by call"
 msgstr ""
 
@@ -1416,7 +1408,7 @@ msgstr ""
 
 #: base/templates/base/help_request.html:44
 #: base/templates/base/profile.html:101
-#: base/templates/base/profile_edit.html:210
+#: base/templates/base/profile_edit.html:233
 #: base/templates/base/reset_request.html:45
 msgid "Telegram"
 msgstr ""
@@ -1533,7 +1525,7 @@ msgstr ""
 
 #: base/templates/base/home.html:100
 #: base/templates/base/info/auth_combined.html:136
-#: base/templates/base/profile_edit.html:95
+#: base/templates/base/profile_edit.html:104
 msgid "Use only English letters, numbers, and @/./+/-/_ characters."
 msgstr ""
 
@@ -1697,7 +1689,7 @@ msgstr ""
 
 #: base/templates/base/includes/staff_help_requests_rows.html:78
 #: base/templates/base/staff_help_requests.html:95
-#: base/views/public_profile_views.py:96
+#: base/views/public_profile_views.py:98
 msgid "Profile"
 msgstr ""
 
@@ -1841,9 +1833,9 @@ msgid "Save"
 msgstr ""
 
 #: base/templates/base/partials/health_documents.html:189
-#: base/templates/base/post_cards.html:93
-#: blog/templates/blog/blog_page.html:155
-#: blog/templates/blog/blog_page.html:249
+#: base/templates/base/post_cards.html:100
+#: blog/templates/blog/blog_page.html:159
+#: blog/templates/blog/blog_page.html:253
 msgid "Edit"
 msgstr ""
 
@@ -2166,7 +2158,7 @@ msgid "Enter a query to search for patients."
 msgstr ""
 
 #: base/templates/base/post_cards.html:10 base/templates/base/profile.html:63
-#: base/templates/base/profile_edit.html:63
+#: base/templates/base/profile_edit.html:64
 msgid "User avatar"
 msgstr ""
 
@@ -2197,49 +2189,49 @@ msgstr ""
 msgid "Pending review"
 msgstr ""
 
-#: base/templates/base/post_cards.html:64
+#: base/templates/base/post_cards.html:71
 msgid "More actions"
 msgstr ""
 
-#: base/templates/base/post_cards.html:72
+#: base/templates/base/post_cards.html:79
 #: base/templates/base/post_create.html:96
-#: blog/templates/blog/create_article.html:89
-#: blog/templates/blog/edit_article.html:114
+#: blog/templates/blog/create_article.html:77
+#: blog/templates/blog/edit_article.html:104
 msgid "Publish"
 msgstr ""
 
-#: base/templates/base/post_cards.html:76 blog/templates/blog/blog_page.html:36
-#: blog/templates/blog/blog_page.html:280
+#: base/templates/base/post_cards.html:83 blog/templates/blog/blog_page.html:36
+#: blog/templates/blog/blog_page.html:284
 msgid "Reject"
 msgstr ""
 
-#: base/templates/base/post_cards.html:85
+#: base/templates/base/post_cards.html:92
 msgid "Unhide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:90
-#: blog/templates/blog/blog_page.html:168
-#: blog/templates/blog/edit_article.html:125
+#: base/templates/base/post_cards.html:97
+#: blog/templates/blog/blog_page.html:172
+#: blog/templates/blog/edit_article.html:115
 msgid "Hide"
 msgstr ""
 
-#: base/templates/base/post_cards.html:102
+#: base/templates/base/post_cards.html:109
 msgid "Copy link"
 msgstr ""
 
-#: base/templates/base/post_cards.html:109
+#: base/templates/base/post_cards.html:116
 msgid "Report"
 msgstr ""
 
-#: base/templates/base/post_cards.html:169
+#: base/templates/base/post_cards.html:176
 msgid "Write a comment..."
 msgstr ""
 
-#: base/templates/base/post_cards.html:192
+#: base/templates/base/post_cards.html:199
 msgid "Show more"
 msgstr ""
 
-#: base/templates/base/post_cards.html:200
+#: base/templates/base/post_cards.html:207
 #: base/templates/base/profile_content_fragment.html:105
 msgid "No posts yet."
 msgstr ""
@@ -2312,7 +2304,7 @@ msgid "Drag photos here or choose them from your gallery."
 msgstr ""
 
 #: base/templates/base/post_edit.html:129
-#: base/templates/base/profile_edit.html:240
+#: base/templates/base/profile_edit.html:263
 msgid "Save changes"
 msgstr ""
 
@@ -2321,17 +2313,17 @@ msgid "Previous"
 msgstr ""
 
 #: base/templates/base/profile.html:81
-#: base/templates/base/profile_edit.html:144
+#: base/templates/base/profile_edit.html:153
 msgid "About me"
 msgstr ""
 
 #: base/templates/base/profile.html:96
-#: base/templates/base/profile_edit.html:114
+#: base/templates/base/profile_edit.html:123
 msgid "Date of birth"
 msgstr ""
 
 #: base/templates/base/profile.html:104
-#: base/templates/base/profile_edit.html:213
+#: base/templates/base/profile_edit.html:236
 msgid "Linked"
 msgstr ""
 
@@ -2340,7 +2332,7 @@ msgid "Not linked"
 msgstr ""
 
 #: base/templates/base/profile.html:113
-#: base/templates/base/profile_edit.html:151
+#: base/templates/base/profile_edit.html:160
 msgid "Syndromes"
 msgstr ""
 
@@ -2392,59 +2384,59 @@ msgstr ""
 msgid "No articles yet."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:65
+#: base/templates/base/profile_edit.html:66
 msgid "Upload new"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:99
+#: base/templates/base/profile_edit.html:108
 msgid "First name"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:104
+#: base/templates/base/profile_edit.html:113
 msgid "Last name"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:118
+#: base/templates/base/profile_edit.html:127
 msgid "Day"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:126
+#: base/templates/base/profile_edit.html:135
 msgid "Month"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:134
+#: base/templates/base/profile_edit.html:143
 msgid "Year"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:145
+#: base/templates/base/profile_edit.html:154
 msgid "A few words about yourself"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:146
+#: base/templates/base/profile_edit.html:155
 msgid "Up to 250 characters."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:197
+#: base/templates/base/profile_edit.html:206
 msgid "Other syndromes"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:203
+#: base/templates/base/profile_edit.html:212
 msgid "If your syndrome is not in the list, write it here"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:215
+#: base/templates/base/profile_edit.html:238
 msgid "Unlink Telegram"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:221
+#: base/templates/base/profile_edit.html:244
 msgid "Link Telegram"
 msgstr ""
 
-#: base/templates/base/profile_edit.html:223
+#: base/templates/base/profile_edit.html:246
 msgid "Activation link is not available."
 msgstr ""
 
-#: base/templates/base/profile_edit.html:225
+#: base/templates/base/profile_edit.html:248
 msgid "Generate new link"
 msgstr ""
 
@@ -2670,6 +2662,15 @@ msgstr ""
 msgid "please place a call to"
 msgstr ""
 
+#: base/templates/base/wait_for_phone_call.html:20
+msgid ""
+"Call will be dropped automatically. Call from the same number you entered."
+msgstr ""
+
+#: base/templates/base/wait_for_phone_call.html:24
+msgid "We will call your number automatically. Just answer the call."
+msgstr ""
+
 #: base/templates/base/wait_for_phone_call.html:28
 msgid "Waiting for call"
 msgstr ""
@@ -2710,7 +2711,7 @@ msgid ""
 "leave a short note."
 msgstr ""
 
-#: base/utils/notify.py:111
+#: base/utils/notify.py:105
 msgid "Notification"
 msgstr ""
 
@@ -2854,11 +2855,11 @@ msgstr ""
 msgid "Please fill in all fields."
 msgstr ""
 
-#: base/views/auth_views.py:81 base/views/profile_views.py:206
+#: base/views/auth_views.py:81 base/views/profile_views.py:219
 msgid "A user with that username already exists."
 msgstr ""
 
-#: base/views/auth_views.py:83 base/views/profile_views.py:270
+#: base/views/auth_views.py:83 base/views/profile_views.py:284
 msgid "This email is already registered."
 msgstr ""
 
@@ -2866,11 +2867,11 @@ msgstr ""
 msgid "Password is too weak."
 msgstr ""
 
-#: base/views/auth_views.py:154 base/views/auth_views.py:430
+#: base/views/auth_views.py:154 base/views/auth_views.py:457
 msgid "Registration was successful! A confirmation email will arrive shortly."
 msgstr ""
 
-#: base/views/auth_views.py:188 base/views/auth_views.py:444
+#: base/views/auth_views.py:188 base/views/auth_views.py:471
 msgid "Invalid username or password."
 msgstr ""
 
@@ -2882,27 +2883,27 @@ msgstr ""
 msgid "Email verification failed or token is invalid."
 msgstr ""
 
-#: base/views/auth_views.py:276
+#: base/views/auth_views.py:277
 msgid "Enter phone number."
 msgstr ""
 
-#: base/views/auth_views.py:282
+#: base/views/auth_views.py:283
 msgid "Failed to initiate call."
 msgstr ""
 
-#: base/views/auth_views.py:307
+#: base/views/auth_views.py:308
 msgid "No phone number set."
 msgstr ""
 
-#: base/views/auth_views.py:316 base/views/auth_views.py:319
+#: base/views/auth_views.py:317 base/views/auth_views.py:320
 msgid "Provider error"
 msgstr ""
 
-#: base/views/auth_views.py:356
+#: base/views/auth_views.py:361
 msgid "Please accept all items."
 msgstr ""
 
-#: base/views/auth_views.py:413
+#: base/views/auth_views.py:440
 msgid "You are already signed in."
 msgstr ""
 
@@ -2944,32 +2945,32 @@ msgstr ""
 msgid "Failed to update the exam."
 msgstr ""
 
-#: base/views/feed_views.py:39
+#: base/views/feed_views.py:41
 msgid "Too many images."
 msgstr ""
 
-#: base/views/feed_views.py:50
+#: base/views/feed_views.py:52
 #, python-format
 msgid "%(msg)s"
 msgstr ""
 
-#: base/views/feed_views.py:174
+#: base/views/feed_views.py:215
 msgid "Post must contain text or an image."
 msgstr ""
 
-#: base/views/feed_views.py:199
+#: base/views/feed_views.py:240
 msgid "Your post is under review. It will appear after approval."
 msgstr ""
 
-#: base/views/feed_views.py:199
+#: base/views/feed_views.py:240
 msgid "Post published."
 msgstr ""
 
-#: base/views/feed_views.py:258
+#: base/views/feed_views.py:299
 msgid "Post updated."
 msgstr ""
 
-#: base/views/feed_views.py:274
+#: base/views/feed_views.py:315
 msgid "You cannot report your own post."
 msgstr ""
 
@@ -3013,24 +3014,24 @@ msgstr ""
 msgid "Medication description is too long."
 msgstr ""
 
-#: base/views/profile_views.py:222
+#: base/views/profile_views.py:235
 msgid "Invalid date of birth."
 msgstr ""
 
-#: base/views/profile_views.py:324
+#: base/views/profile_views.py:338
 msgid ""
 "Please fill in username, first name, last name, email, and date of birth."
 msgstr ""
 
-#: base/views/profile_views.py:345
+#: base/views/profile_views.py:359
 msgid "Validation failed."
 msgstr ""
 
-#: base/views/profile_views.py:352
+#: base/views/profile_views.py:366
 msgid "Profile has been updated."
 msgstr ""
 
-#: base/views/profile_views.py:365
+#: base/views/profile_views.py:379
 msgid "Error while saving."
 msgstr ""
 
@@ -3047,43 +3048,43 @@ msgstr ""
 msgid "Cannot unfollow yourself."
 msgstr ""
 
-#: base/views/telegram_views.py:46
+#: base/views/telegram_views.py:48
 msgid "Share phone"
 msgstr ""
 
-#: base/views/telegram_views.py:203
+#: base/views/telegram_views.py:199
 msgid "Telegram has been unlinked."
 msgstr ""
 
-#: base/views/telegram_views.py:216
+#: base/views/telegram_views.py:212
 msgid "New activation link generated."
 msgstr ""
 
-#: base/views/telegram_views.py:240
+#: base/views/telegram_views.py:236
 msgid "Invalid activation token."
 msgstr ""
 
-#: base/views/telegram_views.py:245
+#: base/views/telegram_views.py:241
 msgid "Activation token not found or already used."
 msgstr ""
 
-#: base/views/telegram_views.py:259
+#: base/views/telegram_views.py:255
 msgid "Telegram account linked successfully."
 msgstr ""
 
-#: base/views/telegram_views.py:263
+#: base/views/telegram_views.py:259
 msgid "Share your phone number to link your account."
 msgstr ""
 
-#: base/views/telegram_views.py:275
+#: base/views/telegram_views.py:271
 msgid "No active link session. Open the link from the site again."
 msgstr ""
 
-#: base/views/telegram_views.py:291
+#: base/views/telegram_views.py:287
 msgid "Phone linked. You can return to the site."
 msgstr ""
 
-#: base/views/telegram_views.py:294
+#: base/views/telegram_views.py:290
 msgid "Tap the button and share your phone to finish linking."
 msgstr ""
 
@@ -3123,54 +3124,53 @@ msgstr ""
 msgid "Failed to save settings."
 msgstr ""
 
-#: blog/models.py:47
+#: blog/models.py:54
 msgid "Intro"
 msgstr ""
 
-#: blog/models.py:147
+#: blog/models.py:154
 msgid "Publication date"
 msgstr ""
 
-#: blog/models.py:156 blog/templates/blog/create_article.html:54
-#: blog/templates/blog/edit_article.html:64
+#: blog/models.py:163
 msgid "Short description"
 msgstr ""
 
-#: blog/models.py:163 blog/templates/blog/create_article.html:69
-#: blog/templates/blog/edit_article.html:79
+#: blog/models.py:170 blog/templates/blog/create_article.html:57
+#: blog/templates/blog/edit_article.html:69
 msgid "Main image"
 msgstr ""
 
-#: blog/models.py:165 blog/templates/blog/create_article.html:77
-#: blog/templates/blog/edit_article.html:101
+#: blog/models.py:172 blog/templates/blog/create_article.html:65
+#: blog/templates/blog/edit_article.html:91
 msgid "Article content"
 msgstr ""
 
-#: blog/models.py:180
+#: blog/models.py:187
 msgid "Rejected by admin"
 msgstr ""
 
-#: blog/models.py:181
+#: blog/models.py:188
 msgid "Rejected at"
 msgstr ""
 
-#: blog/models.py:184
+#: blog/models.py:191
 msgid "Rejected by"
 msgstr ""
 
-#: blog/models.py:281
+#: blog/models.py:302
 msgid "Article like"
 msgstr ""
 
-#: blog/models.py:282
+#: blog/models.py:303
 msgid "Article likes"
 msgstr ""
 
-#: blog/models.py:298
+#: blog/models.py:319
 msgid "Article comment"
 msgstr ""
 
-#: blog/models.py:299
+#: blog/models.py:320
 msgid "Article comments"
 msgstr ""
 
@@ -3261,38 +3261,38 @@ msgstr[1] ""
 msgid "Anonymous author"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:161
-#: blog/templates/blog/edit_article.html:123
+#: blog/templates/blog/blog_page.html:165
+#: blog/templates/blog/edit_article.html:113
 msgid "Show"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:173
-#: blog/templates/blog/edit_article.html:149
+#: blog/templates/blog/blog_page.html:177
+#: blog/templates/blog/edit_article.html:139
 msgid "Delete the article?"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:194
+#: blog/templates/blog/blog_page.html:198
 msgid "Likes"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:204
-#: blog/templates/blog/blog_page.html:214
+#: blog/templates/blog/blog_page.html:208
+#: blog/templates/blog/blog_page.html:218
 msgid "Comments"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:220
+#: blog/templates/blog/blog_page.html:224
 msgid "Leave a comment..."
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:271
+#: blog/templates/blog/blog_page.html:275
 msgid "Reject publication"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:275
+#: blog/templates/blog/blog_page.html:279
 msgid "Reason (optional)"
 msgstr ""
 
-#: blog/templates/blog/blog_page.html:276
+#: blog/templates/blog/blog_page.html:280
 msgid "Write a short reason..."
 msgstr ""
 
@@ -3302,24 +3302,24 @@ msgid ""
 "practical recommendations."
 msgstr ""
 
-#: blog/templates/blog/create_article.html:67
-#: blog/templates/blog/edit_article.html:77
+#: blog/templates/blog/create_article.html:55
+#: blog/templates/blog/edit_article.html:67
 msgid "Cover"
 msgstr ""
 
-#: blog/templates/blog/create_article.html:72
+#: blog/templates/blog/create_article.html:60
 msgid ""
 "Use a clear horizontal image so the article looks strong in previews and "
 "lists."
 msgstr ""
 
-#: blog/templates/blog/create_article.html:84
-#: blog/templates/blog/edit_article.html:108
+#: blog/templates/blog/create_article.html:72
+#: blog/templates/blog/edit_article.html:98
 msgid "Start writing..."
 msgstr ""
 
-#: blog/templates/blog/create_article.html:92
-#: blog/templates/blog/edit_article.html:118
+#: blog/templates/blog/create_article.html:80
+#: blog/templates/blog/edit_article.html:108
 msgid "Save draft"
 msgstr ""
 
@@ -3338,15 +3338,21 @@ msgid ""
 "Update the article to keep the material accurate, useful and easy to read."
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:86
+#: blog/templates/blog/edit_article.html:63
+msgid ""
+"The preview text is generated automatically from the beginning of the "
+"article body."
+msgstr ""
+
+#: blog/templates/blog/edit_article.html:76
 msgid "Current image"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:90
+#: blog/templates/blog/edit_article.html:80
 msgid "Remove image"
 msgstr ""
 
-#: blog/templates/blog/edit_article.html:95
+#: blog/templates/blog/edit_article.html:85
 msgid "Use a strong cover image to improve previews and article cards."
 msgstr ""
 
@@ -3363,49 +3369,49 @@ msgstr ""
 msgid "Page navigation"
 msgstr ""
 
-#: blog/views.py:44
+#: blog/views.py:51
 #, python-format
 msgid ""
 "The article is too large to upload. Reduce the body size or image size and "
 "try again. Current limit: %(size)s MB."
 msgstr ""
 
-#: blog/views.py:47
+#: blog/views.py:54
 msgid ""
 "The article is too large to upload. Reduce the body size or image size and "
 "try again."
 msgstr ""
 
-#: blog/views.py:153
+#: blog/views.py:165
 msgid "Title and content are required."
 msgstr ""
 
-#: blog/views.py:216 blog/views.py:286
+#: blog/views.py:228 blog/views.py:298
 #, python-format
 msgid "System error: %(msg)s"
 msgstr ""
 
-#: blog/views.py:309 blog/views.py:327 blog/views.py:339
+#: blog/views.py:321 blog/views.py:339 blog/views.py:351
 msgid "Insufficient permissions."
 msgstr ""
 
-#: blog/views.py:370 blog/views.py:443
+#: blog/views.py:382 blog/views.py:455
 msgid "Comment cannot be empty."
 msgstr ""
 
-#: blog/views.py:421
+#: blog/views.py:433
 msgid "You cannot delete someone else's comment."
 msgstr ""
 
-#: blog/views.py:439
+#: blog/views.py:451
 msgid "You cannot edit someone else's comment."
 msgstr ""
 
-#: blog/views.py:459
+#: blog/views.py:471
 msgid "No file uploaded."
 msgstr ""
 
-#: blog/views.py:483
+#: blog/views.py:495
 msgid "Upload error."
 msgstr ""
 

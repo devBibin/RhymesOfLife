@@ -37,6 +37,34 @@
   color: rgba(33,37,41,.7);
 }
 
+.post-header .post-author-syndromes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem;
+  margin-top: .12rem;
+  max-width: min(100%, 520px);
+  font-size: .68rem;
+  line-height: 1.2;
+  color: rgba(100, 116, 139, .92);
+}
+
+.post-header .post-author-syndrome {
+  display: inline;
+  color: rgba(100, 116, 139, .92) !important;
+  font-size: inherit !important;
+  font-weight: 400;
+  line-height: inherit;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.post-header .post-author-syndrome:not(:last-child)::after {
+  content: "•";
+  margin-left: .2rem;
+  color: rgba(148, 163, 184, .9);
+}
+
 .post-text {
   --post-text-line-height: 1.55em;
   font-size: 1rem;

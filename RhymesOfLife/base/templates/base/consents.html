@@ -7,28 +7,68 @@
     <h2 class="mb-3 text-center">{% trans "Agreements" %}</h2>
     {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
 
-    <div class="mb-3 text-muted">
-      <p>{% trans "Please read the following documents and confirm:" %}</p>
-      <ul class="mb-0">
-        <li>
-          <a href="#tosModal" class="open-modal" data-modal-target="tosModal">{% trans "Terms of Service" %}</a>
-        </li>
-        <li>
-          <a href="#privacyModal" class="open-modal" data-modal-target="privacyModal">{% trans "Privacy Policy" %}</a>
-        </li>
-        <li>
-          <a href="#patientConsentModal" class="open-modal" data-modal-target="patientConsentModal">
-            {% trans "Consent to personal data processing (Patient)" %}
-          </a>
-        </li>
-        <li>
-          <a href="#expertConsentModal" class="open-modal" data-modal-target="expertConsentModal">
-            {% trans "Consent to personal data processing (Expert/Doctor)" %}
-          </a>
-        </li>
-      </ul>
-    </div>
+    <form method="post" class="mt-3">
+      {% csrf_token %}
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="consent-tos" name="tos" {% if tos_checked %}checked{% endif %}>
+        <label class="form-check-label" for="consent-tos">
+          Я согласен с
+          <a href="#tosModal" class="open-modal" data-modal-target="tosModal">Пользовательским соглашением</a>
+        </label>
+      </div>
 
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" id="consent-privacy" name="privacy" {% if privacy_checked %}checked{% endif %}>
+        <label class="form-check-label" for="consent-privacy">
+          Я согласен с
+          <a href="#privacyModal" class="open-modal" data-modal-target="privacyModal">Политикой конфиденциальности</a>
+        </label>
+      </div>
+
+      <fieldset class="border rounded-3 p-3 mb-4">
+        <legend class="float-none w-auto px-2 fs-6 mb-2">Я даю согласие на обработку персональных данных:</legend>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="data-user"
+            name="data_processing_type"
+            value="user"
+            {% if selected_consent_type == "user" %}checked{% endif %}
+          >
+          <label class="form-check-label" for="data-user">
+            <a href="#patientConsentModal" class="open-modal" data-modal-target="patientConsentModal">
+              Соглашение для пользователя
+            </a>
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="data-expert"
+            name="data_processing_type"
+            value="expert"
+            {% if selected_consent_type == "expert" %}checked{% endif %}
+          >
+          <label class="form-check-label" for="data-expert">
+            <a href="#expertConsentModal" class="open-modal" data-modal-target="expertConsentModal">
+              Соглашение для эксперта
+            </a>
+          </label>
+        </div>
+
+        <div class="form-text mt-2">
+          Откройте и выберите подходящий вариант согласия.
+        </div>
+      </fieldset>
+
+      <button class="btn btn-success w-100">{% trans "Continue" %}</button>
+    </form>
+
+    <div hidden aria-hidden="true">
     <form method="post" class="mt-3">
       {% csrf_token %}
       <div class="form-check mb-2">
@@ -57,6 +97,7 @@
 
       <button class="btn btn-success w-100">{% trans "Continue" %}</button>
     </form>
+    </div>
   </div>
 </div>
 

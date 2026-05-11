@@ -56,6 +56,13 @@
                   {% endif %}
                 {% endif %}
               </div>
+              {% if p.author.public_syndrome_names %}
+                <div class="post-author-syndromes">
+                  {% for syndrome_name in p.author.public_syndrome_names %}
+                    <span class="post-author-syndrome">{{ syndrome_name }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from urllib.parse import urljoin
+from email.utils import formataddr, parseaddr
 
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
@@ -8,9 +9,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.utils.translation import gettext as _
-
-
 class EmailVerificationSender:
     PROVIDERS = {
         "smtp": "_send_via_smtp",
@@ -45,13 +43,28 @@ class EmailVerificationSender:
         base = self._normalize_base_url(base)
         return urljoin(base + "/", path.lstrip("/"))
 
+    def _verification_from_email(self) -> str | None:
+        raw_from = (
+            getattr(settings, "POSTBOX_FROM_EMAIL", None)
+            or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            or getattr(settings, "EMAIL_HOST_USER", None)
+        )
+        if not raw_from:
+            return None
+
+        _, email_address = parseaddr(str(raw_from))
+        if not email_address:
+            email_address = str(raw_from).strip()
+
+        return formataddr(("Ритмы жизней", email_address))
+
     def send_verification(self, info):
         user = info.user
         self.logger.info("email.verify.prepare user_id=%s email=%s", user.id, getattr(user, "email", None))
         verify_link = self.generate_verification_link(info)
 
-        subject = _("Email verification")
-        text = _("Hello, {username}! Confirm your email by the link: {link}").format(
+        subject = "Подтверждение почты"
+        text = "Здравствуйте, {username}! Пожалуйста, подтвердите вашу почту по ссылке: {link}".format(
             username=user.username,
             link=verify_link,
         )
@@ -62,6 +75,7 @@ class EmailVerificationSender:
             "subject": subject,
             "text": text,
             "html": html,
+            "from_email": self._verification_from_email(),
         }
         return self.send_email(payload)
 

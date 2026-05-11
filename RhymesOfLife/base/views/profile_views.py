@@ -153,6 +153,7 @@ def profile_view(request, username=None):
     "confirmed_syndromes",
     "syndrome_status",
     "syndromes_other",
+    "show_syndromes_in_posts",
 )
 def profile_edit_view(request):
     info = request.user.additional_info
@@ -266,6 +267,7 @@ def profile_edit_view(request):
             info.confirmed_syndromes = confirmed
             info.syndrome_statuses = syndrome_statuses
             info.syndromes_other = (request.POST.get("syndromes_other") or "").strip()[:255]
+            info.show_syndromes_in_posts = request.POST.get("show_syndromes_in_posts") == "1"
 
             if new_email:
                 exists = User.objects.filter(email=new_email).exclude(pk=request.user.pk).exists()
