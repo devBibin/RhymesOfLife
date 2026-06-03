@@ -1,3 +1,15 @@
-Привет, {{ user.username }}!
-Перейдите по ссылке для подтверждения:
+{% if info.language|default:'ru'|slice:':2' == 'en' %}Hello, {{ display_name }}.
+
+Please confirm your email address to complete registration.
+
+Confirmation link:
 {{ verify_link }}
+
+If you did not create this account, you can ignore this email.{% else %}Здравствуйте, {{ display_name }}.
+
+Подтвердите адрес электронной почты, чтобы завершить регистрацию.
+
+Ссылка для подтверждения:
+{{ verify_link }}
+
+Если вы не создавали этот аккаунт, просто проигнорируйте это письмо.{% endif %}

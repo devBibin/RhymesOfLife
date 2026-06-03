@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 01:26+0000\n"
+"POT-Creation-Date: 2026-06-03 13:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2836,6 +2836,29 @@ msgstr "Взять в работу"
 msgid "Mark Complete"
 msgstr "Отметить как выполнено"
 
+#: base/templates/base/verification_failed.html:4
+#: base/templates/base/verification_failed.html:14
+msgid "Verification failed"
+msgstr "Ошибка подтверждения"
+
+#: base/templates/base/verification_failed.html:17
+msgid "This email verification link is invalid or has expired."
+msgstr "Эта ссылка для подтверждения email недействительна или срок её действия истек."
+
+#: base/templates/base/verification_failed.html:21
+msgid "Please request a new verification email or return to the main page."
+msgstr "Пожалуйста, запросите новое письмо для подтверждения или вернитесь на главную страницу."
+
+#: base/templates/base/verification_failed.html:31
+#: base/templates/base/verify_prompt.html:31
+msgid "Back to main page"
+msgstr "Вернуться на главную"
+
+#: base/templates/base/verification_failed.html:33
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
+msgstr "Изменить email в профиле"
+
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:14
 msgid "Verify your email"
@@ -2854,14 +2877,6 @@ msgstr ""
 msgid "Email: %(e)s"
 msgstr "Email: %(e)s"
 
-#: base/templates/base/verify_prompt.html:31
-msgid "Back to main page"
-msgstr "Вернуться на главную"
-
-#: base/templates/base/verify_prompt.html:33
-msgid "Change email in profile"
-msgstr "Изменить email в профиле"
-
 #: base/templates/base/wait_for_phone_call.html:10
 msgid "To confirm number"
 msgstr "Чтобы подтвердить номер"
@@ -2879,8 +2894,7 @@ msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:24
 msgid "We will call your number automatically. Just answer the call."
-msgstr ""
-"Мы автоматически позвоним на ваш номер. Просто ответьте на звонок."
+msgstr "Мы автоматически позвоним на ваш номер. Просто ответьте на звонок."
 
 #: base/templates/base/wait_for_phone_call.html:28
 msgid "Waiting for call"
@@ -3579,8 +3593,7 @@ msgstr ""
 msgid ""
 "The preview text is generated automatically from the beginning of the "
 "article body."
-msgstr ""
-"Текст превью автоматически формируется на основе начала статьи."
+msgstr "Текст превью автоматически формируется на основе начала статьи."
 
 #: blog/templates/blog/edit_article.html:76
 msgid "Current image"

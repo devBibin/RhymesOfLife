@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from urllib.parse import urljoin
 from email.utils import formataddr, parseaddr
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
@@ -9,6 +9,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
+
 class EmailVerificationSender:
     PROVIDERS = {
         "smtp": "_send_via_smtp",
@@ -21,6 +23,7 @@ class EmailVerificationSender:
 
     def _default_logger(self):
         import logging
+
         return logging.getLogger(__name__)
 
     def _normalize_base_url(self, base: str | None) -> str:
@@ -56,19 +59,28 @@ class EmailVerificationSender:
         if not email_address:
             email_address = str(raw_from).strip()
 
-        return formataddr(("Ритмы жизней", email_address))
+        return formataddr(("Rhymes of Life", email_address))
 
     def send_verification(self, info):
         user = info.user
         self.logger.info("email.verify.prepare user_id=%s email=%s", user.id, getattr(user, "email", None))
         verify_link = self.generate_verification_link(info)
-
-        subject = "Подтверждение почты"
-        text = "Здравствуйте, {username}! Пожалуйста, подтвердите вашу почту по ссылке: {link}".format(
-            username=user.username,
-            link=verify_link,
+        display_name = (
+            getattr(info, "first_name", None)
+            or getattr(user, "first_name", None)
+            or user.username
         )
-        html = render_to_string("emails/verify_email.html", {"user": user, "verify_link": verify_link})
+        context = {
+            "user": user,
+            "info": info,
+            "display_name": display_name,
+            "verify_link": verify_link,
+            "site_name": "Rhymes of Life",
+        }
+        is_english = str(getattr(info, "language", "ru")).lower().startswith("en")
+        subject = "Confirm your email" if is_english else "Подтвердите ваш email"
+        text = render_to_string("emails/verify_email.txt", context)
+        html = render_to_string("emails/verify_email.html", context)
 
         payload = {
             "to": user.email,

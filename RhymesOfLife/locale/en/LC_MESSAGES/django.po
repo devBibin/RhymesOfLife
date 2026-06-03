@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 01:26+0000\n"
+"POT-Creation-Date: 2026-06-03 13:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2630,6 +2630,29 @@ msgstr ""
 msgid "Mark Complete"
 msgstr ""
 
+#: base/templates/base/verification_failed.html:4
+#: base/templates/base/verification_failed.html:14
+msgid "Verification failed"
+msgstr ""
+
+#: base/templates/base/verification_failed.html:17
+msgid "This email verification link is invalid or has expired."
+msgstr ""
+
+#: base/templates/base/verification_failed.html:21
+msgid "Please request a new verification email or return to the main page."
+msgstr ""
+
+#: base/templates/base/verification_failed.html:31
+#: base/templates/base/verify_prompt.html:31
+msgid "Back to main page"
+msgstr ""
+
+#: base/templates/base/verification_failed.html:33
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
+msgstr ""
+
 #: base/templates/base/verify_prompt.html:4
 #: base/templates/base/verify_prompt.html:14
 msgid "Verify your email"
@@ -2644,14 +2667,6 @@ msgstr ""
 #: base/templates/base/verify_prompt.html:24
 #, python-format
 msgid "Email: %(e)s"
-msgstr ""
-
-#: base/templates/base/verify_prompt.html:31
-msgid "Back to main page"
-msgstr ""
-
-#: base/templates/base/verify_prompt.html:33
-msgid "Change email in profile"
 msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
