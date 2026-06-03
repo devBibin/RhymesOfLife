@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 import os
+import tempfile
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,6 +14,30 @@ if env_path.exists():
 
 def env_value(key, default=None):
     return os.environ.get(key, environment.get(key, default))
+
+
+def resolve_log_dir() -> str:
+    candidates = [
+        environment.get("LOG_DIR"),
+        os.path.join(BASE_DIR, "logs"),
+        os.path.join(tempfile.gettempdir(), "rhymesoflife-logs"),
+    ]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        try:
+            os.makedirs(candidate, exist_ok=True)
+            probe = os.path.join(candidate, ".write_test")
+            with open(probe, "a", encoding="utf-8"):
+                pass
+            try:
+                os.remove(probe)
+            except OSError:
+                pass
+            return candidate
+        except OSError:
+            continue
+    return os.path.join(tempfile.gettempdir(), "rhymesoflife-logs")
 
 SECRET_KEY = environment["SECRET_KEY"]
 DEBUG = environment["DEBUG"]
@@ -162,7 +187,7 @@ STATIC_ROOT = environment.get("STATIC_ROOT", os.path.join(BASE_DIR, "staticfiles
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = environment.get("MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
-LOG_DIR = environment.get("LOG_DIR", os.path.join(BASE_DIR, "logs"))
+LOG_DIR = resolve_log_dir()
 os.makedirs(LOG_DIR, exist_ok=True)
 
 STORAGES = {
