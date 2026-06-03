@@ -121,6 +121,54 @@ def _norm_phone(phone: str) -> str:
     return p if p.startswith("+") else f"+{p}" if p else p
 
 
+def _pending_bind_info_id(chat_id: int) -> int | None:
+    info_id = cache.get(f"tg_bind:{chat_id}")
+    if info_id:
+        return info_id
+    acc = TelegramAccount.objects.filter(telegram_id=str(chat_id), telegram_verified=False).first()
+    return acc.user_info_id if acc else None
+
+
+def _claim_telegram_chat(acc: TelegramAccount, ctx: UpdateCtx) -> bool:
+    chat_id = str(ctx.chat_id)
+    previous = (
+        TelegramAccount.objects.select_for_update()
+        .filter(telegram_id=chat_id)
+        .exclude(pk=acc.pk)
+        .first()
+    )
+    if previous:
+        if previous.telegram_verified and previous.user_info_id != acc.user_info_id:
+            return False
+        previous.telegram_id = None
+        previous.username = None
+        previous.first_name = None
+        previous.last_name = None
+        previous.language_code = None
+        previous.telegram_verified = False
+        previous.activation_token = uuid.uuid4()
+        previous.save(
+            update_fields=[
+                "telegram_id",
+                "username",
+                "first_name",
+                "last_name",
+                "language_code",
+                "telegram_verified",
+                "activation_token",
+                "updated_at",
+            ]
+        )
+
+    acc.telegram_id = chat_id
+    acc.username = ctx.tg_username
+    acc.first_name = ctx.first_name
+    acc.last_name = ctx.last_name
+    acc.language_code = ctx.lang
+    acc.save(update_fields=["telegram_id", "username", "first_name", "last_name", "language_code", "updated_at"])
+    return True
+
+
 @login_required
 @require_http_methods(["GET", "POST"])
 @csrf_protect
@@ -241,12 +289,12 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
             _send_text(ctx.chat_id, _("Activation token not found or already used."))
             return JsonResponse({"ok": True})
 
-        acc.telegram_id = str(ctx.chat_id)
-        acc.username = ctx.tg_username
-        acc.first_name = ctx.first_name
-        acc.last_name = ctx.last_name
-        acc.language_code = ctx.lang
-        acc.save(update_fields=["telegram_id", "username", "first_name", "last_name", "language_code"])
+        with transaction.atomic():
+            acc = TelegramAccount.objects.select_for_update().select_related("user_info").get(pk=acc.pk)
+            claimed = _claim_telegram_chat(acc, ctx)
+        if not claimed:
+            _send_text(ctx.chat_id, _("This Telegram account is already linked to another profile. Please unlink it there first."))
+            return JsonResponse({"ok": True})
 
         if acc.user_info.phone_verified:
             acc.telegram_verified = True
@@ -260,13 +308,8 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         return JsonResponse({"ok": True})
 
     if ctx.phone:
-        info_id = cache.get(f"tg_bind:{ctx.chat_id}")
+        info_id = _pending_bind_info_id(ctx.chat_id)
         acc = None
-        if not info_id:
-            acc = TelegramAccount.objects.filter(telegram_id=str(ctx.chat_id), telegram_verified=False).first()
-            if acc:
-                info_id = acc.user_info_id
-
         if not info_id:
             _send_text(ctx.chat_id, _("No active link session. Open the link from the site again."))
             return JsonResponse({"ok": True})
@@ -287,5 +330,13 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         _send_text(ctx.chat_id, _("Phone linked. You can return to the site."))
         return JsonResponse({"ok": True})
 
-    _send_text(ctx.chat_id, _("Tap the button and share your phone to finish linking."))
+    if _pending_bind_info_id(ctx.chat_id):
+        _send_contact_request(ctx.chat_id, _("Use the button below to share your phone. Sending the number as a message will not work."))
+        return JsonResponse({"ok": True})
+
+    if ctx.text and ctx.text.startswith("/start"):
+        _send_text(ctx.chat_id, _("Open the Telegram link from the site to start linking your account."))
+        return JsonResponse({"ok": True})
+
+    _send_text(ctx.chat_id, _("No active link session. Open the link from the site again."))
     return JsonResponse({"ok": True})
