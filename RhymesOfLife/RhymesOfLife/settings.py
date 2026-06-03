@@ -162,6 +162,8 @@ STATIC_ROOT = environment.get("STATIC_ROOT", os.path.join(BASE_DIR, "staticfiles
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = environment.get("MEDIA_ROOT", os.path.join(BASE_DIR, "media"))
+LOG_DIR = environment.get("LOG_DIR", os.path.join(BASE_DIR, "logs"))
+os.makedirs(LOG_DIR, exist_ok=True)
 
 STORAGES = {
     "default": {
@@ -270,3 +272,42 @@ CAMPAIGN_ID = environment.get("CAMPAIGN_ID")
 ZVONOK_API_INITIATE_URL = environment.get("ZVONOK_API_INITIATE_URL")
 ZVONOK_API_POLLING_URL = environment.get("ZVONOK_API_POLLING_URL")
 ZVONOK_STATIC_GATEWAY = environment.get("ZVONOK_STATIC_GATEWAY", "")
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+        },
+    },
+    "handlers": {
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(LOG_DIR, "error.log"),
+            "maxBytes": 2_000_000,
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}

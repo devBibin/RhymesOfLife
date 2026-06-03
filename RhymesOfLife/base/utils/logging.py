@@ -3,7 +3,7 @@ import logging.handlers
 import os
 from django.conf import settings
 
-LOG_DIR = os.path.join(settings.BASE_DIR, "logs")
+LOG_DIR = getattr(settings, "LOG_DIR", os.path.join(settings.BASE_DIR, "logs"))
 os.makedirs(LOG_DIR, exist_ok=True)
 
 
