@@ -17,6 +17,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_http_methods
+from urllib.parse import quote
 
 from ..models import AdditionalUserInfo, TelegramAccount
 from ..utils.onboarding import resolve_post_onboarding_redirect
@@ -58,34 +59,47 @@ def _send_contact_request(chat_id: int, text: str) -> None:
 def _get_bot_username() -> str | None:
     name = getattr(settings, "TELEGRAM_BOT_USERNAME", "") or cache.get("tg_bot_username")
     if name:
-        return name
+        return str(name).strip().lstrip("@")
 
     token = getattr(settings, "TELEGRAM_BOT_TOKEN_USERS", "")
     if not token:
         return None
     name = get_bot_username(token)
     if name:
-        cache.set("tg_bot_username", name, 24 * 60 * 60)
-        return name
+        normalized = str(name).strip().lstrip("@")
+        cache.set("tg_bot_username", normalized, 24 * 60 * 60)
+        return normalized
     return None
 
 
-def _make_bot_link_for(info: AdditionalUserInfo) -> tuple[str | None, str | None]:
+def _build_bot_links(bot_username: str | None, activation_token) -> tuple[str | None, str |None]:
+    if not bot_username or not activation_token:
+        return None, None
+    start_payload = quote(f"activate_{activation_token}")
+    return (
+        f"https://t.me/{bot_username}?start={start_payload}",
+        f"tg://resolve?domain={bot_username}&start={start_payload}",
+    )
+
+
+def _make_bot_link_for(info: AdditionalUserInfo) -> tuple[str | None, str | None, str | None]:
     acc, created = TelegramAccount.objects.get_or_create(user_info=info)
     if not acc.activation_token:
         acc.activation_token = uuid.uuid4()
         acc.save(update_fields=["activation_token"])
     bot_username = _get_bot_username()
-    link = f"https://t.me/{bot_username}?start=activate_{acc.activation_token}" if bot_username else None
-    return bot_username, link
+    web_link, app_link = _build_bot_links(bot_username, acc.activation_token)
+    return bot_username, web_link, app_link
 
 
 @dataclass
 class UpdateCtx:
     chat_id: int | None
+    from_user_id: int | None
     text: str | None
     start_payload: str | None
     phone: str | None
+    contact_user_id: int | None
     tg_username: str | None
     first_name: str | None
     last_name: str | None
@@ -106,9 +120,11 @@ def _parse_update(raw: dict) -> UpdateCtx:
 
     return UpdateCtx(
         chat_id=chat.get("id"),
+        from_user_id=frm.get("id"),
         text=text,
         start_payload=payload,
         phone=phone,
+        contact_user_id=contact.get("user_id"),
         tg_username=frm.get("username"),
         first_name=frm.get("first_name"),
         last_name=frm.get("last_name"),
@@ -177,7 +193,7 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
     user_info = request.user.additional_info
     acc, created = TelegramAccount.objects.get_or_create(user_info=user_info)
 
-    bot_username, telegram_bot_link = _make_bot_link_for(user_info)
+    bot_username, telegram_bot_link, telegram_bot_app_link = _make_bot_link_for(user_info)
     skip_url = reverse("phone_enter")
 
     if request.method == "POST":
@@ -189,6 +205,7 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
             "base/connect_telegram.html",
             {
                 "telegram_bot_link": telegram_bot_link,
+                "telegram_bot_app_link": telegram_bot_app_link,
                 "link": telegram_bot_link,
                 "bot_username": bot_username,
                 "is_verified": False,
@@ -203,6 +220,7 @@ def connect_telegram_view(request: HttpRequest) -> HttpResponse:
         "base/connect_telegram.html",
         {
             "telegram_bot_link": telegram_bot_link,
+            "telegram_bot_app_link": telegram_bot_app_link,
             "link": telegram_bot_link,
             "bot_username": bot_username,
             "is_verified": acc.telegram_verified,
@@ -312,6 +330,15 @@ def telegram_webhook(request: HttpRequest, bot_token: str) -> HttpResponse:
         acc = None
         if not info_id:
             _send_text(ctx.chat_id, _("No active link session. Open the link from the site again."))
+            return JsonResponse({"ok": True})
+
+        expected_contact_user_id = str(ctx.from_user_id or ctx.chat_id or "")
+        actual_contact_user_id = str(ctx.contact_user_id or "")
+        if not actual_contact_user_id or actual_contact_user_id != expected_contact_user_id:
+            _send_contact_request(
+                ctx.chat_id,
+                _("Please use the button below to share your own contact. Sending a typed number will not work."),
+            )
             return JsonResponse({"ok": True})
 
         phone = _norm_phone(ctx.phone)

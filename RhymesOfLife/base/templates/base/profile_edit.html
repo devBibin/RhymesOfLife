@@ -241,7 +241,7 @@
                   <span class="text-muted">{% trans "Telegram bot is not configured." %}</span>
                 {% else %}
                   {% if tg_link %}
-                    <a href="{{ tg_link }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm btn-action">{% trans "Link Telegram" %}</a>
+                    <a href="{{ tg_app_link|default:tg_link }}" rel="noopener" class="btn btn-primary btn-sm btn-action">{% trans "Link Telegram" %}</a>
                   {% else %}
                     <span class="text-muted">{% trans "Activation link is not available." %}</span>
                   {% endif %}

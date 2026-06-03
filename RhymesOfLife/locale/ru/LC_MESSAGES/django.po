@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 13:39+0000\n"
+"POT-Creation-Date: 2026-06-03 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -793,15 +793,22 @@ msgstr "Вернитесь на эту страницу и нажмите «Пр
 msgid "Open @%(bot_username)s"
 msgstr "Открыть @%(bot_username)s"
 
-#: base/templates/base/connect_telegram.html:48
+#: base/templates/base/connect_telegram.html:46
+msgid ""
+"If the button opens only the bot chat, copy this link and open it directly:"
+msgstr ""
+"Если кнопка открывает только чат с ботом, скопируйте эту ссылку и откройте "
+"её напрямую:"
+
+#: base/templates/base/connect_telegram.html:56
 msgid "Continue (I've interacted with the bot)"
 msgstr "Продолжить (я взаимодействовал с ботом)"
 
-#: base/templates/base/connect_telegram.html:52
+#: base/templates/base/connect_telegram.html:60
 msgid "No Telegram or don't want to use it?"
 msgstr "Нет Telegram или не хотите им пользоваться?"
 
-#: base/templates/base/connect_telegram.html:54
+#: base/templates/base/connect_telegram.html:62
 msgid "Skip Telegram and verify by phone call"
 msgstr "Пропустить Telegram и подтвердить по телефону"
 
@@ -3094,11 +3101,11 @@ msgstr "Пароль сброшен. Теперь вы можете войти."
 msgid "Please fill in all fields."
 msgstr "Пожалуйста, заполните все поля."
 
-#: base/views/auth_views.py:81 base/views/profile_views.py:219
+#: base/views/auth_views.py:81 base/views/profile_views.py:215
 msgid "A user with that username already exists."
 msgstr "Пользователь с таким именем уже существует."
 
-#: base/views/auth_views.py:83 base/views/profile_views.py:284
+#: base/views/auth_views.py:83 base/views/profile_views.py:280
 msgid "This email is already registered."
 msgstr "Этот email уже зарегистрирован."
 
@@ -3253,26 +3260,26 @@ msgstr "Описание лекарства обязательно."
 msgid "Medication description is too long."
 msgstr "Описание лекарства слишком длинное."
 
-#: base/views/profile_views.py:235
+#: base/views/profile_views.py:231
 msgid "Invalid date of birth."
 msgstr "Некорректная дата рождения."
 
-#: base/views/profile_views.py:338
+#: base/views/profile_views.py:334
 msgid ""
 "Please fill in username, first name, last name, email, and date of birth."
 msgstr ""
 "Пожалуйста, заполните имя пользователя, имя, фамилию, адрес электронной "
 "почты и дату рождения."
 
-#: base/views/profile_views.py:359
+#: base/views/profile_views.py:355
 msgid "Validation failed."
 msgstr "Проверка не пройдена."
 
-#: base/views/profile_views.py:366
+#: base/views/profile_views.py:362
 msgid "Profile has been updated."
 msgstr "Профиль обновлён."
 
-#: base/views/profile_views.py:379
+#: base/views/profile_views.py:375
 msgid "Error while saving."
 msgstr "Ошибка при сохранении."
 
@@ -3289,45 +3296,69 @@ msgstr "%(username)s подписался(лась) на вас."
 msgid "Cannot unfollow yourself."
 msgstr "Нельзя отписаться от самого себя."
 
-#: base/views/telegram_views.py:48
+#: base/views/telegram_views.py:49
 msgid "Share phone"
 msgstr "Поделиться номером"
 
-#: base/views/telegram_views.py:199
+#: base/views/telegram_views.py:265
 msgid "Telegram has been unlinked."
 msgstr "Telegram отключён."
 
-#: base/views/telegram_views.py:212
+#: base/views/telegram_views.py:278
 msgid "New activation link generated."
 msgstr "Новая ссылка активации создана."
 
-#: base/views/telegram_views.py:236
+#: base/views/telegram_views.py:302
 msgid "Invalid activation token."
 msgstr "Некорректный токен активации."
 
-#: base/views/telegram_views.py:241
+#: base/views/telegram_views.py:307
 msgid "Activation token not found or already used."
 msgstr "Токен активации не найден или уже использован."
 
-#: base/views/telegram_views.py:255
+#: base/views/telegram_views.py:314
+msgid ""
+"This Telegram account is already linked to another profile. Please unlink it "
+"there first."
+msgstr ""
+"Этот аккаунт Telegram уже привязан к другому профилю. Пожалуйста, сначала "
+"отвяжите его там."
+
+#: base/views/telegram_views.py:321
 msgid "Telegram account linked successfully."
 msgstr "Telegram-аккаунт успешно подключён."
 
-#: base/views/telegram_views.py:259
+#: base/views/telegram_views.py:325
 msgid "Share your phone number to link your account."
 msgstr "Поделитесь номером телефона, чтобы подключить аккаунт."
 
-#: base/views/telegram_views.py:271
+#: base/views/telegram_views.py:332 base/views/telegram_views.py:368
 msgid "No active link session. Open the link from the site again."
 msgstr "Нет активной сессии подключения. Откройте ссылку с сайта ещё раз."
 
-#: base/views/telegram_views.py:287
+#: base/views/telegram_views.py:340
+msgid ""
+"Please use the button below to share your own contact. Sending a typed "
+"number will not work."
+msgstr ""
+"Пожалуйста, используйте кнопку ниже, чтобы поделиться своим контактом. "
+"Отправка номера, набранного вручную, не сработает."
+
+#: base/views/telegram_views.py:357
 msgid "Phone linked. You can return to the site."
 msgstr "Телефон привязан. Вы можете вернуться на сайт."
 
-#: base/views/telegram_views.py:290
-msgid "Tap the button and share your phone to finish linking."
-msgstr "Нажмите кнопку и поделитесь номером, чтобы завершить привязку."
+#: base/views/telegram_views.py:361
+msgid ""
+"Use the button below to share your phone. Sending the number as a message "
+"will not work."
+msgstr ""
+"Используйте кнопку ниже, чтобы поделиться своим номером телефона. Отправка "
+"номера в виде текстового сообщения не сработает."
+
+#: base/views/telegram_views.py:365
+msgid "Open the Telegram link from the site to start linking your account."
+msgstr "Откройте ссылку на Telegram с сайта, чтобы начать привязку аккаунта."
 
 #: base/views/users_views.py:28
 msgid "Profile not found."
@@ -3755,6 +3786,9 @@ msgstr "Войти"
 #: templates/base.html:318
 msgid "All rights reserved."
 msgstr "Все права защищены."
+
+#~ msgid "Tap the button and share your phone to finish linking."
+#~ msgstr "Нажмите кнопку и поделитесь номером, чтобы завершить привязку."
 
 #~ msgid "Please read the following documents and confirm:"
 #~ msgstr "Пожалуйста, ознакомьтесь со следующими документами и подтвердите:"

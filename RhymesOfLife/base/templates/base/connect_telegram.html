@@ -37,9 +37,17 @@
           <li class="mb-0">{% trans 'Return to this page and click "Continue".' %}</li>
         </ol>
 
-        <a href="{{ link }}" class="btn btn-outline-primary mb-2" target="_blank" rel="noopener">
+        <a href="{{ telegram_bot_app_link|default:telegram_bot_link }}" class="btn btn-outline-primary mb-2" rel="noopener">
           {% blocktrans %}Open @{{ bot_username }}{% endblocktrans %}
         </a>
+
+        {% if telegram_bot_link %}
+          <div class="small text-muted mt-2">
+            {% trans "If the button opens only the bot chat, copy this link and open it directly:" %}
+            <br>
+            <a href="{{ telegram_bot_link }}" class="text-break">{{ telegram_bot_link }}</a>
+          </div>
+        {% endif %}
       </div>
 
       <form method="post" class="mb-3">

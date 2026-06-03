@@ -164,7 +164,6 @@ urlpatterns = [
     path("connect-telegram/", connect_telegram_view, name="connect_telegram"),
     path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
     path("telegram/regenerate/", telegram_regenerate_link_view, name="telegram_regenerate"),
-    path("telegram/webhook/<str:bot_token>/", telegram_webhook, name="telegram_webhook"),
     path("telegram/unlink/", telegram_unlink_view, name="telegram_unlink"),
 
     path("password/reset/", password_reset_request_view, name="password_reset_request"),

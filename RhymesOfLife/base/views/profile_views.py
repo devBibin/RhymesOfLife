@@ -26,7 +26,7 @@ from ..models import (
 from ..utils.files import validate_image_upload
 from ..utils.onboarding import resolve_post_onboarding_redirect
 from ..models import TelegramAccount
-from ..views.telegram_views import _get_bot_username
+from ..views.telegram_views import _make_bot_link_for
 
 User = get_user_model()
 username_validator = ASCIIUsernameValidator()
@@ -165,16 +165,12 @@ def profile_edit_view(request):
     day_range = range(1, 32)
 
     acc, created = TelegramAccount.objects.get_or_create(user_info=info)
-    bot_username = _get_bot_username()
-    telegram_bot_link = (
-        f"https://t.me/{bot_username}?start=activate_{acc.activation_token}"
-        if bot_username and acc.activation_token
-        else None
-    )
+    bot_username, telegram_bot_link, telegram_bot_app_link = _make_bot_link_for(info)
     tg_ctx = {
         "tg_is_verified": acc.telegram_verified,
         "tg_username": acc.username,
         "tg_link": telegram_bot_link,
+        "tg_app_link": telegram_bot_app_link,
         "tg_not_configured": not bool(bot_username),
         "tg_bot_username": bot_username,
     }

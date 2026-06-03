@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 13:39+0000\n"
+"POT-Creation-Date: 2026-06-03 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -786,15 +786,20 @@ msgstr ""
 msgid "Open @%(bot_username)s"
 msgstr ""
 
-#: base/templates/base/connect_telegram.html:48
+#: base/templates/base/connect_telegram.html:46
+msgid ""
+"If the button opens only the bot chat, copy this link and open it directly:"
+msgstr ""
+
+#: base/templates/base/connect_telegram.html:56
 msgid "Continue (I've interacted with the bot)"
 msgstr ""
 
-#: base/templates/base/connect_telegram.html:52
+#: base/templates/base/connect_telegram.html:60
 msgid "No Telegram or don't want to use it?"
 msgstr ""
 
-#: base/templates/base/connect_telegram.html:54
+#: base/templates/base/connect_telegram.html:62
 msgid "Skip Telegram and verify by phone call"
 msgstr ""
 
@@ -2873,11 +2878,11 @@ msgstr ""
 msgid "Please fill in all fields."
 msgstr ""
 
-#: base/views/auth_views.py:81 base/views/profile_views.py:219
+#: base/views/auth_views.py:81 base/views/profile_views.py:215
 msgid "A user with that username already exists."
 msgstr ""
 
-#: base/views/auth_views.py:83 base/views/profile_views.py:284
+#: base/views/auth_views.py:83 base/views/profile_views.py:280
 msgid "This email is already registered."
 msgstr ""
 
@@ -3032,24 +3037,24 @@ msgstr ""
 msgid "Medication description is too long."
 msgstr ""
 
-#: base/views/profile_views.py:235
+#: base/views/profile_views.py:231
 msgid "Invalid date of birth."
 msgstr ""
 
-#: base/views/profile_views.py:338
+#: base/views/profile_views.py:334
 msgid ""
 "Please fill in username, first name, last name, email, and date of birth."
 msgstr ""
 
-#: base/views/profile_views.py:359
+#: base/views/profile_views.py:355
 msgid "Validation failed."
 msgstr ""
 
-#: base/views/profile_views.py:366
+#: base/views/profile_views.py:362
 msgid "Profile has been updated."
 msgstr ""
 
-#: base/views/profile_views.py:379
+#: base/views/profile_views.py:375
 msgid "Error while saving."
 msgstr ""
 
@@ -3066,44 +3071,62 @@ msgstr ""
 msgid "Cannot unfollow yourself."
 msgstr ""
 
-#: base/views/telegram_views.py:48
+#: base/views/telegram_views.py:49
 msgid "Share phone"
 msgstr ""
 
-#: base/views/telegram_views.py:199
+#: base/views/telegram_views.py:265
 msgid "Telegram has been unlinked."
 msgstr ""
 
-#: base/views/telegram_views.py:212
+#: base/views/telegram_views.py:278
 msgid "New activation link generated."
 msgstr ""
 
-#: base/views/telegram_views.py:236
+#: base/views/telegram_views.py:302
 msgid "Invalid activation token."
 msgstr ""
 
-#: base/views/telegram_views.py:241
+#: base/views/telegram_views.py:307
 msgid "Activation token not found or already used."
 msgstr ""
 
-#: base/views/telegram_views.py:255
+#: base/views/telegram_views.py:314
+msgid ""
+"This Telegram account is already linked to another profile. Please unlink it "
+"there first."
+msgstr ""
+
+#: base/views/telegram_views.py:321
 msgid "Telegram account linked successfully."
 msgstr ""
 
-#: base/views/telegram_views.py:259
+#: base/views/telegram_views.py:325
 msgid "Share your phone number to link your account."
 msgstr ""
 
-#: base/views/telegram_views.py:271
+#: base/views/telegram_views.py:332 base/views/telegram_views.py:368
 msgid "No active link session. Open the link from the site again."
 msgstr ""
 
-#: base/views/telegram_views.py:287
+#: base/views/telegram_views.py:340
+msgid ""
+"Please use the button below to share your own contact. Sending a typed "
+"number will not work."
+msgstr ""
+
+#: base/views/telegram_views.py:357
 msgid "Phone linked. You can return to the site."
 msgstr ""
 
-#: base/views/telegram_views.py:290
-msgid "Tap the button and share your phone to finish linking."
+#: base/views/telegram_views.py:361
+msgid ""
+"Use the button below to share your phone. Sending the number as a message "
+"will not work."
+msgstr ""
+
+#: base/views/telegram_views.py:365
+msgid "Open the Telegram link from the site to start linking your account."
 msgstr ""
 
 #: base/views/users_views.py:28
