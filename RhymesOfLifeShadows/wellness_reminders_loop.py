@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from orm_connector import settings  # noqa: F401
 
 from django.db import transaction, connection
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import override, gettext as _
 from django.db.models import Max
@@ -108,6 +109,19 @@ def build_email_body(info, message: str) -> str:
     return f"{message}\n\n{label}: {url}"
 
 
+def build_email_html(info, title: str, message: str) -> str:
+    return render_to_string(
+        "emails/wellness_reminder.html",
+        {
+            "info": info,
+            "title": title,
+            "message": message,
+            "tracker_url": build_tracker_url(),
+            "site_name": "Ритмы жизни",
+        },
+    )
+
+
 def _get_user_timezone(info) -> ZoneInfo | None:
     tz_name = getattr(getattr(info, "wellness_settings", None), "reminder_tz", "") or ""
     if not tz_name:
@@ -199,6 +213,7 @@ def loop_once() -> int:
                 via_email=via_email,
                 email_subject=title if via_email else None,
                 email_body=build_email_body(info, msg) if via_email else None,
+                email_html=build_email_html(info, title, msg) if via_email else None,
             )
 
         success = any([bool(res.get("telegram_sent")), bool(res.get("email_sent")), True])

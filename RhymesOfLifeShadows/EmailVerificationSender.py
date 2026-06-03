@@ -59,7 +59,7 @@ class EmailVerificationSender:
         if not email_address:
             email_address = str(raw_from).strip()
 
-        return formataddr(("Rhymes of Life", email_address))
+        return formataddr(("Ритмы жизни", email_address))
 
     def send_verification(self, info):
         user = info.user
@@ -75,7 +75,7 @@ class EmailVerificationSender:
             "info": info,
             "display_name": display_name,
             "verify_link": verify_link,
-            "site_name": "Rhymes of Life",
+            "site_name": "Ритмы жизни",
         }
         is_english = str(getattr(info, "language", "ru")).lower().startswith("en")
         subject = "Confirm your email" if is_english else "Подтвердите ваш email"

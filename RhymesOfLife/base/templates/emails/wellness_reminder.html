@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="{{ info.language|default:'ru' }}">
+  <body style="margin:0;padding:32px 16px;background:#eef6f3;font-family:Arial,'Segoe UI',sans-serif;color:#1f2937;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;margin:0 auto;">
+      <tr>
+        <td>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:linear-gradient(135deg,#166534 0%,#0f766e 100%);border-radius:24px 24px 0 0;">
+            <tr>
+              <td style="padding:28px 32px;color:#ecfdf5;">
+                <div style="font-size:12px;letter-spacing:1.8px;text-transform:uppercase;opacity:.85;">{{ site_name }}</div>
+                <h1 style="margin:14px 0 8px 0;font-size:30px;line-height:1.2;font-weight:700;">{{ title }}</h1>
+                <p style="margin:0;font-size:16px;line-height:1.6;max-width:460px;color:#d1fae5;">
+                  {% if info.language|default:'ru'|slice:':2' == 'en' %}
+                    A quick reminder to check in with yourself and record how you feel today.
+                  {% else %}
+                    Небольшое напоминание заглянуть в дневник и отметить ваше самочувствие сегодня.
+                  {% endif %}
+                </p>
+              </td>
+            </tr>
+          </table>
+
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:0 0 24px 24px;box-shadow:0 18px 50px rgba(15,23,42,.08);">
+            <tr>
+              <td style="padding:32px;">
+                <p style="margin:0 0 18px 0;font-size:16px;line-height:1.7;color:#334155;">{{ message }}</p>
+
+                {% if tracker_url %}
+                  <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;">
+                    <tr>
+                      <td style="border-radius:999px;background:#ea580c;">
+                        <a href="{{ tracker_url }}" style="display:inline-block;padding:14px 24px;font-size:15px;font-weight:700;line-height:1;color:#ffffff;text-decoration:none;">
+                          {% if info.language|default:'ru'|slice:':2' == 'en' %}Open diary{% else %}Открыть дневник{% endif %}
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <p style="margin:0 0 10px 0;font-size:14px;line-height:1.7;color:#64748b;">
+                    {% if info.language|default:'ru'|slice:':2' == 'en' %}
+                      If the button does not work, copy and paste this link into your browser:
+                    {% else %}
+                      Если кнопка не сработает, скопируйте и вставьте эту ссылку в браузер:
+                    {% endif %}
+                  </p>
+                  <p style="margin:0 0 24px 0;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;word-break:break-all;font-size:13px;line-height:1.7;color:#0f172a;">
+                    <a href="{{ tracker_url }}" style="color:#0f766e;text-decoration:none;">{{ tracker_url }}</a>
+                  </p>
+                {% endif %}
+
+                <p style="margin:0;font-size:13px;line-height:1.7;color:#94a3b8;">
+                  {% if info.language|default:'ru'|slice:':2' == 'en' %}
+                    Small regular notes help you and your doctor see changes over time.
+                  {% else %}
+                    Регулярные короткие записи помогают вам и врачу замечать изменения состояния со временем.
+                  {% endif %}
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

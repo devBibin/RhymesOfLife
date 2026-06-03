@@ -1,5 +1,8 @@
 import logging
+from email.utils import formataddr, parseaddr
+
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 from django.utils.translation import override
 from base.models import Notification, AdditionalUserInfo
@@ -7,6 +10,21 @@ from .email_sender import send_email
 from .telegram import send_bot_message
 
 log = logging.getLogger(__name__)
+
+
+def _brand_from_email() -> str | None:
+    raw_from = (
+        getattr(settings, "POSTBOX_FROM_EMAIL", None)
+        or getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        or getattr(settings, "EMAIL_HOST_USER", None)
+    )
+    if not raw_from:
+        return None
+
+    _, email_address = parseaddr(str(raw_from))
+    if not email_address:
+        email_address = str(raw_from).strip()
+    return formataddr(("Ритмы жизни", email_address))
 
 
 def _send_telegram(chat_id: int | str, text: str, *, button_text: str | None = None, button_url: str | None = None) -> bool:
@@ -28,7 +46,14 @@ def _send_telegram(chat_id: int | str, text: str, *, button_text: str | None = N
     )
 
 
-def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> bool:
+def _send_email_localized(
+    info: AdditionalUserInfo,
+    subject: str,
+    body: str,
+    *,
+    html: str | None = None,
+    from_email: str | None = None,
+) -> bool:
     email = (info.email or getattr(info.user, "email", None) or "").strip()
     if not email:
         log.warning("email.notify.skip user_info_id=%s reason=no_email", info.id)
@@ -46,6 +71,8 @@ def _send_email_localized(info: AdditionalUserInfo, subject: str, body: str) -> 
                     "to": email,
                     "subject": s,
                     "text": b,
+                    "html": html,
+                    "from_email": from_email or _brand_from_email(),
                 },
                 logger=log,
             )
@@ -75,6 +102,8 @@ def send_notification_multichannel(
     via_email: bool = True,
     email_subject: str | None = None,
     email_body: str | None = None,
+    email_html: str | None = None,
+    email_from: str | None = None,
 ) -> dict:
     created = None
     payload = dict(payload or {})
@@ -104,7 +133,7 @@ def send_notification_multichannel(
     if via_email:
         subj = email_subject if email_subject is not None else (title or _("Notification"))
         body = email_body if email_body is not None else (f"{message}\n{url}" if url else message)
-        mail_sent = _send_email_localized(recipient, subj, body)
+        mail_sent = _send_email_localized(recipient, subj, body, html=email_html, from_email=email_from)
 
     return {
         "notification_id": getattr(created, "id", None),

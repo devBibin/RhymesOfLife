@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 13:24+0000\n"
+"POT-Creation-Date: 2026-06-03 13:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -664,7 +664,7 @@ msgid "Button text (optional)"
 msgstr ""
 
 #: base/templates/base/admin_notify.html:62
-#: base/templates/base/notifications.html:31 base/utils/notify.py:19
+#: base/templates/base/notifications.html:31 base/utils/notify.py:37
 #: templates/base.html:156
 msgid "Details"
 msgstr ""
@@ -2648,9 +2648,8 @@ msgstr ""
 msgid "Back to main page"
 msgstr ""
 
-#: base/templates/base/verification_failed.html:33
-#: base/templates/base/verify_prompt.html:33
-msgid "Change email in profile"
+#: base/templates/base/verification_failed.html:35
+msgid "Send verification email again"
 msgstr ""
 
 #: base/templates/base/verify_prompt.html:4
@@ -2667,6 +2666,10 @@ msgstr ""
 #: base/templates/base/verify_prompt.html:24
 #, python-format
 msgid "Email: %(e)s"
+msgstr ""
+
+#: base/templates/base/verify_prompt.html:33
+msgid "Change email in profile"
 msgstr ""
 
 #: base/templates/base/wait_for_phone_call.html:10
@@ -2726,7 +2729,7 @@ msgid ""
 "leave a short note."
 msgstr ""
 
-#: base/utils/notify.py:105
+#: base/utils/notify.py:134
 msgid "Notification"
 msgstr ""
 

@@ -30,7 +30,10 @@
           <div class="form-links" style="margin-top: 1rem;">
             <a href="{% url 'login' %}" class="recovery-link">{% trans "Back to main page" %}</a>
             {% if user.is_authenticated %}
-              | <a href="{% url 'profile_edit' %}" class="recovery-link">{% trans "Change email in profile" %}</a>
+              <form method="post" action="{% url 'request_verification' %}" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <button type="submit" class="btn form-btn">{% trans "Send verification email again" %}</button>
+              </form>
             {% endif %}
           </div>
         </div>
