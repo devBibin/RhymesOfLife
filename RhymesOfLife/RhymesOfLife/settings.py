@@ -335,4 +335,8 @@ LOGGING = {
             "propagate": False,
         },
     },
+    "root": {
+        "handlers": ["error_file"],
+        "level": "ERROR",
+    },
 }
