@@ -30,8 +30,18 @@ def _to_int(value, default=1):
 
 @require_http_methods(["GET"])
 def public_profile_view(request, username: str):
-    user = get_object_or_404(User.objects.select_related("additional_info"), username=username)
+    user = get_object_or_404(
+        User.objects.select_related("additional_info", "additional_info__telegram_account"),
+        username=username,
+    )
     info = getattr(user, "additional_info", None)
+    tg_contact = ""
+    tg_account = getattr(info, "telegram_account", None) if info else None
+    tg_username = (getattr(tg_account, "username", "") or "").strip()
+    if tg_username:
+        tg_contact = tg_username if tg_username.startswith("@") else f"@{tg_username}"
+    elif info:
+        tg_contact = (getattr(info, "telegram", "") or "").strip()
 
     tab_param = request.GET.get("tab")
     tab = tab_param if tab_param in ("articles", "posts") else None
@@ -95,6 +105,7 @@ def public_profile_view(request, username: str):
         "following_user_ids": following_user_ids,
         "can_see_articles": can_see_articles,
         "syndrome_choices": syndrome_choices(),
+        "tg_contact": tg_contact,
         "title": _("Profile"),
     }
 

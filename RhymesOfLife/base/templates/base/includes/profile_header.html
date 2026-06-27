@@ -104,6 +104,12 @@
           <span class="text-muted">{% trans "Email" %}:</span>
           <span class="content-safe">{{ info.email|default:profile_user.email }}</span>
         </div>
+        {% if tg_contact %}
+          <div class="mt-1 small">
+            <span class="text-muted">{% trans "Telegram" %}:</span>
+            <span class="content-safe">{{ tg_contact }}</span>
+          </div>
+        {% endif %}
       {% endif %}
     </div>
   </div>
