@@ -34,7 +34,7 @@
              class="header-logo ru-text-fix">
             <div class="logo-icon">R</div>
             <div class="logo-text">
-              <span class="logo-main ru-logo-text">Rhythms of Life</span>
+              <span class="logo-main ru-logo-text">{% trans "Rhythms of Life" %}</span>
               <span class="logo-subtitle desktop-only">{% trans "Health & Wellbeing" %}</span>
             </div>
           </a>
@@ -47,22 +47,11 @@
 
           <div class="nav-container" id="navContainer">
             <ul class="nav-menu">
-              {# ===== NEW: Classification dropdown (mobile-style) ===== #}
-              <li class="nav-item dropdown nav-item-classification">
-                <a class="nav-link ru-header-text dropdown-toggle" href="#" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false" id="classificationDropdown">
-                  <i class="bi bi-diagram-3"></i>
-                  <span class="text-truncate-ru">
-                    Классификация <br class="mobile-only"> и диагностика ДСТ
-                  </span>
-                  <i class="bi bi-chevron-down mobile-only ms-auto"></i>
+              <li class="nav-item nav-item-landing">
+                <a class="nav-link ru-header-text" href="{% url 'home_public' %}">
+                  <i class="bi bi-house-door"></i>
+                  <span class="text-truncate-ru">{% trans "Home" %}</span>
                 </a>
-
-                <ul class="dropdown-menu dropdown-menu-end ru-text" aria-labelledby="classificationDropdown">
-                  <li><a href="/ndst" class="dropdown-item">Недифференцированная ДСТ</a></li>
-                  <li><a href="/marfan" class="dropdown-item">Синдром Марфана</a></li>
-                  <li><a href="/sed" class="dropdown-item">Синдром Элерса-Данло</a></li>
-                </ul>
               </li>
 
               {% if request.user.is_authenticated %}
@@ -75,12 +64,14 @@
                   </li>
                 {% else %}
 
+                  {% comment %}
                   <li class="nav-item">
                     <a class="nav-link ru-header-text" href="{% url 'my_health' %}">
                       <i class="bi bi-heart-pulse"></i>
                       <span class="text-truncate-ru">{% trans "My health" %}</span>
                     </a>
                   </li>
+                  {% endcomment %}
 
                   <li class="nav-item">
                     <a class="nav-link ru-header-text" href="/articles/">
@@ -89,12 +80,14 @@
                     </a>
                   </li>
 
+                  {% comment %}
                   <li class="nav-item">
                     <a class="nav-link ru-header-text" href="{% url 'help_request' %}">
                       <i class="bi bi-life-preserver"></i>
                       <span class="text-truncate-ru">{% trans "Help" %}</span>
                     </a>
                   </li>
+                  {% endcomment %}
 
                   <li class="nav-item dropdown">
                     <a class="nav-link ru-header-text dropdown-toggle" href="#" role="button"
@@ -182,7 +175,7 @@
                     </div>
                   </li>
 
-                  {% if request.user|hasanyperm:'base.view_patient_list,base.can_notify_users,base.view_help_requests' %}
+                  {% if request.user|hasperm:'base.can_notify_users' %}
                     <li class="nav-item dropdown">
                       <a class="nav-link text-warning ru-header-text dropdown-toggle" href="#" role="button"
                          data-bs-toggle="dropdown" aria-expanded="false" id="adminDropdown">
@@ -203,24 +196,28 @@
                           {% endif %}
                         </div>
                         <div class="dropdown-divider"></div>
+                        {% comment %}
                         {% if request.user|hasperm:'base.view_patient_list' %}
                           <a class="dropdown-item d-flex align-items-center" href="{% url 'patients_list' %}">
                             <i class="bi bi-people-fill me-2 text-warning"></i>
                             <span>{% trans "Patients" %}</span>
                           </a>
                         {% endif %}
+                        {% endcomment %}
                         {% if request.user|hasperm:'base.can_notify_users' %}
                           <a class="dropdown-item d-flex align-items-center" href="{% url 'admin_notify' %}">
                             <i class="bi bi-megaphone-fill me-2 text-warning"></i>
                             <span>{% trans "Notify users" %}</span>
                           </a>
                         {% endif %}
+                        {% comment %}
                         {% if request.user|hasperm:'base.view_help_requests' %}
                           <a class="dropdown-item d-flex align-items-center" href="{% url 'staff_help_requests' %}">
                             <i class="bi bi-life-preserver me-2 text-warning"></i>
                             <span>{% trans "Help requests" %}</span>
                           </a>
                         {% endif %}
+                        {% endcomment %}
                       </div>
                     </li>
                   {% endif %}

@@ -24,15 +24,15 @@
         {% endif %}
 
         <div class="rl-card__body">
-          <div>
-            <div class="d-flex align-items-start justify-content-between gap-2">
-              <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
-              {% if page.is_hidden %}
-                <span class="badge bg-secondary">{% trans "Hidden" %}</span>
-              {% endif %}
+          {% if page.is_hidden %}
+            <div class="rl-card__topline">
+              <div class="rl-card__badges">
+                <span class="rl-card__badge">{% trans "Hidden" %}</span>
+              </div>
             </div>
-          </div>
+          {% endif %}
 
+          <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
           <p class="rl-card__intro">{{ page.preview_text }}</p>
 
           {# Tags disabled for now #}
@@ -56,7 +56,8 @@
               {% endif %}
             </div>
 
-            <div class="rl-stats">
+            <div class="rl-card__footer">
+              <div class="rl-stats">
               <span class="rl-pill">
                 <i class="bi bi-calendar3 me-1" aria-hidden="true"></i>{{ page.date|date:"j E Y" }}
               </span>
@@ -66,6 +67,7 @@
               <span class="rl-pill">
                 <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ page.comments_count }}
               </span>
+              </div>
             </div>
           </div>
         </div>
@@ -97,13 +99,22 @@
         {% endif %}
 
         <div class="rl-card__body">
+          <div class="rl-card__topline">
+            <div class="rl-card__badges">
+              <span class="rl-card__badge rl-card__badge--draft">{% trans "Draft" %}</span>
+              {% if page.is_hidden %}
+                <span class="rl-card__badge">{% trans "Hidden" %}</span>
+              {% endif %}
+            </div>
+            <span class="rl-card__date">
+              <i class="bi bi-calendar3" aria-hidden="true"></i>{{ page.date|date:"j E Y" }}
+            </span>
+          </div>
+
           <div class="d-flex align-items-start justify-content-between gap-2">
             <h2 class="rl-card__title mb-0">{{ page.title }}</h2>
-            <div class="d-flex gap-2 flex-wrap justify-content-end">
-              {% if page.is_hidden %}
-                <span class="badge bg-secondary">{% trans "Hidden" %}</span>
-              {% endif %}
-              <span class="badge bg-secondary">{% trans "Draft" %}</span>
+            <div class="rl-card__status-text">
+              {% trans "Editing mode" %}
             </div>
           </div>
 
@@ -130,7 +141,8 @@
               {% endif %}
             </div>
 
-            <div class="rl-stats">
+            <div class="rl-card__footer">
+              <div class="rl-stats">
               <span class="rl-pill">
                 <i class="bi bi-calendar3 me-1" aria-hidden="true"></i>{{ page.date|date:"j E Y" }}
               </span>
@@ -140,6 +152,7 @@
               <span class="rl-pill">
                 <i class="bi bi-chat-left-text me-1" aria-hidden="true"></i>{{ page.comments_count }}
               </span>
+              </div>
             </div>
           </div>
         </div>

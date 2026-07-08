@@ -153,7 +153,7 @@ urlpatterns = [
 
     path("recommendations/", recommendations_view, name="recommendations"),
 
-    path("patients/", patients_list_view, name="patients_list"),
+    # path("patients/", patients_list_view, name="patients_list"),
     path("patients/<int:user_id>/", patient_exams_view, name="patient_exams"),
     path("patients/<int:user_id>/recommendations/add/", add_patient_recommendation_view, name="patient_recommendation_add"),
 
@@ -189,33 +189,33 @@ urlpatterns = [
     path("staff/notify/api/", admin_notify_api, name="admin_notify_api"),
     path("staff/notify/user-suggest/", admin_user_suggest, name="admin_user_suggest"),
 
-    path("help/request/", help_request_view, name="help_request"),
-    path("staff/help-requests/", staff_help_requests_page, name="staff_help_requests"),
-    path("staff/help-requests/data/", staff_help_requests_data, name="staff_help_requests_data"),
-    path("staff/help-requests/api/", staff_help_requests_api, name="staff_help_requests_api"),
+    # path("help/request/", help_request_view, name="help_request"),
+    # path("staff/help-requests/", staff_help_requests_page, name="staff_help_requests"),
+    # path("staff/help-requests/data/", staff_help_requests_data, name="staff_help_requests_data"),
+    # path("staff/help-requests/api/", staff_help_requests_api, name="staff_help_requests_api"),
 
-    path("my-wellness/", my_wellness_view, name="my_wellness"),
-    path("api/wellness/entries/", wellness_entries_api, name="wellness_entries_api"),
-    path("api/wellness/settings/", wellness_settings_api, name="wellness_settings_api"),
-    path("patients/<int:user_id>/wellness/", patient_wellness_view, name="patient_wellness"),
+    # path("my-wellness/", my_wellness_view, name="my_wellness"),
+    # path("api/wellness/entries/", wellness_entries_api, name="wellness_entries_api"),
+    # path("api/wellness/settings/", wellness_settings_api, name="wellness_settings_api"),
+    # path("patients/<int:user_id>/wellness/", patient_wellness_view, name="patient_wellness"),
 
     path("banned/", banned_view, name="banned"),
     path("staff/users/<int:user_id>/ban/", toggle_user_ban, name="toggle_user_ban"),
 
-    path("my-health/", my_health_view, name="my_health"),
-    path("my-health/", my_health_view, name="my_health"),
-    path("my-health/partials/documents/", health_documents_partial, name="health_documents_partial"),
-    path("my-health/partials/recommendations/", health_recommendations_partial, name="health_recommendations_partial"),
-    path("my-health/partials/wellness/", health_wellness_partial, name="health_wellness_partial"),
-    path("my-health/medications/partial/", health_medications_partial, name="health_medications_partial"),
+    # path("my-health/", my_health_view, name="my_health"),
+    # path("my-health/", my_health_view, name="my_health"),
+    # path("my-health/partials/documents/", health_documents_partial, name="health_documents_partial"),
+    # path("my-health/partials/recommendations/", health_recommendations_partial, name="health_recommendations_partial"),
+    # path("my-health/partials/wellness/", health_wellness_partial, name="health_wellness_partial"),
+    # path("my-health/medications/partial/", health_medications_partial, name="health_medications_partial"),
 
     #medications urls
-    path("my-health/medications/", medications_page, name="health_medications"),
-    path("my-health/medications/add/", add_medication, name="health_medication_add"),
-    path("my-health/medications/<int:pk>/delete/", delete_medication, name="health_medication_delete"),
-    path("patients/<int:user_id>/medications/", patient_medications_view, name="patient_medications"),
+    # path("my-health/medications/", medications_page, name="health_medications"),
+    # path("my-health/medications/add/", add_medication, name="health_medication_add"),
+    # path("my-health/medications/<int:pk>/delete/", delete_medication, name="health_medication_delete"),
+    # path("patients/<int:user_id>/medications/", patient_medications_view, name="patient_medications"),
 
-    path("access/request/<int:user_id>/", request_access_view, name="request_access"),
+    # path("access/request/<int:user_id>/", request_access_view, name="request_access"),
     path("access/requests/", access_requests_view, name="access_requests"),
     path("access/requests/<int:request_id>/", decide_access_request_view, name="access_request_decide"),
 

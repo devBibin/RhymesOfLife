@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, override
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db import transaction
 from django.db.models import Q
@@ -21,6 +21,7 @@ from .models import (
     BlogIndexPage,
     ArticleLike,
     ArticleComment,
+    ArticleSubscriptionSettings,
     ARTICLE_INTRO_MAX_LENGTH,
     user_can_manage_articles,
 )
@@ -29,6 +30,7 @@ from .constants import PREDEFINED_TAGS
 from base.utils.files import validate_image_upload
 from base.utils.html import sanitize_html
 from base.utils.logging import get_app_logger
+from base.utils.notify import send_notification_multichannel
 
 from PIL import Image as PILImage, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = False
@@ -133,6 +135,75 @@ def _my_articles_url() -> str:
     return "/articles/?filter=mine"
 
 
+def _article_subscriptions_qs(*, exclude_user_id: int | None = None):
+    qs = (
+        ArticleSubscriptionSettings.objects
+        .select_related("user_info__user", "user_info__telegram_account")
+        .filter(enabled=True)
+    )
+    if exclude_user_id:
+        qs = qs.exclude(user_info__user_id=exclude_user_id)
+    return qs
+
+
+def _notify_article_subscribers(page: BlogPage, request=None) -> bool:
+    if page.subscribers_notified_at or not page.live or page.is_deleted or page.is_hidden or not page.is_approved:
+        return False
+
+    relative_url = _article_public_url(page, request)
+    absolute_url = request.build_absolute_uri(relative_url) if request else relative_url
+    author = getattr(page, "author", None)
+    author_name = ""
+    if author:
+        author_name = " ".join(
+            p for p in [getattr(author, "first_name", "") or "", getattr(author, "last_name", "") or ""] if p
+        ).strip() or getattr(getattr(author, "user", None), "username", "")
+
+    sent_any = False
+    for settings_obj in _article_subscriptions_qs(exclude_user_id=getattr(getattr(author, "user", None), "id", None)):
+        recipient = settings_obj.user_info
+        with override(recipient.language or "en"):
+            title = _("New article in Rhythms of Life")
+            message = _("A new expert article has just been published: %(title)s") % {"title": page.title}
+            if author_name:
+                message = _("%(message)s Author: %(author)s.") % {"message": message, "author": author_name}
+
+            email_subject = _("New article: %(title)s") % {"title": page.title}
+            email_body = _(
+                "A new expert article has just been published on Rhythms of Life.\n\n"
+                "Title: %(title)s\n"
+                "%(author_line)s"
+                "Open article: %(url)s\n\n"
+                "You are receiving this email because you subscribed to article updates."
+            ) % {
+                "title": page.title,
+                "author_line": (_("Author: %(author)s\n") % {"author": author_name}) if author_name else "",
+                "url": absolute_url,
+            }
+            button_text = _("Open article")
+
+        result = send_notification_multichannel(
+            recipient=recipient,
+            sender=author,
+            notification_type="ARTICLE_PUBLISHED",
+            title=title,
+            message=message,
+            url=absolute_url,
+            button_text=button_text,
+            payload={"article_id": page.id},
+            via_site=settings_obj.site_notifications_enabled,
+            via_telegram=settings_obj.tg_notifications_enabled,
+            via_email=settings_obj.email_notifications_enabled,
+            email_subject=email_subject,
+            email_body=email_body,
+        )
+        sent_any = sent_any or bool(result.get("notification_id") or result.get("telegram_sent") or result.get("email_sent"))
+
+    page.subscribers_notified_at = timezone.now()
+    page.save(update_fields=["subscribers_notified_at"])
+    return sent_any
+
+
 def _save_article_visibility(page, *, hidden: bool) -> None:
     page.is_hidden = hidden
     revision = page.save_revision()
@@ -210,6 +281,7 @@ def create_article_view(request):
                 rev = page.save_revision()
                 if action == "publish":
                     rev.publish()
+                    _notify_article_subscribers(page, request=request)
                     log.info("Article published: page_id=%s author_id=%s", page.id, request.user.id)
                     return redirect(_my_articles_url())
                 else:
@@ -282,6 +354,7 @@ def edit_article_view(request, page_id):
             rev = page.save_revision()
             if action == "publish":
                 rev.publish()
+                _notify_article_subscribers(page, request=request)
                 log.info("Article republished: page_id=%s editor_id=%s", page.id, request.user.id)
                 return redirect(_my_articles_url())
             else:
@@ -426,6 +499,69 @@ def ajax_article_search(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
+def article_subscription_settings_api(request):
+    settings_obj, _ = ArticleSubscriptionSettings.objects.get_or_create(user_info=request.user.additional_info)
+
+    if request.method == "GET":
+        return JsonResponse({
+            "status": "ok",
+            "settings": {
+                "enabled": settings_obj.enabled,
+                "site_notifications_enabled": settings_obj.site_notifications_enabled,
+                "tg_notifications_enabled": settings_obj.tg_notifications_enabled,
+                "email_notifications_enabled": settings_obj.email_notifications_enabled,
+            },
+        })
+
+    enabled = request.POST.get("enabled")
+    site_enabled = request.POST.get("site_notifications_enabled")
+    tg_enabled = request.POST.get("tg_notifications_enabled")
+    email_enabled = request.POST.get("email_notifications_enabled")
+
+    fields = []
+    if enabled is not None:
+        settings_obj.enabled = str(enabled).lower() in ("1", "true", "on", "yes")
+        fields.append("enabled")
+    if site_enabled is not None:
+        settings_obj.site_notifications_enabled = str(site_enabled).lower() in ("1", "true", "on", "yes")
+        fields.append("site_notifications_enabled")
+    if tg_enabled is not None:
+        settings_obj.tg_notifications_enabled = str(tg_enabled).lower() in ("1", "true", "on", "yes")
+        fields.append("tg_notifications_enabled")
+    if email_enabled is not None:
+        settings_obj.email_notifications_enabled = str(email_enabled).lower() in ("1", "true", "on", "yes")
+        fields.append("email_notifications_enabled")
+
+    if not settings_obj.enabled:
+        settings_obj.site_notifications_enabled = False
+        settings_obj.tg_notifications_enabled = False
+        settings_obj.email_notifications_enabled = False
+        fields.extend(["site_notifications_enabled", "tg_notifications_enabled", "email_notifications_enabled"])
+    else:
+        if not any([
+            settings_obj.site_notifications_enabled,
+            settings_obj.tg_notifications_enabled,
+            settings_obj.email_notifications_enabled,
+        ]):
+            settings_obj.site_notifications_enabled = True
+            fields.append("site_notifications_enabled")
+
+    if fields:
+        settings_obj.save(update_fields=list(dict.fromkeys(fields)))
+
+    return JsonResponse({
+        "status": "ok",
+        "settings": {
+            "enabled": settings_obj.enabled,
+            "site_notifications_enabled": settings_obj.site_notifications_enabled,
+            "tg_notifications_enabled": settings_obj.tg_notifications_enabled,
+            "email_notifications_enabled": settings_obj.email_notifications_enabled,
+        },
+    })
+
+
+@login_required
 @require_POST
 def delete_comment_view(request, comment_id):
     comment = get_object_or_404(ArticleComment, id=comment_id)
@@ -504,6 +640,7 @@ def approve_article_view(request, page_id):
     page.approved_at = timezone.now()
     page.approved_by = request.user
     page.save(update_fields=["is_approved", "approved_at", "approved_by"])
+    _notify_article_subscribers(page, request=request)
     return redirect(_article_public_url(page, request))
 
 

@@ -119,6 +119,13 @@ class BlogIndexPage(Page):
         page_num = request.GET.get("page")
         page_obj = paginator.get_page(page_num)
 
+        subscription_settings = None
+        if getattr(request.user, "is_authenticated", False):
+            try:
+                subscription_settings = getattr(request.user.additional_info, "article_subscription_settings", None)
+            except AdditionalUserInfo.DoesNotExist:
+                subscription_settings = None
+
         context.update(
             {
                 "posts": page_obj,
@@ -126,6 +133,7 @@ class BlogIndexPage(Page):
                 "sort": sort,
                 "query": query,
                 "can_manage_articles": user_can_manage_articles(request.user),
+                "article_subscription_enabled": bool(getattr(subscription_settings, "enabled", False)),
             }
         )
         return context
@@ -190,6 +198,7 @@ class BlogPage(Page):
         User, null=True, blank=True, on_delete=models.SET_NULL,
         related_name="rejected_articles", verbose_name=_("Rejected by")
     )
+    subscribers_notified_at = models.DateTimeField(_("Subscribers notified at"), null=True, blank=True, db_index=True)
 
     content_panels = Page.content_panels + [
         FieldPanel("date"),
@@ -323,3 +332,30 @@ class ArticleComment(models.Model):
         if self.is_deleted:
             return force_str(_g("🗑 Deleted comment"))
         return force_str(f"💬 {_safe_username(self.author)}: {(self.text or '')[:30]}")
+
+
+class ArticleSubscriptionSettings(models.Model):
+    user_info = models.OneToOneField(
+        AdditionalUserInfo,
+        on_delete=models.CASCADE,
+        related_name="article_subscription_settings",
+    )
+    enabled = models.BooleanField(default=False, db_index=True)
+    site_notifications_enabled = models.BooleanField(default=True, db_index=True)
+    tg_notifications_enabled = models.BooleanField(default=True, db_index=True)
+    email_notifications_enabled = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["enabled"]),
+            models.Index(fields=["site_notifications_enabled"]),
+            models.Index(fields=["tg_notifications_enabled"]),
+            models.Index(fields=["email_notifications_enabled"]),
+        ]
+        verbose_name = _("Article subscription settings")
+        verbose_name_plural = _("Article subscription settings")
+
+    def __str__(self):
+        return force_str(f"ArticleSubscriptionSettings for {_safe_username(self.user_info)}")

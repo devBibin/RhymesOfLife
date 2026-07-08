@@ -410,6 +410,7 @@ class Notification(SoftDeleteModel):
         ("ACCESS_REQUEST", "AccessRequest"),
         ("ACCESS_GRANTED", "AccessGranted"),
         ("ACCESS_DENIED", "AccessDenied"),
+        ("ARTICLE_PUBLISHED", "ArticlePublished"),
     )
 
     recipient = models.ForeignKey(AdditionalUserInfo, related_name="notifications", on_delete=models.CASCADE)

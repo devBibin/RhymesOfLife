@@ -872,13 +872,12 @@
     background: rgba(0, 0, 0, 0.06) !important;
   }
 
-  /* Optional: classification item (если добавил класс .nav-item-classification) */
-  .nav-item-classification .nav-link {
+  .nav-item-landing .nav-link {
     background: rgba(255, 255, 255, 0.10);
     border: 1px solid rgba(255, 255, 255, 0.14);
   }
 
-  .nav-item-classification .nav-link span {
+  .nav-item-landing .nav-link span {
     white-space: normal;
     line-height: 1.25;
   }

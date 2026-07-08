@@ -7,6 +7,7 @@ from .views import (
     delete_comment_view, edit_comment_view, ckeditor5_upload,
     approve_article_view,
     reject_article_view,
+    article_subscription_settings_api,
 )
 
 urlpatterns = [
@@ -23,6 +24,7 @@ urlpatterns = [
 
     path('images/', include(wagtailimages_urls)),
     path('search/', ajax_article_search, name='ajax_article_search'),
+    path('subscription/settings/', article_subscription_settings_api, name='article_subscription_settings_api'),
     path("<int:page_id>/approve/", approve_article_view, name="approve_article"),
     path('<int:page_id>/reject/', reject_article_view, name='reject_article'),
 

@@ -5,20 +5,68 @@
 <link rel="stylesheet" href="{% static 'css/articles.css' %}">
 
 <div class="container py-4 rl-page">
-  <div class="rl-page__head">
-    <div>
+  <section class="rl-page__header">
+    <div class="rl-page__header-main">
       <h1 class="rl-page__title">{% trans "Articles" %}</h1>
+      <p class="rl-page__context mb-0">
+        {% url 'home' as fresh_feed_url %}
+        {% blocktrans trimmed with fresh_feed_url=fresh_feed_url|add:'?filter=latest' %}
+          Here we publish articles by experts and doctors. You can view user posts in the <a href="{{ fresh_feed_url }}">latest feed</a>.
+        {% endblocktrans %}
+      </p>
     </div>
 
-    {% if can_manage_articles %}
-      <a href="{% url 'create_article' %}" class="btn btn-primary btn-sm">
-        <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>{% trans "New article" %}
-      </a>
-    {% endif %}
-  </div>
+    <div class="rl-page__header-side">
+      <div class="rl-page__stat">
+        <span class="rl-page__stat-label">{% trans "Materials" %}</span>
+        <strong class="rl-page__stat-value">{{ posts.paginator.count }}</strong>
+      </div>
+      {% if request.user.is_authenticated %}
+        <div class="rl-subscription-actions">
+          <button
+            type="button"
+            class="btn {% if article_subscription_enabled %}rl-secondary-btn{% else %}rl-primary-btn{% endif %}"
+            id="articleSubscriptionToggle"
+            data-enabled="{% if article_subscription_enabled %}true{% else %}false{% endif %}"
+            data-settings-url="{% url 'article_subscription_settings_api' %}"
+            data-label-enabled="{% trans 'Subscribed to new articles' %}"
+            data-label-disabled="{% trans 'Subscribe to new articles' %}">
+            <i class="bi {% if article_subscription_enabled %}bi-bell-fill{% else %}bi-bell{% endif %}" aria-hidden="true"></i>
+            <span class="article-subscription-toggle__label">
+              {% if article_subscription_enabled %}
+                {% trans "Subscribed to new articles" %}
+              {% else %}
+                {% trans "Subscribe to new articles" %}
+              {% endif %}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="btn rl-ghost-btn"
+            id="articleSubscriptionSettingsBtn"
+            data-bs-toggle="modal"
+            data-bs-target="#articleSubscriptionSettingsModal">
+            <i class="bi bi-gear" aria-hidden="true"></i>
+            <span>{% trans "Notification settings" %}</span>
+          </button>
+        </div>
+      {% else %}
+        <a href="{% url 'auth_combined' %}?tab=register&next={{ request.get_full_path|urlencode }}" class="btn rl-secondary-btn">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span>{% trans "Sign in to subscribe" %}</span>
+        </a>
+      {% endif %}
+      {% if can_manage_articles %}
+        <a href="{% url 'create_article' %}" class="btn rl-primary-btn">
+          <i class="bi bi-pencil-square" aria-hidden="true"></i>
+          <span>{% trans "New article" %}</span>
+        </a>
+      {% endif %}
+    </div>
+  </section>
 
   <form id="search-form" class="rl-toolbar" novalidate>
-    <div class="rl-search">
+    <div class="rl-toolbar__search">
       <div class="input-group">
         <input
           id="search-input"
@@ -29,54 +77,170 @@
           value="{{ query }}"
           autocomplete="off"
         >
-        <button type="submit" class="btn btn-outline-secondary">
+        <button type="submit" class="btn rl-search__btn">
           <i class="bi bi-search me-1" aria-hidden="true"></i>{% trans "Search" %}
         </button>
       </div>
     </div>
 
-    <input type="hidden" id="current-sort" name="sort" value="{{ sort|default:'date' }}">
-    <input type="hidden" id="current-filter" name="filter" value="{{ current_filter }}">
+    <div class="rl-toolbar__controls">
+      <input type="hidden" id="current-sort" name="sort" value="{{ sort|default:'date' }}">
+      <input type="hidden" id="current-filter" name="filter" value="{{ current_filter }}">
 
-    {% if can_manage_articles %}
-      <div class="rl-segmented" role="tablist" aria-label="{% trans 'Article scope' %}">
-        <a
-          href="?{% if query %}q={{ query|urlencode }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}"
-          class="rl-segmented__item {% if not current_filter %}is-active{% endif %}"
-          data-filter=""
-          aria-pressed="{% if not current_filter %}true{% else %}false{% endif %}">
-          {% trans "All articles" %}
-        </a>
-        <a
-          href="?filter=mine{% if query %}&q={{ query|urlencode }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
-          class="rl-segmented__item {% if current_filter == 'mine' %}is-active{% endif %}"
-          data-filter="mine"
-          aria-pressed="{% if current_filter == 'mine' %}true{% else %}false{% endif %}">
-          {% trans "My articles" %}
-        </a>
+      <div class="rl-filters-popover-wrap">
+        <button
+          type="button"
+          class="btn rl-filter-btn"
+          id="articleFiltersToggle"
+          aria-expanded="false"
+          aria-controls="articleFiltersPopover">
+          <i class="bi bi-sliders" aria-hidden="true"></i>
+          <span>{% trans "Filters" %}</span>
+        </button>
+
+        <div class="rl-filters-popover" id="articleFiltersPopover" hidden>
+          <div class="rl-filters-popover__body">
+            {% if can_manage_articles %}
+              <div class="rl-control-group">
+                <span class="rl-control-group__label">{% trans "Scope" %}</span>
+                <div class="rl-segmented rl-segmented--stack" role="tablist" aria-label="{% trans 'Article scope' %}">
+                  <button
+                    type="button"
+                    class="rl-segmented__item {% if not current_filter %}is-active{% endif %}"
+                    data-filter=""
+                    aria-pressed="{% if not current_filter %}true{% else %}false{% endif %}">
+                    {% trans "All articles" %}
+                  </button>
+                  <button
+                    type="button"
+                    class="rl-segmented__item {% if current_filter == 'mine' %}is-active{% endif %}"
+                    data-filter="mine"
+                    aria-pressed="{% if current_filter == 'mine' %}true{% else %}false{% endif %}">
+                    {% trans "My articles" %}
+                  </button>
+                </div>
+              </div>
+            {% endif %}
+
+            <div class="rl-control-group">
+              <span class="rl-control-group__label">{% trans "Sort" %}</span>
+              <div class="rl-segmented rl-segmented--stack" role="tablist" aria-label="{% trans 'Sort' %}">
+                <button
+                  type="button"
+                  class="rl-segmented__item {% if sort|default:'date' == 'date' %}is-active{% endif %}"
+                  data-sort="date"
+                  aria-pressed="{% if sort|default:'date' == 'date' %}true{% else %}false{% endif %}">
+                  {% trans "Newest" %}
+                </button>
+                <button
+                  type="button"
+                  class="rl-segmented__item {% if sort == 'popular' %}is-active{% endif %}"
+                  data-sort="popular"
+                  aria-pressed="{% if sort == 'popular' %}true{% else %}false{% endif %}">
+                  {% trans "Most popular" %}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    {% endif %}
-
-    <div class="rl-segmented" role="tablist" aria-label="{% trans 'Sort' %}">
-      <button
-        type="button"
-        class="rl-segmented__item {% if sort|default:'date' == 'date' %}is-active{% endif %}"
-        data-sort="date"
-        aria-pressed="{% if sort|default:'date' == 'date' %}true{% else %}false{% endif %}">
-        {% trans "Newest" %}
-      </button>
-      <button
-        type="button"
-        class="rl-segmented__item {% if sort == 'popular' %}is-active{% endif %}"
-        data-sort="popular"
-        aria-pressed="{% if sort == 'popular' %}true{% else %}false{% endif %}">
-        {% trans "Most popular" %}
-      </button>
     </div>
   </form>
 
-  <div id="posts-container" data-api="{% url 'ajax_article_search' %}">
-    {% include "blog/includes/article_list_fragment.html" with sort=sort query=query %}
+  <div class="rl-results-head">
+    <p class="rl-results-head__text mb-0">
+      {% blocktrans trimmed count total=posts.paginator.count %}
+        {{ total }} article
+      {% plural %}
+        {{ total }} articles
+      {% endblocktrans %}
+    </p>
+  </div>
+
+  <div class="rl-results-shell">
+    <div id="posts-container" data-api="{% url 'ajax_article_search' %}">
+      {% include "blog/includes/article_list_fragment.html" with sort=sort query=query %}
+    </div>
   </div>
 </div>
+
+{% if request.user.is_authenticated %}
+  <div class="modal fade" id="articleSubscriptionSettingsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rl-subscription-modal">
+        <div class="modal-header">
+          <h2 class="modal-title h5 mb-0">{% trans "Article notifications" %}</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted mb-4">
+            {% trans "Choose how you want to receive notifications when a new article is published." %}
+          </p>
+
+          <div class="mb-4">
+            <label class="form-label d-flex justify-content-between align-items-center">
+              <span>
+                <i class="bi bi-bell me-2"></i>{% trans "Subscription" %}
+              </span>
+            </label>
+            <div class="card bg-light border-0 p-3">
+              <div class="form-check form-switch d-flex align-items-center justify-content-between">
+                <div>
+                  <label class="form-check-label" for="article-subscription-enabled">
+                    {% trans "Notify me about new articles" %}
+                  </label>
+                </div>
+                <input class="form-check-input toggle-switch" type="checkbox" id="article-subscription-enabled" role="switch">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">
+              <i class="bi bi-broadcast me-2"></i>{% trans "Notification channels" %}
+            </label>
+
+            <div class="card bg-light border-0 p-3">
+              <div class="form-check form-switch d-flex align-items-center justify-content-between mb-2">
+                <div>
+                  <i class="bi bi-app-indicator text-primary me-2"></i>
+                  <label class="form-check-label" for="article-site-enabled">
+                    {% trans "Site notifications" %}
+                  </label>
+                </div>
+                <input class="form-check-input toggle-switch" type="checkbox" id="article-site-enabled" role="switch">
+              </div>
+
+              <div class="form-check form-switch d-flex align-items-center justify-content-between mb-2">
+                <div>
+                  <i class="bi bi-telegram text-primary me-2"></i>
+                  <label class="form-check-label" for="article-tg-enabled">
+                    {% trans "Telegram notifications" %}
+                  </label>
+                </div>
+                <input class="form-check-input toggle-switch" type="checkbox" id="article-tg-enabled" role="switch">
+              </div>
+
+              <div class="form-check form-switch d-flex align-items-center justify-content-between">
+                <div>
+                  <i class="bi bi-envelope text-primary me-2"></i>
+                  <label class="form-check-label" for="article-email-enabled">
+                    {% trans "Email notifications" %}
+                  </label>
+                </div>
+                <input class="form-check-input toggle-switch" type="checkbox" id="article-email-enabled" role="switch">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn rl-secondary-btn" data-bs-dismiss="modal">{% trans "Close" %}</button>
+          <button type="button" class="btn rl-primary-btn" id="saveArticleSubscriptionSettings">
+            <i class="bi bi-check-circle me-2"></i>{% trans "Save preferences" %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 {% endblock content %}
